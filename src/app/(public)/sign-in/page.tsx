@@ -7,20 +7,20 @@ import SignInput from "./components/SignInput";
 
 function page(){
   return(
-    <div>
-      <header>
-        <Link href="/initial"><FiChevronLeft className="" size={24}/></Link>
+    <div className="flex flex-col w-[393px] m-auto">
+      <header className="w-full h-36">
+        <Link href="/initial" className="pointer"><FiChevronLeft className="m-12" size={24}/></Link>
       </header>
-      <div className="w-">
-        <h1>Olá!</h1>
-        <p>Bom te ver de novo!</p>
+      <div className="w-full">
+        <h1 className="font-bold text-[38px] ml-12">Olá!</h1>
+        <p className="italic text-[15px] ml-12">Bom te ver de novo!</p>
         <SignInput placeholder={"email"}/>
         <SignInput placeholder={"senha"}/>
-        <Link href="/#">Esqueceu sua senha?</Link>
       </div>
-      <Button className="bg-[#E05D00]">Continuar</Button>
-      
-
+      <div className="w-[305px] flex justify-end italic">
+        <Link href="/#" className=" pointer underline text-right mt-7">Esqueceu sua senha?</Link>
+      </div>
+      <Button className="bg-[#E05D00] w-44 h-10 rounded-xl">Continuar</Button>
     </div>
     
   );
