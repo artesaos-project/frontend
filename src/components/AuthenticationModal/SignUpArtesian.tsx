@@ -8,7 +8,8 @@ import SignInput from "@/components/AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
+import useStoreUser from "@/hooks/useStoreUser";
+import { UserProps } from "@/types/UserProps";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -49,13 +50,24 @@ async function traduzirErro(mensagem: string): Promise<string> {
   return data.responseData.translatedText || texto;
 }
 
+
 // Componente principal
 function ArtisanSignUpPage({
   children,
   token,
+  onSuccess,
+  showExitWarning,
+  setShowExitWarning,
+  setIsOpen,
+  pendingUser,
 }: {
   children: React.ReactNode;
   token: string | null;
+  onSuccess: () => void; 
+  showExitWarning: boolean;
+  setShowExitWarning: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  pendingUser: UserProps | null;
 }) {
   const [uiError, setUiError] = useState<string | null>(null);
   const [sicabRegistrationType, setSicabRegistrationType] = useState<
@@ -65,7 +77,7 @@ function ArtisanSignUpPage({
     "text"
   );
   const [showFormError, setShowFormError] = useState(false);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const setUser = useStoreUser((state) => state.setUser);
 
   const showUiError = async (message: string) => {
     const traduzida = await traduzirErro(message);
@@ -128,9 +140,7 @@ function ArtisanSignUpPage({
 
       await showUiError("sucesso: Artesão foi enviado para analise.");
       setTimeout(() => {
-        if (closeButtonRef.current) {
-          closeButtonRef.current.click();
-        }
+        onSuccess();
       }, 3000);
     } catch (error) {
       console.error("Erro ao criar artesão:", error);
@@ -184,7 +194,7 @@ function ArtisanSignUpPage({
 
   // Renderização do componente
   return (
-    <div className="justify-center p-4 sm:p-11 w-full max-w-md overflow-y-auto">
+    <div className="justify-center p-4 py-2 sm:p-11 w-full max-w-md overflow-y-auto">
       <div className="rounded-3xl text-[#985E00] font-bold w-full">
         <div className="text-black font-normal mb-4">
           {showFormError ? (
@@ -425,13 +435,35 @@ function ArtisanSignUpPage({
             </Button>
           </div>
         </form>
-
-        <DialogClose asChild>
-          <button ref={closeButtonRef} style={{ display: "none" }}>
-            Fechar
-          </button>
-        </DialogClose>
       </div>
+      {showExitWarning && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p className="mb-4">Você perderá as informações preenchidas. Deseja sair?</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  if (pendingUser) {
+                    setUser(pendingUser);
+                    pendingUser = null;
+                  }
+                  setShowExitWarning(false);
+                  setIsOpen(false);
+                }}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Sair
+              </button>
+              <button
+                onClick={() => setShowExitWarning(false)}
+                className="bg-gray-300 text-black px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
