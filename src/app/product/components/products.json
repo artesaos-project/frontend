@@ -1,0 +1,146 @@
+[
+  {
+    "id": 1,
+    "title": "Conjunto de Bijuterias Artesanais",
+    "price": 49.9,
+    "author": "Ana Costa",
+    "description": "Peças únicas feitas à mão com miçangas, contas e metais artesanais.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Tigela de Cerâmica Esmaltada",
+    "price": 89.0,
+    "author": "João Fernandes",
+    "description": "Tigela artesanal de porcelana com acabamento esmaltado em azul cobalto.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 3,
+    "title": "Quadro de Ilustração Botânica",
+    "price": 120.0,
+    "author": "Luiza Ramos",
+    "description": "Ilustração em aquarela representando espécies de plantas brasileiras.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Caixa Decorativa em Madeira",
+    "price": 75.0,
+    "author": "Carlos Nogueira",
+    "description": "Caixa entalhada manualmente com madeira reciclada de demolição.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 5,
+    "title": "Cachecol em Tear Manual",
+    "price": 65.0,
+    "author": "Fernanda Lima",
+    "description": "Cachecol de lã feito em tear manual com fios tingidos naturalmente.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Tapete de Crochê Floral",
+    "price": 98.5,
+    "author": "Marina Oliveira",
+    "description": "Tapete de crochê em formato floral, perfeito para decoração de interiores.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 7,
+    "title": "Caderno com Capa em Couro",
+    "price": 55.0,
+    "author": "Rafael Silva",
+    "description": "Encadernação artesanal com capa de couro e papel reciclado.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 8,
+    "title": "Quadro Bordado com Frases",
+    "price": 42.0,
+    "author": "Juliana Souza",
+    "description": "Quadro decorativo com bordado manual e frases inspiradoras.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 9,
+    "title": "Vela Aromática de Lavanda",
+    "price": 35.0,
+    "author": "Patrícia Mendes",
+    "description": "Vela artesanal com essência natural de lavanda e cera vegetal.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 10,
+    "title": "Kit de Sabonetes Vegetais",
+    "price": 29.9,
+    "author": "André Rocha",
+    "description": "Sabonetes artesanais com óleos essenciais e ingredientes orgânicos.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 11,
+    "title": "Cartões Decorativos Artesanais",
+    "price": 19.0,
+    "author": "Larissa Monteiro",
+    "description": "Cartões feitos à mão com papel texturizado e colagens artísticas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 12,
+    "title": "Escultura com Materiais Reciclados",
+    "price": 110.0,
+    "author": "Diego Martins",
+    "description": "Peça única criada com resíduos metálicos e plásticos reaproveitados.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 13,
+    "title": "Taça de Vidro Soprado",
+    "price": 70.0,
+    "author": "Bruna Almeida",
+    "description": "Taça artesanal feita com técnica de sopro em vidro reciclado.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 14,
+    "title": "Necessaire de Tecido Reutilizado",
+    "price": 38.0,
+    "author": "Gabriel Torres",
+    "description": "Necessaire feita com sobras de tecido estampado e zíper reforçado.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 15,
+    "title": "Vela Aromática de Lavanda",
+    "price": 35.0,
+    "author": "Patrícia Mendes",
+    "description": "Vela artesanal com essência natural de lavanda e cera vegetal.",
+    "img": "artesanato-em-madeira.webp"
+  },
+  {
+    "id": 16,
+    "title": "Kit de Sabonetes Vegetais",
+    "price": 29.9,
+    "author": "André Rocha",
+    "description": "Sabonetes artesanais com óleos essenciais e ingredientes orgânicos.",
+    "img": "bijuterias.jpg"
+  },
+  {
+    "id": 17,
+    "title": "Cartões Decorativos Artesanais",
+    "price": 19.0,
+    "author": "Larissa Monteiro",
+    "description": "Cartões feitos à mão com papel texturizado e colagens artísticas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 18,
+    "title": "Escultura com Materiais Reciclados",
+    "price": 110.0,
+    "author": "Diego Martins",
+    "description": "Peça única criada com resíduos metálicos e plásticos reaproveitados.",
+    "img": "artesanato-em-madeira.webp"
+  }
+]
