@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "type": "Denuncia",
+    "message": "Produto: Conjunto de Bijuterias Artesanais denunciado para revisão.",
+    "date": "27/05/2025"
+  },
+  {
+    "id": "2",
+    "type": "Documentacao",
+    "message": "Documentação pendente para Tigela de Cerâmica Esmaltada.",
+    "date": "26/05/2025"
+  },
+  {
+    "id": "3",
+    "type": "Artesao",
+    "message": "Artesão Luiza Ramos aguardando aprovação.",
+    "date": "25/05/2025"
+  },
+  {
+    "id": "4",
+    "type": "Denuncia",
+    "message": "Produto: Caixa Decorativa em Madeira denunciado para revisão.",
+    "date": "24/05/2025"
+  },
+  {
+    "id": "5",
+    "type": "Documentacao",
+    "message": "Documentação pendente para Cachecol em Tear Manual.",
+    "date": "23/05/2025"
+  }
+]

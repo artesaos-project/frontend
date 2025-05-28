@@ -65,14 +65,15 @@ function SignIn({
       const result = await response.json();
 
       if (response.ok) {
-        const user : UserProps = {
+        const isModerator = result.role.includes("MODERATOR")? true : false;
+        const user: UserProps = {
           userName: result.name,
-          userPhoto: result.avatar  
+          userPhoto: result.avatar,
+          isModerator: isModerator
         }
         setUser(user);
         onSuccess();
 
-        console.log(user);
       } else {
         const errorData = errorMessages[result.message];
         setBackendError(errorData);
@@ -89,7 +90,7 @@ function SignIn({
       <div className="rounded-lg p-[44px] w-full">
         {children}
         <div className="mt-6 mb-14 ">
-          
+
           <DialogTitle className="text-5xl md:text-[45px] font-bold">Olá!</DialogTitle>
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
         </div>

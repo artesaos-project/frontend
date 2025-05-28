@@ -48,14 +48,20 @@ function header() {
                 />
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-mint-50 border-none cursor-pointer">
+            <DropdownMenuContent className="bg-mint-50 border-none">
               <DropdownMenuItem className="cursor-pointer">
                 Editar Perfil
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/moderator" className="cursor-pointer">
+                <Link
+                  href="/moderator"
+                  className={`cursor-pointer ${!user.isModerator ? "pointer-events-none cursor-none opacity-50" : ""}`}
+                  tabIndex={user.isModerator ? 0 : -1}
+                  aria-disabled={!user.isModerator}
+                >
                   Moderação
                 </Link>
+
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-mint-600" />
               <DropdownMenuItem
