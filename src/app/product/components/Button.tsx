@@ -23,7 +23,7 @@ const Button = ({text, Icon, className = '', onClick, variant = 'primary', size 
     
     const sizeClasses = {
         sm: "h-8 px-3 text-xs",
-        md: "h-9.5 text-xs",
+        md: "h-9.5 text-[10px] p-2.5 font-bold",
         lg: "h-12 px-6 text-base"
     };
 

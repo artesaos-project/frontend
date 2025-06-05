@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FiUser, FiUserPlus, FiUserCheck } from 'react-icons/fi';
+import { FiUser, FiPlus, FiUserCheck } from 'react-icons/fi';
 
 interface AuthorProfileProps {
     name: string;
@@ -37,10 +37,10 @@ const AuthorProfile = ({
     };
 
     return (
-        <div className="bg-[#E4F5E9] rounded-lg border border-gray-200 px-8 py-4 shadow-sm">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                    <div className="relative">
+        <div className="bg-[#E4F5E9] border border-gray-200 shadow-sm">
+           <div className="flex items-center justify-between px-8 py-6 lg:py-9 sm:px-8 md:px-16 lg:px-45 ">
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
                         {avatar ? (
                             <img 
                                 src={avatar} 
@@ -52,32 +52,39 @@ const AuthorProfile = ({
                                 <FiUser className="text-white text-xl" />
                             </div>
                         )}
-                    </div>
 
-                    <div className="flex flex-col">
-                        <button 
-                            onClick={onViewProfile}
-                            className="text-left hover:text-[#1B7132] transition-colors"
-                        >
-                            <h3 className="font-semibold text-[#FF6A00] text-sm">{name}</h3>
-                        </button>
-                        
-                        <div className="flex items-center space-x-4 text-xs text-black font-bold">
-                            <span className="flex items-center space-x-1">
-                                <span>{formatNumber(followers)} Seguidores</span>
-                            </span>
+                        <div className="flex flex-col gap-1">
+                            <button 
+                                onClick={onViewProfile}
+                                className="text-left hover:text-[#1B7132] transition-colors"
+                            >
+                                <h3 className="font-semibold text-[#1F3A4D] text-lg">{name}</h3>
+                            </button>
                             
-                            <span className="flex items-center space-x-1">
+                            <div className="flex md:hidden items-center space-x-1 text-xs text-black font-bold">
+                                <span>{formatNumber(followers)} Seguidores</span>
                                 <span>{totalProducts} Produtos</span>
-                            </span>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="hidden md:flex flex-row gap-2 justify-center">
+                    <div className="flex items-center space-x-2 text-xs text-black font-bold">
+                        <span className="flex items-center">
+                            <span>{formatNumber(followers)} Seguidores</span>
+                        </span>
+                        
+                        <span className="flex items-center">
+                            <span>{totalProducts} Produtos</span>
+                        </span>
                     </div>
                 </div>
 
                 <button
                     onClick={handleFollow}
                     className={`
-                        flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all
+                        flex items-center space-x-1 px-5 py-2 rounded-full text-xs font-medium transition-all
                         ${following 
                             ? 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-[#4D7558]' 
                             : 'bg-white text-[#4D7558] hover:bg-[#ABCFB5] hover:text-white text-xs rounded-2xl border border-[#ABCFB5] shadow-[0px_2px_0px_0px_#82BC92]'
@@ -91,8 +98,8 @@ const AuthorProfile = ({
                         </>
                     ) : (
                         <>
-                            <FiUserPlus className="text-sm" />
                             <span>Seguir</span>
+                            <FiPlus className="text-sm" />
                         </>
                     )}
                 </button>

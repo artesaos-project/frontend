@@ -1,12 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from "@/components/header";
 import ProductImage from './components/ProductImage';
 import ProductInfo from './components/ProductInfo';
 import products from './components/products.json';
 import ProductAuthor from './components/ProductAuthor';
+import ProductReviews from './components/ProductReviews';
+import { FiPlus } from 'react-icons/fi';
+import {BaseCard, ProductCardBody}  from '@/components/Card';
+import Image from 'next/image';
+
+interface Review {
+    reviewer: string;
+    rating: number;
+    reviewText: string;
+    reviewImages?: string[];
+}
 
 interface Product {
     id?: number;
@@ -15,6 +26,15 @@ interface Product {
     author: string;
     description: string;
     img: string;
+    reviews?: Review[]; 
+}
+
+interface FormattedReview {
+    reviewerImage?: string;
+    reviewerName: string;
+    rating: number;
+    reviewText: string;
+    reviewImages?: string[];
 }
 
 function ProductPage() {
@@ -31,8 +51,18 @@ function ProductPage() {
         price: `R$ ${currentProduct.price.toFixed(2).replace('.', ',')}`,
         description: currentProduct.description,
         author: currentProduct.author,
-        image: currentProduct.img
+        image: currentProduct.img,
     };
+
+    const productReviews: FormattedReview[] = currentProduct.reviews ? 
+        currentProduct.reviews.map(review => ({
+            reviewerName: review.reviewer,
+            rating: review.rating,
+            reviewText: review.reviewText,
+            reviewImages: review.reviewImages,
+            reviewerImage: undefined 
+        })) 
+        : [];
 
     const handleShare = () => {
         if (navigator.share) {
@@ -40,11 +70,19 @@ function ProductPage() {
                 title: productData.title,
                 text: `Confira este produto: ${productData.title} por ${productData.author}`,
                 url: window.location.href,
+            }).catch(error => {
+                console.log('Erro ao compartilhar:', error);
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copiado para a área de transferência!');
             });
         } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('Link copiado para a área de transferência!');
-        }
+                const textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.body.removeChild(textArea);
+                alert('Link copiado para a área de transferência!');
+            }
     };
 
     const handleAddToFavorites = () => {
@@ -69,7 +107,7 @@ function ProductPage() {
                             <ProductImage 
                                 src={`/${productData.image}`} 
                                 alt={productData.title}
-                                className="aspect-retangle max-h-96"
+                                className="aspect-rectangle max-h-96 rounded-lg"
                             />
                         </div>
                         
@@ -85,7 +123,7 @@ function ProductPage() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="lg:px-4">
                         <ProductAuthor 
                             name={productData.author}
                             avatar={`/${productData.image}`} 
@@ -95,6 +133,95 @@ function ProductPage() {
                             onFollow={() => alert('Seguindo!')}
                             onViewProfile={() => alert('Visualizando perfil!')}
                         />
+                    </div>
+
+                    {productReviews.length > 0 && (
+                        <div>
+                            <ProductReviews 
+                                reviews={productReviews}
+                            />
+                        </div>
+                    )}
+
+                    {productReviews.length === 0 && (
+                        <div className="text-center py-8 text-gray-500">
+                            <p>Este produto ainda não possui avaliações.</p>
+                        </div>
+                    )}
+
+                    <div>
+                        <div className='flex flex-row items-center'>
+                            <div className='flex items-center gap-2 px-8 py-4 text-2xl font-bold'>
+                                <FiPlus/>
+                                <h1>Produtos do Artista</h1>
+                            </div>
+
+                            <div className='hidden md:flex justify-end flex-1 text-xs items-center px-4'>
+                                <button 
+                                    onClick={() => alert('Ver mais produtos do artista!')}
+                                    className="p-1.5 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-md hover:bg-[#ABCFB5] hover:text-white transition-colors"
+                                >
+                                    Ver mais
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">
+                            {products.map((product, i) => (
+                                <BaseCard key={product.id || i}>
+                                    <div className="relative w-full h-40">
+                                        <Image
+                                            src={"/" + product.img}
+                                            alt={product.title}
+                                            className="rounded-lg object-cover"
+                                            fill
+                                        />
+                                    </div>
+                                    <ProductCardBody
+                                        price={product.price}
+                                        title={product.title}
+                                        author={product.author}
+                                    />
+                                </BaseCard>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='flex flex-row'>
+                            <div className='font-bold text-2xl items-center px-8 py-4'>
+                                <h1>Produtos Relacionados</h1>
+                            </div>
+
+                            <div className='hidden md:flex justify-end flex-1 text-xs items-center px-4'>
+                                <button 
+                                    onClick={() => alert('Ver mais produtos do artista!')}
+                                    className="p-1.5 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-md hover:bg-[#ABCFB5] hover:text-white transition-colors"
+                                >
+                                    Ver mais
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">
+                            {products.map((product, i) => (
+                                <BaseCard key={product.id || i}>
+                                    <div className="relative w-full h-40">
+                                        <Image
+                                            src={"/" + product.img}
+                                            alt={product.title}
+                                            className="rounded-lg object-cover"
+                                            fill
+                                        />
+                                    </div>
+                                    <ProductCardBody
+                                        price={product.price}
+                                        title={product.title}
+                                        author={product.author}
+                                    />
+                                </BaseCard>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </main>

@@ -25,7 +25,7 @@ const ProductInfo = ({
     onContact 
 }: ProductInfoProps) => {
     return (
-        <div className='mx-8 my-4 space-y-4'>
+        <div className='mx-9 my-4 space-y-4'>
             <div>
                 <h1 className='text-2xl font-bold text-gray-800'>{title}</h1>
                 <p className='text-[#1B7132] text-2xl font-bold mt-2'>{price}</p>
