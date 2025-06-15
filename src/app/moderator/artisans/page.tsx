@@ -1,8 +1,8 @@
 import React from 'react'
 import ModeratorHeader from '../components/ModeratorHeader'
 import ModeratorTitle from '../components/ModeratorTitle'
-import ModeratorSearch from '../components/ModeratorSearch'
-import ModeratorTable from '../components/ModeratorTable'
+import ModeratorSearch from './components/ModeratorSearch'
+import ModeratorTable from './components/ModeratorTable'
 
 
 function page() {
