@@ -1,0 +1,299 @@
+[
+  {
+    "id": 1,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 2,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 3,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 4,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 5,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 6,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 7,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 8,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 9,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 10,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 11,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 12,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 13,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 14,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 15,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 16,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 17,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 18,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 19,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 20,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 32,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 21,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 22,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 23,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 24,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 25,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 26,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 27,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 28,
+    "title": "Colar de Pedra da Lua",
+    "price": 120.5,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 29,
+    "title": "Pulseira de Couro Trançado",
+    "price": 89.9,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 30,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 31,
+    "title": "Anel Ajustável com Quartzo Rosa",
+    "price": 75.0,
+    "author": "Artesã Maria Oliveira",
+    "authorId": "maria-oliveira",
+    "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+    "img": "ceramica-e-porcelana.webp"
+  },
+  {
+    "id": 33,
+    "title": "Brincos de Argola com Miçangas",
+    "price": 45.0,
+    "author": "Artesã Mario Oliveira",
+    "authorId": "mario-benicio",
+    "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+    "img": "ceramica-e-porcelana.webp"
+  }
+]
