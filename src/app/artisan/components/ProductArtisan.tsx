@@ -1,12 +1,12 @@
 import React from "react";
-import products from "./artisanProductMock.json";
+import artisanProductMock from "./artisanProductMock.json";
 import { BaseCard, ProductCardBody } from "@/components/Card";
 import Image from "next/image";
 
 function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artistId?: string, visibleCount?: number, onTotalChange?: (total: number) => void }) {
   const filteredProducts = artistId
-    ? products.filter((product) => product.authorId === artistId)
-    : products;
+    ? artisanProductMock.products.filter((product) => product.authorId === artistId)
+    : artisanProductMock.products;
 
   if (filteredProducts.length === 0) {
     return (

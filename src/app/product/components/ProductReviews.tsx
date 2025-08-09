@@ -72,17 +72,19 @@ function CardReview({reviewerImage, reviewerName, rating, reviewText, reviewImag
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row items-center gap-2 ">
                         <img 
-                            className="rounded-full w-10 h-10 object-cover" 
-                            src={reviewerImage || "https://placehold.co/40"}  
+                            className="rounded-full w-6.5 h-6.5 object-cover" 
+                            src={reviewerImage ?? "https://placehold.co/26"}
                             alt={`Imagem do usuario ${reviewerName}`} 
                         />
-                        <h3 className="font-bold text-[#1F3A4D]">{reviewerName}</h3>
-                        <div className="flex">
-                            {Array.from({ length: Math.floor(rating) }, (_, index) => (
-                                <FaStar key={index} className="text-[#1F3A4D]" />
-                            ))}
-                            {rating % 1 !== 0 && <FaStarHalfAlt className="text-[#1F3A4D]" />}
-                        </div> 
+                        <div className="flex gap-13">
+                            <h3 className="font-bold text-black">{reviewerName}</h3>
+                            <div className="flex">
+                                {Array.from({ length: Math.floor(rating) }, (_, index) => (
+                                    <FaStar key={index} className="text-[#FFBB00]" />
+                                ))}
+                                {rating % 1 !== 0 && <FaStarHalfAlt className="text-[#FFBB00]" />}
+                            </div> 
+                        </div>
                     </div>
                 <p className="text-gray-600 text-sm">{reviewText}</p>
             </div>
@@ -207,7 +209,7 @@ function ProductReviews({reviews}: ProductReviewsProps) {
                 {reviewsToShow < filteredReviews.length && (
                     <button 
                         onClick={handleShowMore}
-                        className="mt-4 px-6 py-2 bg-white text-[#1B7132] border-2 border-[#ABCFB5] rounded-lg hover:bg-[#ABCFB5] hover:text-white transition-colors"
+                        className="mt-4 px-1.5 py-1 mb-2 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-lg hover:bg-[#ABCFB5] hover:text-white transition-colors"
                     >
                         Ver mais
                     </button>

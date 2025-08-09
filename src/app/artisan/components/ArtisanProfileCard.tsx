@@ -12,6 +12,8 @@ import { CiCircleMore } from "react-icons/ci";
 import SearchBar from "./SearchBar";
 import { useParams } from 'next/navigation';
 import ProductArtisan from "./ProductArtisan";
+import ProductReviews from "@/app/product/components/ProductReviews";
+import artisanProductMock from "./artisanProductMock.json";
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<"produtos" | "avaliacoes">(
@@ -27,10 +29,25 @@ const ArtisanProfileCard = () => {
     products: 15,
     profilePicture: "https://placehold.co/100",
   };
-  const [visibleProducts, setVisibleProducts] = useState(25);
-  const [totalProducts, setTotalProducts] = useState(0);
   const params = useParams();
   const Id = params.id as string;
+
+  const filteredReviews = Id
+    ? artisanProductMock.productReviews.filter((review) => review.authorId === Id)
+    : artisanProductMock.productReviews;
+
+  if (filteredReviews.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-500">
+          Nenhum produto encontrado para este artista.
+        </p>
+      </div>
+    );
+  }
+
+  const [visibleProducts, setVisibleProducts] = useState(25);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   const bgcolor = "bg-[#A6E3E9]";
   const textColor = "text-[#1F3A4D]";
@@ -124,6 +141,26 @@ const ArtisanProfileCard = () => {
           </div>
         )}
 
+      </div>
+
+      <div
+        className={`justify-center bg-white ${
+          activeTab === "avaliacoes" ? "block" : "hidden"
+        }`}
+      >
+        <div className="justify-center items-center max-w-6xl mx-auto md:px-5">
+          {filteredReviews.length > 0 && (
+          <div>
+            <ProductReviews reviews={filteredReviews}/>
+           </div>
+        )}
+
+        {filteredReviews.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            <p>Este produto ainda não possui avaliações.</p>
+          </div>
+        )}
+        </div>
       </div>
     </div>
   );
