@@ -1,4 +1,39 @@
 {
+  "artisans": [
+    {
+      "id": "maria-oliveira",
+      "name": "Maria Fernandes",
+      "username": "@mariafernandes",
+      "description": "Apaixonada por transformar materiais em arte, sou artesã e criadora de peças únicas, feitas à mão com amor e dedicação.",
+      "contactInfo": "12998765432",
+      "followers": 79,
+      "products": 32,
+      "profilePicture": "https://placehold.co/160x160?text=Maria",
+      "categories": ["Bijuterias", "Pedras Naturais", "Acessórios"],
+      "ratingAverage": 4.8,
+      "reviewCount": 4,
+      "social": {
+        "whatsapp": "12998765432"
+      }
+    },
+    {
+      "id": "mario-benicio",
+      "name": "Mário Benício",
+      "username": "@mariobenicio",
+      "description": "Criações modernas com técnicas tradicionais. Foco em peças sustentáveis.",
+      "contactInfo": "11988776655",
+      "followers": 41,
+      "products": 1,
+      "profilePicture": "https://placehold.co/160x160?text=Mario",
+      "location": "São Paulo - SP",
+      "categories": ["Brincos", "Reciclagem"],
+      "ratingAverage": 0,
+      "reviewCount": 0,
+      "social": {
+        "whatsapp": "11988776655"
+      }
+    }
+  ],
   "products": [
     {
       "id": 1,
@@ -292,7 +327,70 @@
       "id": 33,
       "title": "Brincos de Argola com Miçangas",
       "price": 45.0,
-      "author": "Artesã Mario Oliveira",
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 35,
+      "title": "Colar de Pedra da Lua",
+      "price": 120.5,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 36,
+      "title": "Pulseira de Couro Trançado",
+      "price": 89.9,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 37,
+      "title": "Brincos de Argola com Miçangas",
+      "price": 45.0,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 38,
+      "title": "Anel Ajustável com Quartzo Rosa",
+      "price": 75.0,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Anel artesanal com pedra de quartzo rosa, com base ajustável.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 39,
+      "title": "Colar de Pedra da Lua",
+      "price": 120.5,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Colar artesanal com pedra da lua e acabamento em prata.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 40,
+      "title": "Pulseira de Couro Trançado",
+      "price": 89.9,
+      "author": "Artesão Mário Benício",
+      "authorId": "mario-benicio",
+      "description": "Pulseira feita à mão com couro legítimo e fecho magnético.",
+      "img": "ceramica-e-porcelana.webp"
+    },
+    {
+      "id": 41,
+      "title": "Brincos de Argola com Miçangas",
+      "price": 45.0,
+      "author": "Artesão Mário Benício",
       "authorId": "mario-benicio",
       "description": "Brincos coloridos, ideais para o verão, feitos com miçangas recicladas.",
       "img": "ceramica-e-porcelana.webp"

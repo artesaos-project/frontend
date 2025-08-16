@@ -25,7 +25,7 @@ function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artist
   }, [filteredProducts.length, onTotalChange]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-center gap-4 md:w-6/12">
+    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center gap-4 lg:w-6/12">
       {filteredProducts.slice(0, visibleCount).map((product, i) => (
         <BaseCard key={product.id || i}>
           <div className="relative w-full h-40">
