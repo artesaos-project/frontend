@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { IoMenu } from "react-icons/io5";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { IoIosSearch } from "react-icons/io";
@@ -13,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SideBarMenu from "./SideBarMenu";
 
 function header() {
   const user = useStoreUser((state) => state.user);
@@ -21,9 +21,7 @@ function header() {
   return (
     <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8 items-center">
       <div className="flex items-center md:col-span-8">
-        <div>
-          <IoMenu size={30} color="white" />
-        </div>
+        <SideBarMenu />
         <Link
           href={"/"}
           className="mx-auto md:mx-0 md:ml-8 md:mr-auto cursor-pointer"

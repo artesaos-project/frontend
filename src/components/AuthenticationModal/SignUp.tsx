@@ -199,7 +199,7 @@ export default function SignUp ({
   const [isOpen, setIsOpen] = useState(true);
   const [showExitWarning, setShowExitWarning] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://nest-api-fork.onrender.com/users";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333/users";
 
   const [visible, setVisible] = useState({
     calendar: false,
@@ -304,7 +304,7 @@ export default function SignUp ({
   const loginUser = useCallback(
     async (email: string, password: string) => {
       try {
-        const res = await fetch("https://nest-api-fork.onrender.com/sessions", {
+        const res = await fetch("http://localhost:3333/sessions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),

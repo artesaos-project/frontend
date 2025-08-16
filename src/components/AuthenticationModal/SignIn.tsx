@@ -54,11 +54,12 @@ function SignIn({
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://nest-api-fork.onrender.com/sessions', {
+      const response = await fetch('http://localhost:3333/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(data),
       });
 
