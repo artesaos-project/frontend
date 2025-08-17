@@ -9,14 +9,21 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { FiChevronLeft } from "react-icons/fi";
+import { UserProps } from "@/types/UserProps";
+import SignUpArtesian from "./SignUpArtesian";
+import useStoreUser from "@/hooks/useStoreUser";
 
 function AuthenticationModal() {
   const [modalState, setModalState] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [artisanId, setArtisanId] = useState<string | null>(null);
+  const [pendingUser, setPendingUser] = useState<UserProps | null>(null);
+  const setUser = useStoreUser((state) => state.setUser);
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
 
   function openInitial() {
     setModalState(0);
@@ -28,8 +35,39 @@ function AuthenticationModal() {
     setModalState(2);
   }
 
+  function handleClose(open: boolean) {
+    if (!open) { 
+      if (modalState === 2 || modalState === 3) {
+        setShowConfirmClose(true);
+      } else {
+        setIsDialogOpen(false);
+      }
+    } else {
+      setIsDialogOpen(open);
+    }
+  }
+
+  function confirmClose() {
+    setPendingUser(null);
+    if (pendingUser) setUser(pendingUser);
+    setShowConfirmClose(false);
+    setIsDialogOpen(false);
+    setModalState(0);
+  }
+
+  function cancelClose() {
+    setShowConfirmClose(false);
+  }
+
+  function openArtisan(userId: string, userData: UserProps) {
+    setArtisanId(userId);
+    setPendingUser(userData);
+    setModalState(3);
+  }
+
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <>
+    <Dialog open={isDialogOpen} onOpenChange={handleClose}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
@@ -43,11 +81,11 @@ function AuthenticationModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-auto rounded-xl sm:h-fit sm:max-w-[425px]">
+      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-auto rounded-xl sm:h-fit lg:min-w-4/12">
         {modalState === 0 && (
           <div className="flex flex-col justify-center gap-8">
             <Image
-              src="Criarte.svg"
+              src="/Criarte.svg"
               alt="Criart"
               width={110}
               height={110}
@@ -86,7 +124,10 @@ function AuthenticationModal() {
           </SignIn>
         )}
         {modalState === 2 && (
-          <SignUp>
+          <SignUp
+              onClose={() => setIsDialogOpen(false)}
+              onArtisanSignup={openArtisan}
+            >
             <button
               onClick={openInitial}
               className="bg-transparent cursor-pointer"
@@ -95,8 +136,54 @@ function AuthenticationModal() {
             </button>
           </SignUp>
         )}
+        {modalState === 3 && artisanId && (
+            <SignUpArtesian
+              artisanId={artisanId}
+              onSuccess={() => {
+                setPendingUser(null);
+                if (pendingUser) {
+                  setUser(pendingUser);
+                }
+                setIsDialogOpen(false)
+              }}
+            >
+              <button
+                onClick={() => {openInitial()}}
+                className="bg-transparent cursor-pointer"
+              >
+                <FiChevronLeft size={28} />
+              </button>
+            </SignUpArtesian>
+          )}
       </DialogContent>
     </Dialog>
+
+    <Dialog open={showConfirmClose} onOpenChange={setShowConfirmClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogTitle className="text-xl font-bold text-center mb-4">
+          Deseja sair?
+        </DialogTitle>
+        <p className="text-center text-gray-600 mb-6">
+          Você perderá todos os dados inseridos nos campos. Tem certeza que deseja continuar?
+        </p>
+        <div className="flex justify-center gap-4">
+          <Button
+            onClick={cancelClose}
+            variant="outline"
+            className="px-6 py-2"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={confirmClose}
+            className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white"
+          >
+            Sim, sair
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+</>
   );
 }
 

@@ -8,8 +8,6 @@ import SignInput from "@/components/AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import useStoreUser from "@/hooks/useStoreUser";
-import { UserProps } from "@/types/UserProps";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -54,20 +52,12 @@ async function traduzirErro(mensagem: string): Promise<string> {
 // Componente principal
 function ArtisanSignUpPage({
   children,
-  token,
+  artisanId,
   onSuccess,
-  showExitWarning,
-  setShowExitWarning,
-  setIsOpen,
-  pendingUser,
 }: {
   children: React.ReactNode;
-  token: string | null;
+  artisanId: string | null;
   onSuccess: () => void; 
-  showExitWarning: boolean;
-  setShowExitWarning: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  pendingUser: UserProps | null;
 }) {
   const [uiError, setUiError] = useState<string | null>(null);
   const [sicabRegistrationType, setSicabRegistrationType] = useState<
@@ -77,7 +67,6 @@ function ArtisanSignUpPage({
     "text"
   );
   const [showFormError, setShowFormError] = useState(false);
-  const setUser = useStoreUser((state) => state.setUser);
 
   const showUiError = async (message: string) => {
     const traduzida = await traduzirErro(message);
@@ -88,22 +77,20 @@ function ArtisanSignUpPage({
   // Função para criar artesão
   async function createArtisan(data: ArtisanData) {
     try {
-      console.log(token);
-      console.log(data);
 
-      const res = await fetch("https://nest-api-fork.onrender.com/artisans", {
+      const res = await fetch("http://localhost:3333/artisan-applications", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
         body: JSON.stringify({
           rawMaterial: data.rawMaterial,
           technique: data.technique,
           finalityClassification: data.finalityClassification,
           sicab: data.sicab,
-          sisabRegistrationDate: data.sicabRegistration,
-          sisabValidUntil: data.sicabValidity,
+          sicabRegistrationDate: data.sicabRegistration,
+          sicabValidUntil: data.sicabValidity,
         }),
       });
 
@@ -194,7 +181,7 @@ function ArtisanSignUpPage({
 
   // Renderização do componente
   return (
-    <div className="justify-center p-4 py-2 sm:p-11 w-full max-w-md overflow-y-auto">
+    <div className="justify-center p-4 py-2 w-full overflow-y-auto">
       <div className="rounded-3xl text-[#985E00] font-bold w-full">
         <div className="text-black font-normal mb-4">
           {showFormError ? (
@@ -436,34 +423,6 @@ function ArtisanSignUpPage({
           </div>
         </form>
       </div>
-      {showExitWarning && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <p className="mb-4">Você perderá as informações preenchidas. Deseja sair?</p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => {
-                  if (pendingUser) {
-                    setUser(pendingUser);
-                    pendingUser = null;
-                  }
-                  setShowExitWarning(false);
-                  setIsOpen(false);
-                }}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Sair
-              </button>
-              <button
-                onClick={() => setShowExitWarning(false)}
-                className="bg-gray-300 text-black px-4 py-2 rounded"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
