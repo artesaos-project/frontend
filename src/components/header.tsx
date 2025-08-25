@@ -6,13 +6,15 @@ import { IoIosSearch } from "react-icons/io";
 import AuthenticationModal from "./AuthenticationModal/AuthenticationModal";
 import useStoreUser from "@/hooks/useStoreUser";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import SideBarMenu from "./SideBarMenu";
+import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
 
 function header() {
   const user = useStoreUser((state) => state.user);
@@ -37,47 +39,50 @@ function header() {
         </Link>
         {!user.isAuthenticated && <AuthenticationModal />}
         {user.isAuthenticated && (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className="flex items-center justify-center user-select-none cursor-pointer">
+          <Dialog>
+            <DialogTrigger asChild>
+              <DialogHeader>
+                <DialogTitle>
+                  <Image
+                    src={user.userPhoto ?? "/default-avatar.webp"}
+                    alt="User Avatar"
+                    width={60}
+                    height={60}
+                    className="rounded-full user-select-none cursor-pointer"
+                  />
+                </DialogTitle>
+              </DialogHeader>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
+              <div className="flex flex-col items-center justify-center text-midnight">
                 <Image
                   src={user.userPhoto ?? "/default-avatar.webp"}
                   alt="User Avatar"
-                  width={60}
-                  height={60}
-                  className="rounded-full"
+                  width={120}
+                  height={120}
+                  className="rounded-full mb-4"
                 />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-mint-50 border-none">
-              <DropdownMenuItem className="cursor-pointer">
-                Editar Perfil
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/moderator"
-                  className={`cursor-pointer ${
-                    !user.isModerator
-                      ? "pointer-events-none cursor-none opacity-50"
-                      : ""
-                  }`}
-                  tabIndex={user.isModerator ? 0 : -1}
-                  aria-disabled={!user.isModerator}
+                <h2 className="text-2xl font-bold">{user.userName}</h2>
+                <p>@murilofmatos</p>
+                <div className="w-fit">
+                  <Separator className="my-2" />
+                  <Link href="/profile" className="text-xl">
+                    Meu Perfil
+                  </Link>
+                  <Separator className="my-2" />
+                </div>
+                <Button
+                  variant={"ghost"}
+                  onClick={() => {
+                    resetStore();
+                  }}
+                  className="text-xl text-red-500 hover:text-red-600"
                 >
-                  Moderação
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-mint-600" />
-              <DropdownMenuItem
-                className="text-red-700 cursor-pointer"
-                onClick={() => {
-                  resetStore();
-                }}
-              >
-                Sair
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  Sair
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
       <div className="relative md:col-span-4">
