@@ -9,6 +9,7 @@ import ContactButtons from "./ContactButtons";
 import { FaWhatsapp, FaPlus } from "react-icons/fa";
 import { IoMdShareAlt, IoIosArrowDown } from "react-icons/io";
 import { CiCircleMore } from "react-icons/ci";
+import { PiPlusCircleLight} from "react-icons/pi";
 import SearchBar from "./SearchBar";
 import { useParams } from 'next/navigation';
 import ProductArtisan from "./ProductArtisan";
@@ -107,13 +108,19 @@ const ArtisanProfileCard = () => {
               nameButton="Editar perfil"
               iconPosition="left"
               icon={<LuPencil size={20} color="#2AAA4C" />}
-              className="flex justify-center items-center  px-10 min-w-[300px] ring-1 ring-[#2AAA4C] text-[#2AAA4C] py-2 bg-[#B9FFCC80]/50 rounded-lg hover:bg-white"
+              className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
             />
             <ActionButtons
-              nameButton="Editar história do artista"
+              nameButton="Adicionar Produtos"
+              iconPosition="left"
+              icon={<PiPlusCircleLight size={20} color="red" />}
+              className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
+            />
+            <ActionButtons
+              nameButton="Saber mais"
               iconPosition="left"
               icon={<LuPencil size={20}color="red" />}
-              className="px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
+              className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
             />
           </>
           ) : (
