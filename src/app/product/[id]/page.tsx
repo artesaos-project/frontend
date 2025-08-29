@@ -19,6 +19,7 @@ interface Review {
     rating: number;
     reviewText: string;
     reviewImages?: string[];
+    reviewerImage?: string;
 }
 
 interface Product {
@@ -62,7 +63,7 @@ function ProductPage() {
             rating: review.rating,
             reviewText: review.reviewText,
             reviewImages: review.reviewImages,
-            reviewerImage: undefined 
+            reviewerImage: review.reviewerImage ?? "https://placehold.co/26"
         })) 
         : [];
 
