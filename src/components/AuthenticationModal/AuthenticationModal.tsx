@@ -17,7 +17,7 @@ import { UserProps } from "@/types/UserProps";
 import SignUpArtesian from "./SignUpArtesian";
 import useStoreUser from "@/hooks/useStoreUser";
 
-function AuthenticationModal() {
+function AuthenticationModal({ color }: { color?: string }) {
   const [modalState, setModalState] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [artisanId, setArtisanId] = useState<string | null>(null);
@@ -75,7 +75,11 @@ function AuthenticationModal() {
             setIsDialogOpen(true);
           }}
           variant="outline"
-          className="bg-transparent cursor-pointer hover:bg-white/20 hover:text-white border-white text-white inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-2 text-xs"
+          className={`bg-transparent cursor-pointer hover:bg-white/20 hover:text-${
+            color || "white"
+          } border-${color || "white"} text-${
+            color || "white"
+          } inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-2 text-xs`}
         >
           Entre ou cadastre-se
         </Button>
