@@ -1,7 +1,10 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi"
 import notificationsData from "@/db-mock/notifications.json";
+import { useState, useEffect, use } from "react";
+import { useFetch } from "@/hooks/useFetch";
 
 type Notification = {
   id: string;
@@ -16,9 +19,20 @@ function parseDate(dateStr: string) {
 }
 
 function ModeratorNotification() {
-  const notifications: Notification[] = [...notificationsData]
-    .sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
-    .slice(0, 3);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const data = await useFetch('/artisan-applications', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      setNotifications(data);
+    }
+    fetchNotifications();
+  }, []);
 
   return (
     <div className="w-2/3 mx-auto flex flex-col mb-20">
@@ -39,9 +53,9 @@ function ModeratorNotification() {
                 <p className="text-magenta font-semibold mb-2">{notification.type}</p>
                 <p className="text-sakura text-xs font-semibold">{notification.date}</p>
               </div>
-              <div className="flex flex-col gap-2">              
-              <p>{notification.message}</p>
-              <Link href="" className="w-fit text-sakura underline hover:text-magenta/90 transition">Ver {notification.type}</Link>
+              <div className="flex flex-col gap-2">
+                <p>{notification.message}</p>
+                <Link href="" className="w-fit text-sakura underline hover:text-magenta/90 transition">Ver {notification.type}</Link>
               </div>
             </div>
           ))

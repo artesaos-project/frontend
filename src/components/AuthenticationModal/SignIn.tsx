@@ -54,18 +54,18 @@ function SignIn({
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3333/sessions', {
+      const response = await fetch('https://congenial-waddle-xq4p7g7xqvvc67j7-3333.app.github.dev/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(data),
       });
-
       const result = await response.json();
 
       if (response.ok) {
-        const isModerator = result.roles.includes("MODERATOR")? true : false;
+        const isModerator = result.roles.includes("MODERATOR") ? true : false;
         const user: UserProps = {
           userName: result.name,
           userPhoto: result.avatar,

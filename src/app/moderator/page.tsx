@@ -1,11 +1,21 @@
+"use client"
 import ModeratorCard from "./components/ModeratorCard"
 import ModeratorHeader from "./components/ModeratorHeader"
 import ModeratorTitle from "./components/ModeratorTitle"
 import ModeratorNotification from "./components/ModeratorNotification"
 import Footer from "@/components/Footer"
-
+import { useEffect } from "react"
+import useStoreUser from "@/hooks/useStoreUser"
+import { useRouter } from "next/navigation"
 
 function page() {
+  const user = useStoreUser((state) => state.user);
+  const router = useRouter();
+  useEffect(() => {
+    if (!user.isAuthenticated || !user.isModerator) {
+      router.push("/");
+    }
+  }, [user]);
   return (
     <div className="overflow-x-hidden">
       <ModeratorHeader />
