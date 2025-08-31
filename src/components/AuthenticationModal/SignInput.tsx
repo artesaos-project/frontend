@@ -38,7 +38,7 @@ const SignInput = forwardRef<HTMLInputElement, SignInputProps>(
             className={`bg-[#FFF2DE] placeholder:text-[#985E00] placeholder:px-3 placeholder:text-sm placeholder:font-bold w-full h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 ${className}
             ${
               hasError &&
-              "border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta"
+              "border-salmon border-2 focus-visible:ring-2 focus-visible:border-salmon placeholder:text-salmon"
             }`}
             {...rest}
           />
@@ -51,7 +51,7 @@ const SignInput = forwardRef<HTMLInputElement, SignInputProps>(
           )}
         </div>
         {hasError && errorMessage && (
-          <span className="text-sm text-magenta block mt-1">
+          <span className="text-sm text-salmon block mt-1">
             {errorMessage}
           </span>
         )}
