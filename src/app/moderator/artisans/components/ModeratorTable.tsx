@@ -15,8 +15,15 @@ type Artisan = {
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INACTIVE';
 };
 
-function ModeratorTable() {
-  const [artisans, setArtisans] = useState<Artisan[]>([])
+interface ModeratorTableProps {
+  searchTerm: string;
+  activeFilter: string;
+  artisans: Artisan[];
+  onRefresh: () => void;
+}
+
+function ModeratorTable({ searchTerm, activeFilter, artisans, onRefresh }: ModeratorTableProps) {
+  const [filteredArtisans, setFilteredArtisans] = useState<Artisan[]>([])
   const router = useRouter()
 
   const statusTranslated: Record<string, string> = {
@@ -26,35 +33,68 @@ function ModeratorTable() {
     'INACTIVE': 'Inativo',
   };
 
-  const fetchArtisans = async () => {
+  useEffect(() => {
+    let filtered = artisans;
+
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(artisan =>
+        artisan.artisanName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        artisan.email.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(artisan => artisan.status === activeFilter);
+    }
+
+    setFilteredArtisans(filtered);
+  }, [artisans, searchTerm, activeFilter]);
+
+  const handleApprove = async (artisanId: string) => {
+
     try {
-      const response = await fetch('http://localhost:3333/artisan-applications', {
-        method: 'GET',
+      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
+        method: 'POST',
         headers: {
           'Content-type': 'application/json',
         },
         credentials: 'include',
+        body: JSON.stringify({ status: 'APPROVED' })
+
       })
 
-      const result = await response.json();
-
-      if(response.status === 403) {
-        router.replace('/')
-      }
-
       if (response.ok) {
-        setArtisans(result.artisanApplications)
-      }
+        console.log(`artesao aprovado`)
+        // Atualiza a lista após aprovação
+        onRefresh()
+      } 
 
-    } catch(error) {
-      
-      console.error('Erro ao buscar artesãos: ', error)
+    } catch (error) {
+      console.error('Erro ao aprovar artesão: ', error)
     }
   }
+  
+  const handleRejection = async (artisanId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ status: 'REJECTED' })
 
-  useEffect(() => {
-    fetchArtisans()
-  }, [])
+      })
+
+      if (response.ok) {
+        console.log(`artesao rejeitado`)
+        // Atualiza a lista após rejeição
+        onRefresh()
+      } 
+    } catch (error) {
+      console.error('Erro ao rejeitar artesão: ', error)
+    }
+  }
 
 
   return (
@@ -69,13 +109,13 @@ function ModeratorTable() {
           </tr>
         </thead>
         <tbody>
-          {artisans.map((artisan) => {
+          {filteredArtisans.map((artisan) => {
             let actionCell;
 
             if (artisan.status === "PENDING") {
               actionCell = (
                 <div className="flex py-1 justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão" asChild>
+                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão" onClick={() => handleApprove(artisan.id)} asChild>
                     <div><FaCheck className="text-white" />
                       <p className="hidden md:inline">APROVAR</p>
                     </div>
@@ -85,7 +125,7 @@ function ModeratorTable() {
                       <p className="hidden md:inline">EDITAR</p>
                     </div>
                   </Button>
-                  <Button className="h-6 text-xs my-1 bg-red-700 cursor-pointer" aria-label="Recusar artesão">
+                  <Button className="h-6 text-xs my-1 bg-red-700 cursor-pointer" aria-label="Recusar artesão" onClick={() => handleRejection(artisan.id)}>
                     <div className="flex items-center gap-2">
                       <BsXLg className="text-white" />
                       <p className="hidden md:inline">RECUSAR</p>
@@ -112,7 +152,7 @@ function ModeratorTable() {
             } else if (artisan.status === "REJECTED") {
               actionCell = (
                 <div className="flex justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão" asChild>
+                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão" onClick={() => handleApprove(artisan.id)} asChild>
                     <div><FaCheck className="text-white" />
                       <p className="hidden md:inline">APROVAR</p>
                     </div>

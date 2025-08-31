@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi"
 import notificationsData from "@/db-mock/notifications.json";
-import { useState, useEffect, use } from "react";
-import { useFetch } from "@/hooks/useFetch";
 
 type Notification = {
   id: string;
@@ -19,20 +17,8 @@ function parseDate(dateStr: string) {
 }
 
 function ModeratorNotification() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const notifications: Notification[] = notificationsData;
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const data = await useFetch('/artisan-applications', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-      setNotifications(data);
-    }
-    fetchNotifications();
-  }, []);
 
   return (
     <div className="w-2/3 mx-auto flex flex-col mb-20">

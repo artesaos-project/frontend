@@ -111,7 +111,7 @@ function Page() {
             <FaCheck className="text-white" />
             APROVAR
           </Button>
-          <Button className="h-7 text-xs my-1 text-white font-bold border bg-red-500 rounded-lg cursor-pointer" aria-label="Desativar artesão">
+          <Button className="h-7 text-xs my-1 text-white font-bold border bg-red-500 rounded-lg cursor-pointer" aria-label="Desativar artesão" onClick={handleRejection}>
             <BsXLg className="text-white" />
             DESATIVAR
           </Button>
