@@ -2,8 +2,7 @@
 
 import ModeratorHeader from "../../components/ModeratorHeader"
 import ModeratorTitle from "../../components/ModeratorTitle"
-import { useParams } from 'next/navigation'
-import artisans from "@/db-mock/artisans.json"
+import { useParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { FaCheck } from "react-icons/fa"
 import { BsXLg } from "react-icons/bs"
@@ -11,11 +10,93 @@ import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { IoIosArrowDown, IoIosInformationCircleOutline } from "react-icons/io"
+import { useState, useEffect } from "react"
+import { artisanDetails } from "@/types/artisanDetails"
+
+
 
 function Page() {
   const params = useParams();
   const artisanId = params.id as unknown as number;
-  const artisan = artisans.at(artisanId - 1);
+  const [artisan, setArtisan] = useState<artisanDetails | null>(null);
+  const router = useRouter()
+
+  const fetchArtisans = async () => {
+    try {
+      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        credentials: 'include',
+      })
+
+      const result = await response.json();
+
+      if (response.status === 403) {
+        router.replace('/')
+      }
+
+      if (response.ok) {
+        setArtisan(result.artisanApplication)
+        console.log(result.artisanApplication)
+        console.log(artisan)
+      }
+
+    } catch (error) {
+
+      console.error('Erro ao buscar artesãos: ', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchArtisans()
+  }, [])
+
+  const handleApprove = async () => {
+
+    try {
+      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ status: 'APPROVED' })
+
+      })
+
+      if (response.ok) {
+        console.log(`artesao aprovado`)
+        router.push('/moderator/artisans')
+      } 
+
+    } catch (error) {
+      console.error('Erro ao aprovar artesão: ', error)
+    }
+  }
+  
+  const handleRejection = async () => {
+    try {
+      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ status: 'REJECTED' })
+
+      })
+
+      if (response.ok) {
+        console.log(`artesao aprovado`)
+        router.push('/moderator/artisans')
+      } 
+    } catch (error) {
+      console.error('Erro ao aprovar artesão: ', error)
+    }
+  }
+
 
   return (
     <div className='overflow-x-hidden'>
@@ -23,10 +104,10 @@ function Page() {
       <ModeratorTitle title={'Artesãos'} />
       <div className="w-2/3 flex mx-auto mt-10 items-center justify-between">
         <h2 className="text-2xl text-midnight font-semibold">
-          {artisan ? artisan.name : "Artesão não encontrado"}
+          {artisan?.userName ? artisan.userName : "Artesão não encontrado"}
         </h2>
         <div className="flex gap-4">
-          <Button className="h-7 text-xs my-1 bg-green-600 rounded-lg cursor-pointer" aria-label="Aprovar artesão">
+          <Button className="h-7 text-xs my-1 bg-green-600 rounded-lg cursor-pointer" aria-label="Aprovar artesão" onClick={handleApprove}>
             <FaCheck className="text-white" />
             APROVAR
           </Button>
@@ -49,18 +130,18 @@ function Page() {
           </div>
           <div className="w-full flex flex-col gap-2 ml-5">
             <Label className="text-xs font-semibold">Nome Artístico/ Marca</Label>
-            <Input value={artisan?.artistic_name} readOnly className="border border-midnight max-w-[528px] " />
+            <Input value={artisan?.userName} readOnly className="border border-midnight max-w-[528px] " />
 
             <Label className="text-xs font-semibold">Nome Completo</Label>
-            <Input value={artisan?.name} readOnly className="border border-midnight max-w-[528px]" />
+            <Input value={artisan?.userName} readOnly className="border border-midnight max-w-[528px]" />
 
             <Label className="text-xs font-semibold">Email</Label>
-            <Input value={artisan?.email} readOnly className="border border-midnight max-w-[528px]" />
+            <Input value={artisan?.userEmail} readOnly className="border border-midnight max-w-[528px]" />
 
             <Label className="text-xs font-semibold">Telefone/ Whatsapp</Label>
             <div className="flex gap-2 max-w-3xs">
-              <Input value={artisan?.phone.slice(3, 5)} readOnly className="w-11 border border-midnight" />
-              <Input value={artisan?.phone.slice(5, 14)} readOnly className="border border-midnight" />
+              <Input value={artisan?.userPhone.slice(3, 5)} readOnly className="w-11 border border-midnight" />
+              <Input value={artisan?.userPhone.slice(5, 14)} readOnly className="border border-midnight" />
             </div>
           </div>
 
@@ -68,26 +149,26 @@ function Page() {
         <div className="flex mb-5 gap-3">
           <div>
             <Label className="text-xs font-semibold">CEP</Label>
-            <Input value={artisan?.zip_code} readOnly className="border border-midnight" />
+            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
           </div>
 
           <div>
             <Label className="text-xs font-semibold">Estado</Label>
-            <Input value={artisan?.state} readOnly className="border border-midnight" />
+            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
           </div>
 
           <div>
             <Label className="text-xs font-semibold">Cidade</Label>
-            <Input value={artisan?.city} readOnly className="border border-midnight" />
+            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
           </div>
         </div>
 
         <div className="flex flex-col gap-2 mb-5">
           <Label className="text-xs font-semibold">Endereço</Label>
-          <Input value={artisan?.address} readOnly className="max-w-[576px] border border-midnight" />
+          <Input value={artisan?.sicab} readOnly className="max-w-[576px] border border-midnight" />
 
           <Label className="text-xs font-semibold">Nome de usuário</Label>
-          <Input value={artisan?.username} readOnly className=" max-w-52 border border-midnight" />
+          <Input value={artisan?.userName} readOnly className=" max-w-52 border border-midnight" />
         </div>
       </div>
 
@@ -98,7 +179,7 @@ function Page() {
             <Label className="text-xs font-semibold mb-1">Tipo de Artesanato/ Arte</Label>
             <div className="relative max-w-[450px]">
               <Input
-                value={artisan?.art_type}
+                value={artisan?.rawMaterial}
                 readOnly
                 className="border border-midnight pr-8"
               />
@@ -110,7 +191,7 @@ function Page() {
             <Label className="text-xs font-semibold mb-1">MEI ou CNPJ</Label>
             <div className="relative max-w-[200px]">
               <Input
-                value={artisan?.business_type}
+                value={artisan?.userName}
                 readOnly
                 className="border border-midnight pr-8"
               />
@@ -120,7 +201,7 @@ function Page() {
 
           <div className="w-full">
             <Label className="text-xs font-semibold mb-1">Número</Label>
-            <Input value={artisan?.registration_number} readOnly className="max-w-64 border border-midnight" />
+            <Input value={artisan?.sicab} readOnly className="max-w-64 border border-midnight" />
           </div>
         </div>
         <div className="flex text-xs font-semibold gap-4">
@@ -172,10 +253,10 @@ function Page() {
         <h3 className="font-semibold mb-5">Experiências</h3>
         <p className="text-xs font-semibold mb-5">Breve histórico profissional como artesão</p>
         <div className="border text-xs border-midnight rounded-md max-w-[960px] min-h-48 h-fit p-3 ">
-          <p>{artisan?.description}</p>
+          <p>{artisan?.userName}</p>
         </div>
         <p className="my-5 text-midnight text-xs font-semibold">Midia</p>
-        <div className="flex gap-4">
+        {/* <div className="flex gap-4">
           {artisan?.media.map((media, index) => (
             <div key={index} className="flex flex-col items-center">
               <Image
@@ -187,7 +268,7 @@ function Page() {
               />
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -1,17 +1,60 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { BsXLg } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
-import artisans from "../../../../db-mock/artisans.json";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+type Artisan = {
+  id: string;
+  artisanName: string;
+  email: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INACTIVE';
+};
 
 function ModeratorTable() {
+  const [artisans, setArtisans] = useState<Artisan[]>([])
+  const router = useRouter()
+
   const statusTranslated: Record<string, string> = {
     'PENDING': 'Pendente',
     'APPROVED': 'Aprovado',
     'REJECTED': 'Recusado',
     'INACTIVE': 'Inativo',
   };
+
+  const fetchArtisans = async () => {
+    try {
+      const response = await fetch('http://localhost:3333/artisan-applications', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        credentials: 'include',
+      })
+
+      const result = await response.json();
+
+      if(response.status === 403) {
+        router.replace('/')
+      }
+
+      if (response.ok) {
+        setArtisans(result.artisanApplications)
+      }
+
+    } catch(error) {
+      
+      console.error('Erro ao buscar artesãos: ', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchArtisans()
+  }, [])
 
 
   return (
@@ -102,7 +145,7 @@ function ModeratorTable() {
               <tr key={artisan.id} className="h-9">
                 <td className="ring-[0.5px]">
                   <Link href={`/moderator/artisans/${artisan.id}`} className="hover:font-semibold transition underline">
-                    {artisan.name}
+                    {artisan.artisanName}
                   </Link>
                 </td>
                 <td className="ring-[0.5px] hidden md:table-cell ">{artisan.email}</td>
