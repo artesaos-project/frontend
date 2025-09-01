@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import useStoreUser from "@/hooks/useStoreUser";
 import { UserProps } from "@/types/UserProps";
+import Image from "next/image";
 
 const loginSchema = z.object({
   email: z.string().email('Email e/ou senha Incorretos'),
@@ -54,7 +55,7 @@ function SignIn({
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://congenial-waddle-xq4p7g7xqvvc67j7-3333.app.github.dev/sessions', {
+      const response = await fetch('http://localhost:3333/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +92,9 @@ function SignIn({
         {children}
         <div className="mt-6 mb-14 ">
 
-          <DialogTitle className="text-5xl md:text-[45px] font-bold">Olá!</DialogTitle>
+          <Image src="/horizontal-logo.svg" alt="Imagem de boas-vindas" width={120} height={59}/>
+
+          <DialogTitle className="text-5xl md:text-[45px] mt-8 font-bold">Olá!</DialogTitle>
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
         </div>
         <form className="space-y-3 mb-3 text-end" onSubmit={handleSubmit(onSubmit)}>
@@ -134,8 +137,8 @@ function SignIn({
           <div className="w-full flex justify-center mt-10">
             <Button
               type="submit"
-              className="bg-solar-700 w-[191px] h-[42px] rounded-2xl border-b-3 border-[#c04500] 
-              hover:bg-[#c04500] cursor-pointer"
+              className="bg-salmon w-[191px] h-[42px] rounded-2xl border-b-3 border-[#E85A4F]            
+              hover:bg-[#E85A4F] cursor-pointer"
               disabled={isLoading}>
               {isLoading ? (
                 <>
