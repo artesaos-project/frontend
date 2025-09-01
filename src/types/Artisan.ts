@@ -1,11 +1,12 @@
-export type Artisan = {
-    name: string;
-    username: string;
-    followers: number;
-    products: number;
-    profilePicture: string;
-    description?: string;
-    contactInfo?: string;
-    isFollowing?: boolean;
-    isShared?: boolean;
-};
+export interface ArtisanProfile {
+    userId: string;
+    artisanName: string;
+    userName: string;
+    socialName: string | null;
+    followersCount: number;
+    productsCount: number;
+    phoneNumber: string;
+    email: string;
+    bio: string | null;
+    avatar: string | null;
+  }

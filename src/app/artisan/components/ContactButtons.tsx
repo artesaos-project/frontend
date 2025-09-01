@@ -3,7 +3,7 @@
 function ContactButtons({ contactInfo, className, icon }: { contactInfo: string, className?: string, icon?: React.ReactNode }) {
     const handleContact = () => {
         const message = `Olá! Tenho interesse nos Artesanatos que você faz.`;
-        const whatsappUrl = `https://wa.me/55${contactInfo}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${contactInfo}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     };
 
