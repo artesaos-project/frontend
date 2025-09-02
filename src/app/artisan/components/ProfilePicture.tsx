@@ -1,9 +1,21 @@
-import { Artisan } from '@/types/Artisan';
+import { ArtisanProfile } from "@/types/Artisan";
 
-function ProfilePicture({ artist, className }: { artist: Artisan; className?: string }) {
+function ProfilePicture({ artisan, className }: { artisan: ArtisanProfile; className?: string }) {
+    if (!artisan?.avatar) {
+        return (
+            <div>
+                <img src="https://placehold.co/100x100" className={className} alt="Profile"/>
+            </div>
+        );
+    }
+
     return (
         <div>
-            <img src={artist.profilePicture} alt={`${artist.name}'s profile`} className={className}/>
+            <img 
+                src={artisan.avatar} 
+                alt={`${artisan.artisanName}'s profile`} 
+                className={className}
+            />
         </div>
     );
 }

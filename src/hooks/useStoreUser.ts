@@ -6,6 +6,7 @@ const useStoreUser = create<UserStore>()(
   persist(
     (set) => ({
       user: {
+        userId: "",
         userName: "",
         userPhoto: "",
         isAuthenticated: false,
@@ -14,6 +15,7 @@ const useStoreUser = create<UserStore>()(
       setUser: (user: UserProps) =>
         set(() => ({
           user: {
+            userId: user.userId,
             userName: user.userName,
             userPhoto: user.userPhoto,
             isAuthenticated: true,
@@ -23,6 +25,7 @@ const useStoreUser = create<UserStore>()(
       resetStore: () =>
         set(() => ({
           user: {
+            userId: "",
             userName: "",
             userPhoto: "",
             isAuthenticated: false,

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePicture from "./ProfilePicture";
 import ProfileInfo from "./ProfileInfo";
 import ActionButtons from "./ActionButtons";
@@ -16,27 +16,73 @@ import ProductArtisan from "./ProductArtisan";
 import ProductReviews from "@/app/product/components/ProductReviews";
 import artisanProductMock from "./artisanProductMock.json";
 import { LuPencil } from "react-icons/lu";
+import { ArtisanProfile } from "@/types/Artisan";
+import useStoreUser from "@/hooks/useStoreUser";
+import { useRouter } from "next/navigation";
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<"produtos" | "avaliacoes">(
     "produtos"
   );
   const params = useParams();
-  const Id = params.id as string;
-  const [follow, setFollow ] = useState(false);
+  const userName = params.id as string;
+  const [follow, setFollow] = useState(false);
   const [isArtisan, setIsArtisan] = useState(false);
-
-  const artisan =  artisanProductMock.artisans?.find(a => a.id === Id);
-  if(!artisan) {
-    return <div className="text-center py-8 text-gray-500">Artesão não encontrado.</div>;
-  }
-
-  const filteredReviews = Id
-    ? artisanProductMock.productReviews.filter((review) => review.authorId === Id)
-    : artisanProductMock.productReviews;
-
+  const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [visibleProducts, setVisibleProducts] = useState(25);
   const [totalProducts, setTotalProducts] = useState(0);
+  const { user } = useStoreUser();
+  const route = useRouter();
+
+  const getLoggedUserId = () => {
+    return user.userId;
+  };
+
+  useEffect(() => {
+    const fetchArtisanProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:3333/artisan-profile/${userName}`);
+        
+        if (!response.ok) {
+          throw new Error('Artesão não encontrado');
+        }
+        
+        const data: ArtisanProfile = await response.json();
+        setArtisan(data);
+
+        const loggedUserId = getLoggedUserId();
+
+        if (loggedUserId && data.userId && String(loggedUserId) === String(data.userId)) {
+          setIsArtisan(true);
+          console.log("O usuário logado é o artesão.");
+        }
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Erro ao carregar perfil');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userName) {
+      fetchArtisanProfile();
+    }
+  }, [userName, user]);
+
+  if (loading) {
+    return <div className="text-center py-8 text-gray-500 animate-spin">Carregando...</div>;
+  }
+
+  if (error || !artisan) {
+    return <div className="text-center py-8 text-gray-500">{error || "Artesão não encontrado."}</div>;
+  }
+
+  const filteredReviews = artisan.userId
+    ? artisanProductMock.productReviews.filter((review) => review.authorId === artisan.userId)
+    : artisanProductMock.productReviews;
 
   const bgcolor = "bg-[#A6E3E9]";
   const textColor = "text-[#1F3A4D]";
@@ -44,8 +90,8 @@ const ArtisanProfileCard = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-      title: `${artisan.name}`,
-      text: `Confira os produtos do ${artisan.name}`,
+      title: `${artisan.artisanName}`,
+      text: `Confira os produtos do ${artisan.artisanName}`,
       url: window.location.href,
     }).catch(error => {
         console.log('Erro ao compartilhar:', error);
@@ -67,12 +113,20 @@ const ArtisanProfileCard = () => {
     alert(follow ? "Você começou a seguir o artista." : "Você deixou de seguir o artista." );
   }
 
+  const handleAddProduct = () => {
+    if (!user.isAuthenticated) {
+      alert('Você precisa estar logado para adicionar produtos');
+      return;
+    }
+    route.push(`/artisan/${userName}/add-product`);
+  };
+
   return (
     <div className={`${bgcolor} pt-6 mx-auto shadow-md`}>
       <div className="flex flex-row justify-center gap-5">
         <div className="flex flex-col justify-center items-center gap-2">
           <ProfilePicture
-            artist={artisan}
+            artisan={artisan}
             className={`w-24 h-24 rounded-full mx-auto border-4 border-white shadow-md`}
           />
           
@@ -87,7 +141,7 @@ const ArtisanProfileCard = () => {
         </div>
 
         <div className="flex flex-col justify-center items-center gap-2">
-          <ProfileInfo artist={artisan} textColor={textColor} />
+          <ProfileInfo artisan={artisan} textColor={textColor} />
           <ActionButtons
             nameButton="Compartilhar"
             icon={<IoMdShareAlt size={20} />}
@@ -98,7 +152,7 @@ const ArtisanProfileCard = () => {
       </div>
 
       <div className={`${textColor}`}>
-        <ProfileDescription description={artisan.description} />
+        <ProfileDescription description={artisan.bio} />
       </div>
 
       <div className="flex flex-col gap-y-4 md:flex-row justify-center items-center mt-6 md:space-x-4 font-bold text-[#1F3A4D]">
@@ -115,18 +169,19 @@ const ArtisanProfileCard = () => {
               iconPosition="left"
               icon={<PiPlusCircleLight size={20} color="red" />}
               className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
+              onClick={handleAddProduct}
             />
             <ActionButtons
               nameButton="Saber mais"
               iconPosition="left"
-              icon={<LuPencil size={20}color="red" />}
+              icon={<LuPencil size={20} color="red" />}
               className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
             />
           </>
           ) : (
           <>
             <ContactButtons
-              contactInfo={artisan.contactInfo}
+              contactInfo={artisan.phoneNumber}
               icon={<FaWhatsapp />}
               className="flex min-w-[300px] px-10 py-2 ring ring-[#1F3A4D] justify-center items-center rounded-2xl hover:bg-[#1F3A4D] hover:text-white"
             />
@@ -173,7 +228,7 @@ const ArtisanProfileCard = () => {
         </div>
 
         <div className="flex bg-white items-center justify-center p-4 ">
-          <ProductArtisan artistId={Id} visibleCount={visibleProducts} onTotalChange={setTotalProducts} />
+          <ProductArtisan artistId={artisan.userId} visibleCount={visibleProducts} onTotalChange={setTotalProducts} />
         </div>
 
         {visibleProducts < totalProducts && (

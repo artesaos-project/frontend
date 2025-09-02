@@ -1,4 +1,5 @@
 export type UserProps = {
+  userId: string;
   userName: string;
   userPhoto: string;
   isAuthenticated?: boolean;
