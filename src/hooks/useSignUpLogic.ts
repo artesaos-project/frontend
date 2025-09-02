@@ -86,6 +86,7 @@ export const useSignUpLogic = (
             };
           } else {
               const user: UserProps = {
+                userId: body.userId,
                 userName: body.name,
                 userPhoto: body.avatar,
                 isModerator: isModerator

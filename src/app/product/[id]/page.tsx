@@ -348,6 +348,7 @@ function ProductPage() {
                     />
                   </div>
                   <ProductCardBody
+                    id={product.id}
                     price={product.price}
                     title={product.title}
                     author={product.author}
@@ -373,6 +374,7 @@ function ProductPage() {
                     />
                   </div>
                   <ProductCardBody
+                    id={product.id}
                     price={product.price}
                     title={product.title}
                     author={product.author}

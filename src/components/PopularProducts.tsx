@@ -47,6 +47,7 @@ function PopularProducts() {
               />
             </div>
             <ProductCardBody
+              id={product.id}
               price={product.price}
               title={product.title}
               author={product.author}
