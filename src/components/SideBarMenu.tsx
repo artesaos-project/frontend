@@ -10,6 +10,11 @@ import { MdOutlineShoppingBag } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { BsGear } from "react-icons/bs";
 import { RxPlusCircled } from "react-icons/rx";
+import { CgDanger } from "react-icons/cg";
+import { IoDocumentOutline } from "react-icons/io5";
+import { FaHome } from "react-icons/fa";
+import { IoMdCalendar } from "react-icons/io";
+import { IoPerson } from "react-icons/io5";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import AuthenticationModal from "./AuthenticationModal/AuthenticationModal";
 import {
@@ -23,9 +28,13 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import useStoreUser from "@/hooks/useStoreUser";
+import { usePathname } from "next/navigation";
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
+  const pathname = usePathname()
+
+  const isModerationRoute = pathname.startsWith('/moderator')
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -75,44 +84,101 @@ function SideBarMenu() {
           )}
         </div>
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <MdOutlineShoppingBag color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-              Produtos
-            </p>
-            <IoChevronDownOutline size={25} />
-          </div>
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <RxPlusCircled color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-              Adicionar Produto
-            </p>
-          </div>
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <FaRegHeart color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-              Favoritos
-            </p>
-          </div>
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <BsGear color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-              Configurações
-            </p>
-          </div>
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <IoMdHelpCircleOutline color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-              Suporte e Ajuda
-            </p>
-          </div>
+          {isModerationRoute ? (
+            <>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <FaHome color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                  Início
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoPerson color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Artesãos
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoMdCalendar color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Eventos
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <CgDanger color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Denúncias
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoDocumentOutline color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Documentação
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <BsGear color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Configurações
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoMdHelpCircleOutline color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Suporte e Ajuda
+                </p>
+              </div>
 
-          <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-            <TbLogout2 color="#ff8c94" size={30} />
-            <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-              Sair
-            </p>
-          </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <TbLogout2 color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Sair
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <MdOutlineShoppingBag color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                  Produtos
+                </p>
+                <IoChevronDownOutline size={25} />
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <RxPlusCircled color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Adicionar Produto
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <FaRegHeart color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Favoritos
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <BsGear color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Configurações
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoMdHelpCircleOutline color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Suporte e Ajuda
+                </p>
+              </div>
+
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <TbLogout2 color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Sair
+                </p>
+              </div>
+            </>
+          )}
+
         </ScrollArea>
       </SheetContent>
     </Sheet>

@@ -11,11 +11,11 @@ import { useRouter } from "next/navigation"
 function page() {
   const user = useStoreUser((state) => state.user);
   const router = useRouter();
-  useEffect(() => {
-    if (!user.isAuthenticated || !user.isModerator) {
-      router.push("/");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user.isAuthenticated || !user.isModerator) {
+  //     router.push("/");
+  //   }
+  // }, [user]);
   return (
     <div className="overflow-x-hidden">
       <ModeratorHeader />
