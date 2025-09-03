@@ -1,8 +1,7 @@
 import { UserProps } from "@/types/UserProps";
 import { useCallback } from "react";
 import { SignUpData } from "../lib/schemas/signUpSchema";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333/users";
+import { authApi } from "@/services/api";
 
 async function traduzirErro(mensagem: string): Promise<string> {
   try {
@@ -34,70 +33,54 @@ export const useSignUpLogic = (
     setUiError(traduzida);
   }, [setUiError]);
 
-
   const createUser = useCallback(
     async (data: SignUpData): Promise<{success: boolean, userData?: any}> => {
-      const payload = {
-        name: data.name,
-        cpf: data.cpf,
-        email: data.email,
-        password: data.password,
-        birthDate: data.birthDate,
-        phone: `${data.codigoPais}${data.ddd}${data.phone}`,
-        ...(data.socialName &&
-          data.socialName.trim() !== "" && { socialName: data.socialName }),
-      };
-
       try {
-        const res = await fetch(`${API_URL}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: 'include',
-          body: JSON.stringify(payload),
-        });
+        const payload = {
+          name: data.name,
+          cpf: data.cpf,
+          email: data.email,
+          password: data.password,
+          birthDate: data.birthDate,
+          phone: `${data.codigoPais}${data.ddd}${data.phone}`,
+          ...(data.socialName &&
+            data.socialName.trim() !== "" && { socialName: data.socialName }),
+        };
 
-        const body = await res.json();
-
-        if (!res.ok) {
-
-          if (res.status === 400 && body.errors) {
-            console.error("Validation errors detected");
-            return {
-              success: false
-            };
-          } else if (res.status === 409) {
-            const msgTraduzida = await traduzirErro(body.message);
-            await showUiError(msgTraduzida || "Usuário já existe.");
-            return{success: false};
-          }
-
-          await showUiError(body.message || "Erro ao criar usuário.");
-          return{success: false};
+        const body = await authApi.createUser(payload);
+        const isModerator = body.roles.includes("MODERATOR") ? true : false;
+  
+        if(data.isArtisan){
+          setUiError("Usuário criado! Complete o cadastro artesão.");
+  
+          return {
+            success: true,
+            userData: body,
+          };
         } else {
-          
-          const isModerator = body.roles.includes("MODERATOR") ? true : false;
-
-          if(data.isArtisan){
-            setUiError("Usuário criado! Complete o cadastro artesão.");
-
-            return {
-              success: true,
-              userData: body,
+            const user: UserProps = {
+              userId: body.userId,
+              userName: body.name,
+              userPhoto: body.avatar,
+              isModerator: isModerator
             };
-          } else {
-              const user: UserProps = {
-                userId: body.userId,
-                userName: body.name,
-                userPhoto: body.avatar,
-                isModerator: isModerator
-              };
-              setUser(user);
-              setUiError("Usuário criado e logado com sucesso!");
-
-              return { success: true };
-          }
+            setUser(user);
+            setUiError("Usuário criado e logado com sucesso!");
+  
+            return { success: true };
         }
       } catch (err: any) {
+        if (err.status === 400 && err.errors) {
+          console.error("Validation errors detected");
+          return {
+            success: false
+          };
+        } else if (err.status === 409) {
+          const msgTraduzida = await traduzirErro(err.message);
+          await showUiError(msgTraduzida || "Usuário já existe.");
+          return { success: false };
+        }
+  
         await showUiError(err.message || "Erro inesperado.");
         return { success: false };
       }

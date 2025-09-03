@@ -14,6 +14,7 @@ import Image from "next/image";
 import ProductSlide from "../components/ProductSlide";
 import { FormattedReview, ApiProduct  } from "@/types/product";
 import { GoArrowLeft } from "react-icons/go";
+import { productApi } from "@/services/api";
 
 const products = [
   {
@@ -92,15 +93,7 @@ function ProductPage() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `http://localhost:3333/products/${productId}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Produto não encontrado");
-      }
-
-      const productData: ApiProduct = await response.json();
+      const productData = await productApi.getById(productId);
       setProduct(productData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao carregar produto");

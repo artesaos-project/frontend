@@ -10,6 +10,7 @@ import { ProductForm } from "@/types/ProductForm";
 import InputField from "../../components/InputField";
 import { TbSelect, TbTrash } from "react-icons/tb";
 import { IoAdd } from "react-icons/io5";
+import { productApi, uploadApi } from "@/services/api";
 
 const AddProductPage: React.FC = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const AddProductPage: React.FC = () => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [selectedPhotos, setSelectedPhotos] = useState<number[]>([]);
   const [photoIds, setPhotoIds] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (
     field: keyof ProductForm,
@@ -60,40 +62,41 @@ const AddProductPage: React.FC = () => {
     document.getElementById("photo-upload")?.click();
   };
 
-  const handleImage = (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = fetch("http://localhost:3333/attachments", {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    });
-
-    return res;
+  const handleImage = async (file: File): Promise<{ attachmentId: string }> => {
+    try {
+      const result = await uploadApi.uploadFile(file);
+      return result;
+    } catch (error) {
+      console.error("Erro ao fazer upload da foto:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {
     const uploadPhotos = async () => {
+      if (photos.length === 0) {
+        setPhotoIds([]);
+        return;
+      }
+
+      setIsUploading(true);
       const uploadedPhotoIds: string[] = [];
-      for (const photo of photos) {
-        try {
-          const response = await handleImage(photo);
-          const result = await response.json();
+      
+      try {
+        for (const photo of photos) {
+          const result = await handleImage(photo);
           uploadedPhotoIds.push(result.attachmentId);
           console.log("Uploaded photo ID:", result.attachmentId);
-        } catch (error) {
-          console.error("Erro ao fazer upload da foto:", error);
         }
+        setPhotoIds(uploadedPhotoIds);
+      } catch (error) {
+        console.error("Erro ao fazer upload das fotos:", error);
+      } finally {
+        setIsUploading(false);
       }
-      setPhotoIds(uploadedPhotoIds);
     };
 
-    if (photos.length > 0) {
-      uploadPhotos();
-    } else {
-      setPhotoIds([]);
-    }
+    uploadPhotos();
   }, [photos]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,6 +113,11 @@ const AddProductPage: React.FC = () => {
       return;
     }
 
+    if (isUploading) {
+      console.error("Aguarde o upload das fotos ser concluído");
+      return;
+    }
+
     const productData = {
       title: form.name.trim(),
       description: form.description.trim(),
@@ -122,28 +130,19 @@ const AddProductPage: React.FC = () => {
       necessaryDays: form.isCustomOrder ? parseInt(form.necessaryDays) || 0 : 0,
     };
 
-    console.log("Form submitted:", productData);
-    console.log("Photos:", photos);
-
     try {
-      const res = await fetch("http://localhost:3333/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(productData),
-        credentials: "include",
-      });
+      await productApi.create(productData);
+      console.log("Produto adicionado com sucesso!");
+      router.back();
+    } catch (error: any) {
+      console.error("Erro ao adicionar produto:", error);
 
-      if (res.ok) {
-        console.log("Produto adicionado com sucesso!");
-        router.back();
+      if (error.message.includes("401") || error.message === "UNAUTHORIZED") {
+        alert("Você não tem permissão para adicionar produtos.");
+        router.push("/");
       } else {
-        const errorData = await res.json();
-        console.error("Erro ao adicionar produto:", errorData);
+        alert("Erro ao adicionar produto. Tente novamente.");
       }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
     }
   };
 
@@ -714,9 +713,14 @@ const AddProductPage: React.FC = () => {
             <div className="flex w-full text-sm space-x-4 mt-4">
               <button
                 type="submit"
-                className="flex px-6 gap-2 py-2 w-full justify-center items-center bg-[#2AAA4C] text-white rounded-lg hover:bg-green-600 transition-all"
+                disabled={isUploading}
+                className={`flex px-6 gap-2 py-2 w-full justify-center items-center rounded-lg transition-all ${
+                  isUploading 
+                    ? "bg-gray-400 cursor-not-allowed" 
+                    : "bg-[#2AAA4C] hover:bg-green-600"
+                } text-white`}
               >
-                Adicionar Produto
+                {isUploading ? "Enviando fotos..." : "Adicionar Produto"}
                 <IoAdd className="bg-gray-200/50 rounded-2xl" color="white" />
               </button>
             </div>

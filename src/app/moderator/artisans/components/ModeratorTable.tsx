@@ -7,6 +7,7 @@ import { LuPencil } from "react-icons/lu";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { artisanApi } from "@/services/api";
 
 type Artisan = {
   id: string;
@@ -51,51 +52,24 @@ function ModeratorTable({ searchTerm, activeFilter, artisans, onRefresh }: Moder
   }, [artisans, searchTerm, activeFilter]);
 
   const handleApprove = async (artisanId: string) => {
-
     try {
-      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status: 'APPROVED' })
-
-      })
-
-      if (response.ok) {
-        console.log(`artesao aprovado`)
-        // Atualiza a lista após aprovação
-        onRefresh()
-      } 
-
+      await artisanApi.approve(artisanId);
+      console.log(`artesão aprovado`);
+      onRefresh();
     } catch (error) {
-      console.error('Erro ao aprovar artesão: ', error)
+      console.error('Erro ao aprovar artesão: ', error);
     }
   }
   
   const handleRejection = async (artisanId: string) => {
     try {
-      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status: 'REJECTED' })
-
-      })
-
-      if (response.ok) {
-        console.log(`artesao rejeitado`)
-        // Atualiza a lista após rejeição
-        onRefresh()
-      } 
+      await artisanApi.reject(artisanId);
+      console.log(`artesão rejeitado`);
+      onRefresh();
     } catch (error) {
-      console.error('Erro ao rejeitar artesão: ', error)
+      console.error('Erro ao rejeitar artesão: ', error);
     }
   }
-
 
   return (
     <div>
