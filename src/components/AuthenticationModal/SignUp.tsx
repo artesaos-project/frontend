@@ -124,6 +124,7 @@ export default function SignUp({
         const userId = created.userData?.id || created.userData?.userId;
 
         const userData: UserProps = {
+          userId: userId,
           userName: created.userData.name,
           userPhoto: created.userData.avatar,
           isModerator: created.userData.roles?.includes("MODERATOR") || false,

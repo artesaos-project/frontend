@@ -79,6 +79,7 @@ function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artist
             />
           </div>
           <ProductCardBody
+            id={product.id}
             price={product.priceInCents/100}
             title={product.title}
             author={product.authorName}

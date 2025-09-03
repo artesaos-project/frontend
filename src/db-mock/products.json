@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "title": "Conjunto de Bijuterias Artesanais",
     "price": 49.9,
     "author": "Ana Costa",
@@ -7,6 +8,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 2,
     "title": "Tigela de Cerâmica Esmaltada",
     "price": 89.0,
     "author": "João Fernandes",
@@ -14,6 +16,7 @@
     "img": "ceramica-e-porcelana.webp"
   },
   {
+    "id": 3,
     "title": "Quadro de Ilustração Botânica",
     "price": 120.0,
     "author": "Luiza Ramos",
@@ -21,6 +24,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 4,
     "title": "Caixa Decorativa em Madeira",
     "price": 75.0,
     "author": "Carlos Nogueira",
@@ -28,6 +32,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 5,
     "title": "Cachecol em Tear Manual",
     "price": 65.0,
     "author": "Fernanda Lima",
@@ -35,6 +40,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 6,
     "title": "Tapete de Crochê Floral",
     "price": 98.5,
     "author": "Marina Oliveira",
@@ -42,6 +48,7 @@
     "img": "ceramica-e-porcelana.webp"
   },
   {
+    "id": 7,
     "title": "Caderno com Capa em Couro",
     "price": 55.0,
     "author": "Rafael Silva",
@@ -49,6 +56,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 8,
     "title": "Quadro Bordado com Frases",
     "price": 42.0,
     "author": "Juliana Souza",
@@ -56,6 +64,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 9,
     "title": "Vela Aromática de Lavanda",
     "price": 35.0,
     "author": "Patrícia Mendes",
@@ -63,6 +72,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 10,
     "title": "Kit de Sabonetes Vegetais",
     "price": 29.9,
     "author": "André Rocha",
@@ -70,6 +80,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 11,
     "title": "Cartões Decorativos Artesanais",
     "price": 19.0,
     "author": "Larissa Monteiro",
@@ -77,6 +88,7 @@
     "img": "ceramica-e-porcelana.webp"
   },
   {
+    "id": 12,
     "title": "Escultura com Materiais Reciclados",
     "price": 110.0,
     "author": "Diego Martins",
@@ -84,6 +96,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 13,
     "title": "Taça de Vidro Soprado",
     "price": 70.0,
     "author": "Bruna Almeida",
@@ -91,6 +104,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 14,
     "title": "Necessaire de Tecido Reutilizado",
     "price": 38.0,
     "author": "Gabriel Torres",
@@ -98,6 +112,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 15,
     "title": "Vela Aromática de Lavanda",
     "price": 35.0,
     "author": "Patrícia Mendes",
@@ -105,6 +120,7 @@
     "img": "artesanato-em-madeira.webp"
   },
   {
+    "id": 16,
     "title": "Kit de Sabonetes Vegetais",
     "price": 29.9,
     "author": "André Rocha",
@@ -112,6 +128,7 @@
     "img": "bijuterias.jpg"
   },
   {
+    "id": 17,
     "title": "Cartões Decorativos Artesanais",
     "price": 19.0,
     "author": "Larissa Monteiro",
@@ -119,6 +136,7 @@
     "img": "ceramica-e-porcelana.webp"
   },
   {
+    "id": 18,
     "title": "Escultura com Materiais Reciclados",
     "price": 110.0,
     "author": "Diego Martins",
