@@ -3,27 +3,52 @@ import React from "react";
 import { Button } from "./ui/button";
 import { BaseCard, ProductCardBody } from "./Card";
 import Image from "next/image";
-import products from "../db-mock/products.json";
 import { useState, useEffect } from "react";
 
+type Product = {
+  id: number;
+  title: string;
+  author: string;
+  price: number;
+  img: string;
+}
+
+
 function PopularProducts() {
-  const [visibleProducts, setVisibleProducts] = useState(products);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Erro ao buscar produtos:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       let maxItems = products.length;
 
-      if (width > 1024) maxItems = 15; // small screens
-      else if (width > 768) maxItems = 8; // medium screens
-      else if (width > 640) maxItems = 6; // all on larger screens
-      else maxItems = 4; // default for small screens
+      if (width > 1024) maxItems = 15;
+      else if (width > 768) maxItems = 8;
+      else if (width > 640) maxItems = 6;
+      else maxItems = 4;
 
       setVisibleProducts(products.slice(0, maxItems));
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, [products]);
 

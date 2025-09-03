@@ -2,6 +2,7 @@ export type UserProps = {
   userId: string;
   userName: string;
   userPhoto: string;
+  userTag?: string;
   isAuthenticated?: boolean;
   isModerator?: boolean;
 };
