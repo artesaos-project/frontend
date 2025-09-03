@@ -63,7 +63,7 @@ function header() {
                   className="rounded-full mb-4"
                 />
                 <h2 className="text-2xl font-bold">{user.userName}</h2>
-                <p>@murilofmatos</p>
+                <p>{user.userTag}</p>
                 <div className="w-fit">
                   <Separator className="my-2" />
                   <Link href="/profile" className="text-xl">

@@ -65,7 +65,7 @@ function SideBarMenu() {
               <h2 className="font-bold text-2xl text-midnight mb-1">
                 {user.userName}
               </h2>
-              <p className="text-sm text-midnight font-semibold">@johndoe</p>
+              <p className="text-sm text-midnight font-semibold">{user.userTag}</p>
               <Button asChild variant={"outline"} className="rounded-full">
                 <Link
                   href="/profile"
