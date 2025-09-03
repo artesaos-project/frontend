@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BaseCard, ProductCardBody } from "@/components/Card";
 import { ApiProduct } from "@/types/product";
+import { productApi } from "@/services/api";
 
 function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artistId?: string, visibleCount?: number, onTotalChange?: (total: number) => void }) {
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -9,23 +10,14 @@ function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artist
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if (!artistId) {
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
-        const url = `http://localhost:3333/products/?artisanId=${artistId}`
-          
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error('Erro ao carregar produtos');
-        }
-
-        const data: ApiProduct[] = await response.json();
+        const data = await productApi.getByArtisan(artistId);
         setProducts(data);
         
         if (onTotalChange) {

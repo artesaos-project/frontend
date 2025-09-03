@@ -19,6 +19,7 @@ import { LuPencil } from "react-icons/lu";
 import { ArtisanProfile } from "@/types/Artisan";
 import useStoreUser from "@/hooks/useStoreUser";
 import { useRouter } from "next/navigation";
+import { artisanApi } from "@/services/api";
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<"produtos" | "avaliacoes">(
@@ -44,13 +45,7 @@ const ArtisanProfileCard = () => {
     const fetchArtisanProfile = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3333/artisan-profile/${userName}`);
-        
-        if (!response.ok) {
-          throw new Error('Artesão não encontrado');
-        }
-        
-        const data: ArtisanProfile = await response.json();
+        const data = await artisanApi.getProfile(userName);
         setArtisan(data);
 
         const loggedUserId = getLoggedUserId();
@@ -73,11 +68,16 @@ const ArtisanProfileCard = () => {
   }, [userName, user]);
 
   if (loading) {
-    return <div className="text-center py-8 text-gray-500 animate-spin">Carregando...</div>;
+    return (
+      <div className="text-center py-8">
+        <div className="inline-block w-8 h-8 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        <p className="text-gray-500 mt-2">Carregando perfil...</p>
+      </div>
+    );
   }
 
   if (error || !artisan) {
-    return <div className="text-center py-8 text-gray-500">{error || "Artesão não encontrado."}</div>;
+    return <div className="text-center py-8 text-gray-500">{"Artesão não encontrado."}</div>;
   }
 
   const filteredReviews = artisan.userId

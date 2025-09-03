@@ -8,6 +8,7 @@ import SignInput from "@/components/AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { artisanApi } from "@/services/api";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -52,7 +53,6 @@ async function traduzirErro(mensagem: string): Promise<string> {
 // Componente principal
 function ArtisanSignUpPage({
   children,
-  artisanId,
   onSuccess,
 }: {
   children: React.ReactNode;
@@ -74,63 +74,40 @@ function ArtisanSignUpPage({
     setTimeout(() => setUiError(null), 5000);
   };
 
-  // Função para criar artesão
   async function createArtisan(data: ArtisanData) {
     try {
-
-      const res = await fetch("http://localhost:3333/artisan-applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          rawMaterial: data.rawMaterial,
-          technique: data.technique,
-          finalityClassification: data.finalityClassification,
-          sicab: data.sicab,
-          sicabRegistrationDate: data.sicabRegistration,
-          sicabValidUntil: data.sicabValidity,
-        }),
+      await artisanApi.createApplication({
+        rawMaterial: data.rawMaterial,
+        technique: data.technique,
+        finalityClassification: data.finalityClassification,
+        sicab: data.sicab,
+        sicabRegistrationDate: data.sicabRegistration,
+        sicabValidUntil: data.sicabValidity,
       });
-
-      const contentType = res.headers.get("content-type");
-      let body = null;
-      if (contentType && contentType.includes("application/json")) {
-        body = await res.json();
-      } else {
-        body = await res.text();
-      }
-
-      if (!res.ok) {
-        if (res.status === 400 && body.errors) {
-          await Promise.all(
-            (
-              Object.entries(body.errors) as [keyof ArtisanData, string[]][]
-            ).map(async ([field, msgs]) => {
-              const msgTraduzida = await traduzirErro(msgs[0]);
-              setFormError(field as keyof ArtisanData, {
-                type: "server",
-                message: msgTraduzida,
-              });
-            })
-          );
-          return;
-        }
-        if (res.status === 409) {
-          await showUiError(body.message || "Usuário já existe.");
-          return;
-        }
-        await showUiError(body.message || "Erro ao criar usuário.");
-        return;
-      }
 
       await showUiError("sucesso: Artesão foi enviado para analise.");
       setTimeout(() => {
         onSuccess();
       }, 3000);
-    } catch (error) {
-      console.error("Erro ao criar artesão:", error);
+    } catch (error: any) {
+      if (error.status === 400 && error.errors) {
+        await Promise.all(
+          Object.entries(error.errors).map(async ([field, msgs]) => {
+            const messages = Array.isArray(msgs) ? msgs : [String(msgs)];
+            const msgTraduzida = await traduzirErro(messages[0]);
+            setFormError(field as keyof ArtisanData, {
+              type: "server",
+              message: msgTraduzida,
+            });
+          })
+        );
+        return;
+      }
+      if (error.status === 409) {
+        await showUiError(error.message || "Usuário já existe.");
+        return;
+      }
+      await showUiError(error.message || "Erro ao criar usuário.");
     }
   }
 

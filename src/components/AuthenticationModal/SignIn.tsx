@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import useStoreUser from "@/hooks/useStoreUser";
 import { UserProps } from "@/types/UserProps";
+import { authApi } from "@/services/api";
 import Image from "next/image";
 
 const loginSchema = z.object({
@@ -55,33 +56,22 @@ function SignIn({
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3333/sessions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-
-      if (response.ok) {
-        const isModerator = result.roles.includes("MODERATOR") ? true : false;
-        const user: UserProps = {
-          userId: result.userId,
-          userName: result.name,
-          userPhoto: result.avatar,
-          isModerator: isModerator
-        }
-        setUser(user);
-        onSuccess();
-
-      } else {
-        const errorData = errorMessages[result.message];
-        setBackendError(errorData);
+      const result = await authApi.signIn(data);
+      
+      const isModerator = result.roles.includes("MODERATOR");
+      const user: UserProps = {
+        userId: result.userId,
+        userName: result.name,
+        userPhoto: result.avatar,
+        isModerator: isModerator
       }
-    } catch (errorData) {
-      console.error('Erro:', errorData);
+      setUser(user);
+      onSuccess();
+
+    } catch (error: any) {
+      const errorData = errorMessages[error.message] || 'Erro ao fazer login';
+      setBackendError(errorData);
+      console.error('Erro:', error);
     } finally {
       setIsLoading(false);
     }

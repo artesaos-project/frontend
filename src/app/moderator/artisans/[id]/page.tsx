@@ -12,91 +12,51 @@ import { Label } from "@/components/ui/label"
 import { IoIosArrowDown, IoIosInformationCircleOutline } from "react-icons/io"
 import { useState, useEffect } from "react"
 import { artisanDetails } from "@/types/artisanDetails"
-
+import { artisanApi } from "@/services/api"
 
 
 function Page() {
   const params = useParams();
-  const artisanId = params.id as unknown as number;
+  const artisanId = params.id as string;
   const [artisan, setArtisan] = useState<artisanDetails | null>(null);
   const router = useRouter()
 
   const fetchArtisans = async () => {
     try {
-      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-      })
-
-      const result = await response.json();
-
-      if (response.status === 403) {
-        router.replace('/')
+      const result = await artisanApi.getApplication(artisanId);
+      setArtisan(result.artisanApplication);
+      console.log(result.artisanApplication);
+    } catch (error: any) {
+      if (error.message === "UNAUTHORIZED") {
+        router.replace('/');
       }
-
-      if (response.ok) {
-        setArtisan(result.artisanApplication)
-        console.log(result.artisanApplication)
-        console.log(artisan)
-      }
-
-    } catch (error) {
-
-      console.error('Erro ao buscar artesãos: ', error)
+      console.error('Erro ao buscar artesãos: ', error);
     }
   }
 
   useEffect(() => {
     fetchArtisans()
-  }, [])
+  }, [artisanId]);
 
   const handleApprove = async () => {
-
     try {
-      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status: 'APPROVED' })
-
-      })
-
-      if (response.ok) {
-        console.log(`artesao aprovado`)
-        router.push('/moderator/artisans')
-      } 
-
+      await artisanApi.approve(artisanId);
+      console.log(`artesao aprovado`);
+      router.push('/moderator/artisans');
     } catch (error) {
-      console.error('Erro ao aprovar artesão: ', error)
+      console.error('Erro ao aprovar artesão: ', error);
     }
   }
   
   const handleRejection = async () => {
     try {
-      const response = await fetch(`http://localhost:3333/artisan-applications/${artisanId}/moderate`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status: 'REJECTED' })
-
-      })
-
-      if (response.ok) {
-        console.log(`artesao aprovado`)
-        router.push('/moderator/artisans')
-      } 
+      await artisanApi.reject(artisanId);
+      console.log(`artesao rejeitado`);
+      router.push('/moderator/artisans');
     } catch (error) {
-      console.error('Erro ao aprovar artesão: ', error)
+      console.error('Erro ao rejeitar artesão: ', error);
     }
   }
-
 
   return (
     <div className='overflow-x-hidden'>

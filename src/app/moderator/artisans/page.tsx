@@ -6,6 +6,7 @@ import ModeratorTitle from '../components/ModeratorTitle'
 import ModeratorSearch from './components/ModeratorSearch'
 import ModeratorTable from './components/ModeratorTable'
 import { useRouter } from 'next/navigation'
+import { artisanApi } from '@/services/api'
 
 type Artisan = {
   id: string;
@@ -25,32 +26,18 @@ function page() {
   const fetchArtisans = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('http://localhost:3333/artisan-applications', {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        credentials: 'include',
-      })
-
-      if (response.status === 403) {
-        router.replace('/')
-        return
+      const result = await artisanApi.getApplications();
+      setArtisans(result.artisanApplications);
+      setIsAuthorized(true);
+    } catch (error: any) {
+      if (error.message === "UNAUTHORIZED") {
+        router.replace('/');
+        return;
       }
-
-      if (response.ok) {
-        const result = await response.json()
-        setArtisans(result.artisanApplications)
-        setIsAuthorized(true)
-      } else {
-        router.replace('/')
-      }
-
-    } catch (error) {
-      console.error('Erro ao buscar artesãos: ', error)
-      router.replace('/')
+      console.error('Erro ao buscar artesãos: ', error);
+      router.replace('/');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
