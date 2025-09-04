@@ -10,8 +10,8 @@ const useStoreUser = create<UserStore>()(
         userName: undefined,
         userPhoto: undefined,
         artisanUserName: undefined,
-        isAuthenticated: true,
-        isModerator: true,
+        isAuthenticated: false,
+        isModerator: false,
         isArtisan: false,
       },
       setUser: (user: UserProps) =>
