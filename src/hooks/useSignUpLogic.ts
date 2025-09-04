@@ -49,6 +49,7 @@ export const useSignUpLogic = (
 
         const body = await authApi.createUser(payload);
         const isModerator = body.roles.includes("MODERATOR") ? true : false;
+        const isArtisan = body.roles.includes("ARTISAN") ? true : false;
   
         if(data.isArtisan){
           setUiError("Usuário criado! Complete o cadastro artesão.");
@@ -62,7 +63,8 @@ export const useSignUpLogic = (
               userId: body.userId,
               userName: body.name,
               userPhoto: body.avatar,
-              isModerator: isModerator
+              isModerator: isModerator,
+              isArtisan: isArtisan,
             };
             setUser(user);
             setUiError("Usuário criado e logado com sucesso!");

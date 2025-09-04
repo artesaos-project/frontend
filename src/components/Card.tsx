@@ -1,5 +1,5 @@
 import React from "react";
-import { FaRegHeart, FaPlus } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaPlus } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
@@ -21,9 +21,14 @@ function BaseCard({ children }: { children: React.ReactNode }) {
 
 function ProductCardBody({id, price, title, author }: ṔroductCardProps) {
   const router = useRouter();
+  const [isFavorited, setIsFavorited] = React.useState(false);
 
   const handleDetailsClick = () => {
     router.push(`/product/${id}`);
+  };
+
+  const handleFavoriteClick = () => {
+    setIsFavorited(!isFavorited);
   };
 
   return (
@@ -32,7 +37,16 @@ function ProductCardBody({id, price, title, author }: ṔroductCardProps) {
         <p className="font-bold lg:text-xl md:text-lg text-mint-600 truncate">
           R$ {price}
         </p>
-        <FaRegHeart size={25} color="#E00061" />
+        <button 
+          onClick={handleFavoriteClick}
+          className="cursor-pointer hover:scale-110 transition-transform duration-200"
+        >
+          {isFavorited ? (
+            <FaHeart size={25} color="#E00061" />
+          ) : (
+            <FaRegHeart size={25} color="#E00061" />
+          )}
+        </button>
       </header>
       <p className="text-xs lg:text-lg truncate">{title}</p>
       <p className="text-xs lg:text-lg truncate italic font-light">{author}</p>

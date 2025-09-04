@@ -63,7 +63,9 @@ function header() {
                   className="rounded-full mb-4 bg-gray-300"
                 />
                 <h2 className="text-2xl font-bold">{user.userName}</h2>
-                <p>@{user.userTag}</p>
+                {user.artisanUserName && (
+                  <p>@{user.artisanUserName}</p>
+                )}
                 {user.isModerator && (
                   <div className="w-fit">
                     <Separator className="my-2" />
