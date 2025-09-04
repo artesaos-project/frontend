@@ -2,21 +2,12 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { BaseCard, ProductCardBody } from "./Card";
-import Image from "next/image";
 import { useState, useEffect } from "react";
-
-type Product = {
-  id: number;
-  title: string;
-  author: string;
-  price: number;
-  img: string;
-}
-
+import { ApiProduct } from "@/types/product";
 
 function PopularProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ApiProduct[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -63,19 +54,18 @@ function PopularProducts() {
       <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4 lg:gap-y-6">
         {visibleProducts.map((product, i) => (
           <BaseCard key={i}>
-            <div className="relative w-full h-34 md:h-40">
-              <Image
-                src={"/" + product.img}
+            <div className="w-full h-34 md:h-40">
+              <img
+                src={product.coverPhoto}
                 alt="Criarte Logo"
-                className="rounded-lg object-cover"
-                fill
+                className="rounded-lg object-cover h-34 md:h-40 w-full"
               />
             </div>
             <ProductCardBody
               id={product.id}
-              price={product.price}
+              price={product.priceInCents/100}
               title={product.title}
-              author={product.author}
+              author={product.authorName}
             />
           </BaseCard>
         ))}
