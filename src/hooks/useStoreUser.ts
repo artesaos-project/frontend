@@ -7,9 +7,9 @@ const useStoreUser = create<UserStore>()(
     (set) => ({
       user: {
         userId: undefined,
-        userName: "Murilo Francisco Matos",
+        userName: undefined,
         userPhoto: undefined,
-        userTag: "murilofm",
+        userTag: undefined,
         isAuthenticated: true,
         isModerator: true,
         isArtisan: true,
