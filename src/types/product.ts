@@ -27,6 +27,7 @@ export interface FormattedReview {
 export interface ApiProduct {
   id: string;
   authorName: string;
+  authorUserName: string;
   authorId: string;
   title: string;
   description: string;

@@ -66,6 +66,8 @@ export const productApi = {
 
   getById: (id: string) => apiRequest<ApiProduct>(`/products/${id}`),
 
+  getAll: () => apiRequest<ApiProduct[]>(`/products`),
+
   create: (productData: any) =>
     apiRequest(`/products`, {
       method: "POST",

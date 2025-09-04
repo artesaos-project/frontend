@@ -10,81 +10,25 @@ import ProductAuthor from "../components/ProductAuthor";
 import ProductReviews from "../components/ProductReviews";
 import { FiPlus, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { BaseCard, ProductCardBody } from "@/components/Card";
-import Image from "next/image";
 import ProductSlide from "../components/ProductSlide";
-import { FormattedReview, ApiProduct  } from "@/types/product";
+import { FormattedReview, ApiProduct } from "@/types/product";
 import { GoArrowLeft } from "react-icons/go";
 import { productApi } from "@/services/api";
-
-const products = [
-  {
-    id: "1",
-    title: "Quadro Abstrato Azul",
-    price: 299.9,
-    author: "Maria Silva",
-    img: "bijuterias.jpg",
-  },
-  {
-    id: "2",
-    title: "Escultura Moderna",
-    price: 459.9,
-    author: "João Santos",
-    img: "ceramica-e-porcelana.webp",
-  },
-  {
-    id: "3",
-    title: "Pintura Paisagem",
-    price: 199.9,
-    author: "Ana Costa",
-    img: "artesanato-em-madeira.webp",
-  },
-  {
-    id: "4",
-    title: "Arte Digital",
-    price: 149.9,
-    author: "Pedro Lima",
-    img: "ceramica-e-porcelana.webp",
-  },
-  {
-    id: "1",
-    title: "Quadro Abstrato Azul",
-    price: 299.9,
-    author: "Maria Silva",
-    img: "bijuterias.jpg",
-  },
-  {
-    id: "2",
-    title: "Escultura Moderna",
-    price: 459.9,
-    author: "João Santos",
-    img: "ceramica-e-porcelana.webp",
-  },
-  {
-    id: "3",
-    title: "Pintura Paisagem",
-    price: 199.9,
-    author: "Ana Costa",
-    img: "artesanato-em-madeira.webp",
-  },
-  {
-    id: "4",
-    title: "Arte Digital",
-    price: 149.9,
-    author: "Pedro Lima",
-    img: "ceramica-e-porcelana.webp",
-  },
-];
 
 function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const productId = params.id as string;
   const [product, setProduct] = useState<ApiProduct | null>(null);
+  const [artistProducts, setArtistProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingArtistProducts, setLoadingArtistProducts] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<ApiProduct[]>([]);
+  const [loadingRelatedProducts, setLoadingRelatedProducts] = useState(false);
 
   useEffect(() => {
     fetchProduct();
@@ -95,10 +39,45 @@ function ProductPage() {
       setLoading(true);
       const productData = await productApi.getById(productId);
       setProduct(productData);
+
+      if (productData.authorId) {
+        fetchArtistProducts(productData.authorId);
+      }
+
+      fetchRelatedProducts();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao carregar produto");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchArtistProducts = async (authorId: string) => {
+    try {
+      setLoadingArtistProducts(true);
+      const products = await productApi.getByArtisan(authorId);
+      const filteredProducts = products.filter((p) => p.id !== productId);
+      setArtistProducts(filteredProducts);
+    } catch (err) {
+      console.error("Erro ao carregar produtos do artista:", err);
+    } finally {
+      setLoadingArtistProducts(false);
+    }
+  };
+
+  const fetchRelatedProducts = async () => {
+    try {
+      setLoadingRelatedProducts(true);
+
+      const allProducts = await productApi.getAll();
+
+      setRelatedProducts(
+        allProducts.filter((p) => p.id !== productId).slice(0, 12)
+      );
+    } catch (err) {
+      console.error("Erro ao carregar produtos relacionados:", err);
+    } finally {
+      setLoadingRelatedProducts(false);
     }
   };
 
@@ -143,6 +122,18 @@ function ProductPage() {
     }
     if (isRightSwipe && product && product.photos.length > 1) {
       prevImage();
+    }
+  };
+
+  const handleViewArtistProfile = () => {
+    if (product?.authorUserName) {
+      router.push(`/artisan/${product.authorUserName}`);
+    }
+  };
+
+  const handleViewMoreArtistProducts = () => {
+    if (product?.authorUserName) {
+      router.push(`/artisan/${product.authorUserName}`);
     }
   };
 
@@ -308,7 +299,7 @@ function ProductPage() {
               totalProducts={5}
               isFollowing={false}
               onFollow={() => alert("Seguindo!")}
-              onViewProfile={() => alert("Visualizando perfil!")}
+              onViewProfile={handleViewArtistProfile}
             />
           </div>
 
@@ -324,57 +315,91 @@ function ProductPage() {
             </div>
           )}
 
-          <div>
-            <ProductSlide
-              icon={<FiPlus className="text-2xl" />}
-              title="Produtos do Artista"
-              onViewMore={() => alert("Ver mais produtos do artista!")}
-            >
-              {products.map((product, i) => (
-                <BaseCard key={product.id || i}>
-                  <div className="relative w-full h-40">
-                    <Image
-                      src={"/" + product.img}
-                      alt={product.title}
-                      className="rounded-lg object-cover"
-                      fill
-                    />
-                  </div>
-                  <ProductCardBody
-                    id={product.id}
-                    price={product.price}
-                    title={product.title}
-                    author={product.author}
-                  />
-                </BaseCard>
-              ))}
-            </ProductSlide>
-          </div>
+          {product && (
+            <div>
+              <ProductSlide
+                icon={<FiPlus className="text-2xl" />}
+                title="Produtos do Artista"
+                onViewMore={handleViewMoreArtistProducts}
+              >
+                {loadingArtistProducts
+                  ? [
+                      <div
+                        key="loading"
+                        className="flex justify-center items-center p-8"
+                      >
+                        <p>Carregando produtos do artista...</p>
+                      </div>
+                    ]
+                  : artistProducts.length > 0
+                  ? artistProducts.slice(0, 12).map((artistProduct) => (
+                      <BaseCard key={artistProduct.id}>
+                        <div className="relative w-full h-34 md:h-44">
+                          <img
+                            src={artistProduct.coverPhoto}
+                            alt={artistProduct.title}
+                            className="rounded-lg w-full h-34 md:h-44"
+                          />
+                        </div>
+                        <ProductCardBody
+                          id={artistProduct.id}
+                          price={artistProduct.priceInCents / 100}
+                          title={artistProduct.title}
+                          author={artistProduct.authorName}
+                        />
+                      </BaseCard>
+                    ))
+                  : [
+                      <div
+                        className="flex justify-center items-center p-8 col-auto-span-full"
+                      >
+                        <p >Este artista ainda não possui outros produtos.</p>
+                      </div>
+                    ]
+                }
+              </ProductSlide>
+            </div>
+          )}
 
           <div>
             <ProductSlide
               title="Produtos Relacionados"
-              onViewMore={() => alert("Ver mais produtos relacionados!")}
+              onViewMore={() => router.push("/")}
             >
-              {products.map((product, i) => (
-                <BaseCard key={product.id || i}>
-                  <div className="relative w-full h-40">
-                    <Image
-                      src={"/" + product.img}
-                      alt={product.title}
-                      className="rounded-lg object-cover"
-                      fill
-                    />
-                  </div>
-                  <ProductCardBody
-                    id={product.id}
-                    price={product.price}
-                    title={product.title}
-                    author={product.author}
-                  />
-                </BaseCard>
-              ))}
-            </ProductSlide>
+              {loadingRelatedProducts
+                ? [
+                    <div
+                      className="flex justify-center items-center pl-8"
+                    >
+                      <p>Carregando produtos relacionados...</p>
+                    </div>
+                  ]
+                : relatedProducts.length > 0
+                ? relatedProducts.map((relatedProduct) => (
+                    <BaseCard key={relatedProduct.id}>
+                      <div className="relative w-full h-34 md:h-44">
+                        <img
+                          src={relatedProduct.coverPhoto}
+                          alt={relatedProduct.title}
+                          className="rounded-lg h-34 md:h-44 w-full"
+                        />
+                      </div>
+                      <ProductCardBody
+                        id={relatedProduct.id}
+                        price={relatedProduct.priceInCents / 100}
+                        title={relatedProduct.title}
+                        author={relatedProduct.authorName}
+                      />
+                    </BaseCard>
+                  ))
+                : [
+                    <div
+                      className="flex justify-center items-center pl-8"
+                    >
+                      <p>Nenhum produto relacionado encontrado.</p>
+                    </div>
+                  ]}
+              </ProductSlide>
           </div>
         </div>
       </main>
