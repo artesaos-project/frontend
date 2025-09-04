@@ -1,0 +1,10 @@
+export const finalidades = [
+  "ADORNOS, ACESSÓRIOS E VESTUÁRIOS",
+  "DECORATIVOS",
+  "EDUCATIVOS",
+  "LÚDICOS",
+  "RELIGIOSOS/MÍSTICOS",
+  "PROFANOS",
+  "UTILITÁRIOS",
+  "LEMBRANÇAS/SOUVENIRES",
+];
