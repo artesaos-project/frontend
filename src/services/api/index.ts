@@ -91,6 +91,7 @@ export const authApi = {
     apiRequest<{
       userId: string;
       name: string;
+      artisanUserName?: string;
       avatar: string;
       roles: string[];
     }>("/users", {
@@ -102,6 +103,7 @@ export const authApi = {
     apiRequest<{
       userId: string;
       name: string;
+      artisanUserName?: string;
       avatar: string;
       roles: string[];
     }>("/sessions", {

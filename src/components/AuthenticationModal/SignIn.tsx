@@ -63,6 +63,7 @@ function SignIn({
       const user: UserProps = {
         userId: result.userId,
         userName: result.name,
+        artisanUserName: result.artisanUserName,
         userPhoto: result.avatar,
         isModerator: isModerator,
         isArtisan: isArtisan,
