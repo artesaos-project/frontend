@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { ArrowLeft, Upload, Trash2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import Header from "@/components/header";
-import { useRouter } from "next/navigation";
-import { FaRegImage } from "react-icons/fa6";
-import { ProductForm } from "@/types/ProductForm";
-import InputField from "../../components/InputField";
-import { TbSelect, TbTrash } from "react-icons/tb";
-import { IoAdd } from "react-icons/io5";
+import { materiaPrima } from "@/constants/materiaPrima";
+import { tecnicas } from "@/constants/tecnicas";
 import { productApi, uploadApi } from "@/services/api";
+import { ProductForm } from "@/types/ProductForm";
+import { ArrowLeft, Trash2, Upload } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { FaRegImage } from "react-icons/fa6";
+import { IoAdd } from "react-icons/io5";
+import { TbSelect, TbTrash } from "react-icons/tb";
+import InputField from "../../components/InputField";
 
 const AddProductPage: React.FC = () => {
   const router = useRouter();
@@ -257,24 +259,32 @@ const AddProductPage: React.FC = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sakura focus:border-transparent outline-none transition-all"
                   >
                     <option value="">Selecione uma categoria</option>
-                    <option value="1">Cerâmica</option>
-                    <option value="2">Madeira</option>
-                    <option value="3">Tecido</option>
-                    <option value="4">Metal</option>
-                    <option value="5">Outros</option>
+                    {materiaPrima.map((material) => (
+                      <option key={material} value={"1"}>
+                        {material}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div>
-                  <InputField
-                    label="Técnica"
-                    type="text"
+                  <label className="block text-sm font-medium mb-2">
+                    Técnica
+                  </label>
+                  <select
                     value={form.technical}
-                    onChange={(value) =>
-                      handleInputChange("technical", value)
+                    onChange={(e) =>
+                      handleInputChange("technical", e.target.value)
                     }
-                    placeholder="Digite a técnica utilizada"
-                  />
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sakura focus:border-transparent outline-none transition-all"
+                  >
+                    <option value="">Selecione uma técnica</option>
+                    {tecnicas.map((tecnica) => (
+                      <option key={tecnica} value={tecnica}>
+                        {tecnica}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -515,24 +525,32 @@ const AddProductPage: React.FC = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sakura focus:border-transparent outline-none transition-all"
                     >
                       <option value="">Selecione uma categoria</option>
-                      <option value="1">Cerâmica</option>
-                      <option value="2">Madeira</option>
-                      <option value="3">Tecido</option>
-                      <option value="4">Metal</option>
-                      <option value="5">Outros</option>
+                      {materiaPrima.map((material) => (
+                        <option key={material} value={"1"}>
+                          {material}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
-                    <InputField
-                      label="Técnica"
-                      type="text"
+                    <label className="block text-sm font-medium mb-2">
+                      Técnica
+                    </label>
+                    <select
                       value={form.technical}
-                      onChange={(value) =>
-                        handleInputChange("technical", value)
+                      onChange={(e) =>
+                        handleInputChange("technical", e.target.value)
                       }
-                      placeholder="Digite a técnica utilizada"
-                    />
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sakura focus:border-transparent outline-none transition-all"
+                    >
+                      <option value="">Selecione uma técnica</option>
+                      {tecnicas.map((tecnica) => (
+                        <option key={tecnica} value={tecnica}>
+                          {tecnica}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>

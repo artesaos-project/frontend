@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { artisanApi } from "@/services/api";
+import { materiaPrima } from "@/constants/materiaPrima";
+import { tecnicas } from "@/constants/tecnicas";
+import { finalidades } from "@/constants/finalidades";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -274,9 +277,11 @@ function ArtisanSignUpPage({
               {...register("rawMaterial")}
             >
               <option value="">Matéria-prima*</option>
-              <option value="madeira">Madeira</option>
-              <option value="ceramica">Cerâmica</option>
-              <option value="tecido">Tecido</option>
+              {materiaPrima.map((material) => (
+                <option key={material} value={material}>
+                  {material}
+                </option>
+              ))}
             </select>
             {errors.rawMaterial && (
               <p className="text-sm text-magenta font-normal">
@@ -296,9 +301,11 @@ function ArtisanSignUpPage({
               {...register("technique")}
             >
               <option value="">Técnica*</option>
-              <option value="entalhe">Entalhe</option>
-              <option value="tintureiro">Tintureiro</option>
-              <option value="pintura">Pintura</option>
+              {tecnicas.map((tecnica) => (
+                <option key={tecnica} value={tecnica}>
+                  {tecnica}
+                </option>
+              ))}
             </select>
             {errors.technique && (
               <p className="text-sm text-magenta font-normal">
@@ -323,8 +330,11 @@ function ArtisanSignUpPage({
               >
                 Classificação Finalidade*
               </option>
-              <option value="decorativo">Decorativo</option>
-              <option value="utilitario">Utilitário</option>
+              {finalidades.map((finalidade) => (
+                <option key={finalidade} value={finalidade}>
+                  {finalidade}
+                </option>
+              ))}
             </select>
             {errors.finalityClassification && (
               <p className="text-sm text-magenta font-normal">
