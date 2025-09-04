@@ -1,10 +1,11 @@
 export type UserProps = {
-  userId: string;
-  userName: string;
-  userPhoto: string;
-  userTag?: string;
+  userId: string | undefined;
+  userName: string | undefined;
+  userPhoto: string | undefined;
+  userTag?: string | undefined;
   isAuthenticated?: boolean;
   isModerator?: boolean;
+  isArtisan?: boolean;
 };
 
 export type UserStore = {

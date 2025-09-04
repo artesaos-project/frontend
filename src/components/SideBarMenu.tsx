@@ -33,6 +33,11 @@ import { usePathname } from "next/navigation";
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
   const pathname = usePathname()
+  const resetStore = useStoreUser((state) => state.resetStore);
+
+  function handleLogout() {
+    resetStore();
+  }
 
   const isModerationRoute = pathname.startsWith('/moderator')
   return (
@@ -58,17 +63,19 @@ function SideBarMenu() {
             alt="User Avatar"
             width={110}
             height={110}
-            className="rounded-full w-20 sm:w-30"
+            className="rounded-full sm:w-30"
           />
           {user.isAuthenticated && (
             <div className="sm:ml-auto mr-2">
-              <h2 className="font-bold text-2xl text-midnight mb-1">
+              <h2 className="font-bold text-2xl text-midnight mb-1 line-clamp-2">
                 {user.userName}
               </h2>
-              <p className="text-sm text-midnight font-semibold">{user.userTag}</p>
+              {user.isArtisan && (
+                <p className="text-sm text-midnight font-semibold">@{user.userTag}</p>
+              )}
               <Button asChild variant={"outline"} className="rounded-full">
                 <Link
-                  href="/profile"
+                  href={`/artisan/${user.userId}`}
                   className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
                 >
                   Ver meu perfil
@@ -138,50 +145,54 @@ function SideBarMenu() {
             </>
           ) : (
             <>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <MdOutlineShoppingBag color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
                   Produtos
                 </p>
                 <IoChevronDownOutline size={25} />
               </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <RxPlusCircled color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Adicionar Produto
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              {user.isArtisan && (
+                <Link href={`/artisan/${user.userId}/add-product`}>
+                  <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                    <RxPlusCircled color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Adicionar Produto
+                    </p>
+                  </div>
+                </Link>
+              )}
+              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <FaRegHeart color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Favoritos
                 </p>
               </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <BsGear color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Configurações
                 </p>
               </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Suporte e Ajuda
                 </p>
               </div>
-
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <TbLogout2 color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Sair
-                </p>
-              </div>
+              {user.isAuthenticated && (
+                <div onClick={handleLogout} className="w-full cursor-pointer mb-60 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <TbLogout2 color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Sair
+                  </p>
+                </div>
+              )}
             </>
           )}
-
         </ScrollArea>
       </SheetContent>
-    </Sheet>
+    </Sheet >
   );
 }
 
