@@ -48,7 +48,7 @@ function header() {
                     alt="User Avatar"
                     width={60}
                     height={60}
-                    className="rounded-full user-select-none cursor-pointer"
+                    className="rounded-full user-select-none cursor-pointer bg-gray-300"
                   />
                 </DialogTitle>
               </DialogHeader>
@@ -60,23 +60,25 @@ function header() {
                   alt="User Avatar"
                   width={120}
                   height={120}
-                  className="rounded-full mb-4"
+                  className="rounded-full mb-4 bg-gray-300"
                 />
                 <h2 className="text-2xl font-bold">{user.userName}</h2>
-                <p>{user.userTag}</p>
-                <div className="w-fit">
-                  <Separator className="my-2" />
-                  <Link href="/profile" className="text-xl">
-                    Meu Perfil
-                  </Link>
-                  <Separator className="my-2" />
-                </div>
+                <p>@{user.userTag}</p>
+                {user.isModerator && (
+                  <div className="w-fit">
+                    <Separator className="my-2" />
+                    <Link href="/moderator" className="text-xl">
+                      Moderação
+                    </Link>
+                    <Separator className="my-2" />
+                  </div>
+                )}
                 <Button
                   variant={"ghost"}
                   onClick={() => {
                     resetStore();
                   }}
-                  className="text-xl text-red-500 hover:text-red-600"
+                  className="text-xl text-red-500 hover:text-red-600 mt-2"
                 >
                   Sair
                 </Button>
