@@ -57,13 +57,15 @@ function SignIn({
     setIsLoading(true);
     try {
       const result = await authApi.signIn(data);
-      
+
       const isModerator = result.roles.includes("MODERATOR");
+      const isArtisan = result.roles.includes("ARTISAN");
       const user: UserProps = {
         userId: result.userId,
         userName: result.name,
         userPhoto: result.avatar,
-        isModerator: isModerator
+        isModerator: isModerator,
+        isArtisan: isArtisan,
       }
       setUser(user);
       onSuccess();
@@ -83,7 +85,7 @@ function SignIn({
         {children}
         <div className="mt-6 mb-14 ">
 
-          <Image src="/horizontal-logo.svg" alt="Imagem de boas-vindas" width={120} height={59}/>
+          <Image src="/horizontal-logo.svg" alt="Imagem de boas-vindas" width={120} height={59} />
 
           <DialogTitle className="text-5xl md:text-[45px] mt-8 font-bold">Olá!</DialogTitle>
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
