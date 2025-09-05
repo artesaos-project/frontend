@@ -9,13 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { FiChevronLeft } from "react-icons/fi";
 import { UserProps } from "@/types/UserProps";
 import SignUpArtesian from "./SignUpArtesian";
 import useStoreUser from "@/hooks/useStoreUser";
+import { FaCheck } from "react-icons/fa";
 
 function AuthenticationModal({ color }: { color?: string }) {
   const [modalState, setModalState] = useState(0);
@@ -24,6 +25,8 @@ function AuthenticationModal({ color }: { color?: string }) {
   const [pendingUser, setPendingUser] = useState<UserProps | null>(null);
   const setUser = useStoreUser((state) => state.setUser);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   function openInitial() {
     setModalState(0);
@@ -63,6 +66,20 @@ function AuthenticationModal({ color }: { color?: string }) {
     setArtisanId(userId);
     setPendingUser(userData);
     setModalState(3);
+  }
+
+  function handleArtisanSuccess() {
+    setIsDialogOpen(false);
+    setShowSuccessModal(true);
+
+    setTimeout(() => {
+      setShowSuccessModal(false);
+      setPendingUser(null);
+      if (pendingUser) {
+        setUser(pendingUser);
+      }
+      setModalState(0);
+    }, 3000);
   }
 
   return (
@@ -127,7 +144,7 @@ function AuthenticationModal({ color }: { color?: string }) {
             </button>
           </SignIn>
         )}
-        {modalState === 2 && (
+        {modalState === 3 && (
           <SignUp
               onClose={() => setIsDialogOpen(false)}
               onArtisanSignup={openArtisan}
@@ -140,16 +157,10 @@ function AuthenticationModal({ color }: { color?: string }) {
             </button>
           </SignUp>
         )}
-        {modalState === 3 && artisanId && (
+        {modalState === 2 && (
             <SignUpArtesian
               artisanId={artisanId}
-              onSuccess={() => {
-                setPendingUser(null);
-                if (pendingUser) {
-                  setUser(pendingUser);
-                }
-                setIsDialogOpen(false)
-              }}
+              onSuccess={handleArtisanSuccess}
             >
               <button
                 onClick={() => {openInitial()}}
@@ -161,6 +172,37 @@ function AuthenticationModal({ color }: { color?: string }) {
           )}
       </DialogContent>
     </Dialog>
+
+    {showSuccessModal && (
+      <div 
+        className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]" 
+        ref={modalRef}
+      >
+        <div className="bg-white rounded-2xl p-8 mx-4 max-w-md w-full text-center">
+          <div className="mb-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaCheck className="w-10 h-10 text-green-600" />
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Cadastro Enviado!
+            </h3>
+
+            <p className="text-gray-600">
+              Sua solicitação de cadastro como artesão foi enviada para
+              análise. Você receberá uma resposta em breve.
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+              <span>Redirecionando...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
 
     <Dialog open={showConfirmClose} onOpenChange={setShowConfirmClose}>
       <DialogContent className="sm:max-w-md">

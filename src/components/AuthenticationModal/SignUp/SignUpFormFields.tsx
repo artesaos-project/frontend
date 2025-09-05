@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineInfoCircle } from "react-icons/ai";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -36,6 +36,14 @@ const Select = ({ options, ...props }: SelectProps) => (
   </select>
 );
 
+interface PasswordValidation{
+  minLength: boolean;
+  hasUpperCase: boolean;
+  hasLowerCase: boolean;
+  hasNumber: boolean;
+  hasSpecialChar: boolean;
+}
+
 interface PasswordFieldProps {
   name: "password" | "confirmPassword";
   placeholder: string;
@@ -46,7 +54,38 @@ interface PasswordFieldProps {
   showInfo?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
+  currentPassword?: string;
 }
+
+const ValidationItem = ({ isValid, text }: { isValid: boolean; text: string }) => (
+  <p className={isValid ? "text-green-600" : "text-salmon"}>
+    {isValid ? "✓" : "•"} {text}
+  </p>
+);
+
+const usePasswordValidation = (password: string, shouldValidate: boolean) => {
+  const [validation, setValidation] = useState<PasswordValidation>({
+    minLength: false,
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
+
+  useEffect(() => {
+    if (shouldValidate) {
+      setValidation({
+        minLength: password.length >= 8,
+        hasUpperCase: /[A-Z]/.test(password),
+        hasLowerCase: /[a-z]/.test(password),
+        hasNumber: /\d/.test(password),
+        hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+      });
+    }
+  }, [password, shouldValidate]);
+
+  return validation;
+};
 
 export const PasswordField = forwardRef<HTMLDivElement, PasswordFieldProps>(({
   name,
@@ -57,8 +96,12 @@ export const PasswordField = forwardRef<HTMLDivElement, PasswordFieldProps>(({
   onToggle,
   showInfo = false,
   onFocus,
-  onBlur
-}, ref) => (
+  onBlur,
+  currentPassword = ""
+}, ref) => { 
+  const validation = usePasswordValidation(currentPassword, name === "password" && showInfo);
+
+  return(
   <div className="relative" ref={ref}>
     <SignInput
       placeholder={placeholder}
@@ -80,17 +123,36 @@ export const PasswordField = forwardRef<HTMLDivElement, PasswordFieldProps>(({
       onFocus={onFocus}
       onBlur={onBlur}
     />
-    {name === "password" && showInfo && !error && (
-      <div className="relative text-xs text-[#985E00] p-2 border-[#985E00] mt-1">
-        <p>• No mínimo 8 caracteres</p>
-        <p>• Pelo menos 1 letra maiúscula</p>
-        <p>• Pelo menos 1 letra minúscula</p>
-        <p>• Pelo menos 1 número</p>
-        <p>• Pelo menos 1 caractere especial</p>
+      {name === "password" && showInfo && !error && (
+        <div className="relative text-xs p-2 mt-1 bg-gray-50 rounded-lg border border-gray-200">
+        <ValidationItem 
+          isValid={validation.minLength} 
+          text="No mínimo 8 caracteres" 
+        />
+        
+        <ValidationItem 
+          isValid={validation.hasUpperCase} 
+          text="Pelo menos 1 letra maiúscula" 
+        />
+
+        <ValidationItem 
+          isValid={validation.hasLowerCase} 
+          text="Pelo menos 1 letra minúscula" 
+        />
+
+        <ValidationItem 
+          isValid={validation.hasNumber} 
+          text="Pelo menos 1 número" 
+        />
+
+        <ValidationItem 
+          isValid={validation.hasSpecialChar} 
+          text="Pelo menos 1 caractere especial" 
+        />
       </div>
-    )}
+      )}
   </div>
-));
+)});
 
 PasswordField.displayName = "PasswordField";
 
