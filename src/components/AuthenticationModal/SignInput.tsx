@@ -35,10 +35,10 @@ const SignInput = forwardRef<HTMLInputElement, SignInputProps>(
             ref={ref}
             type={type}
             placeholder={placeholder}
-            className={`bg-[#FFF2DE] placeholder:text-[#985E00] placeholder:px-3 placeholder:text-sm placeholder:font-bold w-full h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 ${className}
+            className={`bg-[#FFF2DE] border-2 border-black/30 focus-visible:border-3 focus-visible:border-solar-700 placeholder:text-[#985E00] placeholder:px-3 placeholder:text-sm placeholder:font-bold w-full h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 ${className}
             ${
               hasError &&
-              "border-salmon border-2 focus-visible:ring-2 focus-visible:border-salmon placeholder:text-salmon"
+              "border-salmon focus-visible:border-2 focus-visible:border-salmon placeholder:text-salmon"
             }`}
             {...rest}
           />

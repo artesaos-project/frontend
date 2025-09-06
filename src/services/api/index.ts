@@ -21,8 +21,8 @@ type Artisan = {
 };
 
 type ArtisanApplicationPayload = {
-  rawMaterial: string;
-  technique: string;
+  rawMaterial: string[];
+  technique: string[];
   finalityClassification: string;
   sicab: string;
   sicabRegistrationDate: string;

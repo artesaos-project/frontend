@@ -5,16 +5,17 @@ import { DialogTitle } from "@/components/ui/dialog";
 import useStoreUser from "@/hooks/useStoreUser";
 import { UserProps } from "@/types/UserProps";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import React, { useCallback, useEffect, useRef } from "react";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import SignInput from "./SignInput";
+import { useDateInput } from "@/hooks/useDateInput";
 
 import {
   ArtisanCheckbox,
   BirthDateField,
   PasswordField,
   PhoneFields,
-} from "./SignUp//SignUpFormFields";
+} from "./SignUp/SignUpFormFields";
 
 import {
   ArtisanInfo,
@@ -60,11 +61,26 @@ export default function SignUp({
 
   const { createUser } = useSignUpLogic(setUser, setUiError);
 
+  const { validateAndFormatDate } = useDateInput({
+    onFormattedChange: setBirthDateInput,
+    onValidDateChange: (isoDate) => {
+      setValue("birthDate", isoDate, { shouldValidate: true });
+    }
+  });
+
+  const handleBirthDateInput = useCallback(
+    (value: string) => {
+      validateAndFormatDate(value);
+    },
+    [validateAndFormatDate]
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitted, isSubmitting },
     setValue,
+    control,
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -82,39 +98,12 @@ export default function SignUp({
     },
   });
 
-  const handleBirthDateInput = useCallback(
-    (value: string) => {
-      const formatDateInput = (value: string): string => {
-        const cleaned = value.replace(/\D/g, "");
-        if (cleaned.length <= 2) return cleaned;
-        if (cleaned.length <= 4)
-          return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
-        return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(
-          4,
-          8
-        )}`;
-      };
+  const passwordValue = useWatch({
+    control,
+    name: "password",
+    defaultValue: "",
+  });
 
-      const formatted = formatDateInput(value);
-      setBirthDateInput(formatted);
-
-      if (formatted.length === 10) {
-        const [day, month, year] = formatted.split("/");
-        const date = new Date(Number(year), Number(month) - 1, Number(day));
-        const isValid =
-          date.getDate() === Number(day) &&
-          date.getMonth() === Number(month) - 1 &&
-          date.getFullYear() === Number(year);
-
-        setValue("birthDate", isValid ? `${year}-${month}-${day}` : "", {
-          shouldValidate: true,
-        });
-      } else {
-        setValue("birthDate", "", { shouldValidate: true });
-      }
-    },
-    [setBirthDateInput, setValue]
-  );
 
   const onSubmit: SubmitHandler<SignUpData> = useCallback(
     async (data) => {
@@ -182,21 +171,21 @@ export default function SignUp({
   }, [errors, isSubmitted, setFormErrorFlag]);
 
   useEffect(() => {
-    if (
-      (formErrorFlag || uiError) &&
-      window.innerHeight < 750 &&
-      containerRef.current
-    ) {
-      containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [formErrorFlag, uiError]);
-
-  useEffect(() => {
     if (uiError) {
       const timer = setTimeout(() => setUiError(null), 5000);
       return () => clearTimeout(timer);
     }
   }, [uiError, setUiError]);
+
+    useEffect(() => {
+      if (uiError && containerRef.current) {
+        containerRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+    }, [uiError, formErrorFlag, containerRef]);
 
   return (
     <div
@@ -266,6 +255,7 @@ export default function SignUp({
           onFocus={() => showInfo("passwordInfo")}
           onBlur={() => setTimeout(() => hideInfo("passwordInfo"), 100)}
           ref={passwordRef}
+          currentPassword={passwordValue}
         />
 
         <PasswordField

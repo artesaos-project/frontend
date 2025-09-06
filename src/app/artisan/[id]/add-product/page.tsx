@@ -593,7 +593,6 @@ const AddProductPage: React.FC = () => {
                           <div className="flex items-center gap-1 text-sm">
                             <input
                               type="radio"
-                              name="isCustomOrder"
                               value="true"
                               checked={form.isCustomOrder === true}
                               onChange={() =>
@@ -607,7 +606,6 @@ const AddProductPage: React.FC = () => {
                           <div className="flex items-center gap-1 text-sm">
                             <input
                               type="radio"
-                              name="isCustomOrder"
                               value="false"
                               checked={form.isCustomOrder === false}
                               onChange={() =>

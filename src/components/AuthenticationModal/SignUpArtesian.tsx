@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import SignInput from "@/components/AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
-import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { artisanApi } from "@/services/api";
+import { finalidades } from "@/constants/finalidades";
 import { materiaPrima } from "@/constants/materiaPrima";
 import { tecnicas } from "@/constants/tecnicas";
-import { finalidades } from "@/constants/finalidades";
+import { useDateInput } from "@/hooks/useDateInput";
+import { artisanApi } from "@/services/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import React, { useCallback, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
+import Select from "react-select";
+import { z } from "zod";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -24,8 +26,8 @@ const artisanSchema = z.object({
   neighborhood: z.string().nonempty({ message: "Bairro é obrigatório." }),
   city: z.string().nonempty({ message: "Cidade é obrigatória." }),
   state: z.string().nonempty({ message: "Estado é obrigatório." }),
-  rawMaterial: z.string().nonempty({ message: "Matéria-prima é obrigatória." }),
-  technique: z.string().nonempty({ message: "Técnica é obrigatória." }),
+  rawMaterial: z.array(z.string()).min(1, { message: "Selecione pelo menos uma matéria-prima." }),
+  technique: z.array(z.string()).min(1, { message: "Selecione pelo menos uma técnica." }),
   finalityClassification: z
     .string()
     .nonempty({ message: "Classificação da finalidade é obrigatória." }),
@@ -52,6 +54,43 @@ async function traduzirErro(mensagem: string): Promise<string> {
   return data.responseData.translatedText || texto;
 }
 
+const customSelectStyles = (hasError: boolean) => ({
+  control: (provided: any, state: any) => ({
+    ...provided,
+    width: '100%',
+    padding: '2px',
+    height: '48px',
+    borderRadius: '24px',
+    boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.4)',
+    backgroundColor: '#abcfb5',
+    border: hasError ? '2px solid #E33A46' : '#334137',
+  }),
+  placeholder: (provided: any, state: any) => ({
+    ...provided,
+    color: hasError ? "#E33A46" : "#334137",
+    fontSize: '14px',
+    marginLeft: '8px',
+  }),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    padding: '2px 8px',
+    flexWrap: 'nowrap',
+    maxWidth: '100%',
+  }),
+  multiValue: (provided: any) => ({
+    ...provided,
+    borderRadius: '12px',
+    margin: '1px',
+    fontSize: '12px',
+    maxWidth: '80px',
+    flexShrink: 0,
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: '#334137',
+    padding: '4px',
+  }),
+});
 
 // Componente principal
 function ArtisanSignUpPage({
@@ -60,22 +99,50 @@ function ArtisanSignUpPage({
 }: {
   children: React.ReactNode;
   artisanId: string | null;
-  onSuccess: () => void; 
+  onSuccess: () => void;
 }) {
   const [uiError, setUiError] = useState<string | null>(null);
-  const [sicabRegistrationType, setSicabRegistrationType] = useState<
-    "text" | "date"
-  >("text");
-  const [sicabValidityType, setSicabValidityType] = useState<"text" | "date">(
-    "text"
-  );
   const [showFormError, setShowFormError] = useState(false);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const [selectedTechniques, setSelectedTechniques] = useState<string[]>([]);
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
 
   const showUiError = async (message: string) => {
     const traduzida = await traduzirErro(message);
     setUiError(traduzida);
     setTimeout(() => setUiError(null), 5000);
   };
+
+  const [validityDateInput, setValidityDateInput] = useState("");
+  const [registrationDateInput, setRegistrationDateInput] = useState("");
+
+  const { validateAndFormatDate: validateRegistrationDate } = useDateInput({
+    onFormattedChange: setRegistrationDateInput,
+    onValidDateChange: (isoDate) => {
+      setValue("sicabRegistration", isoDate, { shouldValidate: true });
+    },
+  });
+
+  const { validateAndFormatDate: validateValidityDate } = useDateInput({
+    onFormattedChange: setValidityDateInput,
+    onValidDateChange: (isoDate) => {
+      setValue("sicabValidity", isoDate, { shouldValidate: true });
+    },
+  });
+
+  const handleRegistrationDateInput = useCallback(
+    (value: string) => {
+      validateRegistrationDate(value);
+    },
+    [validateRegistrationDate]
+  );
+
+  const handleValidityDateInput = useCallback(
+    (value: string) => {
+      validateValidityDate(value);
+    },
+    [validateValidityDate]
+  );
 
   async function createArtisan(data: ArtisanData) {
     try {
@@ -88,10 +155,9 @@ function ArtisanSignUpPage({
         sicabValidUntil: data.sicabValidity,
       });
 
-      await showUiError("sucesso: Artesão foi enviado para analise.");
       setTimeout(() => {
         onSuccess();
-      }, 3000);
+      }, 2000);
     } catch (error: any) {
       if (error.status === 400 && error.errors) {
         await Promise.all(
@@ -124,6 +190,9 @@ function ArtisanSignUpPage({
     formState: { errors, isSubmitting },
   } = useForm<ArtisanData>({
     resolver: zodResolver(artisanSchema),
+    defaultValues: {
+      technique: [], 
+    },
   });
 
   // Busca endereço pelo CEP
@@ -159,258 +228,266 @@ function ArtisanSignUpPage({
     }
   }, [errors]);
 
+  useEffect(() => {
+    if (uiError && modalRef.current) {
+      modalRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
+  }, [uiError]);
+
   // Renderização do componente
   return (
-    <div className="justify-center p-4 py-2 w-full overflow-y-auto">
-      <div className="rounded-3xl text-[#985E00] font-bold w-full">
-        <div className="text-black font-normal mb-4">
-          {showFormError ? (
-            <div className="flex items-center justify-center text-white bg-magenta mb-4 p-4 rounded-3xl text-[10px] font-bold w-full">
-              <FaExclamationTriangle className="mr-1" />
-              <span>Campo obrigatório ou com formato inválido.</span>
+    <>
+      <div className="justify-center p-4 py-2 w-full overflow-y-auto">
+        <div className="rounded-3xl text-[#985E00] font-bold w-full">
+          <div className="text-black font-normal mb-4">
+            {showFormError ? (
+              <div className="flex items-center justify-center text-white bg-magenta mb-4 p-4 rounded-3xl text-[10px] font-bold w-full">
+                <FaExclamationTriangle className="mr-1" />
+                <span>Campo obrigatório ou com formato inválido.</span>
+              </div>
+            ) : (
+              <>
+                {children}
+                <DialogTitle className="text-2xl font-bold mb-2">
+                  Bem-Vindo Artesao!
+                </DialogTitle>
+                <p>Vamos continuar o seu cadastro</p>
+              </>
+            )}
+          </div>
+
+          {uiError && (
+            <div
+              className={`mb-4 p-3 rounded-lg text-xs text-center ${
+                uiError.includes("sucesso")
+                  ? "bg-mint-600 text-white"
+                  : "bg-magenta text-white"
+              }`}
+            >
+              <div className="flex items-center text-xs justify-center">
+                {!uiError.includes("sucesso") && (
+                  <FaExclamationTriangle className="mr-2" />
+                )}
+                <span>{uiError}</span>
+              </div>
             </div>
-          ) : (
-            <>
-              {children}
-              <DialogTitle className="text-2xl font-bold mb-2">
-                Bem-Vindo Artesao!
-              </DialogTitle>
-              <p>Vamos continuar o seu cadastro</p>
-            </>
           )}
-        </div>
 
-        {uiError && (
-          <div
-            className={`mb-4 p-3 rounded-lg text-xs text-center ${
-              uiError.includes("sucesso")
-                ? "bg-mint-600 text-white"
-                : "bg-magenta text-white"
-            }`}
-          >
-            <div className="flex items-center text-xs justify-center">
-              {!uiError.includes("sucesso") && (
-                <FaExclamationTriangle className="mr-2" />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            <div>
+              <SignInput
+                placeholder="CEP*"
+                type="text"
+                maxLength={8}
+                {...register("cep")}
+                onBlur={handleCepBlur}
+                hasError={!!errors.cep}
+                errorMessage={errors.cep?.message}
+              />
+            </div>
+
+            <div>
+              <SignInput
+                placeholder="Logradouro*"
+                type="text"
+                {...register("street")}
+                hasError={!!errors.street}
+                errorMessage={errors.street?.message}
+              />
+            </div>
+
+            <div>
+              <div className="grid grid-cols-10 gap-2">
+                <SignInput
+                  className="col-span-3"
+                  placeholder="N°"
+                  type="text"
+                  hasError={!!errors.number}
+                  {...register("number")}
+                />
+                <SignInput
+                  className="col-span-7"
+                  placeholder="Bairro*"
+                  type="text"
+                  hasError={!!errors.neighborhood}
+                  {...register("neighborhood")}
+                />
+                <SignInput
+                  className="col-span-6"
+                  placeholder="Cidade*"
+                  type="text"
+                  hasError={!!errors.city}
+                  {...register("city")}
+                />
+                <SignInput
+                  className="col-span-4"
+                  placeholder="Estado*"
+                  type="text"
+                  maxLength={2}
+                  hasError={!!errors.state}
+                  {...register("state")}
+                />
+              </div>
+
+              {(errors.number ||
+                errors.street ||
+                errors.city ||
+                errors.state) && (
+                <p className="text-sm text-magenta font-normal">
+                  {errors.number?.message ||
+                    errors.neighborhood?.message ||
+                    errors.city?.message ||
+                    errors.state?.message}
+                </p>
               )}
-              <span>{uiError}</span>
-            </div>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-          <div>
-            <SignInput
-              placeholder="CEP*"
-              type="text"
-              maxLength={8}
-              {...register("cep")}
-              onBlur={handleCepBlur}
-              hasError={!!errors.cep}
-              errorMessage={errors.cep?.message}
-            />
-          </div>
-
-          <div>
-            <SignInput
-              placeholder="Logradouro*"
-              type="text"
-              {...register("street")}
-              hasError={!!errors.street}
-              errorMessage={errors.street?.message}
-            />
-          </div>
-
-          <div>
-            <div className="grid grid-cols-10 gap-2">
-              <SignInput
-                className="col-span-3"
-                placeholder="N°"
-                type="text"
-                hasError={!!errors.number}
-                {...register("number")}
-              />
-              <SignInput
-                className="col-span-7"
-                placeholder="Bairro*"
-                type="text"
-                hasError={!!errors.neighborhood}
-                {...register("neighborhood")}
-              />
-              <SignInput
-                className="col-span-6"
-                placeholder="Cidade*"
-                type="text"
-                hasError={!!errors.city}
-                {...register("city")}
-              />
-              <SignInput
-                className="col-span-4"
-                placeholder="Estado*"
-                type="text"
-                maxLength={2}
-                hasError={!!errors.state}
-                {...register("state")}
-              />
             </div>
 
-            {(errors.number ||
-              errors.street ||
-              errors.city ||
-              errors.state) && (
-              <p className="text-sm text-magenta font-normal">
-                {errors.number?.message ||
-                  errors.neighborhood?.message ||
-                  errors.city?.message ||
-                  errors.state?.message}
-              </p>
-            )}
-          </div>
 
-          <div>
-            <select
-              className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
-                ${
-                  errors.rawMaterial
-                    ? "text-magenta border-2 border-magenta"
-                    : "text-mint-700"
-                }`}
-              {...register("rawMaterial")}
-            >
-              <option value="">Matéria-prima*</option>
-              {materiaPrima.map((material) => (
-                <option key={material} value={material}>
-                  {material}
-                </option>
-              ))}
-            </select>
-            {errors.rawMaterial && (
-              <p className="text-sm text-magenta font-normal">
-                {errors.rawMaterial.message}
-              </p>
-            )}
-          </div>
+            <div className="text-mint-700 "> 
+              <Select options={materiaPrima.map(mat => ({ value: mat, label: mat }))}
+                isMulti
+                placeholder="Matéria-prima*"
+                styles={customSelectStyles(!!errors.rawMaterial)}
+                components={({ ClearIndicator: () => null, IndicatorSeparator: () => null })}
+                value={selectedMaterials.map(mat => ({ value: mat, label: mat }))}
+                className="flex-row"
+                onChange={(selectedOptions) => {
+                  const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                  setSelectedMaterials(values);
+                  setValue("rawMaterial", values, { shouldValidate: true });
+                }}
+              />
+              {errors.rawMaterial && (
+                <p className="text-sm text-magenta font-normal">
+                  {errors.rawMaterial.message}
+                </p>
+              )}
+            </div>
 
-          <div>
-            <select
-              className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
-                ${
-                  errors.technique
-                    ? "text-magenta border-2 border-magenta"
-                    : "text-mint-700"
-                }`}
-              {...register("technique")}
-            >
-              <option value="">Técnica*</option>
-              {tecnicas.map((tecnica) => (
-                <option key={tecnica} value={tecnica}>
-                  {tecnica}
-                </option>
-              ))}
-            </select>
-            {errors.technique && (
-              <p className="text-sm text-magenta font-normal">
-                {errors.technique.message}
-              </p>
-            )}
-          </div>
+            <div className="text-mint-700 "> 
+              <Select options={tecnicas.map(tec => ({ value: tec, label: tec }))}
+                isMulti
+                placeholder="Tecnicas*"
+                styles={customSelectStyles(!!errors.technique)}
+                components={({ ClearIndicator: () => null, IndicatorSeparator: () => null })}
+                value={selectedTechniques.map(tec => ({ value: tec, label: tec }))}
+                className="flex-row"
+                onChange={(selectedOptions) => {
+                  const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                  setSelectedTechniques(values);
+                  setValue("technique", values, { shouldValidate: true });
+                }}
+                isSearchable={false}
+              />
+              {errors.technique && (
+                <p className="text-sm text-magenta font-normal">
+                  {errors.technique.message}
+                </p>
+              )}
+            </div>
 
-          <div>
-            <select
-              className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
+            <div>
+              <select
+                className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
                 ${
                   errors.finalityClassification
                     ? "text-magenta border-2 border-magenta"
                     : "text-mint-700"
                 }`}
-              {...register("finalityClassification")}
-            >
-              <option
-                value=""
-                className={errors.finalityClassification ? "text-magenta" : ""}
+                {...register("finalityClassification")}
               >
-                Classificação Finalidade*
-              </option>
-              {finalidades.map((finalidade) => (
-                <option key={finalidade} value={finalidade}>
-                  {finalidade}
+                <option
+                  value=""
+                  className={
+                    errors.finalityClassification ? "text-magenta" : ""
+                  }
+                >
+                  Classificação Finalidade*
                 </option>
-              ))}
-            </select>
-            {errors.finalityClassification && (
-              <p className="text-sm text-magenta font-normal">
-                {errors.finalityClassification.message}
-              </p>
-            )}
-          </div>
+                {finalidades.map((finalidade) => (
+                  <option key={finalidade} value={finalidade}>
+                    {finalidade}
+                  </option>
+                ))}
+              </select>
+              {errors.finalityClassification && (
+                <p className="text-sm text-magenta font-normal">
+                  {errors.finalityClassification.message}
+                </p>
+              )}
+            </div>
 
-          <div className="w-full">
+            <div className="w-full">
+              <div className="relative">
+                <SignInput
+                  className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
+                  placeholder="Sicab*"
+                  type="text"
+                  {...register("sicab")}
+                  hasError={!!errors.sicab}
+                  errorMessage={errors.sicab?.message}
+                />
+              </div>
+            </div>
+
             <div className="relative">
               <SignInput
                 className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
-                placeholder="Sicab*"
+                placeholder="Data de Cadastro SICAB*"
                 type="text"
-                {...register("sicab")}
-                hasError={!!errors.sicab}
-                errorMessage={errors.sicab?.message}
+                {...register("sicabRegistration")}
+                icon={<FaRegCalendarAlt />}
+                iconPosition="right"
+                iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
+                hasError={!!errors.sicabRegistration}
+                errorMessage={errors.sicabRegistration?.message}
+                value={registrationDateInput}
+                onChange={(e) => handleRegistrationDateInput(e.target.value)}
               />
             </div>
-          </div>
 
-          <div className="relative">
-            <SignInput
-              className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
-              placeholder="Data de Cadastro SICAB*"
-              type={sicabRegistrationType}
-              {...register("sicabRegistration")}
-              onFocus={() => setSicabRegistrationType("date")}
-              onBlur={() => setSicabRegistrationType("text")}
-              icon={
-                sicabRegistrationType === "text" ? <FaRegCalendarAlt /> : null
-              }
-              iconPosition="right"
-              iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
-              hasError={!!errors.sicabRegistration}
-              errorMessage={errors.sicabRegistration?.message}
-            />
-          </div>
+            <div className="relative text-mint-700">
+              <SignInput
+                className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
+                placeholder="Data de Validade SICAB*"
+                type="text"
+                {...register("sicabValidity")}
+                icon={<FaRegCalendarAlt />}
+                iconPosition="right"
+                iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
+                hasError={!!errors.sicabValidity}
+                errorMessage={errors.sicabValidity?.message}
+                value={validityDateInput}
+                onChange={(e) => handleValidityDateInput(e.target.value)}
+              />
+            </div>
 
-          <div className="relative text-mint-700">
-            <SignInput
-              className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
-              placeholder="Data de Validade SICAB*"
-              type={sicabValidityType}
-              {...register("sicabValidity")}
-              onFocus={() => setSicabValidityType("date")}
-              onBlur={() => setSicabValidityType("text")}
-              icon={sicabValidityType === "text" ? <FaRegCalendarAlt /> : null}
-              iconPosition="right"
-              iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
-              hasError={!!errors.sicabValidity}
-              errorMessage={errors.sicabValidity?.message}
-            />
-          </div>
-
-          <div className="text-sm text-gray-600 text-center mb-6 font-normal">
-            <p>
-              Ao continuar, você concorda com os
-              <br />
-              <a href="#" className="underline text-black">
-                Termos de Uso e Privacidade
-              </a>
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-[191px] h-[42px] bg-solar-700 hover:bg-[#c05000] text-white rounded-[20px] border-b-4 border-[#a04500]"
-            >
-              {isSubmitting ? "Processando..." : "Continuar"}
-            </Button>
-          </div>
-        </form>
+            <div className="text-sm text-gray-600 text-center mb-6 font-normal">
+              <p>
+                Ao continuar, você concorda com os
+                <br />
+                <a href="#" className="underline text-black">
+                  Termos de Uso e Privacidade
+                </a>
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-[191px] h-[42px] bg-solar-700 hover:bg-[#c05000] text-white rounded-[20px] border-b-4 border-[#a04500]"
+              >
+                {isSubmitting ? "Processando..." : "Continuar"}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
