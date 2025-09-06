@@ -1,22 +1,22 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { IoIosSearch } from "react-icons/io";
-import AuthenticationModal from "./AuthenticationModal/AuthenticationModal";
-import useStoreUser from "@/hooks/useStoreUser";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { IoIosSearch } from 'react-icons/io';
+import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
+import useStoreUser from '@/hooks/useStoreUser';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import SideBarMenu from "./SideBarMenu";
-import { Separator } from "./ui/separator";
-import { Button } from "./ui/button";
+} from '@/components/ui/dialog';
+import SideBarMenu from './SideBarMenu';
+import { Separator } from './ui/separator';
+import { Button } from './ui/button';
 
-function header() {
+function Header() {
   const user = useStoreUser((state) => state.user);
   const resetStore = useStoreUser((state) => state.resetStore);
 
@@ -25,7 +25,7 @@ function header() {
       <div className="flex items-center md:col-span-8">
         <SideBarMenu />
         <Link
-          href={"/"}
+          href={'/'}
           className="mx-auto md:mx-0 md:ml-8 md:mr-auto cursor-pointer"
         >
           <Image
@@ -44,7 +44,7 @@ function header() {
               <DialogHeader>
                 <DialogTitle>
                   <Image
-                    src={user.userPhoto ?? "/default-avatar.webp"}
+                    src={user.userPhoto ?? '/default-avatar.webp'}
                     alt="User Avatar"
                     width={60}
                     height={60}
@@ -56,16 +56,14 @@ function header() {
             <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
               <div className="flex flex-col items-center justify-center text-midnight">
                 <Image
-                  src={user.userPhoto ?? "/default-avatar.webp"}
+                  src={user.userPhoto ?? '/default-avatar.webp'}
                   alt="User Avatar"
                   width={120}
                   height={120}
                   className="rounded-full mb-4 bg-gray-300"
                 />
                 <h2 className="text-2xl font-bold">{user.userName}</h2>
-                {user.artisanUserName && (
-                  <p>@{user.artisanUserName}</p>
-                )}
+                {user.artisanUserName && <p>@{user.artisanUserName}</p>}
                 {user.isModerator && (
                   <div className="w-fit">
                     <Separator className="my-2" />
@@ -76,7 +74,7 @@ function header() {
                   </div>
                 )}
                 <Button
-                  variant={"ghost"}
+                  variant={'ghost'}
                   onClick={() => {
                     resetStore();
                   }}
@@ -101,4 +99,4 @@ function header() {
   );
 }
 
-export default header;
+export default Header;

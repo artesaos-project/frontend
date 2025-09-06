@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/Footer";
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import { materiaPrima } from "@/constants/materiaPrima";
 import { tecnicas } from "@/constants/tecnicas";
 import { productApi, uploadApi } from "@/services/api";
@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoAdd } from "react-icons/io5";
 import { TbSelect, TbTrash } from "react-icons/tb";
-import InputField from "../../components/InputField";
+import InputField from "../../../../components/features/artisan/InputField";
 
 const AddProductPage: React.FC = () => {
   const router = useRouter();

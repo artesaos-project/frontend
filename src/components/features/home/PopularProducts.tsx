@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Button } from "./ui/button";
-import { BaseCard, ProductCardBody } from "./Card";
+import { Button } from "../../ui/button";
+import { BaseCard, ProductCardBody } from "../../Card";
 import { useState, useEffect } from "react";
 import { ApiProduct } from "@/types/product";
 

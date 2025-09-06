@@ -2,18 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductImage from "../components/ProductImage";
-import ProductInfo from "../components/ProductInfo";
-import ProductAuthor from "../components/ProductAuthor";
-import ProductReviews from "../components/ProductReviews";
 import { FiPlus, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { BaseCard, ProductCardBody } from "@/components/Card";
-import ProductSlide from "../components/ProductSlide";
 import { FormattedReview, ApiProduct } from "@/types/product";
 import { GoArrowLeft } from "react-icons/go";
 import { productApi } from "@/services/api";
+import ProductAuthor from "@/components/features/product/ProductAuthor";
+import ProductImage from "@/components/features/product/ProductImage";
+import ProductInfo from "@/components/features/product/ProductInfo";
+import ProductReviews from "@/components/features/product/ProductReviews";
+import ProductSlide from "@/components/features/product/ProductSlide";
 
 function ProductPage() {
   const params = useParams();

@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import ModeratorHeader from '../components/ModeratorHeader'
-import ModeratorTitle from '../components/ModeratorTitle'
+import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader'
+import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle'
 import ModeratorSearch from './components/ModeratorSearch'
 import ModeratorTable from './components/ModeratorTable'
 import { useRouter } from 'next/navigation'
