@@ -1,6 +1,6 @@
 import React from 'react'
-import ModeratorHeader from '../components/ModeratorHeader'
-import ModeratorTitle from '../components/ModeratorTitle'
+import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader'
+import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle'
 import { Input } from '@/components/ui/input'
 import { IoIosSearch } from 'react-icons/io'
 import { Button } from '@/components/ui/button'

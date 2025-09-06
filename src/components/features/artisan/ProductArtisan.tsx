@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { BaseCard, ProductCardBody } from "@/components/Card";
-import { ApiProduct } from "@/types/product";
-import { productApi } from "@/services/api";
+import React, { useState, useEffect } from 'react';
+import { BaseCard, ProductCardBody } from '@/components/Card';
+import { ApiProduct } from '@/types/product';
+import { productApi } from '@/services/api';
 
-function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artistId?: string, visibleCount?: number, onTotalChange?: (total: number) => void }) {
+function ProductArtisan({
+  artistId,
+  visibleCount = 25,
+  onTotalChange,
+}: {
+  artistId?: string;
+  visibleCount?: number;
+  onTotalChange?: (total: number) => void;
+}) {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,12 +27,14 @@ function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artist
         setLoading(true);
         const data = await productApi.getByArtisan(artistId);
         setProducts(data);
-        
+
         if (onTotalChange) {
           onTotalChange(data.length);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar produtos');
+        setError(
+          err instanceof Error ? err.message : 'Erro ao carregar produtos',
+        );
       } finally {
         setLoading(false);
       }
@@ -72,7 +82,7 @@ function ProductArtisan({ artistId, visibleCount = 25, onTotalChange }: { artist
           </div>
           <ProductCardBody
             id={product.id}
-            price={product.priceInCents/100}
+            price={product.priceInCents / 100}
             title={product.title}
             author={product.authorName}
           />

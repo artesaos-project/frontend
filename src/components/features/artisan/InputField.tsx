@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface InputFieldProps {
   label: string;
@@ -15,7 +15,7 @@ interface InputFieldProps {
 
 const InputField: React.FC<InputFieldProps> = ({
   label,
-  type = "text",
+  type = 'text',
   required = false,
   value,
   onChange,
@@ -23,7 +23,7 @@ const InputField: React.FC<InputFieldProps> = ({
   disabled = false,
   min,
   step,
-  className = "",
+  className = '',
 }) => {
   return (
     <div className={className}>

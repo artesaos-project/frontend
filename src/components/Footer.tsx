@@ -1,10 +1,10 @@
-import React from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
-import { Label } from "./ui/label";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { Checkbox } from './ui/checkbox';
+import { Label } from './ui/label';
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface FooterProps {
   newsSubscription: boolean;
@@ -32,10 +32,10 @@ function Footer({ newsSubscription }: FooterProps) {
             <div className="flex gap-2 mt-4">
               <Checkbox id="terms" className="checked:bg-white border-2" />
               <Label htmlFor="terms" className="text-white">
-                Concordo com a{" "}
+                Concordo com a{' '}
                 <Link href="/" className="underline underline-offset-2">
                   Política de Privacidade
-                </Link>{" "}
+                </Link>{' '}
                 e aceito receber comunicações
               </Label>
             </div>
@@ -68,7 +68,7 @@ function Footer({ newsSubscription }: FooterProps) {
         />
         <div className="text-midnight text-sm flex flex-col items-center">
           <p className="font-bold">
-            {" "}
+            {' '}
             ® 2025 Arteiros Caraguá. Todos os direitos reservados.
           </p>
           <Link href="#" className="text-midnight underline">

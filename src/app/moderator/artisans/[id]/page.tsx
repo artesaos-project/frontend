@@ -1,25 +1,24 @@
-'use client'
+'use client';
 
-import ModeratorHeader from "../../components/ModeratorHeader"
-import ModeratorTitle from "../../components/ModeratorTitle"
-import { useParams, useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button"
-import { FaCheck } from "react-icons/fa"
-import { BsXLg } from "react-icons/bs"
-import Image from "next/image"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { IoIosArrowDown, IoIosInformationCircleOutline } from "react-icons/io"
-import { useState, useEffect } from "react"
-import { artisanDetails } from "@/types/artisanDetails"
-import { artisanApi } from "@/services/api"
-
+import ModeratorHeader from '../../../../components/features/moderator/ModeratorHeader';
+import ModeratorTitle from '../../../../components/features/moderator/ModeratorTitle';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { FaCheck } from 'react-icons/fa';
+import { BsXLg } from 'react-icons/bs';
+import Image from 'next/image';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { IoIosArrowDown, IoIosInformationCircleOutline } from 'react-icons/io';
+import { useState, useEffect } from 'react';
+import { artisanDetails } from '@/types/artisanDetails';
+import { artisanApi } from '@/services/api';
 
 function Page() {
   const params = useParams();
   const artisanId = params.id as string;
   const [artisan, setArtisan] = useState<artisanDetails | null>(null);
-  const router = useRouter()
+  const router = useRouter();
 
   const fetchArtisans = async () => {
     try {
@@ -27,15 +26,15 @@ function Page() {
       setArtisan(result.artisanApplication);
       console.log(result.artisanApplication);
     } catch (error: any) {
-      if (error.message === "UNAUTHORIZED") {
+      if (error.message === 'UNAUTHORIZED') {
         router.replace('/');
       }
       console.error('Erro ao buscar artesãos: ', error);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchArtisans()
+    fetchArtisans();
   }, [artisanId]);
 
   const handleApprove = async () => {
@@ -46,8 +45,8 @@ function Page() {
     } catch (error) {
       console.error('Erro ao aprovar artesão: ', error);
     }
-  }
-  
+  };
+
   const handleRejection = async () => {
     try {
       await artisanApi.reject(artisanId);
@@ -56,22 +55,30 @@ function Page() {
     } catch (error) {
       console.error('Erro ao rejeitar artesão: ', error);
     }
-  }
+  };
 
   return (
-    <div className='overflow-x-hidden'>
+    <div className="overflow-x-hidden">
       <ModeratorHeader />
       <ModeratorTitle title={'Artesãos'} />
       <div className="w-2/3 flex mx-auto mt-10 items-center justify-between">
         <h2 className="text-2xl text-midnight font-semibold">
-          {artisan?.userName ? artisan.userName : "Artesão não encontrado"}
+          {artisan?.userName ? artisan.userName : 'Artesão não encontrado'}
         </h2>
         <div className="flex gap-4">
-          <Button className="h-7 text-xs my-1 bg-green-600 rounded-lg cursor-pointer" aria-label="Aprovar artesão" onClick={handleApprove}>
+          <Button
+            className="h-7 text-xs my-1 bg-green-600 rounded-lg cursor-pointer"
+            aria-label="Aprovar artesão"
+            onClick={handleApprove}
+          >
             <FaCheck className="text-white" />
             APROVAR
           </Button>
-          <Button className="h-7 text-xs my-1 text-white font-bold border bg-red-500 rounded-lg cursor-pointer" aria-label="Desativar artesão" onClick={handleRejection}>
+          <Button
+            className="h-7 text-xs my-1 text-white font-bold border bg-red-500 rounded-lg cursor-pointer"
+            aria-label="Desativar artesão"
+            onClick={handleRejection}
+          >
             <BsXLg className="text-white" />
             DESATIVAR
           </Button>
@@ -82,53 +89,96 @@ function Page() {
         <div className="flex mb-5">
           <div>
             <Label className="text-xs font-semibold mb-2">Foto de Perfil</Label>
-            <Image src="https://github.com/marcus-santos.png"
+            <Image
+              src="https://github.com/marcus-santos.png"
               width={246}
               height={246}
-              alt={"artisan-profile-photo"}
-              className="rounded-md border-2 border-midnight min-w-[246px]" />
+              alt={'artisan-profile-photo'}
+              className="rounded-md border-2 border-midnight min-w-[246px]"
+            />
           </div>
           <div className="w-full flex flex-col gap-2 ml-5">
-            <Label className="text-xs font-semibold">Nome Artístico/ Marca</Label>
-            <Input value={artisan?.userName} readOnly className="border border-midnight max-w-[528px] " />
+            <Label className="text-xs font-semibold">
+              Nome Artístico/ Marca
+            </Label>
+            <Input
+              value={artisan?.userName}
+              readOnly
+              className="border border-midnight max-w-[528px] "
+            />
 
             <Label className="text-xs font-semibold">Nome Completo</Label>
-            <Input value={artisan?.userName} readOnly className="border border-midnight max-w-[528px]" />
+            <Input
+              value={artisan?.userName}
+              readOnly
+              className="border border-midnight max-w-[528px]"
+            />
 
             <Label className="text-xs font-semibold">Email</Label>
-            <Input value={artisan?.userEmail} readOnly className="border border-midnight max-w-[528px]" />
+            <Input
+              value={artisan?.userEmail}
+              readOnly
+              className="border border-midnight max-w-[528px]"
+            />
 
             <Label className="text-xs font-semibold">Telefone/ Whatsapp</Label>
             <div className="flex gap-2 max-w-3xs">
-              <Input value={artisan?.userPhone.slice(3, 5)} readOnly className="w-11 border border-midnight" />
-              <Input value={artisan?.userPhone.slice(5, 14)} readOnly className="border border-midnight" />
+              <Input
+                value={artisan?.userPhone.slice(3, 5)}
+                readOnly
+                className="w-11 border border-midnight"
+              />
+              <Input
+                value={artisan?.userPhone.slice(5, 14)}
+                readOnly
+                className="border border-midnight"
+              />
             </div>
           </div>
-
         </div>
         <div className="flex mb-5 gap-3">
           <div>
             <Label className="text-xs font-semibold">CEP</Label>
-            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
+            <Input
+              value={artisan?.sicab}
+              readOnly
+              className="border border-midnight"
+            />
           </div>
 
           <div>
             <Label className="text-xs font-semibold">Estado</Label>
-            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
+            <Input
+              value={artisan?.sicab}
+              readOnly
+              className="border border-midnight"
+            />
           </div>
 
           <div>
             <Label className="text-xs font-semibold">Cidade</Label>
-            <Input value={artisan?.sicab} readOnly className="border border-midnight" />
+            <Input
+              value={artisan?.sicab}
+              readOnly
+              className="border border-midnight"
+            />
           </div>
         </div>
 
         <div className="flex flex-col gap-2 mb-5">
           <Label className="text-xs font-semibold">Endereço</Label>
-          <Input value={artisan?.sicab} readOnly className="max-w-[576px] border border-midnight" />
+          <Input
+            value={artisan?.sicab}
+            readOnly
+            className="max-w-[576px] border border-midnight"
+          />
 
           <Label className="text-xs font-semibold">Nome de usuário</Label>
-          <Input value={artisan?.userName} readOnly className=" max-w-52 border border-midnight" />
+          <Input
+            value={artisan?.userName}
+            readOnly
+            className=" max-w-52 border border-midnight"
+          />
         </div>
       </div>
 
@@ -136,7 +186,9 @@ function Page() {
         <h3 className="font-semibold mb-5">Dados Profissionais</h3>
         <div className="max-w-[960px] flex justify-around gap-5 mb-5">
           <div className="w-full">
-            <Label className="text-xs font-semibold mb-1">Tipo de Artesanato/ Arte</Label>
+            <Label className="text-xs font-semibold mb-1">
+              Tipo de Artesanato/ Arte
+            </Label>
             <div className="relative max-w-[450px]">
               <Input
                 value={artisan?.rawMaterial}
@@ -161,7 +213,11 @@ function Page() {
 
           <div className="w-full">
             <Label className="text-xs font-semibold mb-1">Número</Label>
-            <Input value={artisan?.sicab} readOnly className="max-w-64 border border-midnight" />
+            <Input
+              value={artisan?.sicab}
+              readOnly
+              className="max-w-64 border border-midnight"
+            />
           </div>
         </div>
         <div className="flex text-xs font-semibold gap-4">
@@ -194,7 +250,10 @@ function Page() {
           <div className="border border-midnight rounded-md pl-2 pr-4 py-2">
             <div className="flex items-center gap-2">
               <p>Termos de Uso e Política de Privacidade</p>
-              <IoIosInformationCircleOutline className="cursor-pointer text-midnight" size={16} />
+              <IoIosInformationCircleOutline
+                className="cursor-pointer text-midnight"
+                size={16}
+              />
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
@@ -211,7 +270,9 @@ function Page() {
       </div>
       <div className="w-2/3 flex flex-col mx-auto my-8 p-5 text-midnight rounded-lg shadow ring-[0.5px] ring-black/20 shadow-black/30">
         <h3 className="font-semibold mb-5">Experiências</h3>
-        <p className="text-xs font-semibold mb-5">Breve histórico profissional como artesão</p>
+        <p className="text-xs font-semibold mb-5">
+          Breve histórico profissional como artesão
+        </p>
         <div className="border text-xs border-midnight rounded-md max-w-[960px] min-h-48 h-fit p-3 ">
           <p>{artisan?.userName}</p>
         </div>
@@ -231,7 +292,7 @@ function Page() {
         </div> */}
       </div>
     </div>
-  )
+  );
 }
 
-export default Page
+export default Page;
