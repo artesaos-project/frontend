@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { DialogTitle } from "@/components/ui/dialog";
-import useStoreUser from "@/hooks/useStoreUser";
-import { UserProps } from "@/types/UserProps";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback, useEffect, useRef } from "react";
-import { SubmitHandler, useForm, useWatch } from "react-hook-form";
-import SignInput from "./SignInput";
-import { useDateInput } from "@/hooks/useDateInput";
+import { Button } from '@/components/ui/button';
+import { DialogTitle } from '@/components/ui/dialog';
+import { useDateInput } from '@/hooks/useDateInput';
+import useStoreUser from '@/hooks/useStoreUser';
+import { UserProps } from '@/types/UserProps';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import SignInput from './SignInput';
 
 import {
   ArtisanCheckbox,
   BirthDateField,
   PasswordField,
   PhoneFields,
-} from "./SignUp/SignUpFormFields";
+} from './SignUp/SignUpFormFields';
 
 import {
   ArtisanInfo,
   ErrorBanner,
   TermsAgreement,
   UIMessage,
-} from "./SignUp/SignUpComponents";
+} from './SignUp/SignUpComponents';
 
-import { useUIState } from "@/hooks/useUIState";
-import { useSignUpLogic } from "../../hooks/useSignUpLogic";
-import { signUpSchema, type SignUpData } from "../../lib/schemas/signUpSchema";
+import { useUIState } from '@/hooks/useUIState';
+import { useSignUpLogic } from '../../hooks/useSignUpLogic';
+import { signUpSchema, type SignUpData } from '../../lib/schemas/signUpSchema';
 
 interface SignupFormProps {
   children?: React.ReactNode;
@@ -64,15 +64,15 @@ export default function SignUp({
   const { validateAndFormatDate } = useDateInput({
     onFormattedChange: setBirthDateInput,
     onValidDateChange: (isoDate) => {
-      setValue("birthDate", isoDate, { shouldValidate: true });
-    }
+      setValue('birthDate', isoDate, { shouldValidate: true });
+    },
   });
 
   const handleBirthDateInput = useCallback(
     (value: string) => {
       validateAndFormatDate(value);
     },
-    [validateAndFormatDate]
+    [validateAndFormatDate],
   );
 
   const {
@@ -84,26 +84,25 @@ export default function SignUp({
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: "",
-      socialName: "",
-      cpf: "",
-      email: "",
-      birthDate: "",
-      password: "",
-      confirmPassword: "",
-      codigoPais: "+55",
-      ddd: "",
-      phone: "",
+      name: '',
+      socialName: '',
+      cpf: '',
+      email: '',
+      birthDate: '',
+      password: '',
+      confirmPassword: '',
+      codigoPais: '+55',
+      ddd: '',
+      phone: '',
       isArtisan: false,
     },
   });
 
   const passwordValue = useWatch({
     control,
-    name: "password",
-    defaultValue: "",
+    name: 'password',
+    defaultValue: '',
   });
-
 
   const onSubmit: SubmitHandler<SignUpData> = useCallback(
     async (data) => {
@@ -117,8 +116,8 @@ export default function SignUp({
           userName: created.userData.name,
           artisanUserName: created.userData.artisanUserName,
           userPhoto: created.userData.avatar,
-          isModerator: created.userData.roles.includes("MODERATOR") || false,
-          isArtisan: created.userData.roles.includes("ARTISAN") || false,
+          isModerator: created.userData.roles.includes('MODERATOR') || false,
+          isArtisan: created.userData.roles.includes('ARTISAN') || false,
         };
 
         onArtisanSignup?.(userId, userData);
@@ -126,7 +125,7 @@ export default function SignUp({
         onClose?.();
       }
     },
-    [createUser, onClose]
+    [createUser, onClose],
   );
 
   useEffect(() => {
@@ -136,12 +135,12 @@ export default function SignUp({
         passwordRef.current &&
         !passwordRef.current.contains(event.target as Node)
       ) {
-        hideInfo("passwordInfo");
+        hideInfo('passwordInfo');
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [visible.passwordInfo, hideInfo]);
 
   useEffect(() => {
@@ -151,14 +150,14 @@ export default function SignUp({
         popoverRef.current &&
         !popoverRef.current.contains(e.target as Node)
       ) {
-        hideInfo("popover");
+        hideInfo('popover');
       }
     };
 
     if (visible.popover) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
       return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [visible.popover, hideInfo]);
 
@@ -177,15 +176,15 @@ export default function SignUp({
     }
   }, [uiError, setUiError]);
 
-    useEffect(() => {
-      if (uiError && containerRef.current) {
-        containerRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'center'
-        });
-      }
-    }, [uiError, formErrorFlag, containerRef]);
+  useEffect(() => {
+    if (uiError && containerRef.current) {
+      containerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }, [uiError, formErrorFlag, containerRef]);
 
   return (
     <div
@@ -209,7 +208,7 @@ export default function SignUp({
         <SignInput
           placeholder="Nome*"
           type="text"
-          {...register("name")}
+          {...register('name')}
           hasError={!!errors.name}
           errorMessage={errors.name?.message}
         />
@@ -217,7 +216,7 @@ export default function SignUp({
         <SignInput
           placeholder="Nome Social"
           type="text"
-          {...register("socialName")}
+          {...register('socialName')}
           hasError={!!errors.socialName}
           errorMessage={errors.socialName?.message}
         />
@@ -225,7 +224,7 @@ export default function SignUp({
         <SignInput
           placeholder="CPF*"
           type="text"
-          {...register("cpf")}
+          {...register('cpf')}
           hasError={!!errors.cpf}
           errorMessage={errors.cpf?.message}
         />
@@ -233,7 +232,7 @@ export default function SignUp({
         <SignInput
           placeholder="Email*"
           type="email"
-          {...register("email")}
+          {...register('email')}
           hasError={!!errors.email}
           errorMessage={errors.email?.message}
         />
@@ -250,10 +249,10 @@ export default function SignUp({
           register={register}
           error={errors.password}
           visible={visible.password}
-          onToggle={() => toggleField("password")}
+          onToggle={() => toggleField('password')}
           showInfo={visible.passwordInfo}
-          onFocus={() => showInfo("passwordInfo")}
-          onBlur={() => setTimeout(() => hideInfo("passwordInfo"), 100)}
+          onFocus={() => showInfo('passwordInfo')}
+          onBlur={() => setTimeout(() => hideInfo('passwordInfo'), 100)}
           ref={passwordRef}
           currentPassword={passwordValue}
         />
@@ -264,7 +263,7 @@ export default function SignUp({
           register={register}
           error={errors.confirmPassword}
           visible={visible.confirmPassword}
-          onToggle={() => toggleField("confirmPassword")}
+          onToggle={() => toggleField('confirmPassword')}
         />
 
         <PhoneFields
@@ -278,7 +277,7 @@ export default function SignUp({
 
         <ArtisanCheckbox
           register={register}
-          onInfoClick={() => toggleField("popover")}
+          onInfoClick={() => toggleField('popover')}
         />
 
         {visible.popover && (
@@ -287,7 +286,7 @@ export default function SignUp({
             <div className="fixed inset-0 flex items-center justify-center z-50">
               <ArtisanInfo
                 popoverRef={popoverRef}
-                onClose={() => hideInfo("popover")}
+                onClose={() => hideInfo('popover')}
               />
             </div>
           </div>
@@ -301,7 +300,7 @@ export default function SignUp({
             disabled={isSubmitting}
             className="w-48 h-10 rounded-[20px] bg-salmon hover:bg-crimson text-white border-b-4 border-crimson"
           >
-            {isSubmitting ? "Processando..." : "Continuar"}
+            {isSubmitting ? 'Processando...' : 'Continuar'}
           </Button>
         </div>
       </form>

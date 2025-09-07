@@ -1,10 +1,4 @@
 'use client';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Input } from '@/components/ui/input';
-import { IoIosSearch } from 'react-icons/io';
-import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
-import useStoreUser from '@/hooks/useStoreUser';
 import {
   Dialog,
   DialogContent,
@@ -12,9 +6,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import useStoreUser from '@/hooks/useStoreUser';
+import Image from 'next/image';
+import Link from 'next/link';
+import { IoIosSearch } from 'react-icons/io';
+import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import SideBarMenu from './SideBarMenu';
-import { Separator } from './ui/separator';
 import { Button } from './ui/button';
+import { Separator } from './ui/separator';
 
 function Header() {
   const user = useStoreUser((state) => state.user);

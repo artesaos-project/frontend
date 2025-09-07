@@ -1,5 +1,5 @@
-import React from "react";
-import { FaExclamationTriangle } from "react-icons/fa";
+import React from 'react';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 export const ErrorBanner = () => (
   <div className="flex items-center text-center justify-center bg-salmon text-white rounded-2xl py-4 mb-4 text-[10px] md:text-xs font-bold">
@@ -13,11 +13,13 @@ interface UIMessageProps {
 }
 
 export const UIMessage = ({ message }: UIMessageProps) => {
-  const isSuccess = message.includes("sucesso");
-  const bannerColor = isSuccess ? "bg-mint-600" : "bg-salmon";
+  const isSuccess = message.includes('sucesso');
+  const bannerColor = isSuccess ? 'bg-mint-600' : 'bg-salmon';
 
   return (
-    <div className={`mb-4 py-4 rounded-lg text-xs text-center ${bannerColor} text-white`}>
+    <div
+      className={`mb-4 py-4 rounded-lg text-xs text-center ${bannerColor} text-white`}
+    >
       <div className="flex items-center justify-center">
         {!isSuccess && <FaExclamationTriangle size={16} className="mr-2" />}
         <span>{message}</span>
@@ -44,8 +46,8 @@ interface ArtisanInfoProps {
 }
 
 export const ArtisanInfo = ({ popoverRef, onClose }: ArtisanInfoProps) => (
-  <div 
-    ref={popoverRef} 
+  <div
+    ref={popoverRef}
     className="bg-white text-black p-5 rounded-3xl shadow-lg max-w-xs text-center relative"
   >
     <button
@@ -57,10 +59,10 @@ export const ArtisanInfo = ({ popoverRef, onClose }: ArtisanInfoProps) => (
     </button>
     <p className="font-bold mb-2">Artesão credenciado</p>
     <p className="text-xs">
-      Marque essa opção se você é artesão(a) cadastrado e faz parte
-      da associação vinculada à <strong>Fundacc</strong> (Fundação
-      Educacional e Cultural de Caraguatatuba). Isso garante acesso
-      a funcionalidades exclusivas para membros reconhecidos.
+      Marque essa opção se você é artesão(a) cadastrado e faz parte da
+      associação vinculada à <strong>Fundacc</strong> (Fundação Educacional e
+      Cultural de Caraguatatuba). Isso garante acesso a funcionalidades
+      exclusivas para membros reconhecidos.
     </p>
   </div>
 );

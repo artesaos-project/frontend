@@ -1,25 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import ProfilePicture from './ProfilePicture';
-import ProfileInfo from './ProfileInfo';
-import ActionButtons from './ActionButtons';
-import ProfileDescription from './ProfileDescription';
-import ContactButtons from './ContactButtons';
-import { FaWhatsapp, FaPlus } from 'react-icons/fa';
-import { IoMdShareAlt, IoIosArrowDown } from 'react-icons/io';
-import { CiCircleMore } from 'react-icons/ci';
-import { PiPlusCircleLight } from 'react-icons/pi';
-import SearchBar from './SearchBar';
-import { useParams } from 'next/navigation';
-import ProductArtisan from './ProductArtisan';
-import artisanProductMock from './artisanProductMock.json';
-import { LuPencil } from 'react-icons/lu';
-import { ArtisanProfile } from '@/types/Artisan';
-import useStoreUser from '@/hooks/useStoreUser';
-import { useRouter } from 'next/navigation';
-import { artisanApi } from '@/services/api';
 import ProductReviews from '@/components/features/product/ProductReviews';
+import useStoreUser from '@/hooks/useStoreUser';
+import { artisanApi } from '@/services/api';
+import { ArtisanProfile } from '@/types/Artisan';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { CiCircleMore } from 'react-icons/ci';
+import { FaPlus, FaWhatsapp } from 'react-icons/fa';
+import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
+import { LuPencil } from 'react-icons/lu';
+import { PiPlusCircleLight } from 'react-icons/pi';
+import ActionButtons from './ActionButtons';
+import ContactButtons from './ContactButtons';
+import ProductArtisan from './ProductArtisan';
+import ProfileDescription from './ProfileDescription';
+import ProfileInfo from './ProfileInfo';
+import ProfilePicture from './ProfilePicture';
+import SearchBar from './SearchBar';
+import artisanProductMock from './artisanProductMock.json';
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<'produtos' | 'avaliacoes'>(
@@ -37,9 +36,9 @@ const ArtisanProfileCard = () => {
   const { user } = useStoreUser();
   const route = useRouter();
 
-  const getLoggedUserId = () => {
+  const getLoggedUserId = useCallback(() => {
     return user.userId;
-  };
+  }, [user.userId]);
 
   useEffect(() => {
     const fetchArtisanProfile = async () => {
@@ -70,7 +69,7 @@ const ArtisanProfileCard = () => {
     if (userName) {
       fetchArtisanProfile();
     }
-  }, [userName, user]);
+  }, [userName, user, getLoggedUserId]);
 
   if (loading) {
     return (

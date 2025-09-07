@@ -1,7 +1,7 @@
-import { apiRequest } from "../apiService";
-import { ApiProduct } from "@/types/product";
-import { ArtisanProfile } from "@/types/Artisan";
-import { artisanDetails } from "@/types/artisanDetails";
+import { apiRequest } from '../apiService';
+import { ApiProduct } from '@/types/product';
+import { ArtisanProfile } from '@/types/Artisan';
+import { artisanDetails } from '@/types/artisanDetails';
 
 type CreateUserPayload = {
   name: string;
@@ -17,7 +17,7 @@ type Artisan = {
   id: string;
   artisanName: string;
   email: string;
-  status: "PENDING" | "APPROVED" | "REJECTED" | "INACTIVE";
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INACTIVE';
 };
 
 type ArtisanApplicationPayload = {
@@ -38,25 +38,25 @@ export const artisanApi = {
 
   getApplication: (artisanId: string) =>
     apiRequest<{ artisanApplication: artisanDetails }>(
-      `/artisan-applications/${artisanId}`
+      `/artisan-applications/${artisanId}`,
     ),
 
   createApplication: (data: ArtisanApplicationPayload) =>
     apiRequest(`/artisan-applications`, {
-      method: "POST",
+      method: 'POST',
       body: data,
     }),
 
   approve: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: "POST",
-      body: { status: "APPROVED" },
+      method: 'POST',
+      body: { status: 'APPROVED' },
     }),
 
   reject: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: "POST",
-      body: { status: "REJECTED" },
+      method: 'POST',
+      body: { status: 'REJECTED' },
     }),
 };
 
@@ -68,9 +68,9 @@ export const productApi = {
 
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
-  create: (productData: any) =>
+  create: (productData: unknown) =>
     apiRequest(`/products`, {
-      method: "POST",
+      method: 'POST',
       body: productData,
     }),
 };
@@ -78,10 +78,10 @@ export const productApi = {
 export const uploadApi = {
   uploadFile: (file: File) => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
-    return apiRequest<{ attachmentId: string; url?: string }>("/attachments", {
-      method: "POST",
+    return apiRequest<{ attachmentId: string; url?: string }>('/attachments', {
+      method: 'POST',
       body: formData,
       isFormData: true,
     });
@@ -96,8 +96,8 @@ export const authApi = {
       artisanUserName?: string;
       avatar: string;
       roles: string[];
-    }>("/users", {
-      method: "POST",
+    }>('/users', {
+      method: 'POST',
       body: userData,
     }),
 
@@ -108,8 +108,8 @@ export const authApi = {
       artisanUserName?: string;
       avatar: string;
       roles: string[];
-    }>("/sessions", {
-      method: "POST",
+    }>('/sessions', {
+      method: 'POST',
       body: credentials,
     }),
 };

@@ -1,7 +1,7 @@
-import React from 'react';
-import { FaRegHeart, FaHeart, FaPlus } from 'react-icons/fa';
-import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
+import { Button } from './ui/button';
 
 type ṔroductCardProps = {
   id: string | number;

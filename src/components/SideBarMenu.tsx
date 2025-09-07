@@ -1,22 +1,5 @@
 'use client';
-import {
-  IoMenu,
-  IoChevronForward,
-  IoChevronDownOutline,
-} from 'react-icons/io5';
-import { IoMdHelpCircleOutline } from 'react-icons/io';
-import { TbArrowsExchange, TbLogout2 } from 'react-icons/tb';
-import { MdOutlineShoppingBag } from 'react-icons/md';
-import { FaRegHeart } from 'react-icons/fa';
-import { BsGear } from 'react-icons/bs';
-import { RxPlusCircled } from 'react-icons/rx';
-import { CgDanger } from 'react-icons/cg';
-import { IoDocumentOutline } from 'react-icons/io5';
-import { FaHome } from 'react-icons/fa';
-import { IoMdCalendar } from 'react-icons/io';
-import { IoPerson } from 'react-icons/io5';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import {
   Sheet,
   SheetContent,
@@ -24,11 +7,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Button } from './ui/button';
+import useStoreUser from '@/hooks/useStoreUser';
 import Image from 'next/image';
 import Link from 'next/link';
-import useStoreUser from '@/hooks/useStoreUser';
 import { usePathname } from 'next/navigation';
+import { BsGear } from 'react-icons/bs';
+import { CgDanger } from 'react-icons/cg';
+import { FaHome, FaRegHeart } from 'react-icons/fa';
+import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
+import {
+  IoChevronDownOutline,
+  IoChevronForward,
+  IoDocumentOutline,
+  IoMenu,
+  IoPerson,
+} from 'react-icons/io5';
+import { MdOutlineShoppingBag } from 'react-icons/md';
+import { RxPlusCircled } from 'react-icons/rx';
+import { TbLogout2 } from 'react-icons/tb';
+import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
+import { Button } from './ui/button';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);

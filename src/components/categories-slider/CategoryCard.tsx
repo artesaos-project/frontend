@@ -1,5 +1,4 @@
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
 
 type CategoryCardProps = {
   name: string;
@@ -10,7 +9,7 @@ function CategoryCard({ name, img }: CategoryCardProps) {
   return (
     <div className="flex flex-col mt-4 mb-10 items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out">
       <Image
-        src={"/" + img}
+        src={'/' + img}
         width={80}
         height={80}
         alt={name}

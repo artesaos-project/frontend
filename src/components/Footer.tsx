@@ -1,10 +1,9 @@
-import React from 'react';
-import { Input } from './ui/input';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
+import { Input } from './ui/input';
 import { Label } from './ui/label';
-import Link from 'next/link';
-import Image from 'next/image';
 
 interface FooterProps {
   newsSubscription: boolean;

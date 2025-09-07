@@ -1,25 +1,25 @@
-"use client";
-import CategoryCard from "./CategoryCard";
-import categories from "@/db-mock/categories.json";
-import { Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+'use client';
+import categories from '@/db-mock/categories.json';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import CategoryCard from './CategoryCard';
 
 function CategoriesSlider() {
   return (
     <div className="w-[100vw] ml-12 sm:w-[95vw] sm:px-6 md:w-full sm:mx-20 mx-10 relative">
       {/* Custom navigation buttons */}
-      <div className="swiper-button-prev absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400"></div>
-      <div className="swiper-button-next absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400"></div>
+      <div className="swiper-button-prev absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
+      <div className="swiper-button-next absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
           slidesPerView={3.5}
           slidesPerGroup={3}
-          breakpointsBase={"window"}
+          breakpointsBase={'window'}
           breakpoints={{
             0: {
               slidesPerView: 3.5,
@@ -44,13 +44,13 @@ function CategoriesSlider() {
           }}
           onSwiper={(swiper) => console.log(swiper)}
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
           }}
           onPaginationShow={(swiper) => console.log(swiper)}
           pagination={{
             clickable: true,
-            type: "custom",
+            type: 'custom',
             renderCustom: function (swiper, current, total) {
               // Custom pagination indicator
               let html =
@@ -62,7 +62,7 @@ function CategoriesSlider() {
                   html += `<div class="w-8 h-1"></div>`;
                 }
               }
-              html += "</div></div>";
+              html += '</div></div>';
               return html;
             },
           }}

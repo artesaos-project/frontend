@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader'
-import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle'
-import ModeratorSearch from './components/ModeratorSearch'
-import ModeratorTable from './components/ModeratorTable'
-import { useRouter } from 'next/navigation'
-import { artisanApi } from '@/services/api'
+import React, { useState, useEffect } from 'react';
+import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader';
+import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle';
+import ModeratorSearch from './components/ModeratorSearch';
+import ModeratorTable from './components/ModeratorTable';
+import { useRouter } from 'next/navigation';
+import { artisanApi } from '@/services/api';
 
 type Artisan = {
   id: string;
@@ -16,21 +16,21 @@ type Artisan = {
 };
 
 function page() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [activeFilter, setActiveFilter] = useState('all')
-  const [artisans, setArtisans] = useState<Artisan[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isAuthorized, setIsAuthorized] = useState(false)
-  const router = useRouter()
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [artisans, setArtisans] = useState<Artisan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const router = useRouter();
 
   const fetchArtisans = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const result = await artisanApi.getApplications();
       setArtisans(result.artisanApplications);
       setIsAuthorized(true);
     } catch (error: any) {
-      if (error.message === "UNAUTHORIZED") {
+      if (error.message === 'UNAUTHORIZED') {
         router.replace('/');
         return;
       }
@@ -39,55 +39,55 @@ function page() {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchArtisans()
-  }, [])
+    fetchArtisans();
+  }, []);
 
   const handleSearchChange = (value: string) => {
-    setSearchTerm(value)
-  }
+    setSearchTerm(value);
+  };
 
   const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter)
-  }
+    setActiveFilter(filter);
+  };
 
   // Tela de carregamento
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-midnight mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-midnight mx-auto mb-4" />
           <p className="text-midnight font-semibold">Carregando...</p>
         </div>
       </div>
-    )
+    );
   }
 
   // Se não autorizado, não renderiza nada (já redirecionou)
   if (!isAuthorized) {
-    return null
+    return null;
   }
 
   return (
-    <div className='overflow-x-hidden'>
+    <div className="overflow-x-hidden">
       <ModeratorHeader />
       <ModeratorTitle title={'Artesãos'} />
-      <ModeratorSearch 
+      <ModeratorSearch
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
         activeFilter={activeFilter}
         onFilterChange={handleFilterChange}
       />
-      <ModeratorTable 
+      <ModeratorTable
         searchTerm={searchTerm}
         activeFilter={activeFilter}
         artisans={artisans}
         onRefresh={fetchArtisans}
       />
     </div>
-  )
+  );
 }
 
-export default page
+export default page;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { BaseCard, ProductCardBody } from '@/components/Card';
-import { ApiProduct } from '@/types/product';
 import { productApi } from '@/services/api';
+import { ApiProduct } from '@/types/product';
+import { useEffect, useState } from 'react';
 
 function ProductArtisan({
   artistId,
