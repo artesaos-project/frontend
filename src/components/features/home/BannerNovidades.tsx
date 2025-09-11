@@ -1,5 +1,5 @@
-import Image from "next/image";
-import StrokedText from "./StrokedText/StrokedText";
+import Image from 'next/image';
+import StrokedText from '../../StrokedText/StrokedText';
 
 function BannerNovidades() {
   return (
@@ -14,7 +14,7 @@ function BannerNovidades() {
             <br className="sm:hidden" /> das novidades!
           </StrokedText>
           <Image
-            src={"/bell.png"}
+            src={'/bell.png'}
             width={70}
             height={70}
             alt="Imagem de um sino"

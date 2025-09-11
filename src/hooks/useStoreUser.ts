@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { UserProps, UserStore } from "@/types/UserProps";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { UserProps, UserStore } from '@/types/UserProps';
+import { persist } from 'zustand/middleware';
 
 const useStoreUser = create<UserStore>()(
   persist(
@@ -25,8 +25,7 @@ const useStoreUser = create<UserStore>()(
             isModerator: user.isModerator,
             isArtisan: user.isArtisan,
           },
-        }))
-      ,
+        })),
       resetStore: () =>
         set(() => ({
           user: {
@@ -41,9 +40,9 @@ const useStoreUser = create<UserStore>()(
         })),
     }),
     {
-      name: "loginStore",
-    }
-  )
+      name: 'loginStore',
+    },
+  ),
 );
 
 export default useStoreUser;

@@ -1,4 +1,4 @@
-import { IoIosSearch } from "react-icons/io";
+import { IoIosSearch } from 'react-icons/io';
 
 function SearchBar() {
   return (

@@ -1,29 +1,28 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import ProfilePicture from "./ProfilePicture";
-import ProfileInfo from "./ProfileInfo";
-import ActionButtons from "./ActionButtons";
-import ProfileDescription from "./ProfileDescription";
-import ContactButtons from "./ContactButtons";
-import { FaWhatsapp, FaPlus } from "react-icons/fa";
-import { IoMdShareAlt, IoIosArrowDown } from "react-icons/io";
-import { CiCircleMore } from "react-icons/ci";
-import { PiPlusCircleLight} from "react-icons/pi";
-import SearchBar from "./SearchBar";
-import { useParams } from 'next/navigation';
-import ProductArtisan from "./ProductArtisan";
-import ProductReviews from "@/app/product/components/ProductReviews";
-import artisanProductMock from "./artisanProductMock.json";
-import { LuPencil } from "react-icons/lu";
-import { ArtisanProfile } from "@/types/Artisan";
-import useStoreUser from "@/hooks/useStoreUser";
-import { useRouter } from "next/navigation";
-import { artisanApi } from "@/services/api";
+import ProductReviews from '@/components/features/product/ProductReviews';
+import useStoreUser from '@/hooks/useStoreUser';
+import { artisanApi } from '@/services/api';
+import { ArtisanProfile } from '@/types/Artisan';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { CiCircleMore } from 'react-icons/ci';
+import { FaPlus, FaWhatsapp } from 'react-icons/fa';
+import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
+import { LuPencil } from 'react-icons/lu';
+import { PiPlusCircleLight } from 'react-icons/pi';
+import ActionButtons from './ActionButtons';
+import ContactButtons from './ContactButtons';
+import ProductArtisan from './ProductArtisan';
+import ProfileDescription from './ProfileDescription';
+import ProfileInfo from './ProfileInfo';
+import ProfilePicture from './ProfilePicture';
+import SearchBar from './SearchBar';
+import artisanProductMock from './artisanProductMock.json';
 
 const ArtisanProfileCard = () => {
-  const [activeTab, setActiveTab] = useState<"produtos" | "avaliacoes">(
-    "produtos"
+  const [activeTab, setActiveTab] = useState<'produtos' | 'avaliacoes'>(
+    'produtos',
   );
   const params = useParams();
   const userName = params.id as string;
@@ -37,9 +36,9 @@ const ArtisanProfileCard = () => {
   const { user } = useStoreUser();
   const route = useRouter();
 
-  const getLoggedUserId = () => {
+  const getLoggedUserId = useCallback(() => {
     return user.userId;
-  };
+  }, [user.userId]);
 
   useEffect(() => {
     const fetchArtisanProfile = async () => {
@@ -50,13 +49,18 @@ const ArtisanProfileCard = () => {
 
         const loggedUserId = getLoggedUserId();
 
-        if (loggedUserId && data.userId && String(loggedUserId) === String(data.userId)) {
+        if (
+          loggedUserId &&
+          data.userId &&
+          String(loggedUserId) === String(data.userId)
+        ) {
           setIsArtisan(true);
-          console.log("O usuário logado é o artesão.");
+          console.log('O usuário logado é o artesão.');
         }
-
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar perfil');
+        setError(
+          err instanceof Error ? err.message : 'Erro ao carregar perfil',
+        );
       } finally {
         setLoading(false);
       }
@@ -65,53 +69,65 @@ const ArtisanProfileCard = () => {
     if (userName) {
       fetchArtisanProfile();
     }
-  }, [userName, user]);
+  }, [userName, user, getLoggedUserId]);
 
   if (loading) {
     return (
       <div className="text-center py-8">
-        <div className="inline-block w-8 h-8 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        <div className="inline-block w-8 h-8 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin" />
         <p className="text-gray-500 mt-2">Carregando perfil...</p>
       </div>
     );
   }
 
   if (error || !artisan) {
-    return <div className="text-center py-8 text-gray-500">{"Artesão não encontrado."}</div>;
+    return (
+      <div className="text-center py-8 text-gray-500">
+        {'Artesão não encontrado.'}
+      </div>
+    );
   }
 
   const filteredReviews = artisan.userId
-    ? artisanProductMock.productReviews.filter((review) => review.authorId === artisan.userId)
+    ? artisanProductMock.productReviews.filter(
+        (review) => review.authorId === artisan.userId,
+      )
     : artisanProductMock.productReviews;
 
-  const bgcolor = "bg-[#A6E3E9]";
-  const textColor = "text-[#1F3A4D]";
+  const bgcolor = 'bg-[#A6E3E9]';
+  const textColor = 'text-[#1F3A4D]';
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-      title: `${artisan.artisanName}`,
-      text: `Confira os produtos do ${artisan.artisanName}`,
-      url: window.location.href,
-    }).catch(error => {
-        console.log('Erro ao compartilhar:', error);
-        navigator.clipboard.writeText(window.location.href);
-        alert('Link copiado para a área de transferência!');
-    });
+      navigator
+        .share({
+          title: `${artisan.artisanName}`,
+          text: `Confira os produtos do ${artisan.artisanName}`,
+          url: window.location.href,
+        })
+        .catch((error) => {
+          console.log('Erro ao compartilhar:', error);
+          navigator.clipboard.writeText(window.location.href);
+          alert('Link copiado para a área de transferência!');
+        });
     } else {
-        const textArea = document.createElement('textarea');
-        textArea.value = window.location.href;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.body.removeChild(textArea);
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.body.removeChild(textArea);
       alert('Link copiado para a área de transferência!');
     }
   };
 
   const handleFollow = () => {
     setFollow(!follow);
-    alert(follow ? "Você começou a seguir o artista." : "Você deixou de seguir o artista." );
-  }
+    alert(
+      follow
+        ? 'Você começou a seguir o artista.'
+        : 'Você deixou de seguir o artista.',
+    );
+  };
 
   const handleAddProduct = () => {
     if (!user.isAuthenticated) {
@@ -129,14 +145,20 @@ const ArtisanProfileCard = () => {
             artisan={artisan}
             className={`w-24 h-24 rounded-full mx-auto border-4 border-white shadow-md`}
           />
-          
-        {!isArtisan && (
-          <ActionButtons
-            nameButton={follow ?  "Seguir" : "Seguindo"}
-            icon={follow ? <FaPlus size={16} /> : <IoIosArrowDown size={16}/> }
-            className={ follow ? `px-4 py-1 font-bold bg-white ${textColor} ring-1 shadow-[0_4px_0_0_#1F3A4D] ring-[#1F3A4D] rounded-2xl hover:text-white hover:bg-[#1F3A4D] hover:shadow-none` : `px-2 py-1 font-bold bg-white text-[#FF8C94] ring-1 shadow-[0_4px_0_0_#E33A46] ring-[#FF8C94] rounded-2xl hover:text-white hover:bg-[#FF8C94] hover:shadow-none`}
-            onClick={handleFollow}
-          />
+
+          {!isArtisan && (
+            <ActionButtons
+              nameButton={follow ? 'Seguir' : 'Seguindo'}
+              icon={
+                follow ? <FaPlus size={16} /> : <IoIosArrowDown size={16} />
+              }
+              className={
+                follow
+                  ? `px-4 py-1 font-bold bg-white ${textColor} ring-1 shadow-[0_4px_0_0_#1F3A4D] ring-[#1F3A4D] rounded-2xl hover:text-white hover:bg-[#1F3A4D] hover:shadow-none`
+                  : `px-2 py-1 font-bold bg-white text-[#FF8C94] ring-1 shadow-[0_4px_0_0_#E33A46] ring-[#FF8C94] rounded-2xl hover:text-white hover:bg-[#FF8C94] hover:shadow-none`
+              }
+              onClick={handleFollow}
+            />
           )}
         </div>
 
@@ -156,7 +178,7 @@ const ArtisanProfileCard = () => {
       </div>
 
       <div className="flex flex-col gap-y-4 md:flex-row justify-center items-center mt-6 md:space-x-4 font-bold text-[#1F3A4D]">
-        { isArtisan ? (
+        {isArtisan ? (
           <>
             <ActionButtons
               nameButton="Editar perfil"
@@ -178,7 +200,7 @@ const ArtisanProfileCard = () => {
               className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
             />
           </>
-          ) : (
+        ) : (
           <>
             <ContactButtons
               contactInfo={artisan.phoneNumber}
@@ -200,35 +222,35 @@ const ArtisanProfileCard = () => {
           <ActionButtons
             nameButton="Produtos"
             className={`flex w-full justify-center items-center mt-4 px-4 py-2 rounded-t-3xl hover:bg-white ${
-              activeTab === "produtos"
-                ? "bg-white text-[#E33A46] shadow-[0_-2px_0_0_#E33A46]"
+              activeTab === 'produtos'
+                ? 'bg-white text-[#E33A46] shadow-[0_-2px_0_0_#E33A46]'
                 : `${bgcolor} text-[#4D7558]`
             }`}
-            onClick={() => setActiveTab("produtos")}
+            onClick={() => setActiveTab('produtos')}
           />
           <ActionButtons
             nameButton="Avaliações"
             className={`flex w-full justify-center items-center mt-4 px-4 py-2 rounded-t-3xl hover:bg-white ${
-              activeTab === "avaliacoes"
-                ? "bg-white text-[#E33A46] shadow-[0_-2px_0_0_#E33A46]"
+              activeTab === 'avaliacoes'
+                ? 'bg-white text-[#E33A46] shadow-[0_-2px_0_0_#E33A46]'
                 : `${bgcolor} text-[#4D7558]`
             }`}
-            onClick={() => setActiveTab("avaliacoes")}
+            onClick={() => setActiveTab('avaliacoes')}
           />
         </div>
       </div>
 
-      <div
-        className={`${
-          activeTab === "produtos" ? "block" : "hidden"
-        }`}
-      >
+      <div className={`${activeTab === 'produtos' ? 'block' : 'hidden'}`}>
         <div className="flex bg-white items-center justify-center p-4">
           <SearchBar />
         </div>
 
         <div className="flex bg-white items-center justify-center p-4 ">
-          <ProductArtisan artistId={artisan.userId} visibleCount={visibleProducts} onTotalChange={setTotalProducts} />
+          <ProductArtisan
+            artistId={artisan.userId}
+            visibleCount={visibleProducts}
+            onTotalChange={setTotalProducts}
+          />
         </div>
 
         {visibleProducts < totalProducts && (
@@ -240,26 +262,25 @@ const ArtisanProfileCard = () => {
             />
           </div>
         )}
-
       </div>
 
       <div
         className={`justify-center bg-white ${
-          activeTab === "avaliacoes" ? "block" : "hidden"
+          activeTab === 'avaliacoes' ? 'block' : 'hidden'
         }`}
       >
         <div className="justify-center items-center mx-auto lg:w-7/12">
           {filteredReviews.length > 0 && (
-          <div>
-            <ProductReviews reviews={filteredReviews}/>
-           </div>
-        )}
+            <div>
+              <ProductReviews reviews={filteredReviews} />
+            </div>
+          )}
 
-        {filteredReviews.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            <p>Este artesão ainda não possui avaliações.</p>
-          </div>
-        )}
+          {filteredReviews.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              <p>Este artesão ainda não possui avaliações.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

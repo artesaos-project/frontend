@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 interface VisibleState {
   password: boolean;
@@ -17,7 +17,7 @@ export const useUIState = () => {
 
   const [uiError, setUiError] = useState<string | null>(null);
   const [formErrorFlag, setFormErrorFlag] = useState(false);
-  const [birthDateInput, setBirthDateInput] = useState("");
+  const [birthDateInput, setBirthDateInput] = useState('');
 
   const toggleField = useCallback((field: keyof VisibleState) => {
     setVisible((prev) => ({ ...prev, [field]: !prev[field] }));

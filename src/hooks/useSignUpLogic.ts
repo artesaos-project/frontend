@@ -1,40 +1,51 @@
-import { UserProps } from "@/types/UserProps";
-import { useCallback } from "react";
-import { SignUpData } from "../lib/schemas/signUpSchema";
-import { authApi } from "@/services/api";
+import { UserProps } from '@/types/UserProps';
+import { useCallback } from 'react';
+import { SignUpData } from '../lib/schemas/signUpSchema';
+import { authApi } from '@/services/api';
+
+interface ApiError {
+  status?: number;
+  errors?: unknown;
+  message?: string;
+}
 
 async function traduzirErro(mensagem: string): Promise<string> {
   try {
-    const texto = Array.isArray(mensagem) ? mensagem.join(" ") : mensagem;
+    const texto = Array.isArray(mensagem) ? mensagem.join(' ') : mensagem;
     const res = await fetch(
       `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-        texto
-      )}&langpair=en|pt-br`
+        texto,
+      )}&langpair=en|pt-br`,
     );
 
     if (!res.ok) {
-      throw new Error("Translation service unavailable");
+      throw new Error('Translation service unavailable');
     }
 
     const data = await res.json();
     return data.responseData?.translatedText || texto;
   } catch (error) {
-    console.warn("Translation failed, using original message:", error);
+    console.warn('Translation failed, using original message:', error);
     return mensagem;
   }
 }
 
 export const useSignUpLogic = (
   setUser: (user: UserProps) => void,
-  setUiError: (error: string | null) => void
+  setUiError: (error: string | null) => void,
 ) => {
-  const showUiError = useCallback(async (message: string) => {
-    const traduzida = await traduzirErro(message);
-    setUiError(traduzida);
-  }, [setUiError]);
+  const showUiError = useCallback(
+    async (message: string) => {
+      const traduzida = await traduzirErro(message);
+      setUiError(traduzida);
+    },
+    [setUiError],
+  );
 
   const createUser = useCallback(
-    async (data: SignUpData): Promise<{success: boolean, userData?: any}> => {
+    async (
+      data: SignUpData,
+    ): Promise<{ success: boolean; userData?: unknown }> => {
       try {
         const payload = {
           name: data.name,
@@ -44,50 +55,53 @@ export const useSignUpLogic = (
           birthDate: data.birthDate,
           phone: `${data.codigoPais}${data.ddd}${data.phone}`,
           ...(data.socialName &&
-            data.socialName.trim() !== "" && { socialName: data.socialName }),
+            data.socialName.trim() !== '' && { socialName: data.socialName }),
         };
 
         const body = await authApi.createUser(payload);
-        const isModerator = body.roles.includes("MODERATOR") ? true : false;
-        const isArtisan = body.roles.includes("ARTISAN") ? true : false;
-  
-        if(data.isArtisan){
-          setUiError("Usuário criado! Complete o cadastro artesão.");
-  
+        const isModerator = body.roles.includes('MODERATOR');
+        const isArtisan = body.roles.includes('ARTISAN');
+
+        if (data.isArtisan) {
+          setUiError('Usuário criado! Complete o cadastro artesão.');
+
           return {
             success: true,
             userData: body,
           };
-        } else {
-            const user: UserProps = {
-              userId: body.userId,
-              userName: body.name,
-              userPhoto: body.avatar,
-              isModerator: isModerator,
-              isArtisan: isArtisan,
-            };
-            setUser(user);
-            setUiError("Usuário criado e logado com sucesso!");
-  
-            return { success: true };
         }
-      } catch (err: any) {
-        if (err.status === 400 && err.errors) {
-          console.error("Validation errors detected");
+        const user: UserProps = {
+          userId: body.userId,
+          userName: body.name,
+          userPhoto: body.avatar,
+          isModerator,
+          isArtisan,
+        };
+        setUser(user);
+        setUiError('Usuário criado e logado com sucesso!');
+
+        return { success: true };
+      } catch (err: unknown) {
+        const error = err as ApiError;
+        if (error.status === 400 && error.errors) {
+          console.error('Validation errors detected');
           return {
-            success: false
+            success: false,
           };
-        } else if (err.status === 409) {
-          const msgTraduzida = await traduzirErro(err.message);
-          await showUiError(msgTraduzida || "Usuário já existe.");
+        }
+        if (error.status === 409) {
+          const msgTraduzida = await traduzirErro(
+            error.message || 'Usuário já existe.',
+          );
+          await showUiError(msgTraduzida);
           return { success: false };
         }
-  
-        await showUiError(err.message || "Erro inesperado.");
+
+        await showUiError(error.message || 'Erro inesperado.');
         return { success: false };
       }
     },
-    [showUiError, setUser]
+    [showUiError, setUser, setUiError],
   );
 
   return {

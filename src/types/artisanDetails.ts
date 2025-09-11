@@ -1,5 +1,4 @@
 export type artisanDetails = {
-
   finalityClassification: string;
   rawMaterial: string;
   sicab: number;
@@ -11,5 +10,4 @@ export type artisanDetails = {
   userId: string;
   userName: string;
   userPhone: string;
-
-}
+};

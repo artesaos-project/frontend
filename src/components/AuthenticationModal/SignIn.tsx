@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { DialogTitle } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import SignInput from "../AuthenticationModal/SignInput";
-import { z } from "zod";
+import { Button } from '@/components/ui/button';
+import useStoreUser from '@/hooks/useStoreUser';
+import { authApi } from '@/services/api';
+import { UserProps } from '@/types/UserProps';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import useStoreUser from "@/hooks/useStoreUser";
-import { UserProps } from "@/types/UserProps";
-import { authApi } from "@/services/api";
-import Image from "next/image";
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { z } from 'zod';
+import SignInput from '../AuthenticationModal/SignInput';
 
 const loginSchema = z.object({
   email: z.string().email('Email e/ou senha Incorretos'),
@@ -23,7 +23,7 @@ const loginSchema = z.object({
     .regex(/[!@#$%*&^(),.?":{}|<>]/, 'Email e/ou senha Incorretos')
     .regex(/[A-Z]/, 'Email e/ou senha Incorretos')
     .regex(/[a-z]/, 'Email e/ou senha Incorretos')
-    .regex(/[0-9]/, 'Email e/ou senha Incorretos')
+    .regex(/[0-9]/, 'Email e/ou senha Incorretos'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -48,9 +48,9 @@ function SignIn({
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
+    resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -58,8 +58,8 @@ function SignIn({
     try {
       const result = await authApi.signIn(data);
 
-      const isModerator = result.roles.includes("MODERATOR");
-      const isArtisan = result.roles.includes("ARTISAN");
+      const isModerator = result.roles.includes('MODERATOR');
+      const isArtisan = result.roles.includes('ARTISAN');
       const user: UserProps = {
         userId: result.userId,
         userName: result.name,
@@ -67,10 +67,9 @@ function SignIn({
         userPhoto: result.avatar,
         isModerator: isModerator,
         isArtisan: isArtisan,
-      }
+      };
       setUser(user);
       onSuccess();
-
     } catch (error: any) {
       const errorData = errorMessages[error.message] || 'Erro ao fazer login';
       setBackendError(errorData);
@@ -85,27 +84,36 @@ function SignIn({
       <div className="rounded-lg p-[44px] w-full">
         {children}
         <div className="mt-6 mb-14 ">
+          <Image
+            src="/horizontal-logo.svg"
+            alt="Imagem de boas-vindas"
+            width={120}
+            height={59}
+          />
 
-          <Image src="/horizontal-logo.svg" alt="Imagem de boas-vindas" width={120} height={59} />
-
-          <DialogTitle className="text-5xl md:text-[45px] mt-8 font-bold">Olá!</DialogTitle>
+          <DialogTitle className="text-5xl md:text-[45px] mt-8 font-bold">
+            Olá!
+          </DialogTitle>
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
         </div>
-        <form className="space-y-3 mb-3 text-end" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-3 mb-3 text-end"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <SignInput
             className="bg-[#E4F5E9] placeholder:text-[#4D7558] focus-visible:border-mint-600"
             hasError={!!errors.email}
-            placeholder={"Email"}
-            type={"email"}
+            placeholder={'Email'}
+            type={'email'}
             {...register('email')}
           />
           <div className="relative">
             <SignInput
               className="bg-[#E4F5E9] placeholder:text-[#4D7558] focus-visible:border-mint-600"
               hasError={!!errors.password}
-              placeholder={"Senha"}
-              type={visiblePassword ? "text" : "password"}
-              {...register("password")}
+              placeholder={'Senha'}
+              type={visiblePassword ? 'text' : 'password'}
+              {...register('password')}
             />
             <button
               type="button"
@@ -133,14 +141,15 @@ function SignIn({
               type="submit"
               className="bg-salmon w-[191px] h-[42px] rounded-2xl border-b-3 border-[#E85A4F]            
               hover:bg-[#E85A4F] cursor-pointer"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
                   <p>Carregando</p>
                 </>
               ) : (
-                "Continuar"
+                'Continuar'
               )}
             </Button>
           </div>

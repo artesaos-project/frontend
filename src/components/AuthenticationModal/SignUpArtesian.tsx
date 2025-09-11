@@ -1,54 +1,58 @@
-"use client";
+'use client';
 
-import SignInput from "@/components/AuthenticationModal/SignInput";
-import { Button } from "@/components/ui/button";
-import { finalidades } from "@/constants/finalidades";
-import { materiaPrima } from "@/constants/materiaPrima";
-import { tecnicas } from "@/constants/tecnicas";
-import { useDateInput } from "@/hooks/useDateInput";
-import { artisanApi } from "@/services/api";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import React, { useCallback, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
-import Select from "react-select";
-import { z } from "zod";
+import SignInput from '@/components/AuthenticationModal/SignInput';
+import { Button } from '@/components/ui/button';
+import { finalidades } from '@/constants/finalidades';
+import { materiaPrima } from '@/constants/materiaPrima';
+import { tecnicas } from '@/constants/tecnicas';
+import { useDateInput } from '@/hooks/useDateInput';
+import { artisanApi } from '@/services/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import React, { useCallback, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { FaExclamationTriangle, FaRegCalendarAlt } from 'react-icons/fa';
+import Select from 'react-select';
+import { z } from 'zod';
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
   cep: z
     .string()
-    .nonempty({ message: "CEP é obrigatório." })
-    .length(8, { message: "CEP inválido: deve ter 8 dígitos." }),
-  street: z.string().nonempty({ message: "Logradouro é obrigatório." }),
-  number: z.string().nonempty({ message: "Número é obrigatório." }),
-  neighborhood: z.string().nonempty({ message: "Bairro é obrigatório." }),
-  city: z.string().nonempty({ message: "Cidade é obrigatória." }),
-  state: z.string().nonempty({ message: "Estado é obrigatório." }),
-  rawMaterial: z.array(z.string()).min(1, { message: "Selecione pelo menos uma matéria-prima." }),
-  technique: z.array(z.string()).min(1, { message: "Selecione pelo menos uma técnica." }),
+    .nonempty({ message: 'CEP é obrigatório.' })
+    .length(8, { message: 'CEP inválido: deve ter 8 dígitos.' }),
+  street: z.string().nonempty({ message: 'Logradouro é obrigatório.' }),
+  number: z.string().nonempty({ message: 'Número é obrigatório.' }),
+  neighborhood: z.string().nonempty({ message: 'Bairro é obrigatório.' }),
+  city: z.string().nonempty({ message: 'Cidade é obrigatória.' }),
+  state: z.string().nonempty({ message: 'Estado é obrigatório.' }),
+  rawMaterial: z
+    .array(z.string())
+    .min(1, { message: 'Selecione pelo menos uma matéria-prima.' }),
+  technique: z
+    .array(z.string())
+    .min(1, { message: 'Selecione pelo menos uma técnica.' }),
   finalityClassification: z
     .string()
-    .nonempty({ message: "Classificação da finalidade é obrigatória." }),
-  sicab: z.string().nonempty({ message: "SICAB é obrigatório." }),
+    .nonempty({ message: 'Classificação da finalidade é obrigatória.' }),
+  sicab: z.string().nonempty({ message: 'SICAB é obrigatório.' }),
   sicabRegistration: z
     .string()
-    .nonempty({ message: "Data de cadastro SICAB é obrigatória." }),
+    .nonempty({ message: 'Data de cadastro SICAB é obrigatória.' }),
   sicabValidity: z
     .string()
-    .nonempty({ message: "Data de validade SICAB é obrigatória." }),
+    .nonempty({ message: 'Data de validade SICAB é obrigatória.' }),
 });
 
 type ArtisanData = z.infer<typeof artisanSchema>;
 
 // Função para traduzir mensagens de erro
 async function traduzirErro(mensagem: string): Promise<string> {
-  const texto = Array.isArray(mensagem) ? mensagem.join(" ") : mensagem;
+  const texto = Array.isArray(mensagem) ? mensagem.join(' ') : mensagem;
   const res = await fetch(
     `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-      texto
-    )}&langpair=en|pt-br`
+      texto,
+    )}&langpair=en|pt-br`,
   );
   const data = await res.json();
   return data.responseData.translatedText || texto;
@@ -67,7 +71,7 @@ const customSelectStyles = (hasError: boolean) => ({
   }),
   placeholder: (provided: any, state: any) => ({
     ...provided,
-    color: hasError ? "#E33A46" : "#334137",
+    color: hasError ? '#E33A46' : '#334137',
     fontSize: '14px',
     marginLeft: '8px',
   }),
@@ -113,20 +117,20 @@ function ArtisanSignUpPage({
     setTimeout(() => setUiError(null), 5000);
   };
 
-  const [validityDateInput, setValidityDateInput] = useState("");
-  const [registrationDateInput, setRegistrationDateInput] = useState("");
+  const [validityDateInput, setValidityDateInput] = useState('');
+  const [registrationDateInput, setRegistrationDateInput] = useState('');
 
   const { validateAndFormatDate: validateRegistrationDate } = useDateInput({
     onFormattedChange: setRegistrationDateInput,
     onValidDateChange: (isoDate) => {
-      setValue("sicabRegistration", isoDate, { shouldValidate: true });
+      setValue('sicabRegistration', isoDate, { shouldValidate: true });
     },
   });
 
   const { validateAndFormatDate: validateValidityDate } = useDateInput({
     onFormattedChange: setValidityDateInput,
     onValidDateChange: (isoDate) => {
-      setValue("sicabValidity", isoDate, { shouldValidate: true });
+      setValue('sicabValidity', isoDate, { shouldValidate: true });
     },
   });
 
@@ -134,14 +138,14 @@ function ArtisanSignUpPage({
     (value: string) => {
       validateRegistrationDate(value);
     },
-    [validateRegistrationDate]
+    [validateRegistrationDate],
   );
 
   const handleValidityDateInput = useCallback(
     (value: string) => {
       validateValidityDate(value);
     },
-    [validateValidityDate]
+    [validateValidityDate],
   );
 
   async function createArtisan(data: ArtisanData) {
@@ -165,18 +169,18 @@ function ArtisanSignUpPage({
             const messages = Array.isArray(msgs) ? msgs : [String(msgs)];
             const msgTraduzida = await traduzirErro(messages[0]);
             setFormError(field as keyof ArtisanData, {
-              type: "server",
+              type: 'server',
               message: msgTraduzida,
             });
-          })
+          }),
         );
         return;
       }
       if (error.status === 409) {
-        await showUiError(error.message || "Usuário já existe.");
+        await showUiError(error.message || 'Usuário já existe.');
         return;
       }
-      await showUiError(error.message || "Erro ao criar usuário.");
+      await showUiError(error.message || 'Erro ao criar usuário.');
     }
   }
 
@@ -191,28 +195,28 @@ function ArtisanSignUpPage({
   } = useForm<ArtisanData>({
     resolver: zodResolver(artisanSchema),
     defaultValues: {
-      technique: [], 
+      technique: [],
     },
   });
 
   // Busca endereço pelo CEP
   const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    const cep = e.target.value.replace(/\D/g, "");
+    const cep = e.target.value.replace(/\D/g, '');
 
     if (cep.length !== 8) return;
     try {
       const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await res.json();
       if (!data.erro) {
-        setValue("street", data.logradouro);
-        setValue("neighborhood", data.bairro);
-        setValue("city", data.localidade);
-        setValue("state", data.uf);
+        setValue('street', data.logradouro);
+        setValue('neighborhood', data.bairro);
+        setValue('city', data.localidade);
+        setValue('state', data.uf);
 
-        clearErrors(["street", "neighborhood", "city", "state"]);
+        clearErrors(['street', 'neighborhood', 'city', 'state']);
       }
     } catch {
-      console.error("Erro ao buscar CEP:", e);
+      console.error('Erro ao buscar CEP:', e);
     }
   };
 
@@ -233,7 +237,7 @@ function ArtisanSignUpPage({
       modalRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
-        inline: 'center'
+        inline: 'center',
       });
     }
   }, [uiError]);
@@ -263,13 +267,13 @@ function ArtisanSignUpPage({
           {uiError && (
             <div
               className={`mb-4 p-3 rounded-lg text-xs text-center ${
-                uiError.includes("sucesso")
-                  ? "bg-mint-600 text-white"
-                  : "bg-magenta text-white"
+                uiError.includes('sucesso')
+                  ? 'bg-mint-600 text-white'
+                  : 'bg-magenta text-white'
               }`}
             >
               <div className="flex items-center text-xs justify-center">
-                {!uiError.includes("sucesso") && (
+                {!uiError.includes('sucesso') && (
                   <FaExclamationTriangle className="mr-2" />
                 )}
                 <span>{uiError}</span>
@@ -283,7 +287,7 @@ function ArtisanSignUpPage({
                 placeholder="CEP*"
                 type="text"
                 maxLength={8}
-                {...register("cep")}
+                {...register('cep')}
                 onBlur={handleCepBlur}
                 hasError={!!errors.cep}
                 errorMessage={errors.cep?.message}
@@ -294,7 +298,7 @@ function ArtisanSignUpPage({
               <SignInput
                 placeholder="Logradouro*"
                 type="text"
-                {...register("street")}
+                {...register('street')}
                 hasError={!!errors.street}
                 errorMessage={errors.street?.message}
               />
@@ -307,21 +311,21 @@ function ArtisanSignUpPage({
                   placeholder="N°"
                   type="text"
                   hasError={!!errors.number}
-                  {...register("number")}
+                  {...register('number')}
                 />
                 <SignInput
                   className="col-span-7"
                   placeholder="Bairro*"
                   type="text"
                   hasError={!!errors.neighborhood}
-                  {...register("neighborhood")}
+                  {...register('neighborhood')}
                 />
                 <SignInput
                   className="col-span-6"
                   placeholder="Cidade*"
                   type="text"
                   hasError={!!errors.city}
-                  {...register("city")}
+                  {...register('city')}
                 />
                 <SignInput
                   className="col-span-4"
@@ -329,7 +333,7 @@ function ArtisanSignUpPage({
                   type="text"
                   maxLength={2}
                   hasError={!!errors.state}
-                  {...register("state")}
+                  {...register('state')}
                 />
               </div>
 
@@ -346,19 +350,30 @@ function ArtisanSignUpPage({
               )}
             </div>
 
-
-            <div className="text-mint-700 "> 
-              <Select options={materiaPrima.map(mat => ({ value: mat, label: mat }))}
+            <div className="text-mint-700 ">
+              <Select
+                options={materiaPrima.map((mat) => ({
+                  value: mat,
+                  label: mat,
+                }))}
                 isMulti
                 placeholder="Matéria-prima*"
                 styles={customSelectStyles(!!errors.rawMaterial)}
-                components={({ ClearIndicator: () => null, IndicatorSeparator: () => null })}
-                value={selectedMaterials.map(mat => ({ value: mat, label: mat }))}
+                components={{
+                  ClearIndicator: () => null,
+                  IndicatorSeparator: () => null,
+                }}
+                value={selectedMaterials.map((mat) => ({
+                  value: mat,
+                  label: mat,
+                }))}
                 className="flex-row"
                 onChange={(selectedOptions) => {
-                  const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                  const values = selectedOptions
+                    ? selectedOptions.map((option) => option.value)
+                    : [];
                   setSelectedMaterials(values);
-                  setValue("rawMaterial", values, { shouldValidate: true });
+                  setValue('rawMaterial', values, { shouldValidate: true });
                 }}
               />
               {errors.rawMaterial && (
@@ -368,18 +383,27 @@ function ArtisanSignUpPage({
               )}
             </div>
 
-            <div className="text-mint-700 "> 
-              <Select options={tecnicas.map(tec => ({ value: tec, label: tec }))}
+            <div className="text-mint-700 ">
+              <Select
+                options={tecnicas.map((tec) => ({ value: tec, label: tec }))}
                 isMulti
                 placeholder="Tecnicas*"
                 styles={customSelectStyles(!!errors.technique)}
-                components={({ ClearIndicator: () => null, IndicatorSeparator: () => null })}
-                value={selectedTechniques.map(tec => ({ value: tec, label: tec }))}
+                components={{
+                  ClearIndicator: () => null,
+                  IndicatorSeparator: () => null,
+                }}
+                value={selectedTechniques.map((tec) => ({
+                  value: tec,
+                  label: tec,
+                }))}
                 className="flex-row"
                 onChange={(selectedOptions) => {
-                  const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                  const values = selectedOptions
+                    ? selectedOptions.map((option) => option.value)
+                    : [];
                   setSelectedTechniques(values);
-                  setValue("technique", values, { shouldValidate: true });
+                  setValue('technique', values, { shouldValidate: true });
                 }}
                 isSearchable={false}
               />
@@ -395,15 +419,15 @@ function ArtisanSignUpPage({
                 className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
                 ${
                   errors.finalityClassification
-                    ? "text-magenta border-2 border-magenta"
-                    : "text-mint-700"
+                    ? 'text-magenta border-2 border-magenta'
+                    : 'text-mint-700'
                 }`}
-                {...register("finalityClassification")}
+                {...register('finalityClassification')}
               >
                 <option
                   value=""
                   className={
-                    errors.finalityClassification ? "text-magenta" : ""
+                    errors.finalityClassification ? 'text-magenta' : ''
                   }
                 >
                   Classificação Finalidade*
@@ -427,7 +451,7 @@ function ArtisanSignUpPage({
                   className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
                   placeholder="Sicab*"
                   type="text"
-                  {...register("sicab")}
+                  {...register('sicab')}
                   hasError={!!errors.sicab}
                   errorMessage={errors.sicab?.message}
                 />
@@ -439,7 +463,7 @@ function ArtisanSignUpPage({
                 className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
                 placeholder="Data de Cadastro SICAB*"
                 type="text"
-                {...register("sicabRegistration")}
+                {...register('sicabRegistration')}
                 icon={<FaRegCalendarAlt />}
                 iconPosition="right"
                 iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
@@ -455,7 +479,7 @@ function ArtisanSignUpPage({
                 className="bg-mint text-mint-700 placeholder:text-mint-700 rounded-3xl"
                 placeholder="Data de Validade SICAB*"
                 type="text"
-                {...register("sicabValidity")}
+                {...register('sicabValidity')}
                 icon={<FaRegCalendarAlt />}
                 iconPosition="right"
                 iconClassName="absolute right-3 top-1/2 transform -translate-y-1/2"
@@ -481,7 +505,7 @@ function ArtisanSignUpPage({
                 disabled={isSubmitting}
                 className="w-[191px] h-[42px] bg-solar-700 hover:bg-[#c05000] text-white rounded-[20px] border-b-4 border-[#a04500]"
               >
-                {isSubmitting ? "Processando..." : "Continuar"}
+                {isSubmitting ? 'Processando...' : 'Continuar'}
               </Button>
             </div>
           </form>

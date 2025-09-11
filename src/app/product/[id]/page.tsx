@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Header from "@/components/header";
-import Footer from "@/components/Footer";
-import ProductImage from "../components/ProductImage";
-import ProductInfo from "../components/ProductInfo";
-import ProductAuthor from "../components/ProductAuthor";
-import ProductReviews from "../components/ProductReviews";
-import { FiPlus, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { BaseCard, ProductCardBody } from "@/components/Card";
-import ProductSlide from "../components/ProductSlide";
-import { FormattedReview, ApiProduct } from "@/types/product";
-import { GoArrowLeft } from "react-icons/go";
-import { productApi } from "@/services/api";
+import { BaseCard, ProductCardBody } from '@/components/Card';
+import ProductAuthor from '@/components/features/product/ProductAuthor';
+import ProductImage from '@/components/features/product/ProductImage';
+import ProductInfo from '@/components/features/product/ProductInfo';
+import ProductReviews from '@/components/features/product/ProductReviews';
+import ProductSlide from '@/components/features/product/ProductSlide';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { productApi } from '@/services/api';
+import { ApiProduct, FormattedReview } from '@/types/product';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback } from 'react';
+import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
+import { GoArrowLeft } from 'react-icons/go';
 
 function ProductPage() {
   const params = useParams();
@@ -30,11 +30,37 @@ function ProductPage() {
   const [relatedProducts, setRelatedProducts] = useState<ApiProduct[]>([]);
   const [loadingRelatedProducts, setLoadingRelatedProducts] = useState(false);
 
-  useEffect(() => {
-    fetchProduct();
+  const fetchArtistProducts = useCallback(
+    async (authorId: string) => {
+      try {
+        setLoadingArtistProducts(true);
+        const products = await productApi.getByArtisan(authorId);
+        const filteredProducts = products.filter((p) => p.id !== productId);
+        setArtistProducts(filteredProducts);
+      } catch (err) {
+        console.error('Erro ao carregar produtos do artista:', err);
+      } finally {
+        setLoadingArtistProducts(false);
+      }
+    },
+    [productId],
+  );
+
+  const fetchRelatedProducts = useCallback(async () => {
+    try {
+      setLoadingRelatedProducts(true);
+      const allProducts = await productApi.getAll();
+      setRelatedProducts(
+        allProducts.filter((p) => p.id !== productId).slice(0, 12),
+      );
+    } catch (err) {
+      console.error('Erro ao carregar produtos relacionados:', err);
+    } finally {
+      setLoadingRelatedProducts(false);
+    }
   }, [productId]);
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const productData = await productApi.getById(productId);
@@ -46,45 +72,19 @@ function ProductPage() {
 
       fetchRelatedProducts();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao carregar produto");
+      setError(err instanceof Error ? err.message : 'Erro ao carregar produto');
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId, fetchArtistProducts, fetchRelatedProducts]);
 
-  const fetchArtistProducts = async (authorId: string) => {
-    try {
-      setLoadingArtistProducts(true);
-      const products = await productApi.getByArtisan(authorId);
-      const filteredProducts = products.filter((p) => p.id !== productId);
-      setArtistProducts(filteredProducts);
-    } catch (err) {
-      console.error("Erro ao carregar produtos do artista:", err);
-    } finally {
-      setLoadingArtistProducts(false);
-    }
-  };
-
-  const fetchRelatedProducts = async () => {
-    try {
-      setLoadingRelatedProducts(true);
-
-      const allProducts = await productApi.getAll();
-
-      setRelatedProducts(
-        allProducts.filter((p) => p.id !== productId).slice(0, 12)
-      );
-    } catch (err) {
-      console.error("Erro ao carregar produtos relacionados:", err);
-    } finally {
-      setLoadingRelatedProducts(false);
-    }
-  };
-
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
   const nextImage = () => {
     if (product && product.photos.length > 1) {
       setCurrentImageIndex((prev) =>
-        prev === product.photos.length - 1 ? 0 : prev + 1
+        prev === product.photos.length - 1 ? 0 : prev + 1,
       );
     }
   };
@@ -92,7 +92,7 @@ function ProductPage() {
   const prevImage = () => {
     if (product && product.photos.length > 1) {
       setCurrentImageIndex((prev) =>
-        prev === 0 ? product.photos.length - 1 : prev - 1
+        prev === 0 ? product.photos.length - 1 : prev - 1,
       );
     }
   };
@@ -160,7 +160,7 @@ function ProductPage() {
         <main className="bg-white">
           <div className="max-w-6xl mx-auto p-8">
             <div className="text-center text-red-500">
-              <p>{error || "Produto não encontrado"}</p>
+              <p>{error || 'Produto não encontrado'}</p>
             </div>
           </div>
         </main>
@@ -172,7 +172,7 @@ function ProductPage() {
   const productData = {
     id: product.id,
     title: product.title,
-    price: `R$ ${(product.priceInCents / 100).toFixed(2).replace(".", ",")}`,
+    price: `R$ ${(product.priceInCents / 100).toFixed(2).replace('.', ',')}`,
     description: product.description,
     author: product.authorName,
     image: product.photos[currentImageIndex] || product.coverPhoto,
@@ -190,31 +190,31 @@ function ProductPage() {
           url: window.location.href,
         })
         .catch((error) => {
-          console.log("Erro ao compartilhar:", error);
+          console.log('Erro ao compartilhar:', error);
           navigator.clipboard.writeText(window.location.href);
-          alert("Link copiado para a área de transferência!");
+          alert('Link copiado para a área de transferência!');
         });
     } else {
-      const textArea = document.createElement("textarea");
+      const textArea = document.createElement('textarea');
       textArea.value = window.location.href;
       document.body.appendChild(textArea);
       textArea.select();
       document.body.removeChild(textArea);
-      alert("Link copiado para a área de transferência!");
+      alert('Link copiado para a área de transferência!');
     }
   };
 
   const handleAddToFavorites = () => {
-    console.log("Adicionado aos favoritos:", productData);
+    console.log('Adicionado aos favoritos:', productData);
     alert(`${productData.title} foi adicionado aos favoritos!`);
   };
 
   const handleContact = () => {
     const message = `Olá! Tenho interesse no produto: ${productData.title} (ID: ${productData.id}) por ${productData.author}. Preço: ${productData.price}`;
     const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(
-      message
+      message,
     )}`;
-    window.open(whatsappUrl, "_blank");
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -269,8 +269,8 @@ function ProductPage() {
                         onClick={() => goToImage(index)}
                         className={`w-2 h-2 rounded-full transition-colors ${
                           index === currentImageIndex
-                            ? "bg-white"
-                            : "bg-white/50"
+                            ? 'bg-white'
+                            : 'bg-white/50'
                         }`}
                       />
                     ))}
@@ -294,11 +294,11 @@ function ProductPage() {
           <div className="lg:px-4">
             <ProductAuthor
               name={productData.author}
-              avatar={"https://placehold.co/48x48"}
+              avatar={'https://placehold.co/48x48'}
               followers={1000}
               totalProducts={5}
               isFollowing={false}
-              onFollow={() => alert("Seguindo!")}
+              onFollow={() => alert('Seguindo!')}
               onViewProfile={handleViewArtistProfile}
             />
           </div>
@@ -329,34 +329,34 @@ function ProductPage() {
                         className="flex justify-center items-center p-8"
                       >
                         <p>Carregando produtos do artista...</p>
-                      </div>
+                      </div>,
                     ]
                   : artistProducts.length > 0
-                  ? artistProducts.slice(0, 12).map((artistProduct) => (
-                      <BaseCard key={artistProduct.id}>
-                        <div className="relative w-full h-34 md:h-44">
-                          <img
-                            src={artistProduct.coverPhoto}
-                            alt={artistProduct.title}
-                            className="rounded-lg w-full h-34 md:h-44"
+                    ? artistProducts.slice(0, 12).map((artistProduct) => (
+                        <BaseCard key={artistProduct.id}>
+                          <div className="relative w-full h-34 md:h-44">
+                            <img
+                              src={artistProduct.coverPhoto}
+                              alt={artistProduct.title}
+                              className="rounded-lg w-full h-34 md:h-44"
+                            />
+                          </div>
+                          <ProductCardBody
+                            id={artistProduct.id}
+                            price={artistProduct.priceInCents / 100}
+                            title={artistProduct.title}
+                            author={artistProduct.authorName}
                           />
-                        </div>
-                        <ProductCardBody
-                          id={artistProduct.id}
-                          price={artistProduct.priceInCents / 100}
-                          title={artistProduct.title}
-                          author={artistProduct.authorName}
-                        />
-                      </BaseCard>
-                    ))
-                  : [
-                      <div
-                        className="flex justify-center items-center p-8 col-auto-span-full"
-                      >
-                        <p >Este artista ainda não possui outros produtos.</p>
-                      </div>
-                    ]
-                }
+                        </BaseCard>
+                      ))
+                    : [
+                        <div
+                          key="no-artist-products"
+                          className="flex justify-center items-center p-8 col-auto-span-full"
+                        >
+                          <p>Este artista ainda não possui outros produtos.</p>
+                        </div>,
+                      ]}
               </ProductSlide>
             </div>
           )}
@@ -364,42 +364,44 @@ function ProductPage() {
           <div>
             <ProductSlide
               title="Produtos Relacionados"
-              onViewMore={() => router.push("/")}
+              onViewMore={() => router.push('/')}
             >
               {loadingRelatedProducts
                 ? [
                     <div
+                      key="loading-related"
                       className="flex justify-center items-center pl-8"
                     >
                       <p>Carregando produtos relacionados...</p>
-                    </div>
+                    </div>,
                   ]
                 : relatedProducts.length > 0
-                ? relatedProducts.map((relatedProduct) => (
-                    <BaseCard key={relatedProduct.id}>
-                      <div className="relative w-full h-34 md:h-44">
-                        <img
-                          src={relatedProduct.coverPhoto}
-                          alt={relatedProduct.title}
-                          className="rounded-lg h-34 md:h-44 w-full"
+                  ? relatedProducts.map((relatedProduct) => (
+                      <BaseCard key={relatedProduct.id}>
+                        <div className="relative w-full h-34 md:h-44">
+                          <img
+                            src={relatedProduct.coverPhoto}
+                            alt={relatedProduct.title}
+                            className="rounded-lg h-34 md:h-44 w-full"
+                          />
+                        </div>
+                        <ProductCardBody
+                          id={relatedProduct.id}
+                          price={relatedProduct.priceInCents / 100}
+                          title={relatedProduct.title}
+                          author={relatedProduct.authorName}
                         />
-                      </div>
-                      <ProductCardBody
-                        id={relatedProduct.id}
-                        price={relatedProduct.priceInCents / 100}
-                        title={relatedProduct.title}
-                        author={relatedProduct.authorName}
-                      />
-                    </BaseCard>
-                  ))
-                : [
-                    <div
-                      className="flex justify-center items-center pl-8"
-                    >
-                      <p>Nenhum produto relacionado encontrado.</p>
-                    </div>
-                  ]}
-              </ProductSlide>
+                      </BaseCard>
+                    ))
+                  : [
+                      <div
+                        key="no-related-products"
+                        className="flex justify-center items-center pl-8"
+                      >
+                        <p>Nenhum produto relacionado encontrado.</p>
+                      </div>,
+                    ]}
+            </ProductSlide>
           </div>
         </div>
       </main>

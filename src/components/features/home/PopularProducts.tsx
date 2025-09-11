@@ -1,9 +1,8 @@
-"use client";
-import React from "react";
-import { Button } from "./ui/button";
-import { BaseCard, ProductCardBody } from "./Card";
-import { useState, useEffect } from "react";
-import { ApiProduct } from "@/types/product";
+'use client';
+import { ApiProduct } from '@/types/product';
+import { useEffect, useState } from 'react';
+import { BaseCard, ProductCardBody } from '../../Card';
+import { Button } from '../../ui/button';
 
 function PopularProducts() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -18,7 +17,7 @@ function PopularProducts() {
         console.log(data);
         setProducts(data);
       } catch (err) {
-        console.error("Erro ao buscar produtos:", err);
+        console.error('Erro ao buscar produtos:', err);
       }
     };
 
@@ -39,9 +38,9 @@ function PopularProducts() {
     };
 
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [products]);
 
   return (
@@ -64,7 +63,7 @@ function PopularProducts() {
             </div>
             <ProductCardBody
               id={product.id}
-              price={product.priceInCents/100}
+              price={product.priceInCents / 100}
               title={product.title}
               author={product.authorName}
             />

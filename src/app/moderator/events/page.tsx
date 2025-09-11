@@ -1,6 +1,6 @@
-import React from 'react'
-import ModeratorHeader from '../components/ModeratorHeader'
-import ModeratorTitle from '../components/ModeratorTitle'
+import React from 'react';
+import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader';
+import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle';
 
 function page() {
   return (
@@ -8,7 +8,7 @@ function page() {
       <ModeratorHeader />
       <ModeratorTitle title={'Eventos'} />
     </>
-  )
+  );
 }
 
-export default page
+export default page;
