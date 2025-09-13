@@ -3,7 +3,7 @@ function AuthButton() {
     <button
       type="submit"
       className="w-full h-10.5 rounded-full bg-midnight text-white font-semibold
-    cursor-pointer hover:bg-"
+    cursor-pointer hover:bg-sakura"
     >
       Continuar
     </button>
