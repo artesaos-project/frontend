@@ -7,6 +7,9 @@ import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
 import pluginPrettier from 'eslint-plugin-prettier';
 
 export default [
+  {
+    ignores: ['node_modules/**', 'dist/**', 'build/**', 'out/**', '.turbo/**'],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,

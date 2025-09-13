@@ -4,16 +4,48 @@ import { FiChevronLeft, FiEye, FiEyeOff } from 'react-icons/fi';
 import Image from 'next/image';
 import AuthInput from '@/components/common/auth-input';
 import AuthButton from '@/components/common/auth-button';
-import React from 'react';
+import { useState } from 'react';
+import { LoginFormData, loginSchema } from '@/lib/schemas/signinSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
 function Page() {
-  const [visiblePassword, setVisiblePassword] = React.useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log(data);
+  };
+
+  const handleVisibility = () => {
+    setVisiblePassword(!visiblePassword);
+  };
+
+  const hasErrors = Object.keys(errors).length > 0;
+  const errorMessage = errors.email?.message || errors.password?.message;
 
   return (
-    <div className="p-12.5 h-screen w-full">
-      <div className="w-full max-w-md mx-auto flex flex-col">
-        <div className="mb-12.5">
-          <FiChevronLeft size={24} />
+    <div className="p-12.5 h-screen w-full flex flex-col justify-center items-center">
+      <div className="max-w-2xl w-full max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 py-17.5 bg-white">
+        <Image
+          src="auth-bg.svg"
+          width="10"
+          height="10"
+          className="object-cover w-full h-full fixed top-0 left-0 -z-10 hidden md:block"
+          alt={''}
+        />
+        <div className="pb-12.5 md:pb-7.5">
+          <Link href="/">
+            <FiChevronLeft size={24} className="cursor-pointer" />
+          </Link>
         </div>
         <div>
           <Image
@@ -29,29 +61,33 @@ function Page() {
             Bom te ver de novo!
           </h2>
         </div>
-        <form className="flex flex-col gap-4">
-          <AuthInput placeholder="Email" type="email" />
-          {visiblePassword ? (
-            <AuthInput
-              placeholder="Senha"
-              type="text"
-              onToggle={() => setVisiblePassword(!visiblePassword)}
-              icon={<FiEye size={20} className="text-salmon" />}
-              hasError={true}
-              errorMessage="Email ou senha incorretos"
-            />
-          ) : (
-            <AuthInput
-              placeholder="Senha"
-              type="password"
-              onToggle={() => setVisiblePassword(!visiblePassword)}
-              icon={<FiEyeOff size={20} className="text-salmon" />}
-              hasError={false}
-            />
-          )}
-          <span className="text-xs text-midnight font-light underline text-right mb-6">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <AuthInput
+            placeholder="Email"
+            type="email"
+            {...register('email')}
+            hasError={hasErrors}
+          />
+          <AuthInput
+            type={visiblePassword ? 'text' : 'password'}
+            placeholder="Senha"
+            {...register('password')}
+            hasError={hasErrors}
+            errorMessage={errorMessage}
+            icon={
+              visiblePassword ? (
+                <FiEye size={20} color="salmon" onClick={handleVisibility} />
+              ) : (
+                <FiEyeOff size={20} color="salmon" onClick={handleVisibility} />
+              )
+            }
+          />
+          <Link
+            href="#"
+            className="text-xs text-midnight font-light underline text-right mb-6"
+          >
             Esqueceu sua senha?
-          </span>
+          </Link>
           <AuthButton />
         </form>
       </div>
