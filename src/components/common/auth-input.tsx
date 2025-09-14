@@ -12,7 +12,7 @@ function AuthInput({
   name,
   placeholder,
   icon,
-  className,
+  className = 'pl-5 pr-12',
   hasError,
   errorMessage,
   ...props
@@ -25,7 +25,7 @@ function AuthInput({
           name={name}
           placeholder={placeholder}
           className={`w-full h-10 border-2  
-        rounded-full pl-5 pr-12 placeholder:font-semibold
+        rounded-full placeholder:font-semibold
         placeholder:text-sm
         ${hasError ? 'placeholder:text-salmon border-salmon bg-sakura-100' : 'placeholder:text-midnight border-midnight'} 
         ${className}`}

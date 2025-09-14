@@ -29,6 +29,8 @@
   --color-grape: #6c1b71;
   --color-crimson: #E0001E;
   --color-olivine: #95C97B;
+  --color-olivine-600: #2AAA4C;
+  --color-olivine-100: #D8F5C8;
 }
 
 @theme inline {
