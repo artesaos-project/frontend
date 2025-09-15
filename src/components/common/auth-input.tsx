@@ -1,53 +1,45 @@
-import { useState } from 'react';
-
-interface AuthInputProps {
-  type: string;
+import { InputHTMLAttributes } from 'react';
+interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   icon?: React.ReactNode;
   className?: string;
   hasError?: boolean;
   errorMessage?: string;
-  onToggle?: (isVisible: boolean) => void;
 }
 
 function AuthInput({
   type,
+  name,
   placeholder,
   icon,
-  className,
+  className = 'pl-5 pr-12',
   hasError,
   errorMessage,
-  onToggle,
+  ...props
 }: AuthInputProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleToggle = () => {
-    const newVisibility = !isVisible;
-    setIsVisible(newVisibility);
-    onToggle?.(newVisibility);
-  };
-
   return (
     <div className="relative">
       <div className="relative">
         <input
           type={type}
+          name={name}
           placeholder={placeholder}
-          className={`${className} w-full h-10 border-2  
-        rounded-full pl-5 pr-12 placeholder:font-semibold
-        placeholder:text-sm 
-        ${hasError ? 'placeholder:text-salmon border-salmon bg-sakura-100' : 'placeholder:text-midnight border-midnight'}`}
+          className={`w-full h-10 border-2  
+        rounded-full placeholder:font-semibold
+        placeholder:text-sm
+        ${hasError ? 'placeholder:text-salmon border-salmon bg-sakura-100' : 'placeholder:text-midnight border-midnight'} 
+        ${className}`}
+          {...props}
         />
-        <button
-          className="absolute right-4 top-1/2 -translate-y-1/2"
-          onClick={handleToggle}
-          type="button"
-        >
-          {icon}
-        </button>
+
+        {icon && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            {icon}
+          </div>
+        )}
       </div>
       {hasError && errorMessage && (
-        <p className="p-2 text-xs font-semibold text-salmon">{errorMessage}</p>
+        <p className="p-1 text-xs font-semibold text-salmon">{errorMessage}</p>
       )}
     </div>
   );
