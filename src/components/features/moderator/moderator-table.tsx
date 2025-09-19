@@ -1,13 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { artisanApi } from '@/services/api';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BsXLg } from 'react-icons/bs';
 import { FaCheck } from 'react-icons/fa6';
 import { LuPencil } from 'react-icons/lu';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { artisanApi } from '@/services/api';
 
 type Artisan = {
   id: string;

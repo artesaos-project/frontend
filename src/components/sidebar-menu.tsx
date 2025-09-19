@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import useStoreUser from '@/hooks/useStoreUser';
+import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

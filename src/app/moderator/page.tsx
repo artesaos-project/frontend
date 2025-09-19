@@ -1,12 +1,11 @@
 'use client';
-import ModeratorCard from '../../components/features/moderator/ModeratorCard';
-import ModeratorHeader from '../../components/features/moderator/ModeratorHeader';
-import ModeratorTitle from '../../components/features/moderator/ModeratorTitle';
-import ModeratorNotification from '../../components/features/moderator/ModeratorNotification';
-import Footer from '@/components/Footer';
-import { useEffect } from 'react';
-import useStoreUser from '@/hooks/useStoreUser';
+import Footer from '@/components/footer';
+import useStoreUser from '@/hooks/use-store-user';
 import { useRouter } from 'next/navigation';
+import ModeratorCard from '../../components/features/moderator/moderator-card';
+import ModeratorHeader from '../../components/features/moderator/moderator-header';
+import ModeratorNotification from '../../components/features/moderator/moderator-notification';
+import ModeratorTitle from '../../components/features/moderator/moderator-title';
 
 function page() {
   const user = useStoreUser((state) => state.user);

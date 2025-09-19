@@ -1,24 +1,24 @@
 'use client';
 
-import ProductReviews from '@/components/features/product/ProductReviews';
-import useStoreUser from '@/hooks/useStoreUser';
+import useStoreUser from '@/hooks/use-store-user';
 import { artisanApi } from '@/services/api';
-import { ArtisanProfile } from '@/types/Artisan';
+import { ArtisanProfile } from '@/types/artisan';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CiCircleMore } from 'react-icons/ci';
 import { FaPlus, FaWhatsapp } from 'react-icons/fa';
 import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
 import { LuPencil } from 'react-icons/lu';
 import { PiPlusCircleLight } from 'react-icons/pi';
-import ActionButtons from './ActionButtons';
-import ContactButtons from './ContactButtons';
-import ProductArtisan from './ProductArtisan';
-import ProfileDescription from './ProfileDescription';
-import ProfileInfo from './ProfileInfo';
-import ProfilePicture from './ProfilePicture';
-import SearchBar from './SearchBar';
-import artisanProductMock from './artisanProductMock.json';
+import ProductReviews from '../product/product-reviews';
+import ActionButtons from './action-buttons';
+import artisanProductMock from './artisan-product-mock.json';
+import ContactButtons from './contact-buttons';
+import ProductArtisan from './product-artisan';
+import ProfileDescription from './product-description';
+import ProfileInfo from './profile-info';
+import ProfilePicture from './profile-picture';
+import SearchBar from './search-bar';
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<'produtos' | 'avaliacoes'>(

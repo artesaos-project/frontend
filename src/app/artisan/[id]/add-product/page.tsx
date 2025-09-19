@@ -1,18 +1,18 @@
 'use client';
 
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import { materiaPrima } from '@/constants/materiaPrima';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
+import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
 import { productApi, uploadApi } from '@/services/api';
-import { ProductForm } from '@/types/ProductForm';
+import { ProductForm } from '@/types/product-form';
 import { ArrowLeft, Trash2, Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
 import { IoAdd } from 'react-icons/io5';
 import { TbSelect, TbTrash } from 'react-icons/tb';
-import InputField from '../../../../components/features/artisan/InputField';
+import InputField from '../../../../components/features/artisan/input-field';
 
 const AddProductPage = () => {
   const router = useRouter();

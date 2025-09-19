@@ -1,11 +1,10 @@
-import React from 'react';
-import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader';
-import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle';
-import { Input } from '@/components/ui/input';
-import { IoIosSearch } from 'react-icons/io';
 import { Button } from '@/components/ui/button';
-import { IoFilter } from 'react-icons/io5';
+import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { IoIosSearch } from 'react-icons/io';
+import { IoFilter } from 'react-icons/io5';
+import ModeratorHeader from '../../../components/features/moderator/moderator-header';
+import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 function page() {
   return (

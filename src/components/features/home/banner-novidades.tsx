@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import StrokedText from '../../StrokedText/StrokedText';
+import StrokedText from './stroked-text';
 
 function BannerNovidades() {
   return (

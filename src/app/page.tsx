@@ -1,8 +1,8 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import CategoriesSlider from '@/components/categories-slider/CategoriesSlider';
-import BannerNovidades from '@/components/features/home/BannerNovidades';
-import PopularProducts from '@/components/features/home/PopularProducts';
+import BannerNovidades from '@/components/features/home/banner-novidades';
+import CategoriesSlider from '@/components/features/home/categories-slider';
+import PopularProducts from '@/components/features/home/popular-product';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 
 export default function Home() {
   return (

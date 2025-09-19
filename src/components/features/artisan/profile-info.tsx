@@ -1,4 +1,4 @@
-import { ArtisanProfile } from '@/types/Artisan';
+import { ArtisanProfile } from '@/types/artisan';
 
 function ProfileInfo({
   artisan,

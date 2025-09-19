@@ -1,7 +1,7 @@
-import { apiRequest } from '../apiService';
+import { ArtisanProfile } from '@/types/artisan';
+import { artisanDetails } from '@/types/artisan-details';
 import { ApiProduct } from '@/types/product';
-import { ArtisanProfile } from '@/types/Artisan';
-import { artisanDetails } from '@/types/artisanDetails';
+import { apiRequest } from '../api-service';
 
 type CreateUserPayload = {
   name: string;

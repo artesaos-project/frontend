@@ -1,6 +1,5 @@
-import React from 'react';
-import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader';
-import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle';
+import ModeratorHeader from '../../../components/features/moderator/moderator-header';
+import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 function page() {
   return (

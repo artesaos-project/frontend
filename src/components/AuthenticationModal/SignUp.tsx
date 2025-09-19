@@ -2,9 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { DialogTitle } from '@/components/ui/dialog';
-import { useDateInput } from '@/hooks/useDateInput';
-import useStoreUser from '@/hooks/useStoreUser';
-import { UserProps } from '@/types/UserProps';
+import { useDateInput } from '@/hooks/use-date-input';
+import useStoreUser from '@/hooks/use-store-user';
+import { UserProps } from '@/types/user-props';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
@@ -24,9 +24,9 @@ import {
   UIMessage,
 } from './SignUp/SignUpComponents';
 
-import { useUIState } from '@/hooks/useUIState';
-import { useSignUpLogic } from '../../hooks/useSignUpLogic';
-import { signUpSchema, type SignUpData } from '../../lib/schemas/signUpSchema';
+import { useUIState } from '@/hooks/use-ui-state';
+import { useSignUpLogic } from '../../hooks/use-sign-up-logic';
+import { signUpSchema, type SignUpData } from '../../lib/schemas/sign-up-schema';
 
 interface SignupFormProps {
   children?: React.ReactNode;

@@ -1,5 +1,5 @@
+import { UserProps, UserStore } from '@/types/user-props';
 import { create } from 'zustand';
-import { UserProps, UserStore } from '@/types/UserProps';
 import { persist } from 'zustand/middleware';
 
 const useStoreUser = create<UserStore>()(

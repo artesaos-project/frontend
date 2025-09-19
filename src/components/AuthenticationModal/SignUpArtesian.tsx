@@ -3,9 +3,9 @@
 import SignInput from '@/components/AuthenticationModal/SignInput';
 import { Button } from '@/components/ui/button';
 import { finalidades } from '@/constants/finalidades';
-import { materiaPrima } from '@/constants/materiaPrima';
+import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
-import { useDateInput } from '@/hooks/useDateInput';
+import { useDateInput } from '@/hooks/use-date-input';
 import { artisanApi } from '@/services/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogTitle } from '@radix-ui/react-dialog';

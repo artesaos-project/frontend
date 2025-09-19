@@ -1,14 +1,14 @@
 'use client';
 
-import { FiChevronLeft, FiEye, FiEyeOff } from 'react-icons/fi';
-import Image from 'next/image';
-import AuthInput from '@/components/common/auth-input';
 import AuthButton from '@/components/common/auth-button';
-import { useState } from 'react';
-import { LoginFormData, loginSchema } from '@/lib/schemas/signinSchema';
+import AuthInput from '@/components/common/auth-input';
+import { LoginFormData, loginSchema } from '@/lib/schemas/sign-in-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FiChevronLeft, FiEye, FiEyeOff } from 'react-icons/fi';
 
 function Page() {
   const [visiblePassword, setVisiblePassword] = useState(false);

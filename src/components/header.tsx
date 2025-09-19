@@ -7,12 +7,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import useStoreUser from '@/hooks/useStoreUser';
+import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoIosSearch } from 'react-icons/io';
 import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
-import SideBarMenu from './SideBarMenu';
+import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 

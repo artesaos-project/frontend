@@ -1,11 +1,9 @@
-import { Input } from '@/components/ui/input';
-import { IoIosSearch } from 'react-icons/io';
 import { Button } from '@/components/ui/button';
-import { IoIosArrowDown } from 'react-icons/io';
-import { GoClockFill } from 'react-icons/go';
-import { FaCheck } from 'react-icons/fa6';
+import { Input } from '@/components/ui/input';
 import { BsXLg } from 'react-icons/bs';
-import { IoFilter } from 'react-icons/io5';
+import { FaCheck } from 'react-icons/fa6';
+import { GoClockFill } from 'react-icons/go';
+import { IoIosArrowDown, IoIosSearch } from 'react-icons/io';
 import { LuPencil } from 'react-icons/lu';
 
 interface ModeratorSearchProps {

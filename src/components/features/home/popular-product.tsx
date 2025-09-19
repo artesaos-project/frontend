@@ -1,7 +1,7 @@
 'use client';
 import { ApiProduct } from '@/types/product';
 import { useEffect, useState } from 'react';
-import { BaseCard, ProductCardBody } from '../../Card';
+import { BaseCard, ProductCardBody } from '../../card';
 import { Button } from '../../ui/button';
 
 function PopularProducts() {

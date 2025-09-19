@@ -3,7 +3,7 @@
 import { CiHeart } from 'react-icons/ci';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
-import Button from './Button';
+import Button from './button';
 
 interface ProductInfoProps {
   title: string;

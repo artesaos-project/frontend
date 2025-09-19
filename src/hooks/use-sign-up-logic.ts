@@ -1,7 +1,7 @@
-import { UserProps } from '@/types/UserProps';
-import { useCallback } from 'react';
-import { SignUpData } from '../lib/schemas/signUpSchema';
 import { authApi } from '@/services/api';
+import { UserProps } from '@/types/user-props';
+import { useCallback } from 'react';
+import { SignUpData } from '../lib/schemas/sign-up-schema';
 
 interface ApiError {
   status?: number;

@@ -1,6 +1,6 @@
 'use client';
 
-import Header from '@/components/Header';
+import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

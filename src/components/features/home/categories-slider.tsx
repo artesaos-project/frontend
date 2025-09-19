@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import CategoryCard from './CategoryCard';
+import CategoryCard from './category-card';
 
 function CategoriesSlider() {
   return (
