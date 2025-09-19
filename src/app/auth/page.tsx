@@ -5,8 +5,8 @@ import { FiX } from 'react-icons/fi';
 function page() {
   return (
     <div className="p-12.5 h-screen w-full flex flex-col bg-[url('/fundo-cadastro-login.svg')] justify-center items-center">
-      <div className="max-w-2xl w-full max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 py-25">
-        <div className="mb-2.5">
+      <div className="max-w-2xl w-full h-full md:max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 md:py-25">
+        <div className="mb-30 md:mb-2.5">
           <Link href={'/'} className="w-6 flex ml-auto">
             <FiX size={24} />
           </Link>

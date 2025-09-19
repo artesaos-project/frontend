@@ -34,7 +34,7 @@ function Page() {
 
   return (
     <div className="p-12.5 h-screen w-full flex flex-col bg-[url('/fundo-cadastro-login.svg')] justify-center items-center">
-      <div className="max-w-2xl w-full max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 py-17.5">
+      <div className="max-w-2xl w-full h-full md:max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 md:py-17.5">
         <div className="pb-12.5 md:pb-7.5 flex justify-between">
           <Link href="/auth">
             <FiChevronLeft size={24} className="cursor-pointer" />
