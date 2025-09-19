@@ -1,8 +1,5 @@
-import { forwardRef, InputHTMLAttributes } from 'react';
-
+import { InputHTMLAttributes } from 'react';
 interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  name?: string;
-  type: string;
   placeholder: string;
   icon?: React.ReactNode;
   className?: string;
@@ -10,39 +7,42 @@ interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
-  (
-    { type, placeholder, icon, className, hasError, errorMessage, ...props },
-    ref,
-  ) => {
-    return (
+function AuthInput({
+  type,
+  name,
+  placeholder,
+  icon,
+  className = 'pl-5 pr-12',
+  hasError,
+  errorMessage,
+  ...props
+}: AuthInputProps) {
+  return (
+    <div className="relative">
       <div className="relative">
-        <div className="relative">
-          <input
-            ref={ref}
-            type={type}
-            placeholder={placeholder}
-            className={` w-full h-10 border-2  
-          rounded-full pl-5 pr-12 placeholder:font-semibold
-          placeholder:text-sm 
-          ${hasError ? 'placeholder:text-salmon border-salmon bg-sakura-100' : 'placeholder:text-midnight border-midnight'}
-          ${className}`}
-            {...props}
-          />
-          {icon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              {icon}
-            </div>
-          )}
-        </div>
-        {hasError && errorMessage && (
-          <p className="pt-2 text-xs text-salmon">{errorMessage}</p>
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          className={`w-full h-10 border-2  
+        rounded-full placeholder:font-semibold
+        placeholder:text-sm
+        ${hasError ? 'placeholder:text-salmon border-salmon bg-sakura-100' : 'placeholder:text-midnight border-midnight'} 
+        ${className}`}
+          {...props}
+        />
+
+        {icon && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            {icon}
+          </div>
         )}
       </div>
-    );
-  },
-);
-
-AuthInput.displayName = 'AuthInput';
+      {hasError && errorMessage && (
+        <p className="p-1 text-xs font-semibold text-salmon">{errorMessage}</p>
+      )}
+    </div>
+  );
+}
 
 export default AuthInput;
