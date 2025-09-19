@@ -2,13 +2,13 @@
 
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
-import { LoginFormData, loginSchema } from '@/lib/schemas/sign-in-schema';
+import { LoginFormData, loginSchema } from '@/lib/schemas/login-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiChevronLeft, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiChevronLeft, FiEye, FiEyeOff, FiX } from 'react-icons/fi';
 
 function Page() {
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -33,18 +33,14 @@ function Page() {
   const errorMessage = errors.email?.message || errors.password?.message;
 
   return (
-    <div className="p-12.5 h-screen w-full flex flex-col justify-center items-center">
-      <div className="max-w-2xl w-full max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 py-17.5 bg-white">
-        <Image
-          src="auth-bg.svg"
-          width="10"
-          height="10"
-          className="object-cover w-full h-full fixed top-0 left-0 -z-10 hidden md:block"
-          alt={''}
-        />
-        <div className="pb-12.5 md:pb-7.5">
-          <Link href="/">
+    <div className="p-12.5 h-screen w-full flex flex-col bg-[url('/fundo-cadastro-login.svg')] justify-center items-center">
+      <div className="max-w-2xl w-full max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 py-17.5">
+        <div className="pb-12.5 md:pb-7.5 flex justify-between">
+          <Link href="/auth">
             <FiChevronLeft size={24} className="cursor-pointer" />
+          </Link>
+          <Link href={'/'} className="w-6 flex ml-auto">
+            <FiX size={24} />
           </Link>
         </div>
         <div>
@@ -84,7 +80,7 @@ function Page() {
           />
           <Link
             href="#"
-            className="text-xs text-midnight font-light underline text-right mb-6"
+            className="text-xs text-midnight hover:text-sakura w-fit font-light underline ml-auto mb-6"
           >
             Esqueceu sua senha?
           </Link>
