@@ -1,6 +1,6 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import ArtistProfileCard from '../../../components/features/artisan/ArtisanProfileCard';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
+import ArtistProfileCard from '../../../components/features/artisan/artisan-profile-card';
 
 export default function ArtisanPage() {
   return (

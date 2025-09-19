@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import ModeratorHeader from '../../../components/features/moderator/ModeratorHeader';
-import ModeratorTitle from '../../../components/features/moderator/ModeratorTitle';
-import ModeratorSearch from './components/ModeratorSearch';
-import ModeratorTable from './components/ModeratorTable';
-import { useRouter } from 'next/navigation';
 import { artisanApi } from '@/services/api';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import ModeratorHeader from '../../../components/features/moderator/moderator-header';
+import ModeratorSearch from '../../../components/features/moderator/moderator-search';
+import ModeratorTable from '../../../components/features/moderator/moderator-table';
+import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 type Artisan = {
   id: string;
@@ -15,7 +15,7 @@ type Artisan = {
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INACTIVE';
 };
 
-function page() {
+function Page() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [artisans, setArtisans] = useState<Artisan[]>([]);
@@ -90,4 +90,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

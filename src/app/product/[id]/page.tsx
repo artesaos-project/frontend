@@ -1,17 +1,17 @@
 'use client';
 
-import { BaseCard, ProductCardBody } from '@/components/Card';
-import ProductAuthor from '@/components/features/product/ProductAuthor';
-import ProductImage from '@/components/features/product/ProductImage';
-import ProductInfo from '@/components/features/product/ProductInfo';
-import ProductReviews from '@/components/features/product/ProductReviews';
-import ProductSlide from '@/components/features/product/ProductSlide';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import { BaseCard, ProductCardBody } from '@/components/card';
+import ProductAuthor from '@/components/features/product/product-author';
+import ProductImage from '@/components/features/product/product-image';
+import ProductInfo from '@/components/features/product/product-info';
+import ProductReviews from '@/components/features/product/product-reviews';
+import ProductSlide from '@/components/features/product/product-slide';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 import { productApi } from '@/services/api';
 import { ApiProduct, FormattedReview } from '@/types/product';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { GoArrowLeft } from 'react-icons/go';
 

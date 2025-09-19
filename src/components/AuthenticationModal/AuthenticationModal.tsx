@@ -7,8 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import useStoreUser from '@/hooks/useStoreUser';
-import { UserProps } from '@/types/UserProps';
+import useStoreUser from '@/hooks/use-store-user';
+import { UserProps } from '@/types/user-props';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';

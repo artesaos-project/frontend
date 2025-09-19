@@ -1,18 +1,18 @@
 'use client';
 
-import ModeratorHeader from '../../../../components/features/moderator/ModeratorHeader';
-import ModeratorTitle from '../../../../components/features/moderator/ModeratorTitle';
-import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { FaCheck } from 'react-icons/fa';
-import { BsXLg } from 'react-icons/bs';
-import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { IoIosArrowDown, IoIosInformationCircleOutline } from 'react-icons/io';
-import { useState, useEffect } from 'react';
-import { artisanDetails } from '@/types/artisanDetails';
 import { artisanApi } from '@/services/api';
+import { artisanDetails } from '@/types/artisan-details';
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { BsXLg } from 'react-icons/bs';
+import { FaCheck } from 'react-icons/fa';
+import { IoIosArrowDown, IoIosInformationCircleOutline } from 'react-icons/io';
+import ModeratorHeader from '../../../../components/features/moderator/moderator-header';
+import ModeratorTitle from '../../../../components/features/moderator/moderator-title';
 
 function Page() {
   const params = useParams();

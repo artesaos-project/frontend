@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import useStoreUser from '@/hooks/useStoreUser';
+import useStoreUser from '@/hooks/use-store-user';
 import { authApi } from '@/services/api';
-import { UserProps } from '@/types/UserProps';
+import { UserProps } from '@/types/user-props';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { Loader2 } from 'lucide-react';
