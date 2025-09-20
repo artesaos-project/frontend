@@ -10,6 +10,7 @@ import {
   ArtisanStep7,
 } from '@/components/features/sign-up/artisan-steps';
 import { Step1, Step2, Step3 } from '@/components/features/sign-up/user-steps';
+import SignUpComplete from '@/components/features/sign-up/sign-up-complete';
 import { ClipboardPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -36,6 +37,12 @@ function SignUp() {
   };
 
   const handleGoHome = () => {
+    if (step >= 4 && step <= 10) {
+      const confirmLeave = window.confirm(
+        'Seu cadastro será perdido. Deseja sair mesmo assim?',
+      );
+      if (!confirmLeave) return;
+    }
     router.push('/');
   };
 
@@ -48,16 +55,33 @@ function SignUp() {
   ];
 
   return (
-    <div className="flex lg:w-screen lg:h-screen justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover">
-      <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl">
+    <div className="flex md:w-screen md:h-screen justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center">
+      <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl md:shadow-2xl ">
         <div className="flex mb-10 justify-between">
-          <FiChevronLeft size={24} onClick={handleBack} />
-          <FiX size={24} />
+          {step < 10 && (
+            <FiChevronLeft
+              size={24}
+              onClick={handleBack}
+              className="cursor-pointer"
+            />
+          )}
+          {step <= 10 && (
+            <FiX size={24} className="cursor-pointer" onClick={handleGoHome} />
+          )}
+          {step > 10 && (
+            <div className="flex-1 flex justify-end">
+              <FiX
+                size={24}
+                className="cursor-pointer"
+                onClick={handleGoHome}
+              />
+            </div>
+          )}
         </div>
         <div
           className={
-            step > 3
-              ? 'flex flex-row items-center justify-center mb-6'
+            step > 3 && step <= 10
+              ? 'flex flex-row flex-wrap items-center justify-center mb-6 rounded-2xl border-1 p-1'
               : 'hidden'
           }
         >
@@ -76,13 +100,13 @@ function SignUp() {
             }
 
             return (
-              <div key={idx} className="flex items-center justify-between">
+              <div key={idx} className="flex items-center justify-between ">
                 {idx !== 0 && (
                   <div
-                    className={`w-6 lg:w-8 h-1 rounded-full transition-colors ${
+                    className={`w-6 sm:w-8 md:12 h-0.5 rounded-full transition-colors ${
                       step > (prevActiveStep ?? 0)
                         ? 'bg-olivine-600'
-                        : 'bg-gray-100'
+                        : 'bg-gray-100 '
                     }`}
                   />
                 )}
@@ -119,21 +143,7 @@ function SignUp() {
         {step === 8 && <ArtisanStep5 onNext={handleNext} />}
         {step === 9 && <ArtisanStep6 onNext={handleNext} />}
         {step === 10 && <ArtisanStep7 onNext={handleNext} />}
-        {step > 10 && (
-          <div className="text-midnight text-center">
-            <h1 className="text-2xl font-bold text-olivine-600 mb-2">
-              Cadastro concluído!
-            </h1>
-            <h2 className="text-lg font-bold mb-1">
-              Bem-vindo à comunidade Artesão!
-            </h2>
-            <p className="text-md mt-4">
-              Seu perfil foi criado com sucesso. Agora você pode explorar,
-              conectar-se com outros artesãos e começar a compartilhar suas
-              criações.
-            </p>
-          </div>
-        )}
+        {step > 10 && <SignUpComplete />}
       </div>
     </div>
   );

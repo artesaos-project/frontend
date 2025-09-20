@@ -1,7 +1,7 @@
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
 import { PhoneFields } from '@/components/features/sign-up/PhoneFileds';
-import { SignUpData, signUpSchema } from '@/lib/schemas/signUpSchema';
+import { SignUpData, signUpSchema } from '@/lib/schemas/sign-up-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useState } from 'react';

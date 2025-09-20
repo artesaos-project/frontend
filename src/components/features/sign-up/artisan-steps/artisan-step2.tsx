@@ -1,10 +1,24 @@
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
-import { useDateInput } from '@/hooks/useDateInput';
+import { useDateInput } from '@/hooks/use-date-input';
+import {
+  artisanProfileSchema,
+  ArtisanProfileFormData,
+} from '@/lib/schemas/artisan-profile-schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 
 function ArtisanStep2({ onNext }: { onNext: () => void }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ArtisanProfileFormData>({
+    resolver: zodResolver(artisanProfileSchema),
+  });
+
   const [dateCadastro, setDateCadastro] = useState('');
   const [dateValidade, setDateValidade] = useState('');
   const { validateAndFormatDate: validateCadastro } = useDateInput({
@@ -14,7 +28,8 @@ function ArtisanStep2({ onNext }: { onNext: () => void }) {
     onFormattedChange: setDateValidade,
   });
 
-  const handleNext = () => {
+  const onSubmit: SubmitHandler<ArtisanProfileFormData> = (data) => {
+    console.log(data);
     onNext();
   };
 
@@ -27,25 +42,42 @@ function ArtisanStep2({ onNext }: { onNext: () => void }) {
         Para que seu perfil seja completo e atraente, preencha suas informações
         profissionais.
       </p>
-      <form className="flex flex-col gap-4 mt-4">
-        <AuthInput placeholder="Sicab*" type="text" />
+      <form
+        className="flex flex-col gap-4 mt-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <AuthInput
+          placeholder="Sicab*"
+          type="text"
+          {...register('sicab')}
+          hasError={!!errors.sicab}
+          errorMessage={errors.sicab?.message}
+        />
         <AuthInput
           placeholder="Data de Cadastro Sicab*"
           type="text"
           value={dateCadastro}
           maxLength={10}
-          onChange={(e) => validateCadastro(e.target.value)}
           icon={<FaRegCalendarAlt />}
+          {...register('dataCadastro', {
+            onChange: (e) => validateCadastro(e.target.value),
+          })}
+          hasError={!!errors.dataCadastro}
+          errorMessage={errors.dataCadastro?.message}
         />
         <AuthInput
           placeholder="Data de Validade Sicab*"
           type="text"
           value={dateValidade}
           maxLength={10}
-          onChange={(e) => validateValidade(e.target.value)}
           icon={<FaRegCalendarAlt />}
+          {...register('dataValidade', {
+            onChange: (e) => validateValidade(e.target.value),
+          })}
+          hasError={!!errors.dataValidade}
+          errorMessage={errors.dataValidade?.message}
         />
-        <AuthButton text="Continuar" className="mt-10" onClick={handleNext} />
+        <AuthButton text="Continuar" className="mt-10" />
       </form>
     </div>
   );

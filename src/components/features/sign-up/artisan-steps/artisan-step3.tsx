@@ -1,5 +1,5 @@
 import AuthButton from '@/components/common/auth-button';
-import { materiaPrima } from '@/constants/materiaPrima';
+import { materiaPrima } from '@/constants/materia-prima';
 import { useState } from 'react';
 import SearchBar from '../searchBar';
 
