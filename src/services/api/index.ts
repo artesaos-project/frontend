@@ -101,13 +101,14 @@ export const authApi = {
       body: userData,
     }),
 
-  signIn: (credentials: { email: string; password: string }) =>
+  login: (credentials: { email: string; password: string }) =>
     apiRequest<{
       userId: string;
       name: string;
       artisanUserName?: string;
       avatar: string;
       roles: string[];
+      status: number;
     }>('/sessions', {
       method: 'POST',
       body: credentials,

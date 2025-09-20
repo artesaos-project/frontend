@@ -26,7 +26,10 @@ import {
 
 import { useUIState } from '@/hooks/use-ui-state';
 import { useSignUpLogic } from '../../hooks/use-sign-up-logic';
-import { signUpSchema, type SignUpData } from '../../lib/schemas/sign-up-schema';
+import {
+  signUpSchema,
+  type SignUpData,
+} from '../../lib/schemas/sign-up-schema';
 
 interface SignupFormProps {
   children?: React.ReactNode;

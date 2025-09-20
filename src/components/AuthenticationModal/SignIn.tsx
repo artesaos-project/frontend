@@ -56,7 +56,7 @@ function SignIn({
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const result = await authApi.signIn(data);
+      const result = await authApi.login(data);
 
       const isModerator = result.roles.includes('MODERATOR');
       const isArtisan = result.roles.includes('ARTISAN');
