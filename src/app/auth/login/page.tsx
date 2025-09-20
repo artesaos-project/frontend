@@ -2,16 +2,26 @@
 
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import useStoreUser from '@/hooks/use-store-user';
 import { LoginFormData, loginSchema } from '@/lib/schemas/login-schema';
+import { authApi } from '@/services/api';
+import { UserProps } from '@/types/user-props';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiChevronLeft, FiEye, FiEyeOff, FiX } from 'react-icons/fi';
+import { IoIosWarning } from 'react-icons/io';
 
 function Page() {
   const [visiblePassword, setVisiblePassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const setUser = useStoreUser((state) => state.setUser);
+  const router = useRouter();
 
   const {
     register,
@@ -21,15 +31,44 @@ function Page() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
+    try {
+      const response = await authApi.login({
+        email: data.email,
+        password: data.password,
+      });
+
+      const user: UserProps = {
+        userId: response.userId,
+        userName: response.name,
+        userPhoto: response.avatar,
+        artisanUserName: response.artisanUserName,
+        isAuthenticated: true,
+        isModerator: response.roles.includes('MODERATOR'),
+        isArtisan: response.roles.includes('ARTISAN'),
+      };
+
+      setUser(user);
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+      setErrorAlert(true);
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (errorAlert) {
+      const timer = setTimeout(() => setErrorAlert(false), 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorAlert]);
 
   const handleVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
 
-  const hasErrors = Object.keys(errors).length > 0;
   const errorMessage = errors.email?.message || errors.password?.message;
 
   return (
@@ -43,6 +82,18 @@ function Page() {
             <FiX size={24} />
           </Link>
         </div>
+        {errorAlert && (
+          <Alert
+            variant="destructive"
+            className="w-full bg-salmon text-white flex justify-between rounded-full mb-10 mt-3"
+          >
+            <div className="flex gap-2">
+              <IoIosWarning />
+              <AlertTitle>Preencha com dados válidos</AlertTitle>
+            </div>
+            <FiX onClick={() => setErrorAlert(false)} />
+          </Alert>
+        )}
         <div>
           <Image
             src="/horizontal-logo.svg"
@@ -62,13 +113,13 @@ function Page() {
             placeholder="Email"
             type="email"
             {...register('email')}
-            hasError={hasErrors}
+            hasError={!!errors.email}
           />
           <AuthInput
             type={visiblePassword ? 'text' : 'password'}
             placeholder="Senha"
             {...register('password')}
-            hasError={hasErrors}
+            hasError={!!errors.password}
             errorMessage={errorMessage}
             icon={
               visiblePassword ? (
@@ -84,7 +135,10 @@ function Page() {
           >
             Esqueceu sua senha?
           </Link>
-          <AuthButton />
+          <AuthButton
+            text={isLoading ? 'Entrando...' : 'Continuar'}
+            disabled={isLoading}
+          />
         </form>
       </div>
     </div>

@@ -21,18 +21,20 @@ function page() {
           <h1 className="font-bold text-midnight text-5xl">Olá!</h1>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <button
-            className={`max-w-2xs w-full rounded-2xl py-3.5 cursor-pointer bg-sakura text-white
+          <Link
+            href={'/auth/login'}
+            className={`max-w-2xs w-full text-center rounded-2xl py-3.5 cursor-pointer bg-sakura text-white
               hover:bg-white hover:border hover:border-sakura hover:text-sakura transition`}
           >
-            <Link href={'/auth/login'}>Já possuo cadastro</Link>
-          </button>
-          <button
-            className={`max-w-2xs w-full rounded-2xl py-3.5 cursor-pointer bg-olivine-600 text-white
+            Já possuo cadastro
+          </Link>
+          <Link
+            href={'/auth/sign-up'}
+            className={`max-w-2xs w-full text-center rounded-2xl py-3.5 cursor-pointer bg-olivine-600 text-white
               hover:bg-white hover:border hover:border-olivine-600 hover:text-olivine-600 transition`}
           >
-            <Link href={'/auth/sign-up'}>Quero me cadastrar</Link>
-          </button>
+            Quero me cadastrar
+          </Link>
           <Link
             href={'/'}
             className="underline text-sm font-light hover:text-sakura mt-4"
