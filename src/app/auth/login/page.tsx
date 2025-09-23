@@ -74,25 +74,29 @@ function Page() {
   return (
     <div className="p-12.5 h-screen w-full flex flex-col bg-[url('/fundo-cadastro-login.svg')] justify-center items-center">
       <div className="max-w-2xl w-full h-full md:max-h-fit md:ring-1 ring-neutral-200 rounded-3xl md:px-25 md:py-17.5">
-        <div className="pb-12.5 md:pb-7.5 flex justify-between">
-          <Link href="/auth">
-            <FiChevronLeft size={24} className="cursor-pointer" />
-          </Link>
-          <Link href={'/'} className="w-6 flex ml-auto">
-            <FiX size={24} />
-          </Link>
-        </div>
-        {errorAlert && (
+        {errorAlert ? (
           <Alert
             variant="destructive"
-            className="w-full bg-salmon text-white flex justify-between rounded-full mb-10 mt-3"
+            className="w-full bg-salmon text-white flex justify-between rounded-full mb-7"
           >
-            <div className="flex gap-2">
-              <IoIosWarning />
+            <div className="flex gap-5 items-center">
+              <IoIosWarning size={22} />
               <AlertTitle>Preencha com dados válidos</AlertTitle>
             </div>
-            <FiX onClick={() => setErrorAlert(false)} />
+              <FiX 
+                className='cursor-pointer'
+                onClick={() => setErrorAlert(false)} 
+              />
           </Alert>
+        ) : (
+          <div className="pb-12.5 md:pb-7.5 flex justify-between">
+            <Link href="/auth">
+              <FiChevronLeft size={24} className="cursor-pointer" />
+            </Link>
+            <Link href={'/'} className="w-6 flex ml-auto">
+              <FiX size={24} />
+            </Link>
+          </div>
         )}
         <div>
           <Image
