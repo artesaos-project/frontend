@@ -1,7 +1,4 @@
 'use client';
-
-import Footer from '@/components/footer';
-import Header from '@/components/header';
 import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
 import { productApi, uploadApi } from '@/services/api';
@@ -210,8 +207,6 @@ const AddProductPage = () => {
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
-      <Header />
-
       <div className="w-10/12 mx-auto pt-10">
         <div className="flex items-center mb-6">
           <ArrowLeft
@@ -749,8 +744,6 @@ const AddProductPage = () => {
           </div>
         </form>
       </div>
-
-      <Footer newsSubscription={true} />
     </div>
   );
 };
