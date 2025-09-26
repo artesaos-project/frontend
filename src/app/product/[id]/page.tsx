@@ -6,8 +6,6 @@ import ProductImage from '@/components/features/product/product-image';
 import ProductInfo from '@/components/features/product/product-info';
 import ProductReviews from '@/components/features/product/product-reviews';
 import ProductSlide from '@/components/features/product/product-slide';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
 import { productApi } from '@/services/api';
 import { ApiProduct, FormattedReview } from '@/types/product';
 import { useParams, useRouter } from 'next/navigation';
@@ -140,7 +138,6 @@ function ProductPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
         <main className="bg-white">
           <div className="max-w-6xl mx-auto p-8">
             <div className="text-center">
@@ -148,7 +145,6 @@ function ProductPage() {
             </div>
           </div>
         </main>
-        <Footer newsSubscription={true} />
       </div>
     );
   }
@@ -156,7 +152,6 @@ function ProductPage() {
   if (error || !product) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
         <main className="bg-white">
           <div className="max-w-6xl mx-auto p-8">
             <div className="text-center text-red-500">
@@ -164,7 +159,6 @@ function ProductPage() {
             </div>
           </div>
         </main>
-        <Footer newsSubscription={true} />
       </div>
     );
   }
@@ -219,7 +213,6 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       <main className="bg-white">
         <div className="max-w-6xl mx-auto">
           <button
@@ -405,8 +398,6 @@ function ProductPage() {
           </div>
         </div>
       </main>
-
-      <Footer newsSubscription={true} />
     </div>
   );
 }
