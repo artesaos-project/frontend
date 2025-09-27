@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { BsXLg } from 'react-icons/bs';
 import { FaCheck } from 'react-icons/fa';
 import { IoIosArrowDown, IoIosInformationCircleOutline } from 'react-icons/io';
-import ModeratorHeader from '../../../../components/features/moderator/moderator-header';
 import ModeratorTitle from '../../../../components/features/moderator/moderator-title';
 
 function Page() {
@@ -59,7 +58,6 @@ function Page() {
 
   return (
     <div className="overflow-x-hidden">
-      <ModeratorHeader />
       <ModeratorTitle title={'Artesãos'} />
       <div className="w-2/3 flex mx-auto mt-10 items-center justify-between">
         <h2 className="text-2xl text-midnight font-semibold">

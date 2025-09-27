@@ -3,13 +3,11 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { IoIosSearch } from 'react-icons/io';
 import { IoFilter } from 'react-icons/io5';
-import ModeratorHeader from '../../../components/features/moderator/moderator-header';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 function page() {
   return (
     <>
-      <ModeratorHeader />
       <ModeratorTitle title={'Documentação'} />
       <div className="w-2/3 m-auto">
         <div className="my-15 gap-8 flex items-center">

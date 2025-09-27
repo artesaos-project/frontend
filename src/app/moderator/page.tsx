@@ -1,23 +1,11 @@
 'use client';
-import Footer from '@/components/footer';
-import useStoreUser from '@/hooks/use-store-user';
-import { useRouter } from 'next/navigation';
 import ModeratorCard from '../../components/features/moderator/moderator-card';
-import ModeratorHeader from '../../components/features/moderator/moderator-header';
 import ModeratorNotification from '../../components/features/moderator/moderator-notification';
 import ModeratorTitle from '../../components/features/moderator/moderator-title';
 
 function page() {
-  const user = useStoreUser((state) => state.user);
-  const router = useRouter();
-  // useEffect(() => {
-  //   if (!user.isAuthenticated || !user.isModerator) {
-  //     router.push("/");
-  //   }
-  // }, [user]);
   return (
     <div className="overflow-x-hidden">
-      <ModeratorHeader />
       <ModeratorTitle title={'Moderação'} />
       <div className="w-2/3 mx-auto grid grid-cols-1 justify-items-center md:grid-cols-2 xl:grid-cols-4 gap-10 mb-20 mt-16">
         <ModeratorCard
@@ -46,7 +34,6 @@ function page() {
         />
       </div>
       <ModeratorNotification />
-      <Footer newsSubscription={false} />
     </div>
   );
 }

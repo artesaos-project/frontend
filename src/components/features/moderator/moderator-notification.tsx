@@ -11,11 +11,6 @@ type Notification = {
   date: string;
 };
 
-function parseDate(dateStr: string) {
-  const [day, month, year] = dateStr.split('/').map(Number);
-  return new Date(year, month - 1, day);
-}
-
 function ModeratorNotification() {
   const notifications: Notification[] = notificationsData;
 

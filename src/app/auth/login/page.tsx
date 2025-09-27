@@ -83,10 +83,10 @@ function Page() {
               <IoIosWarning size={22} />
               <AlertTitle>Preencha com dados válidos</AlertTitle>
             </div>
-              <FiX 
-                className='cursor-pointer'
-                onClick={() => setErrorAlert(false)} 
-              />
+            <FiX
+              className="cursor-pointer"
+              onClick={() => setErrorAlert(false)}
+            />
           </Alert>
         ) : (
           <div className="pb-12.5 md:pb-7.5 flex justify-between">
