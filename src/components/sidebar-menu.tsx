@@ -17,6 +17,7 @@ import { FaHome, FaRegHeart } from 'react-icons/fa';
 import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
 import {
   IoChevronDownOutline,
+  IoChevronUpOutline,
   IoChevronForward,
   IoDocumentOutline,
   IoMenu,
@@ -27,6 +28,9 @@ import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
 import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import { Button } from './ui/button';
+import { useState } from 'react';
+
+import categories from '@/db-mock/categories.json';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
@@ -164,13 +168,7 @@ function SideBarMenu() {
                   </div>
                 </Link>
               )}
-              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <MdOutlineShoppingBag color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                  Produtos
-                </p>
-                <IoChevronDownOutline size={25} />
-              </div>
+              <DropdownCategories />
               {user.isArtisan && (
                 <Link href={`/artisan/${user.artisanUserName}/add-product`}>
                   <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
@@ -215,6 +213,41 @@ function SideBarMenu() {
         </ScrollArea>
       </SheetContent>
     </Sheet>
+  );
+}
+
+function DropdownCategories() {
+  const [isOpen, setIsOpen] = useState(false);
+  // PUXAR CATEGORIAS DA API
+  return (
+    <div>
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
+      >
+        <MdOutlineShoppingBag color="#ff8c94" size={30} />
+        <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+          Produtos
+        </p>
+        {isOpen ? (
+          <IoChevronUpOutline size={25} />
+        ) : (
+          <IoChevronDownOutline size={25} />
+        )}
+      </div>
+      {isOpen && (
+        <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
+          {categories.map((category, index) => (
+            <div
+              key={category.name || 0 + index}
+              className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
+            >
+              {category.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
