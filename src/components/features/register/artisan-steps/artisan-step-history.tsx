@@ -1,6 +1,6 @@
 import AuthButton from '@/components/common/auth-button';
 
-function ArtisanStep6({ onNext }: { onNext: () => void }) {
+function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
   const handleNext = () => {
     onNext();
   };
@@ -24,4 +24,4 @@ function ArtisanStep6({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep6;
+export default ArtisanStepHistory;

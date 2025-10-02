@@ -1,7 +1,13 @@
 import AuthButton from '@/components/common/auth-button';
 import { FaCheck } from 'react-icons/fa6';
 
-function Step2({ onNext, goHome }: { onNext: () => void; goHome: () => void }) {
+function StepChoice({
+  onNext,
+  goHome,
+}: {
+  onNext: () => void;
+  goHome: () => void;
+}) {
   const handleArtisan = () => {
     onNext();
   };
@@ -34,4 +40,4 @@ function Step2({ onNext, goHome }: { onNext: () => void; goHome: () => void }) {
   );
 }
 
-export default Step2;
+export default StepChoice;

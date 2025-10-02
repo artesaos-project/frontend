@@ -1,9 +1,9 @@
 import AuthButton from '@/components/common/auth-button';
 import { materiaPrima } from '@/constants/materia-prima';
 import { useState } from 'react';
-import SearchBar from '../searchBar';
+import SearchBar from '../search-bar';
 
-function ArtisanStep3({ onNext }: { onNext: () => void }) {
+function ArtisanStepRawMaterial({ onNext }: { onNext: () => void }) {
   const [value, setValue] = useState<string[]>([]);
   const [search, setSearch] = useState('');
 
@@ -75,4 +75,4 @@ function ArtisanStep3({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep3;
+export default ArtisanStepRawMaterial;

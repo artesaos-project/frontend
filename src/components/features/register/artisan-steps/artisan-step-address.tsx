@@ -15,7 +15,7 @@ const apiCep = async (cep: string) => {
   return data;
 };
 
-function ArtisanStep1({ onNext }: { onNext: () => void }) {
+function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
   const {
     register,
     handleSubmit,
@@ -136,4 +136,4 @@ function ArtisanStep1({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep1;
+export default ArtisanStepAddress;

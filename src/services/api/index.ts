@@ -5,10 +5,8 @@ import { apiRequest } from '../api-service';
 
 type CreateUserPayload = {
   name: string;
-  cpf: string;
   email: string;
   password: string;
-  birthDate: string;
   phone: string;
   socialName?: string;
 };
@@ -96,6 +94,8 @@ export const authApi = {
       artisanUserName?: string;
       avatar: string;
       roles: string[];
+      message?: string;
+      error?: boolean;
     }>('/users', {
       method: 'POST',
       body: userData,

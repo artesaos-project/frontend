@@ -1,28 +1,50 @@
 'use client';
 
 import {
-  ArtisanStep1,
-  ArtisanStep2,
-  ArtisanStep3,
-  ArtisanStep4,
-  ArtisanStep5,
-  ArtisanStep6,
-  ArtisanStep7,
-} from '@/components/features/sign-up/artisan-steps';
-import { Step1, Step2, Step3 } from '@/components/features/sign-up/user-steps';
-import SignUpComplete from '@/components/features/sign-up/sign-up-complete';
+  ArtisanStepAddress,
+  ArtisanStepHistory,
+  ArtisanStepMedia,
+  ArtisanStepPurpose,
+  ArtisanStepRawMaterial,
+  ArtisanStepSicab,
+  ArtisanStepTechnique,
+} from '@/components/features/register/artisan-steps';
+import SignUpComplete from '@/components/features/register/register-complete';
+import {
+  StepChoice,
+  StepComplete,
+  StepRegister,
+} from '@/components/features/register/user-steps';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 import { ClipboardPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsChatDots } from 'react-icons/bs';
 import { FaRegAddressCard } from 'react-icons/fa';
 import { FiChevronLeft, FiX } from 'react-icons/fi';
+import { IoIosWarning } from 'react-icons/io';
 import { LuFileUser } from 'react-icons/lu';
 import { RiImage2Fill } from 'react-icons/ri';
 
 function SignUp() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    'Ocorreu um erro. Por favor, tente novamente.',
+  );
+
+  useEffect(() => {
+    if (errorAlert) {
+      const timer = setTimeout(() => setErrorAlert(false), 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorAlert]);
+
+  const handleError = (msg?: string) => {
+    setErrorMessage(msg || 'Preencha com dados válidos');
+    setErrorAlert(true);
+  };
 
   const handleNext = () => {
     setStep((prev) => prev + 1);
@@ -57,27 +79,47 @@ function SignUp() {
   return (
     <div className="flex md:w-screen md:h-screen justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center">
       <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl md:shadow-2xl ">
-        <div className="flex mb-10 justify-between">
-          {step < 10 && (
-            <FiChevronLeft
-              size={24}
-              onClick={handleBack}
+        {errorAlert ? (
+          <Alert
+            variant="destructive"
+            className="w-full bg-salmon text-white flex justify-between rounded-full mb-7"
+          >
+            <div className="flex gap-5 items-center">
+              <IoIosWarning size={22} />
+              <AlertTitle>{errorMessage}</AlertTitle>
+            </div>
+            <FiX
               className="cursor-pointer"
+              onClick={() => setErrorAlert(false)}
             />
-          )}
-          {step <= 10 && (
-            <FiX size={24} className="cursor-pointer" onClick={handleGoHome} />
-          )}
-          {step > 10 && (
-            <div className="flex-1 flex justify-end">
+          </Alert>
+        ) : (
+          <div className="flex mb-10 justify-between">
+            {step < 10 && (
+              <FiChevronLeft
+                size={24}
+                onClick={handleBack}
+                className="cursor-pointer"
+              />
+            )}
+            {step <= 10 && (
               <FiX
                 size={24}
                 className="cursor-pointer"
                 onClick={handleGoHome}
               />
-            </div>
-          )}
-        </div>
+            )}
+            {step > 10 && (
+              <div className="flex-1 flex justify-end">
+                <FiX
+                  size={24}
+                  className="cursor-pointer"
+                  onClick={handleGoHome}
+                />
+              </div>
+            )}
+          </div>
+        )}
         <div
           className={
             step > 3 && step <= 10
@@ -133,16 +175,20 @@ function SignUp() {
           })}
         </div>
 
-        {step === 1 && <Step1 onNext={handleNext} />}
-        {step === 2 && <Step2 onNext={handleNext} goHome={handleGoHome} />}
-        {step === 3 && <Step3 onNext={handleNext} goHome={handleGoHome} />}
-        {step === 4 && <ArtisanStep1 onNext={handleNext} />}
-        {step === 5 && <ArtisanStep2 onNext={handleNext} />}
-        {step === 6 && <ArtisanStep3 onNext={handleNext} />}
-        {step === 7 && <ArtisanStep4 onNext={handleNext} />}
-        {step === 8 && <ArtisanStep5 onNext={handleNext} />}
-        {step === 9 && <ArtisanStep6 onNext={handleNext} />}
-        {step === 10 && <ArtisanStep7 onNext={handleNext} />}
+        {step === 1 && (
+          <StepRegister onNext={handleNext} onError={handleError} />
+        )}
+        {step === 2 && <StepChoice onNext={handleNext} goHome={handleGoHome} />}
+        {step === 3 && (
+          <StepComplete onNext={handleNext} goHome={handleGoHome} />
+        )}
+        {step === 4 && <ArtisanStepAddress onNext={handleNext} />}
+        {step === 5 && <ArtisanStepSicab onNext={handleNext} />}
+        {step === 6 && <ArtisanStepRawMaterial onNext={handleNext} />}
+        {step === 7 && <ArtisanStepTechnique onNext={handleNext} />}
+        {step === 8 && <ArtisanStepPurpose onNext={handleNext} />}
+        {step === 9 && <ArtisanStepHistory onNext={handleNext} />}
+        {step === 10 && <ArtisanStepMedia onNext={handleNext} />}
         {step > 10 && <SignUpComplete />}
       </div>
     </div>

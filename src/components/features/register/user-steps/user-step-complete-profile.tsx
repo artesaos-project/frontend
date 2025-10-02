@@ -1,6 +1,12 @@
 import AuthButton from '@/components/common/auth-button';
 
-function Step3({ onNext, goHome }: { onNext: () => void; goHome: () => void }) {
+function StepComplete({
+  onNext,
+  goHome,
+}: {
+  onNext: () => void;
+  goHome: () => void;
+}) {
   return (
     <div>
       <h1 className="font-bold text-2xl text-midnight text-center">
@@ -27,4 +33,4 @@ function Step3({ onNext, goHome }: { onNext: () => void; goHome: () => void }) {
   );
 }
 
-export default Step3;
+export default StepComplete;

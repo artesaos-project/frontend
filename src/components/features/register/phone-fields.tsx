@@ -1,7 +1,7 @@
 import AuthInput from '@/components/common/auth-input';
 import { SignUpData } from '@/lib/schemas/sign-up-schema';
 import { UseFormRegister, FieldError } from 'react-hook-form';
-import Select from './SelectField';
+import Select from './select-field';
 
 interface PhoneFieldsProps {
   register: UseFormRegister<SignUpData>;

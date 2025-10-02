@@ -1,15 +1,26 @@
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
-import { PhoneFields } from '@/components/features/sign-up/PhoneFileds';
+import { PhoneFields } from '@/components/features/register/phone-fields';
+import useStoreUser from '@/hooks/use-store-user';
 import { SignUpData, signUpSchema } from '@/lib/schemas/sign-up-schema';
+import { authApi } from '@/services/api';
+import { UserProps } from '@/types/user-props';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { PasswordValidationBox } from '../PasswordValidation';
+import { PasswordValidationBox } from '../password-validation';
 
-function Step1({ onNext }: { onNext: () => void }) {
+function StepRegister({
+  onNext,
+  onError,
+}: {
+  onNext: () => void;
+  onError: (backendMsg?: string) => void;
+}) {
+  const setUser = useStoreUser((state) => state.setUser);
   const {
     register,
     handleSubmit,
@@ -19,9 +30,40 @@ function Step1({ onNext }: { onNext: () => void }) {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (data: SignUpData) => {
-    console.log(data);
-    onNext();
+  const onSubmit = async (data: SignUpData) => {
+    try {
+      const response = await authApi.createUser(data);
+
+      if (response.error) {
+        const backendMsg = response.message || 'Erro no servidor';
+        onError(backendMsg);
+        return;
+      } else {
+        const user: UserProps = {
+          userId: response.userId,
+          userName: response.name,
+          userPhoto: response.avatar,
+          artisanUserName: response.artisanUserName,
+          isAuthenticated: true,
+          isModerator: response.roles.includes('MODERATOR'),
+          isArtisan: response.roles.includes('ARTISAN'),
+        };
+
+        setUser(user);
+        onNext();
+      }
+    } catch (error: unknown) {
+      let backendMessage = 'Erro ao cadastrar usuário';
+
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message;
+        backendMessage = Array.isArray(message)
+          ? message[0]
+          : message || backendMessage;
+      }
+
+      onError(backendMessage);
+    }
   };
 
   const [visible, setVisible] = useState({
@@ -132,4 +174,4 @@ function Step1({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default Step1;
+export default StepRegister;

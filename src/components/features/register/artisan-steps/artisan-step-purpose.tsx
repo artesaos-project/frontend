@@ -1,9 +1,9 @@
 import AuthButton from '@/components/common/auth-button';
-import { tecnicas } from '@/constants/tecnicas';
+import { finalidades } from '@/constants/finalidades';
 import { useState } from 'react';
-import SearchBar from '../searchBar';
+import SearchBar from '../search-bar';
 
-function ArtisanStep4({ onNext }: { onNext: () => void }) {
+function ArtisanStepPurpose({ onNext }: { onNext: () => void }) {
   const [value, setValue] = useState<string[]>([]);
   const [search, setSearch] = useState('');
 
@@ -16,7 +16,7 @@ function ArtisanStep4({ onNext }: { onNext: () => void }) {
     }
   };
 
-  const filteredTecnicas = tecnicas.filter((item) =>
+  const filteredFinalidade = finalidades.filter((item) =>
     item.toLowerCase().includes(search.toLowerCase()),
   );
 
@@ -26,22 +26,24 @@ function ArtisanStep4({ onNext }: { onNext: () => void }) {
 
   return (
     <div className="text-midnight">
-      <h1 className="text-2xl font-bold text-olivine-600 mb-2">Técnica</h1>
-      <h2 className="text-lg font-bold mb-1">Qual técnica você utiliza?</h2>
+      <h1 className="text-2xl font-bold text-olivine-600 mb-2">Finalidade</h1>
+      <h2 className="text-lg font-bold mb-1">
+        Qual é a finalidade das suas peças?
+      </h2>
       <p className="text-md mt-4">
-        Marque todas as técnicas que fazem parte do seu trabalho.
+        Escolha as opções que se aplicam. É possível selecionar mais de uma.
       </p>
       <div>
         <SearchBar value={search} onChange={setSearch} />
       </div>
 
       <div className="h-72 overflow-y-auto border-2 border-gray-300 rounded-md p-4 mt-4 mb-10">
-        {filteredTecnicas.length === 0 && (
+        {filteredFinalidade.length === 0 && (
           <p className="text-center text-gray-400">
             Nenhum resultado encontrado.
           </p>
         )}
-        {filteredTecnicas.map((item) => {
+        {filteredFinalidade.map((item) => {
           const isChecked = value.includes(item);
           return (
             <label
@@ -70,4 +72,4 @@ function ArtisanStep4({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep4;
+export default ArtisanStepPurpose;

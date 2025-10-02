@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 
-function ArtisanStep2({ onNext }: { onNext: () => void }) {
+function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
   const {
     register,
     handleSubmit,
@@ -83,4 +83,4 @@ function ArtisanStep2({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep2;
+export default ArtisanStepSicab;
