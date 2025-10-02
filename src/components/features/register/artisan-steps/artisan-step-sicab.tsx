@@ -1,35 +1,46 @@
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { useDateInput } from '@/hooks/use-date-input';
 import {
-  artisanProfileSchema,
   ArtisanProfileFormData,
+  artisanProfileSchema,
 } from '@/lib/schemas/artisan-profile-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 
 function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
+  const artisanStore = useArtisanRegister();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ArtisanProfileFormData>({
     resolver: zodResolver(artisanProfileSchema),
+    defaultValues: {
+      sicab: artisanStore.sicab || '',
+      dataCadastro: artisanStore.sicabDataCadastro || '',
+      dataValidade: artisanStore.sicabValidade || '',
+    },
   });
 
-  const [dateCadastro, setDateCadastro] = useState('');
-  const [dateValidade, setDateValidade] = useState('');
-  const { validateAndFormatDate: validateCadastro } = useDateInput({
-    onFormattedChange: setDateCadastro,
+  const { validateAndFormatDate: handleDateCadastro } = useDateInput({
+    onFormattedChange: (val) =>
+      setValue('dataCadastro', val, { shouldValidate: true }),
   });
-  const { validateAndFormatDate: validateValidade } = useDateInput({
-    onFormattedChange: setDateValidade,
+  const { validateAndFormatDate: handleDateValidade } = useDateInput({
+    onFormattedChange: (val) =>
+      setValue('dataValidade', val, { shouldValidate: true }),
   });
 
   const onSubmit: SubmitHandler<ArtisanProfileFormData> = (data) => {
-    console.log(data);
+    artisanStore.update({
+      sicab: data.sicab,
+      sicabDataCadastro: data.dataCadastro,
+      sicabValidade: data.dataValidade,
+    });
     onNext();
   };
 
@@ -56,11 +67,10 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
         <AuthInput
           placeholder="Data de Cadastro Sicab*"
           type="text"
-          value={dateCadastro}
           maxLength={10}
           icon={<FaRegCalendarAlt />}
           {...register('dataCadastro', {
-            onChange: (e) => validateCadastro(e.target.value),
+            onChange: (e) => handleDateCadastro(e.target.value),
           })}
           hasError={!!errors.dataCadastro}
           errorMessage={errors.dataCadastro?.message}
@@ -68,11 +78,10 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
         <AuthInput
           placeholder="Data de Validade Sicab*"
           type="text"
-          value={dateValidade}
           maxLength={10}
           icon={<FaRegCalendarAlt />}
           {...register('dataValidade', {
-            onChange: (e) => validateValidade(e.target.value),
+            onChange: (e) => handleDateValidade(e.target.value),
           })}
           hasError={!!errors.dataValidade}
           errorMessage={errors.dataValidade?.message}

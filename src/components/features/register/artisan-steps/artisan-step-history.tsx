@@ -1,7 +1,12 @@
 import AuthButton from '@/components/common/auth-button';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
 
 function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
+  const artisanStore = useArtisanRegister();
   const handleNext = () => {
+    artisanStore.update({
+      historico: artisanStore.historico || '',
+    });
     onNext();
   };
 
@@ -17,6 +22,8 @@ function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
       <textarea
         className="w-full h-60 border-2 border-midnight rounded-3xl p-4 mt-4 resize-none mb-10"
         placeholder="Escreva aqui..."
+        value={artisanStore.historico || ''}
+        onChange={(e) => artisanStore.update({ historico: e.target.value })}
       />
 
       <AuthButton onClick={handleNext} />

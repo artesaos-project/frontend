@@ -11,6 +11,24 @@ type CreateUserPayload = {
   socialName?: string;
 };
 
+interface CreateUserResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    avatar?: string;
+    artisanUserName?: string;
+    roles: string[];
+  };
+  session: {
+    id: string;
+    expiresAt: string;
+  };
+  error?: boolean;
+  message?: string;
+  statusCode?: number;
+}
+
 type Artisan = {
   id: string;
   artisanName: string;
@@ -87,16 +105,8 @@ export const uploadApi = {
 };
 
 export const authApi = {
-  createUser: (userData: CreateUserPayload) =>
-    apiRequest<{
-      userId: string;
-      name: string;
-      artisanUserName?: string;
-      avatar: string;
-      roles: string[];
-      message?: string;
-      error?: boolean;
-    }>('/users', {
+  createUser: (userData: CreateUserPayload): Promise<CreateUserResponse> =>
+    apiRequest<CreateUserResponse>('/users', {
       method: 'POST',
       body: userData,
     }),

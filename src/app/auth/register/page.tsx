@@ -16,6 +16,8 @@ import {
   StepRegister,
 } from '@/components/features/register/user-steps';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
+import useStoreUser from '@/hooks/use-store-user';
 import { ClipboardPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -28,6 +30,8 @@ import { RiImage2Fill } from 'react-icons/ri';
 
 function SignUp() {
   const router = useRouter();
+  const resetArtisan = useArtisanRegister((s) => s.reset);
+  const isAuthenticated = useStoreUser((s) => s.user.isAuthenticated);
   const [step, setStep] = useState(1);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
@@ -41,6 +45,12 @@ function SignUp() {
     }
   }, [errorAlert]);
 
+  useEffect(() => {
+    if (isAuthenticated && step === 1) {
+      setStep(2);
+    }
+  }, [isAuthenticated, step]);
+
   const handleError = (msg?: string) => {
     setErrorMessage(msg || 'Preencha com dados válidos');
     setErrorAlert(true);
@@ -52,9 +62,12 @@ function SignUp() {
 
   const handleBack = () => {
     if (step > 1) {
+      if (isAuthenticated && step === 2) {
+        return;
+      }
       setStep((prev) => prev - 1);
     } else {
-      router.push('/');
+      router.push('/auth');
     }
   };
 
@@ -64,6 +77,9 @@ function SignUp() {
         'Seu cadastro será perdido. Deseja sair mesmo assim?',
       );
       if (!confirmLeave) return;
+      resetArtisan();
+    } else if (step > 10) {
+      resetArtisan();
     }
     router.push('/');
   };
@@ -77,7 +93,7 @@ function SignUp() {
   ];
 
   return (
-    <div className="flex md:w-screen md:h-screen justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center">
+    <div className="flex md:w-screen md:m-4 justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center">
       <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl md:shadow-2xl ">
         {errorAlert ? (
           <Alert
@@ -95,7 +111,7 @@ function SignUp() {
           </Alert>
         ) : (
           <div className="flex mb-10 justify-between">
-            {step < 10 && (
+            {step <= 10 && (
               <FiChevronLeft
                 size={24}
                 onClick={handleBack}
@@ -189,7 +205,7 @@ function SignUp() {
         {step === 8 && <ArtisanStepPurpose onNext={handleNext} />}
         {step === 9 && <ArtisanStepHistory onNext={handleNext} />}
         {step === 10 && <ArtisanStepMedia onNext={handleNext} />}
-        {step > 10 && <SignUpComplete />}
+        {step > 10 && <SignUpComplete goHome={handleGoHome} />}
       </div>
     </div>
   );

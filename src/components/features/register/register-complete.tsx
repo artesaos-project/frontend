@@ -1,11 +1,8 @@
-import { Clock } from 'lucide-react';
 import AuthButton from '@/components/common/auth-button';
+import { Clock } from 'lucide-react';
 import { LiaClipboardSolid } from 'react-icons/lia';
-import { useRouter } from 'next/navigation';
 
-function SignUpComplete() {
-  const route = useRouter();
-
+function SignUpComplete({ goHome }: { goHome: () => void }) {
   return (
     <div className="text-midnight text-center">
       <span className="relative inline-block mx-auto mb-4">
@@ -20,7 +17,7 @@ function SignUpComplete() {
         Seu cadastro foi enviado com sucesso e está em análise. Você receberá
         uma notificação assim que for aprovado.
       </p>
-      <AuthButton onClick={() => route.push('/')} />
+      <AuthButton onClick={goHome} />
     </div>
   );
 }

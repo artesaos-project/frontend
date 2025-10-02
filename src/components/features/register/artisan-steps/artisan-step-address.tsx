@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { addressSchema } from '@/lib/schemas/andress-schema';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { z } from 'zod';
 
 export type FormValues = z.infer<typeof addressSchema>;
@@ -11,11 +12,11 @@ export type FormValues = z.infer<typeof addressSchema>;
 const apiCep = async (cep: string) => {
   const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
   const data = await response.json();
-  console.log(data);
   return data;
 };
 
 function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
+  const artisanStore = useArtisanRegister();
   const {
     register,
     handleSubmit,
@@ -25,6 +26,16 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
     clearErrors,
   } = useForm<FormValues>({
     resolver: zodResolver(addressSchema),
+    defaultValues: {
+      nomeComercial: artisanStore.nomeComercial || '',
+      cep: artisanStore.cep || '',
+      endereco: artisanStore.endereco || '',
+      numero: artisanStore.numero || '',
+      bairro: artisanStore.bairro || '',
+      complemento: artisanStore.complemento || '',
+      cidade: artisanStore.cidade || '',
+      estado: artisanStore.estado || '',
+    },
   });
 
   const cep = watch('cep');
@@ -48,7 +59,16 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
   }, [cep, setValue, clearErrors]);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    artisanStore.update({
+      nomeComercial: data.nomeComercial,
+      cep: data.cep,
+      endereco: data.endereco,
+      numero: data.numero,
+      bairro: data.bairro,
+      complemento: data.complemento,
+      cidade: data.cidade,
+      estado: data.estado,
+    });
     onNext();
   };
 

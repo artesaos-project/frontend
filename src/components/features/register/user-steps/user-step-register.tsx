@@ -31,27 +31,28 @@ function StepRegister({
   });
 
   const onSubmit = async (data: SignUpData) => {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      phone: `${data.codigoPais}${data.ddd}${data.phone}`,
+    };
     try {
-      const response = await authApi.createUser(data);
+      const response = await authApi.createUser(payload);
 
-      if (response.error) {
-        const backendMsg = response.message || 'Erro no servidor';
-        onError(backendMsg);
-        return;
-      } else {
-        const user: UserProps = {
-          userId: response.userId,
-          userName: response.name,
-          userPhoto: response.avatar,
-          artisanUserName: response.artisanUserName,
-          isAuthenticated: true,
-          isModerator: response.roles.includes('MODERATOR'),
-          isArtisan: response.roles.includes('ARTISAN'),
-        };
+      const user: UserProps = {
+        userId: response.user.id,
+        userName: response.user.name,
+        userPhoto: response.user.avatar,
+        artisanUserName: response.user.artisanUserName,
+        isAuthenticated: true,
+        isModerator: response.user.roles.includes('MODERATOR'),
+        isArtisan: response.user.roles.includes('ARTISAN'),
+      };
 
-        setUser(user);
-        onNext();
-      }
+      setUser(user);
+      onNext();
+      return;
     } catch (error: unknown) {
       let backendMessage = 'Erro ao cadastrar usuário';
 
