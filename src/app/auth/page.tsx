@@ -29,7 +29,7 @@ function page() {
             Já possuo cadastro
           </Link>
           <Link
-            href={'/auth/sign-up'}
+            href={'/auth/register'}
             className={`max-w-2xs w-full text-center rounded-2xl py-3.5 cursor-pointer bg-olivine-600 text-white
               hover:bg-white hover:border hover:border-olivine-600 hover:text-olivine-600 transition`}
           >

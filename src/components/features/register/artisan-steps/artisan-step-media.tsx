@@ -4,7 +4,7 @@ import { FaRegImage } from 'react-icons/fa6';
 import { LuVideo } from 'react-icons/lu';
 import { TbTrash } from 'react-icons/tb';
 
-function ArtisanStep7({ onNext }: { onNext: () => void }) {
+function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [media, setMedia] = useState<File[]>([]);
 
@@ -110,4 +110,4 @@ function ArtisanStep7({ onNext }: { onNext: () => void }) {
   );
 }
 
-export default ArtisanStep7;
+export default ArtisanStepMedia;
