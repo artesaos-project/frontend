@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import products from '@/db-mock/products.json';
-import { FileImage, Star, Video } from 'lucide-react';
+import { FileImage, Star, Video, MessageSquare } from 'lucide-react';
 
 const StarRating = ({
   rating,
@@ -62,16 +62,16 @@ export default function ProductEvaluationPage({
 
   return (
     <div>
-      <div className="bg-green-500 px-4 py-3 flex items-center justify-center gap-4">
+      <div className="bg-green-600 px-4 py-3 flex items-center justify-center gap-4">
         <Button
           variant="ghost"
           size="icon"
-          className="text-white hover:bg-green-600 p-2 absolute left-4"
+          className="text-white hover:bg-green-700 p-2 absolute left-4"
         >
           <svg
             width="20"
             height="20"
-            viewBox="0 0 20 20"
+            viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -85,21 +85,7 @@ export default function ProductEvaluationPage({
           </svg>
         </Button>
         <div className="flex items-center gap-2">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <MessageSquare className="h-5 w-5 text-white" />
           <h1 className="text-xl font-semibold text-white">Avaliar produto</h1>
         </div>
       </div>
