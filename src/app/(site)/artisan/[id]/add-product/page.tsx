@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
 import { IoAdd } from 'react-icons/io5';
 import { TbSelect, TbTrash } from 'react-icons/tb';
-import InputField from '../../../../components/features/artisan/input-field';
+import InputField from '../../../../../components/features/artisan/input-field';
 
 const AddProductPage = () => {
   const router = useRouter();

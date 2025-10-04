@@ -19,8 +19,6 @@ const useStoreUser = create<UserStore>()(
           user: {
             userId: user.userId,
             userName: user.userName,
-            userPhoto: user.userPhoto,
-            artisanUserName: user.artisanUserName,
             isAuthenticated: true,
             isModerator: user.isModerator,
             isArtisan: user.isArtisan,

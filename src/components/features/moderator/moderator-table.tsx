@@ -2,7 +2,7 @@
 
 import { artisanApi } from '@/services/api';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import ModerateArtisanButton from './moderate-artisan-button';
 
 type Artisan = {
@@ -36,9 +36,7 @@ function ModeratorTable({
   searchResults = [],
   isSearching = false,
 }: ModeratorTableProps) {
-  const [filteredArtisans, setFilteredArtisans] = useState<Artisan[]>([]);
-
-  useEffect(() => {
+  const filteredArtisans = useMemo(() => {
     const dataToFilter = searchTerm.trim() ? searchResults : artisans;
 
     let filtered = dataToFilter;
@@ -47,7 +45,7 @@ function ModeratorTable({
       filtered = filtered.filter((artisan) => artisan.status === activeFilter);
     }
 
-    setFilteredArtisans(filtered);
+    return filtered;
   }, [artisans, searchResults, searchTerm, activeFilter]);
 
   const handleAction = async (
@@ -129,7 +127,7 @@ function ModeratorTable({
 
   return (
     <div>
-      <table className="w-2/3 mx-auto mt-10 text-center text-midnight border-b border-midnight text-sm">
+      <table className="w-2/3 mx-auto mt-10 text-center text-midnight border-b border-midnight text-sm mb-20">
         <thead className="bg-baby-blue">
           <tr>
             <th className="font-semibold p-2 text-sm rounded-tl-md ring-[0.5px]">

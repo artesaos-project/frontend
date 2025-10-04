@@ -113,13 +113,17 @@ export const authApi = {
 
   login: (credentials: { email: string; password: string }) =>
     apiRequest<{
-      userId: string;
-      name: string;
-      artisanUserName?: string;
-      avatar: string;
-      roles: string[];
-      status: number;
-    }>('/sessions', {
+      user: {
+        id: string;
+        name: string;
+        email: string;
+        roles: string[];
+      };
+      session: {
+        id: string;
+        expiresAt: string;
+      };
+    }>('/auth/login', {
       method: 'POST',
       body: credentials,
     }),

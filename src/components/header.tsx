@@ -11,7 +11,6 @@ import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoIosSearch } from 'react-icons/io';
-import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -37,7 +36,17 @@ function Header() {
             priority
           />
         </Link>
-        {!user.isAuthenticated && <AuthenticationModal />}
+        {!user.isAuthenticated && (
+          <Link href="/auth">
+            <Button
+              onClick={() => {}}
+              variant="outline"
+              className={`bg-transparent cursor-pointer hover:bg-white/20 hover:text-white border-white text-white inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-2 text-xs`}
+            >
+              Entre ou cadastre-se
+            </Button>
+          </Link>
+        )}
         {user.isAuthenticated && (
           <Dialog>
             <DialogTrigger asChild>

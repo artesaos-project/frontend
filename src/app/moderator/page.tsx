@@ -1,7 +1,8 @@
 'use client';
-import ModeratorCard from '../../components/features/moderator/moderator-card';
-import ModeratorNotification from '../../components/features/moderator/moderator-notification';
-import ModeratorTitle from '../../components/features/moderator/moderator-title';
+
+import ModeratorCard from '@/components/features/moderator/moderator-card';
+import ModeratorNotification from '@/components/features/moderator/moderator-notification';
+import ModeratorTitle from '@/components/features/moderator/moderator-title';
 
 function page() {
   return (
