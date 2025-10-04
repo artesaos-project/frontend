@@ -10,6 +10,17 @@ type CreateUserPayload = {
   phone: string;
   socialName?: string;
 };
+export interface CreateArtisanPayload {
+  applicationId?: string;
+  rawMaterial: string[];
+  technique: string[];
+  finalityClassification: string[];
+  bio?: string;
+  photosIds?: string[];
+  sicab?: string;
+  sicabRegistrationDate?: string;
+  sicabValidUntil?: string;
+}
 
 interface CreateUserResponse {
   user: {
@@ -119,12 +130,22 @@ export const authApi = {
         email: string;
         roles: string[];
       };
-      session: {
-        id: string;
-        expiresAt: string;
-      };
     }>('/auth/login', {
       method: 'POST',
       body: credentials,
+    }),
+
+  initiate: (wantsToCompleteNow: boolean) =>
+    apiRequest<{ applicationId?: string; message: string }>(
+      '/artisan-applications/initiate',
+      {
+        method: 'POST',
+        body: { wantsToCompleteNow },
+      },
+    ),
+  complete: (profileData: CreateArtisanPayload) =>
+    apiRequest(`/artisan-applications/${profileData.applicationId}/complete`, {
+      method: 'POST',
+      body: profileData,
     }),
 };

@@ -95,7 +95,7 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
         })}
       </div>
       <AuthButton
-        className="mb-4 bg-olivine hover:bg-midnight!"
+        className="mb-4 bg-olivine"
         text=" + Adicionar"
         onClick={handleCustomClick}
       />

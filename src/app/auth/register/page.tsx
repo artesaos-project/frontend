@@ -27,11 +27,14 @@ import { FiChevronLeft, FiX } from 'react-icons/fi';
 import { IoIosWarning } from 'react-icons/io';
 import { LuFileUser } from 'react-icons/lu';
 import { RiImage2Fill } from 'react-icons/ri';
+import { authApi } from '@/services/api';
+import { AxiosError } from 'axios';
 
 function SignUp() {
   const router = useRouter();
   const resetArtisan = useArtisanRegister((s) => s.reset);
   const isAuthenticated = useStoreUser((s) => s.user.isAuthenticated);
+  const artisanApplicationId = useArtisanRegister((s) => s.applicationId);
   const [step, setStep] = useState(1);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
@@ -48,15 +51,62 @@ function SignUp() {
   useEffect(() => {
     if (isAuthenticated && step === 1) {
       setStep(2);
+    } else if (artisanApplicationId && step < 4) {
+      setStep(4);
     }
-  }, [isAuthenticated, step]);
+  }, [isAuthenticated, artisanApplicationId, step]);
 
   const handleError = (msg?: string) => {
     setErrorMessage(msg || 'Preencha com dados válidos');
     setErrorAlert(true);
   };
 
+  const handleSubmit = async () => {
+    try {
+      const user = useStoreUser.getState().user;
+      if (!user.isAuthenticated) {
+        throw new Error('Usuário não autenticado');
+      }
+      const sicabDataCadastro = useArtisanRegister.getState().sicabDataCadastro;
+      const sicabValidade = useArtisanRegister.getState().sicabValidade;
+
+      await authApi.complete({
+        applicationId: useArtisanRegister.getState().applicationId,
+        rawMaterial: useArtisanRegister.getState().materiasPrimas,
+        technique: useArtisanRegister.getState().tecnicas,
+        finalityClassification: useArtisanRegister.getState().finalidades,
+        bio: useArtisanRegister.getState().historico,
+        sicab: useArtisanRegister.getState().sicab,
+        sicabRegistrationDate: sicabDataCadastro
+          ? new Date(sicabDataCadastro).toISOString()
+          : undefined,
+        sicabValidUntil: sicabValidade
+          ? new Date(sicabValidade).toISOString()
+          : undefined,
+      });
+
+      setStep(11);
+      resetArtisan();
+    } catch (error: unknown) {
+      let backendMessage = 'Erro ao cadastrar artesão';
+
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message;
+        backendMessage = Array.isArray(message)
+          ? message[0]
+          : message || backendMessage;
+      }
+
+      setErrorMessage(backendMessage);
+      setErrorAlert(true);
+    }
+  };
+
   const handleNext = () => {
+    if (step === 10 && isAuthenticated) {
+      handleSubmit();
+      return;
+    }
     setStep((prev) => prev + 1);
   };
 
@@ -93,7 +143,7 @@ function SignUp() {
   ];
 
   return (
-    <div className="flex md:w-screen md:m-4 justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center">
+    <div className="min-h-screen w-full flex justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center md:p-4">
       <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl md:shadow-2xl ">
         {errorAlert ? (
           <Alert
