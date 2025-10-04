@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { IoIosSearch } from 'react-icons/io';
-import ModerateArtisanInstructions from './moderate-artisan-instructions';
+import ModerateArtisanInstructions from './moderate-artisan/moderate-artisan-instructions';
 import ModeratorFilterButtons from './moderator-filter-buttons';
 
 interface ModeratorSearchProps {
