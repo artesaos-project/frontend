@@ -1,4 +1,6 @@
 import AuthButton from '@/components/common/auth-button';
+import { authApi } from '@/services/api';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
 
 function StepComplete({
   onNext,
@@ -7,6 +9,16 @@ function StepComplete({
   onNext: () => void;
   goHome: () => void;
 }) {
+  const handleSubmit = async () => {
+    const artisanStore = useArtisanRegister.getState();
+    try {
+      const response = await authApi.initiate(true);
+      artisanStore.update({ applicationId: response.applicationId });
+      onNext();
+    } catch (error) {
+      console.error('Error submitting profile completion:', error);
+    }
+  };
   return (
     <div>
       <h1 className="font-bold text-2xl text-midnight text-center">
@@ -22,7 +34,7 @@ function StepComplete({
       <AuthButton
         text="Sim, quero responder agora"
         className="bg-olivine-600 mt-10 hover:bg-midnight"
-        onClick={onNext}
+        onClick={handleSubmit}
       />
       <AuthButton
         text="Prefiro deixar para depois"
