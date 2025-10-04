@@ -39,14 +39,14 @@ function Page() {
         password: data.password,
       });
 
+      console.log(response);
+
       const user: UserProps = {
-        userId: response.userId,
-        userName: response.name,
-        userPhoto: response.avatar,
-        artisanUserName: response.artisanUserName,
+        userId: response.user.id,
+        userName: response.user.name,
         isAuthenticated: true,
-        isModerator: response.roles.includes('MODERATOR'),
-        isArtisan: response.roles.includes('ARTISAN'),
+        isModerator: response.user.roles?.includes('MODERATOR') || false,
+        isArtisan: response.user.roles?.includes('ARTISAN') || false,
       };
 
       setUser(user);

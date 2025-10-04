@@ -58,7 +58,7 @@ function Footer({ newsSubscription }: FooterProps) {
           Telefone
         </Link>
       </div>
-      <div className="py-6 flex flex-col md:flex-row justify-center items-center gap-3">
+      <div className="py-6 bg-white flex flex-col md:flex-row justify-center items-center gap-3">
         <Image
           src="/horizontal-logo-azul.svg"
           alt="Logo Criarte"

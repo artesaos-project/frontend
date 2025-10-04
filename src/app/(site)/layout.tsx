@@ -1,5 +1,5 @@
-import ModeratorHeader from '@/components/features/moderator/moderator-header';
 import Footer from '@/components/footer';
+import Header from '@/components/header';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import '../globals.css';
@@ -23,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <ModeratorHeader />
+        <Header />
         {children}
-        <Footer newsSubscription={false} />
+        <Footer newsSubscription />
       </body>
     </html>
   );
