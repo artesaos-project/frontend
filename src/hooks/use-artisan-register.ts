@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface ArtisanRegisterState {
+  applicationId?: string;
   nomeComercial?: string;
   cep?: string;
   endereco?: string;
