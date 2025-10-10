@@ -10,6 +10,7 @@ import {
   ArtisanStepTechnique,
 } from '@/components/features/register/artisan-steps';
 import SignUpComplete from '@/components/features/register/register-complete';
+import { StepIndicator } from '@/components/features/register/step-indicator';
 import {
   StepChoice,
   StepComplete,
@@ -18,6 +19,8 @@ import {
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import useStoreUser from '@/hooks/use-store-user';
+import { authApi } from '@/services/api';
+import { AxiosError } from 'axios';
 import { ClipboardPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -27,15 +30,13 @@ import { FiChevronLeft, FiX } from 'react-icons/fi';
 import { IoIosWarning } from 'react-icons/io';
 import { LuFileUser } from 'react-icons/lu';
 import { RiImage2Fill } from 'react-icons/ri';
-import { authApi } from '@/services/api';
-import { AxiosError } from 'axios';
 
 function SignUp() {
   const router = useRouter();
   const resetArtisan = useArtisanRegister((s) => s.reset);
   const isAuthenticated = useStoreUser((s) => s.user.isAuthenticated);
   const artisanApplicationId = useArtisanRegister((s) => s.applicationId);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<number | null>(null);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
     'Ocorreu um erro. Por favor, tente novamente.',
@@ -49,7 +50,9 @@ function SignUp() {
   }, [errorAlert]);
 
   useEffect(() => {
-    if (isAuthenticated && step === 1) {
+    if (step === null) {
+      setStep(1);
+    } else if (isAuthenticated && step < 2) {
       setStep(2);
     } else if (artisanApplicationId && step < 4) {
       setStep(4);
@@ -72,6 +75,7 @@ function SignUp() {
 
       await authApi.complete({
         applicationId: useArtisanRegister.getState().applicationId,
+        photosIds: useArtisanRegister.getState().attachmentIds,
         rawMaterial: useArtisanRegister.getState().materiasPrimas,
         technique: useArtisanRegister.getState().tecnicas,
         finalityClassification: useArtisanRegister.getState().finalidades,
@@ -107,40 +111,48 @@ function SignUp() {
       handleSubmit();
       return;
     }
-    setStep((prev) => prev + 1);
+    setStep((prev) => (prev === null ? 1 : prev + 1));
   };
 
   const handleBack = () => {
-    if (step > 1) {
+    if (step && step > 1) {
       if (isAuthenticated && step === 2) {
         return;
       }
-      setStep((prev) => prev - 1);
+      setStep((prev) => (prev === null ? 1 : prev - 1));
     } else {
       router.push('/auth');
     }
   };
 
   const handleGoHome = () => {
-    if (step >= 4 && step <= 10) {
+    if (step && step >= 4 && step <= 10) {
       const confirmLeave = window.confirm(
         'Seu cadastro será perdido. Deseja sair mesmo assim?',
       );
       if (!confirmLeave) return;
       resetArtisan();
-    } else if (step > 10) {
+    } else if (step && step > 10) {
       resetArtisan();
     }
     router.push('/');
   };
 
-  const stepsIcons = [
+  const stepIcons = [
     { icon: ClipboardPen, activeStep: 4 },
     { icon: FaRegAddressCard, activeStep: 5 },
     { icon: LuFileUser, activeStep: [6, 7, 8] },
     { icon: BsChatDots, activeStep: 9 },
     { icon: RiImage2Fill, activeStep: 10 },
   ];
+
+  if (step === null) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Carregando...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center md:p-4">
@@ -186,61 +198,20 @@ function SignUp() {
             )}
           </div>
         )}
-        <div
-          className={
-            step > 3 && step <= 10
-              ? 'flex flex-row flex-wrap items-center justify-center mb-6 rounded-2xl border-1 p-1'
-              : 'hidden'
-          }
-        >
-          {stepsIcons.map(({ icon: Icon, activeStep }, idx) => {
-            const stepsArr = Array.isArray(activeStep)
-              ? activeStep
-              : [activeStep];
-            const isCurrent = stepsArr.includes(step);
-            const isPast = step > Math.max(...stepsArr);
-            const isFuture = step < Math.min(...stepsArr);
-
-            let prevActiveStep = null;
-            if (idx > 0) {
-              const prev = stepsIcons[idx - 1].activeStep;
-              prevActiveStep = Array.isArray(prev) ? Math.max(...prev) : prev;
-            }
-
-            return (
-              <div key={idx} className="flex items-center justify-between ">
-                {idx !== 0 && (
-                  <div
-                    className={`w-6 sm:w-8 md:12 h-0.5 rounded-full transition-colors ${
-                      step > (prevActiveStep ?? 0)
-                        ? 'bg-olivine-600'
-                        : 'bg-gray-100 '
-                    }`}
-                  />
-                )}
-                <div
-                  className={
-                    isCurrent
-                      ? 'flex bg-golden/40 rounded-full w-10 h-10 justify-center items-center mx-auto'
-                      : 'flex rounded-full w-10 h-10 justify-center items-center mx-auto'
-                  }
-                >
-                  <Icon
-                    size={24}
-                    className={
-                      isPast
-                        ? 'mx-auto text-olivine-600'
-                        : isFuture
-                          ? 'mx-auto text-gray-200'
-                          : 'mx-auto text-golden'
-                    }
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
+        {step > 3 && step <= 10 && (
+          <div className="flex items-center justify-center mb-6 border rounded-2xl p-2">
+            {stepIcons.map((item, idx) => (
+              <StepIndicator
+                key={idx}
+                icon={item.icon}
+                index={idx}
+                step={step}
+                activeStep={item.activeStep}
+                isLast={idx === stepIcons.length - 1}
+              />
+            ))}
+          </div>
+        )}
         {step === 1 && (
           <StepRegister onNext={handleNext} onError={handleError} />
         )}

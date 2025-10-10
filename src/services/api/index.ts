@@ -136,7 +136,7 @@ export const authApi = {
     }),
 
   initiate: (wantsToCompleteNow: boolean) =>
-    apiRequest<{ applicationId?: string; message: string }>(
+    apiRequest<{ applicationId: string; message: string }>(
       '/artisan-applications/initiate',
       {
         method: 'POST',

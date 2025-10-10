@@ -22,6 +22,8 @@ export interface ArtisanRegisterState {
 
   historico?: string;
 
+  attachmentIds?: string[];
+
   update: (data: Partial<ArtisanRegisterState>) => void;
   reset: () => void;
 }
@@ -33,6 +35,7 @@ export const useArtisanRegister = create<ArtisanRegisterState>()(
       tecnicas: [],
       finalidades: [],
       midias: [],
+      attachmentIds: [],
       update: (data) => set((prev) => ({ ...prev, ...data })),
       reset: () =>
         set({
@@ -51,6 +54,7 @@ export const useArtisanRegister = create<ArtisanRegisterState>()(
           tecnicas: [],
           finalidades: [],
           historico: undefined,
+          attachmentIds: [],
         }),
     }),
     { name: 'artisan-register' },
