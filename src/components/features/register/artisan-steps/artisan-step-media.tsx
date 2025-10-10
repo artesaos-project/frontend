@@ -1,4 +1,6 @@
 import AuthButton from '@/components/common/auth-button';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
+import { uploadApi } from '@/services/api';
 import { useRef, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
 import { LuVideo } from 'react-icons/lu';
@@ -8,7 +10,17 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [media, setMedia] = useState<File[]>([]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    try {
+      const uploadedFiles = await Promise.all(
+        media.map((file) => uploadApi.uploadFile(file)),
+      );
+      const attachmentIds = uploadedFiles.map((file) => file.attachmentId);
+      useArtisanRegister.getState().update({ attachmentIds });
+    } catch (error) {
+      console.error('Error uploading media files:', error);
+      return;
+    }
     onNext();
   };
 
