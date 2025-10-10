@@ -238,12 +238,13 @@ function DropdownCategories() {
       {isOpen && (
         <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
           {categories.map((category, index) => (
-            <div
+            <Link
+              href={'/category/' + category.name}
               key={category.name || 0 + index}
               className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
             >
               {category.name}
-            </div>
+            </Link>
           ))}
         </div>
       )}
