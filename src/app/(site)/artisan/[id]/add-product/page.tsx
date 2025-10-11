@@ -121,10 +121,10 @@ const AddProductPage = () => {
       title: form.name.trim(),
       description: form.description.trim(),
       priceInCents: Math.round(parseFloat(form.unitPrice) * 100),
-      categoryId: parseInt(form.category),
+      photosIds: photoIds,
+      rawMaterialIds: form.category ? [parseInt(form.category)] : [],
+      techniqueIds: form.technical ? [parseInt(form.technical)] : [],
       stock: parseInt(form.stock),
-      photoIds: photoIds,
-      technique: form.technical.trim(),
       isCustomOrder: form.isCustomOrder,
       necessaryDays: form.isCustomOrder ? parseInt(form.necessaryDays) || 0 : 0,
     };
@@ -547,7 +547,7 @@ const AddProductPage = () => {
                     >
                       <option value="">Selecione uma técnica</option>
                       {tecnicas.map((tecnica) => (
-                        <option key={tecnica} value={tecnica}>
+                        <option key={tecnica} value={'1'}>
                           {tecnica}
                         </option>
                       ))}

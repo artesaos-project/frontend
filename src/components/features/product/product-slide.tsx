@@ -1,8 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import type { Swiper as SwiperClass } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface ProductSlideProps {
@@ -20,6 +22,17 @@ const ProductSlide: React.FC<ProductSlideProps> = ({
   onViewMore,
   showViewMoreButton = true,
 }) => {
+  const swiperRef = useRef<SwiperClass | null>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const updateNav = (instance?: SwiperClass | null) => {
+    const s = instance ?? swiperRef.current;
+    if (!s) return;
+    setCanPrev(!s.isBeginning);
+    setCanNext(!s.isEnd);
+  };
+
   return (
     <div>
       <div className="flex flex-row">
@@ -41,63 +54,85 @@ const ProductSlide: React.FC<ProductSlideProps> = ({
       </div>
 
       <div className="mb-10 p-2">
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={16}
-          slidesPerView={2}
-          slidesPerGroup={2}
-          breakpointsBase={'window'}
-          navigation={{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          }}
-          pagination={{
-            clickable: true,
-            type: 'custom',
-            renderCustom: function (swiper, current, total) {
-              let html =
-                "<div class='flex w-full absolute top-0'><div class='mx-auto flex bg-gray-200'>";
-              for (let i = 0; i < total; i++) {
-                if (i === current - 1) {
-                  html += `<div class="w-8 h-1 bg-gray-400 rounded-full"></div>`;
-                } else {
-                  html += `<div class="w-8 h-1"></div>`;
-                }
-              }
-              html += '</div></div>';
-              return html;
-            },
-          }}
-          breakpoints={{
-            400: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-              spaceBetween: 10,
-            },
-            640: {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
-              spaceBetween: 10,
-            },
-            768: {
-              slidesPerView: 5,
-              slidesPerGroup: 5,
-              spaceBetween: 10,
-            },
-            1024: {
-              slidesPerView: 6,
-              slidesPerGroup: 6,
-              spaceBetween: 10,
-            },
-          }}
-          className="products-swiper"
-        >
-          {React.Children.map(children, (child, index) => (
-            <SwiperSlide key={index} className="mb-10">
-              {child}
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="flex items-center gap-3">
+          {canPrev && (
+            <button
+              onClick={() => {
+                swiperRef.current?.slidePrev();
+                updateNav();
+              }}
+              type="button"
+              aria-label="Anterior"
+              className="hidden w-6 h-6 rounded-full bg-midnight text-white md:flex items-center justify-center hover:bg-black/70 transition"
+            >
+              <FiChevronLeft size={20} />
+            </button>
+          )}
+
+          <div className="flex-1 overflow-hidden">
+            <Swiper
+              modules={[Pagination]}
+              spaceBetween={16}
+              slidesPerView={2}
+              slidesPerGroup={2}
+              watchOverflow
+              breakpointsBase="window"
+              pagination={{
+                clickable: true,
+                type: 'custom',
+                renderCustom: function (_swiper, current, total) {
+                  let html =
+                    "<div class='flex w-full absolute top-0'><div class='mx-auto flex bg-gray-200'>";
+                  for (let i = 0; i < total; i++) {
+                    if (i === current - 1) {
+                      html += `<div class="w-8 h-1 bg-gray-400 rounded-full"></div>`;
+                    } else {
+                      html += `<div class="w-8 h-1"></div>`;
+                    }
+                  }
+                  html += '</div></div>';
+                  return html;
+                },
+              }}
+              breakpoints={{
+                400: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
+                640: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 10 },
+                768: { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 10 },
+                1024: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 10 },
+              }}
+              onSwiper={(instance) => {
+                swiperRef.current = instance;
+                updateNav(instance);
+              }}
+              onSlideChange={updateNav}
+              onResize={updateNav}
+              onReachBeginning={updateNav}
+              onReachEnd={updateNav}
+              onFromEdge={updateNav}
+              className="products-swiper"
+            >
+              {React.Children.map(children, (child, index) => (
+                <SwiperSlide key={index} className="mb-10">
+                  {child}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          {canNext && (
+            <button
+              onClick={() => {
+                swiperRef.current?.slideNext();
+                updateNav();
+              }}
+              type="button"
+              aria-label="Próximo"
+              className="hidden w-6 h-6 rounded-full bg-midnight text-white md:flex items-center justify-center hover:bg-black/70 transition"
+            >
+              <FiChevronRight size={20} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
