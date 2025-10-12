@@ -94,7 +94,7 @@ const AuthorProfile = ({
             onClick={handleFollow}
             className={`flex items-center mt-2 gap-2 px-10 py-2 border-2 rounded-4xl font-bold transition-colors ${
               following
-                ? 'bg-midnight text-white border-midnight hover:bg-white hover:text-midnight'
+                ? 'bg-white text-sakura border-sakura hover:bg-sakura hover:text-white'
                 : 'bg-white text-midnight border-midnight hover:bg-midnight hover:text-white'
             }`}
           >

@@ -96,7 +96,7 @@ export const productApi = {
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
   create: (productData: unknown) =>
-    apiRequest(`/products`, {
+    apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
       body: productData,
     }),

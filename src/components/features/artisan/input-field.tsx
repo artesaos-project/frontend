@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface InputFieldProps {
+  name?: string;
   label: string;
   type?: string;
   required?: boolean;
@@ -14,6 +15,7 @@ interface InputFieldProps {
 }
 
 const InputField: React.FC<InputFieldProps> = ({
+  name,
   label,
   type = 'text',
   required = false,
@@ -32,6 +34,7 @@ const InputField: React.FC<InputFieldProps> = ({
         {required && <span className="text-salmon ml-1">*</span>}
       </label>
       <input
+        name={name}
         type={type}
         required={required}
         value={value}

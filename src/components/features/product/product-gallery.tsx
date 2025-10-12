@@ -63,12 +63,12 @@ export default function ProductGallery({
       </div>
 
       {hasMultipleImages && (
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-4 flex gap-2 p-2 justify-center items-center overflow-x-auto">
           {images.map((src, index) => (
             <button
               key={index}
               onClick={() => onGoTo(index)}
-              className="relative flex-shrink-0 rounded-md p-2"
+              className="flex rounded-md"
               aria-label={`Ver imagem ${index + 1}`}
             >
               <img
