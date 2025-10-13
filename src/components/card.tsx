@@ -3,7 +3,7 @@ import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
 import { Button } from './ui/button';
 
-type ṔroductCardProps = {
+type ProductCardProps = {
   id: string | number;
   price: number;
   title: string;
@@ -12,13 +12,13 @@ type ṔroductCardProps = {
 
 function BaseCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg lg:max-w-65">
+    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg lg:max-w-65 h-full">
       {children}
     </div>
   );
 }
 
-function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
+function ProductCardBody({ id, price, title, author }: ProductCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = React.useState(false);
 
@@ -32,7 +32,7 @@ function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
 
   return (
     <>
-      <header className="flex justify-between items-center mt-2 mb-2">
+      <header className="flex justify-between items-center mt-2 mb-1">
         <p className="font-bold lg:text-xl md:text-lg text-mint-600 truncate">
           R$ {price}
         </p>
@@ -47,11 +47,11 @@ function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
           )}
         </button>
       </header>
-      <p className="text-xs lg:text-lg truncate">{title}</p>
-      <p className="text-xs lg:text-lg truncate italic font-light">{author}</p>
+      <p className="text-sm lg:text-lg line-clamp-2">{title}</p>
+      <p className="text-sm lg:text-lg truncate italic font-light">{author}</p>
       <Button
         onClick={handleDetailsClick}
-        className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold"
+        className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold mt-auto"
       >
         <FaPlus />
         Detalhes
