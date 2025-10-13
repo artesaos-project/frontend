@@ -27,7 +27,7 @@ const ArtisanProfileCard = () => {
   const params = useParams();
   const userName = params.id as string;
   const [follow, setFollow] = useState(false);
-  const [isArtisan, setIsArtisan] = useState(true);
+  const [isArtisan, setIsArtisan] = useState(false);
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -22,6 +22,9 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const {
     photos,
     addApiPhotos,
+    newPhotos,
+    deletedPhotos,
+    coverPhotoId,
     selectedPhotos,
     photoIds,
     isUploading,
@@ -67,11 +70,11 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
         necessaryDays: '',
       };
       reset(formValues);
-      const apiPhotos = (fetchedProduct.photos || []).map((url, idx) => ({
-        id: String(idx),
+      const apiPhotos = (fetchedProduct.photos || []).map((url, index) => ({
+        id: String((fetchedProduct.photosIds || [])[index] || ''),
         url,
       }));
-      addApiPhotos(apiPhotos);
+      addApiPhotos(apiPhotos, fetchedProduct.coverPhoto);
     };
 
     fetchProduct();
@@ -82,11 +85,18 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
       toast.warning('Por favor, aguarde o término do upload das fotos.');
       return;
     }
+    if (photos.length === 0 || !coverPhotoId) {
+      toast.error('Selecione uma foto de capa antes de salvar o produto.');
+      return;
+    }
     const productData = {
       title: data.name.trim(),
       description: data.description.trim(),
       priceInCents: Math.round(parseFloat(data.unitPrice) * 100),
       photosIds: photoIds,
+      newPhotos,
+      deletedPhotos,
+      coverPhotoId: photoIds[0] || coverPhotoId,
       rawMaterialIds: data.category.map((c) => parseInt(c)),
       techniqueIds: data.technical.map((t) => parseInt(t)),
       stock: parseInt(data.stock),
@@ -95,7 +105,7 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
     };
 
     try {
-      await productApi.create(productData);
+      await productApi.update(id, productData);
       toast.success('Produto atualizado com sucesso!');
       router.back();
     } catch (error: unknown) {

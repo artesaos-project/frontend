@@ -58,7 +58,7 @@ type ArtisanApplicationPayload = {
 
 export const artisanApi = {
   getProfile: (userName: string) =>
-    apiRequest<ArtisanProfile>(`/artisan-profile/${userName}`),
+    apiRequest<ArtisanProfile>(`/artisan-profiles/${userName}`),
 
   getApplications: () =>
     apiRequest<{ artisanApplications: Artisan[] }>(`/artisan-applications`),
@@ -76,13 +76,13 @@ export const artisanApi = {
 
   approve: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'APPROVED' },
     }),
 
   reject: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'REJECTED' },
     }),
 };
@@ -98,6 +98,11 @@ export const productApi = {
   create: (productData: unknown) =>
     apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
+      body: productData,
+    }),
+  update: (id: string, productData: unknown) =>
+    apiRequest<{ message?: string }>(`/products/${id}`, {
+      method: 'PUT',
       body: productData,
     }),
 };
