@@ -170,7 +170,7 @@ function SideBarMenu() {
               )}
               <DropdownCategories />
               {user.isArtisan && (
-                <Link href={`/artisan/${user.artisanUserName}/add-product`}>
+                <Link href={`/artisan/add-product`}>
                   <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                     <RxPlusCircled color="#ff8c94" size={30} />
                     <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">

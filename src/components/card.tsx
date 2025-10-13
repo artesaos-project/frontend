@@ -1,13 +1,15 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
 import { Button } from './ui/button';
 
-type ṔroductCardProps = {
+type ProductCardProps = {
   id: string | number;
   price: number;
   title: string;
   author: string;
+  isEdit?: boolean;
 };
 
 function BaseCard({ children }: { children: React.ReactNode }) {
@@ -18,12 +20,22 @@ function BaseCard({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
+function ProductCardBody({
+  id,
+  price,
+  title,
+  author,
+  isEdit,
+}: ProductCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = React.useState(false);
 
   const handleDetailsClick = () => {
     router.push(`/product/${id}`);
+  };
+
+  const handleEditClick = () => {
+    router.push(`/artisan/edit-product/${id}`);
   };
 
   const handleFavoriteClick = () => {
@@ -34,7 +46,10 @@ function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
     <>
       <header className="flex justify-between items-center mt-2 mb-2">
         <p className="font-bold lg:text-xl md:text-lg text-mint-600 truncate">
-          R$ {price}
+          {Number(price).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          })}
         </p>
         <button
           onClick={handleFavoriteClick}
@@ -56,6 +71,15 @@ function ProductCardBody({ id, price, title, author }: ṔroductCardProps) {
         <FaPlus />
         Detalhes
       </Button>
+      {isEdit && (
+        <Button
+          onClick={handleEditClick}
+          className="bg-olivine-600 cursor-pointer hover:bg-olivine-600/70 text-xl font-bold mt-1"
+        >
+          Editar
+          <HiOutlinePencilAlt />
+        </Button>
+      )}
     </>
   );
 }

@@ -58,7 +58,7 @@ type ArtisanApplicationPayload = {
 
 export const artisanApi = {
   getProfile: (userName: string) =>
-    apiRequest<ArtisanProfile>(`/artisan-profile/${userName}`),
+    apiRequest<ArtisanProfile>(`/artisan-profiles/${userName}`),
 
   getApplications: () =>
     apiRequest<{ artisanApplications: Artisan[] }>(`/artisan-applications`),
@@ -76,13 +76,13 @@ export const artisanApi = {
 
   approve: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'APPROVED' },
     }),
 
   reject: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'REJECTED' },
     }),
 };
@@ -96,8 +96,13 @@ export const productApi = {
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
   create: (productData: unknown) =>
-    apiRequest(`/products`, {
+    apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
+      body: productData,
+    }),
+  update: (id: string, productData: unknown) =>
+    apiRequest<{ message?: string }>(`/products/${id}`, {
+      method: 'PUT',
       body: productData,
     }),
 };
@@ -136,7 +141,7 @@ export const authApi = {
     }),
 
   initiate: (wantsToCompleteNow: boolean) =>
-    apiRequest<{ applicationId?: string; message: string }>(
+    apiRequest<{ applicationId: string; message: string }>(
       '/artisan-applications/initiate',
       {
         method: 'POST',
