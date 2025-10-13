@@ -1,18 +1,22 @@
 import InputField from '@/components/features/artisan/input-field';
 import { ProductForm } from '@/types/product-form';
-import React from 'react';
+import React, { useState } from 'react';
+import { FieldErrors, useForm } from 'react-hook-form';
 
 interface PriceStockFormProps {
-  form: ProductForm;
-  onInputChange: (field: keyof ProductForm, value: string | boolean) => void;
+  register: ReturnType<typeof useForm<ProductForm>>['register'];
+  setValue?: ReturnType<typeof useForm<ProductForm>>['setValue'];
+  errors: FieldErrors<ProductForm>;
   isDesktop?: boolean;
 }
 
 export const PriceStockForm: React.FC<PriceStockFormProps> = ({
-  form,
-  onInputChange,
+  register,
+  errors,
   isDesktop = false,
 }) => {
+  const [isCustomOrder, setIsCustomOrder] = useState(false);
+
   return (
     <div>
       <div className="flex items-center mb-4 text-salmon font-bold">
@@ -25,10 +29,11 @@ export const PriceStockForm: React.FC<PriceStockFormProps> = ({
             label="Preço Unitário"
             type="number"
             required={true}
-            min="0"
             step="0.01"
-            value={form.unitPrice}
-            onChange={(value) => onInputChange('unitPrice', value)}
+            {...register('unitPrice', {
+              required: 'Preço é obrigatório',
+              min: { value: 0, message: 'Preço não pode ser negativo' },
+            })}
             placeholder="0,00"
           />
 
@@ -36,11 +41,18 @@ export const PriceStockForm: React.FC<PriceStockFormProps> = ({
             label="Estoque"
             type="number"
             required={true}
-            min="0"
-            value={form.stock}
-            onChange={(value) => onInputChange('stock', value)}
+            {...register('stock', {
+              required: 'Estoque é obrigatório',
+              min: { value: 0, message: 'Estoque não pode ser negativo' },
+            })}
             placeholder="Quantidade"
           />
+          {errors.unitPrice && (
+            <p className="text-red-500 text-sm">{errors.unitPrice.message}</p>
+          )}
+          {errors.stock && (
+            <p className="text-red-500 text-sm">{errors.stock.message}</p>
+          )}
         </div>
 
         <div
@@ -52,11 +64,10 @@ export const PriceStockForm: React.FC<PriceStockFormProps> = ({
             <div className="flex items-center gap-2">
               <input
                 type="radio"
-                name="isCustomOrder"
                 value="true"
-                checked={form.isCustomOrder === true}
-                onChange={() => onInputChange('isCustomOrder', true)}
                 className="w-5 h-5 accent-sakura"
+                {...register('isCustomOrder')}
+                onChange={() => setIsCustomOrder(true)}
               />
               <label className="text-sm">Sim</label>
             </div>
@@ -64,11 +75,10 @@ export const PriceStockForm: React.FC<PriceStockFormProps> = ({
             <div className="flex items-center gap-2">
               <input
                 type="radio"
-                name="isCustomOrder"
                 value="false"
-                checked={form.isCustomOrder === false}
-                onChange={() => onInputChange('isCustomOrder', false)}
                 className="w-5 h-5 accent-sakura"
+                {...register('isCustomOrder')}
+                onChange={() => setIsCustomOrder(false)}
               />
               <label className="text-sm">Não</label>
             </div>
@@ -77,11 +87,18 @@ export const PriceStockForm: React.FC<PriceStockFormProps> = ({
           <InputField
             label="Dias Necessários"
             type="number"
-            min="0"
-            value={form.necessaryDays}
-            onChange={(value) => onInputChange('necessaryDays', value)}
+            disabled={!isCustomOrder}
+            {...register('necessaryDays', {
+              required: isCustomOrder
+                ? 'Dias necessários é obrigatório'
+                : false,
+              min: {
+                value: 0,
+                message: 'Dias necessários não pode ser negativo',
+              },
+              valueAsNumber: true,
+            })}
             placeholder="Quantidade de dias"
-            disabled={!form.isCustomOrder}
           />
         </div>
       </div>

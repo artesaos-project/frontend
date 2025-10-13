@@ -1,30 +1,18 @@
 import { uploadApi } from '@/services/api';
-import { ProductForm } from '@/types/product-form';
-import { useEffect, useState } from 'react';
-
+import { useCallback, useEffect, useState } from 'react';
+export type PhotoType = File | { id: string; url: string };
 export const useProductForm = () => {
-  const [form, setForm] = useState<ProductForm>({
-    name: '',
-    description: '',
-    category: [],
-    technical: [],
-    unitPrice: '',
-    stock: '',
-    isCustomOrder: false,
-    necessaryDays: '',
-  });
-
-  const [photos, setPhotos] = useState<File[]>([]);
+  const [photos, setPhotos] = useState<PhotoType[]>([]);
   const [selectedPhotos, setSelectedPhotos] = useState<number[]>([]);
   const [photoIds, setPhotoIds] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleInputChange = (
-    field: keyof ProductForm,
-    value: string | boolean | string[],
-  ) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  const addApiPhotos = useCallback(
+    (apiPhotos: { id: string; url: string }[]) => {
+      setPhotos((prev) => [...apiPhotos, ...prev].slice(0, 5));
+    },
+    [],
+  );
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -63,7 +51,11 @@ export const useProductForm = () => {
 
   useEffect(() => {
     const uploadPhotos = async () => {
-      if (photos.length === 0) {
+      const filesToUpload = photos.filter(
+        (photo) => photo instanceof File,
+      ) as File[];
+
+      if (filesToUpload.length === 0) {
         setPhotoIds([]);
         return;
       }
@@ -72,8 +64,8 @@ export const useProductForm = () => {
       const uploadedPhotoIds: string[] = [];
 
       try {
-        for (const photo of photos) {
-          const result = await uploadImage(photo);
+        for (const file of filesToUpload) {
+          const result = await uploadImage(file);
           uploadedPhotoIds.push(result.attachmentId);
         }
         setPhotoIds(uploadedPhotoIds);
@@ -88,12 +80,11 @@ export const useProductForm = () => {
   }, [photos]);
 
   return {
-    form,
     photos,
+    addApiPhotos,
     selectedPhotos,
     photoIds,
     isUploading,
-    handleInputChange,
     handlePhotoUpload,
     handlePhotoSelect,
     removeSelectedPhotos,

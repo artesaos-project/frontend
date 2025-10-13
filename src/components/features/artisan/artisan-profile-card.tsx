@@ -27,11 +27,11 @@ const ArtisanProfileCard = () => {
   const params = useParams();
   const userName = params.id as string;
   const [follow, setFollow] = useState(false);
-  const [isArtisan, setIsArtisan] = useState(false);
+  const [isArtisan, setIsArtisan] = useState(true);
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [visibleProducts, setVisibleProducts] = useState(25);
+  const [visibleProducts, setVisibleProducts] = useState(6);
   const [totalProducts, setTotalProducts] = useState(0);
   const { user } = useStoreUser();
   const route = useRouter();
@@ -39,6 +39,20 @@ const ArtisanProfileCard = () => {
   const getLoggedUserId = useCallback(() => {
     return user.userId;
   }, [user.userId]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setVisibleProducts(6);
+      } else {
+        setVisibleProducts(25);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchArtisanProfile = async () => {
@@ -69,7 +83,7 @@ const ArtisanProfileCard = () => {
     if (userName) {
       fetchArtisanProfile();
     }
-  }, [userName, user, getLoggedUserId]);
+  }, [userName, getLoggedUserId]);
 
   if (loading) {
     return (
@@ -134,7 +148,7 @@ const ArtisanProfileCard = () => {
       alert('Você precisa estar logado para adicionar produtos');
       return;
     }
-    route.push(`/artisan/${userName}/add-product`);
+    route.push(`/artisan/add-product`);
   };
 
   return (
@@ -196,7 +210,7 @@ const ArtisanProfileCard = () => {
             <ActionButtons
               nameButton="Saber mais"
               iconPosition="left"
-              icon={<LuPencil size={20} color="red" />}
+              icon={<CiCircleMore size={20} color="red" />}
               className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
             />
           </>
@@ -250,6 +264,7 @@ const ArtisanProfileCard = () => {
             artistId={artisan.userId}
             visibleCount={visibleProducts}
             onTotalChange={setTotalProducts}
+            isEdit={isArtisan}
           />
         </div>
 

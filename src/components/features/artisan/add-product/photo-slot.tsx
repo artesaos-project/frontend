@@ -1,10 +1,11 @@
+import { PhotoType } from '@/hooks/use-product-form';
 import { Upload } from 'lucide-react';
 import React from 'react';
 import { FaRegImage } from 'react-icons/fa6';
 
 interface PhotoSlotProps {
   index: number;
-  photo?: File;
+  photo?: PhotoType;
   onClick: () => void;
   isSelected: boolean;
 }
@@ -16,6 +17,13 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
   isSelected,
 }) => {
   const isMainPhoto = index === 0;
+
+  const getPhotoUrl = (photo?: File | { id: string; url: string }) => {
+    if (!photo) return '';
+    if (photo instanceof File) return URL.createObjectURL(photo);
+    if (typeof photo === 'object' && 'url' in photo) return photo.url;
+    return '';
+  };
 
   return (
     <div
@@ -32,7 +40,7 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
       {photo ? (
         <div className="w-full h-full rounded-lg overflow-hidden">
           <img
-            src={URL.createObjectURL(photo)}
+            src={getPhotoUrl(photo)}
             alt={`Preview ${index}`}
             className="w-full h-full object-cover"
           />

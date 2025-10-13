@@ -7,77 +7,96 @@ import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
 import { useProductForm } from '@/hooks/use-product-form';
 import { productApi } from '@/services/api';
-import { ArrowLeft } from 'lucide-react';
+import { ProductForm } from '@/types/product-form';
 import { AxiosError } from 'axios';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import { use, useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { IoAdd } from 'react-icons/io5';
 import { toast, Toaster } from 'sonner';
 
-const AddProductPage = () => {
+const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
+  const { id } = use(params);
   const {
-    form,
     photos,
+    addApiPhotos,
     selectedPhotos,
     photoIds,
     isUploading,
-    handleInputChange,
     handlePhotoUpload,
     handlePhotoSelect,
     removeSelectedPhotos,
     selectAllPhotos,
   } = useProductForm();
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<ProductForm>({
+    defaultValues: {
+      name: '',
+      description: '',
+      category: [],
+      technical: [],
+      unitPrice: '',
+      stock: '',
+      isCustomOrder: false,
+      necessaryDays: '',
+    },
+  });
   const triggerFileUpload = () => {
     document.getElementById('photo-upload')?.click();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const fetchedProduct = await productApi.getById(id);
+      const formValues: ProductForm = {
+        name: fetchedProduct.title,
+        description: fetchedProduct.description,
+        category: [fetchedProduct.categoryId].toLocaleString().split(','),
+        technical: [1, 2, 3].toLocaleString().split(','),
+        unitPrice: (fetchedProduct.priceInCents / 100).toFixed(2),
+        stock: fetchedProduct.stock.toString(),
+        isCustomOrder: false,
+        necessaryDays: '',
+      };
+      reset(formValues);
+      const apiPhotos = (fetchedProduct.photos || []).map((url, idx) => ({
+        id: String(idx),
+        url,
+      }));
+      addApiPhotos(apiPhotos);
+    };
 
-    const categories = Array.isArray(form.category)
-      ? form.category
-      : form.category
-        ? [form.category]
-        : [];
-    const techniques = Array.isArray(form.technical)
-      ? form.technical
-      : form.technical
-        ? [form.technical]
-        : [];
+    fetchProduct();
+  }, [reset, addApiPhotos, id]);
 
-    if (
-      !form.name.trim() ||
-      !form.description.trim() ||
-      !form.unitPrice ||
-      categories.length === 0 ||
-      !form.stock
-    ) {
-      toast.warning('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
+  const onSubmit: SubmitHandler<ProductForm> = async (data) => {
     if (isUploading) {
       toast.warning('Por favor, aguarde o término do upload das fotos.');
       return;
     }
-
     const productData = {
-      title: form.name.trim(),
-      description: form.description.trim(),
-      priceInCents: Math.round(parseFloat(form.unitPrice) * 100),
+      title: data.name.trim(),
+      description: data.description.trim(),
+      priceInCents: Math.round(parseFloat(data.unitPrice) * 100),
       photosIds: photoIds,
-      rawMaterialIds: categories.map((c) => parseInt(c)),
-      techniqueIds: techniques.map((t) => parseInt(t)),
-      stock: parseInt(form.stock),
-      isCustomOrder: form.isCustomOrder,
-      necessaryDays: form.isCustomOrder ? parseInt(form.necessaryDays) || 0 : 0,
+      rawMaterialIds: data.category.map((c) => parseInt(c)),
+      techniqueIds: data.technical.map((t) => parseInt(t)),
+      stock: parseInt(data.stock),
+      isCustomOrder: data.isCustomOrder,
+      necessaryDays: data.isCustomOrder ? parseInt(data.necessaryDays) || 0 : 0,
     };
 
     try {
       await productApi.create(productData);
-      toast.success('Produto adicionado com sucesso!');
+      toast.success('Produto atualizado com sucesso!');
       router.back();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -96,23 +115,24 @@ const AddProductPage = () => {
             className="w-6 h-6 text-gray-700 mr-3 cursor-pointer hover:text-gray-900"
             onClick={() => router.back()}
           />
-          <h1 className="text-xl font-bold text-gray-800">Adicionar produto</h1>
+          <h1 className="text-xl font-bold text-gray-800">Editar produto</h1>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="bg-white rounded-2xl shadow-lg p-4 mb-10">
             {/* Mobile */}
             <div className="lg:hidden">
               <ProductInfoForm
-                form={form}
+                register={register}
+                control={control}
+                errors={errors}
                 materiaPrima={materiaPrima}
                 tecnicas={tecnicas}
-                onInputChange={handleInputChange}
               />
 
               <div className="mb-8 mt-8">
                 <PhotoGallery
-                  photos={photos}
+                  photos={photos as []}
                   selectedPhotos={selectedPhotos}
                   isMobile={true}
                   onPhotoSelect={handlePhotoSelect}
@@ -123,8 +143,8 @@ const AddProductPage = () => {
               </div>
 
               <PriceStockForm
-                form={form}
-                onInputChange={handleInputChange}
+                register={register}
+                errors={errors}
                 isDesktop={false}
               />
             </div>
@@ -133,16 +153,17 @@ const AddProductPage = () => {
             <div className="hidden lg:grid grid-cols-2 gap-8">
               <div>
                 <ProductInfoForm
-                  form={form}
+                  register={register}
+                  control={control}
+                  errors={errors}
                   materiaPrima={materiaPrima}
                   tecnicas={tecnicas}
-                  onInputChange={handleInputChange}
                 />
 
                 <div className="mt-6">
                   <PriceStockForm
-                    form={form}
-                    onInputChange={handleInputChange}
+                    register={register}
+                    errors={errors}
                     isDesktop={true}
                   />
                 </div>
@@ -150,7 +171,7 @@ const AddProductPage = () => {
 
               <div>
                 <PhotoGallery
-                  photos={photos}
+                  photos={photos as []}
                   selectedPhotos={selectedPhotos}
                   isMobile={false}
                   onPhotoSelect={handlePhotoSelect}
@@ -177,7 +198,7 @@ const AddProductPage = () => {
                 className={`flex px-6 gap-2 py-2 w-full justify-center items-center rounded-lg transition-all ${
                   isUploading
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-[#2AAA4C] hover:bg-green-600'
+                    : 'bg-[#2AAA4C] hover:bg-green-600 cursor-pointer'
                 } text-white`}
               >
                 {isUploading ? 'Enviando fotos...' : 'Adicionar Produto'}
@@ -191,4 +212,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default EditProductPage;

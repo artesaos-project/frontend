@@ -2,9 +2,10 @@ import { Trash2 } from 'lucide-react';
 import React from 'react';
 import { TbSelect, TbTrash } from 'react-icons/tb';
 import { PhotoSlot } from './photo-slot';
+import { PhotoType } from '@/hooks/use-product-form';
 
 interface PhotoGalleryProps {
-  photos: File[];
+  photos: PhotoType[];
   selectedPhotos: number[];
   isMobile?: boolean;
   onPhotoSelect: (index: number) => void;
@@ -54,7 +55,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
           <div className="mb-3">
             <PhotoSlot
               index={0}
-              photo={photos[0]}
+              photo={photos[0] as File}
               onClick={() => handleSlotClick(0)}
               isSelected={selectedPhotos.includes(0)}
             />
@@ -66,7 +67,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 <PhotoSlot
                   key={index}
                   index={index}
-                  photo={photos[index]}
+                  photo={photos[index] as File}
                   onClick={() => handleSlotClick(index)}
                   isSelected={selectedPhotos.includes(index)}
                 />
@@ -80,7 +81,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             <PhotoSlot
               key={index}
               index={index}
-              photo={photos[index]}
+              photo={photos[index] as File}
               onClick={() => handleSlotClick(index)}
               isSelected={selectedPhotos.includes(index)}
             />
