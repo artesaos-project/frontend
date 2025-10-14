@@ -2,24 +2,37 @@
 import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
+import products from '../db-mock/products.json';
+
+type ProductMockProps = {
+  id: number;
+  title: string;
+  priceInCents: number;
+  authorName: string;
+  description: string;
+  coverPhoto: string;
+};
 
 function ProductsList() {
-  const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
+  // const [products, setProducts] = useState<ApiProduct[]>([]);
+  // const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<ProductMockProps[]>(
+    [],
+  );
 
   useEffect(() => {
     // setProducts(productsMock)
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const fetchProducts = async () => {
-      try {
-        console.log(baseUrl);
-        const res = await fetch(`${baseUrl}/products`);
-        const data = await res.json();
-        console.log(data);
-        setProducts(data);
-      } catch (err) {
-        console.error('Erro ao buscar produtos:', err);
-      }
+      // try {
+      //   console.log(baseUrl);
+      //   const res = await fetch(`${baseUrl}/products`);
+      //   const data = await res.json();
+      //   console.log(data);
+      //   setProducts(data);
+      // } catch (err) {
+      //   console.error('Erro ao buscar produtos:', err);
+      // }
     };
 
     fetchProducts();
@@ -49,7 +62,7 @@ function ProductsList() {
         <BaseCard key={i}>
           <div className="w-full h-34 md:h-40">
             <img
-              src={product.coverPhoto}
+              src={'/' + product.coverPhoto}
               alt="Imagem do Produto"
               className="rounded-lg object-cover h-34 md:h-40 w-full"
             />

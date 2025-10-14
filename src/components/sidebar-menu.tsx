@@ -28,17 +28,9 @@ import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
 import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import { Button } from './ui/button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
+import categories from '@/db-mock/categories.json';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
@@ -69,7 +61,7 @@ function SideBarMenu() {
         </SheetHeader>
         <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
           <Image
-            src={'/default-avatar.webp'}
+            src={user.userPhoto || '/default-avatar.webp'}
             alt="User Avatar"
             width={110}
             height={110}
@@ -88,12 +80,12 @@ function SideBarMenu() {
               </h2>
               {user.isArtisan && (
                 <>
-                  {/* <p className="text-sm text-midnight font-semibold">
+                  <p className="text-sm text-midnight font-semibold">
                     @{user.artisanUserName}
-                  </p> */}
+                  </p>
                   <Button asChild variant={'outline'} className="rounded-full">
                     <Link
-                      href={`/artisan/${user.userId}`}
+                      href={`/artisan/${user.artisanUserName}`}
                       className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
                     >
                       Ver meu perfil
@@ -178,7 +170,7 @@ function SideBarMenu() {
               )}
               <DropdownCategories />
               {user.isArtisan && (
-                <Link href={`/artisan/${user.userId}/add-product`}>
+                <Link href={`/artisan/${user.artisanUserName}/add-product`}>
                   <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                     <RxPlusCircled color="#ff8c94" size={30} />
                     <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
@@ -225,21 +217,8 @@ function SideBarMenu() {
 }
 
 function DropdownCategories() {
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const response = await fetch('http://localhost:3333/catalog/materials');
-        const data = await response.json();
-        setCategories(data.items);
-      } catch (err: unknown) {
-        if (err instanceof Error)
-          console.log('Erro ao buscar categorias', err.message);
-      }
-    }
-    fetchCategories();
-  }, []);
+  // PUXAR CATEGORIAS DA API
   return (
     <div>
       <div
@@ -260,11 +239,11 @@ function DropdownCategories() {
         <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
           {categories.map((category, index) => (
             <Link
-              href={'/category/' + category.nameFilter}
-              key={category.nameFilter || 0 + index}
+              href={'/category/' + category.name}
+              key={category.name || 0 + index}
               className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
             >
-              {category.nameExhibit}
+              {category.name}
             </Link>
           ))}
         </div>
