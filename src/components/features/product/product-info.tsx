@@ -29,6 +29,35 @@ const ProductInfo = ({
         <p className="text-[#1B7132] text-2xl font-bold mt-2">{price}</p>
       </div>
 
+      <div className="pt-2">
+        <Button
+          text="Compartilhar"
+          Icon={<IoMdShareAlt size={20} color="#E0001E" />}
+          variant="outline"
+          onClick={onShare}
+          className="w-full"
+        />
+      </div>
+
+      <div className="flex gap-3 items-center">
+        <Button
+          text="Adicionar aos favoritos"
+          Icon={<CiHeart size={18} />}
+          variant="secondary"
+          size="md"
+          onClick={onAddToFavorites}
+          className="w-full"
+        />
+        <Button
+          text="Entrar em contato"
+          Icon={<FaWhatsapp size={18} />}
+          variant="primary"
+          size="md"
+          onClick={onContact}
+          className="w-full"
+        />
+      </div>
+
       {description && (
         <details className="group">
           <summary className="cursor-pointer text-[#1B7132] hover:text-[#156029] transition-colors flex items-center gap-2">
@@ -42,37 +71,6 @@ const ProductInfo = ({
           </p>
         </details>
       )}
-
-      <div className="pt-2">
-        <Button
-          text="Compartilhar"
-          Icon={<IoMdShareAlt size={20} color="#E0001E" />}
-          variant="outline"
-          className="rounded-full p-2"
-          onClick={onShare}
-        />
-      </div>
-
-      <div className="flex gap-3 items-center">
-        <Button
-          text="Adicionar aos favoritos"
-          Icon={<CiHeart size={18} />}
-          variant="secondary"
-          size="md"
-          width="171px"
-          className="rounded-lg"
-          onClick={onAddToFavorites}
-        />
-        <Button
-          text="Entrar em contato"
-          Icon={<FaWhatsapp size={18} />}
-          variant="primary"
-          size="md"
-          width="141px"
-          className="rounded-lg"
-          onClick={onContact}
-        />
-      </div>
     </div>
   );
 };

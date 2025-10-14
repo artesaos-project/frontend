@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 
 function ProductArtisan({
   artistId,
-  visibleCount = 25,
+  visibleCount = 5,
+  isEdit,
   onTotalChange,
 }: {
   artistId?: string;
   visibleCount?: number;
+  isEdit?: boolean;
   onTotalChange?: (total: number) => void;
 }) {
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -85,6 +87,7 @@ function ProductArtisan({
             price={product.priceInCents / 100}
             title={product.title}
             author={product.authorName}
+            isEdit={isEdit}
           />
         </BaseCard>
       ))}
