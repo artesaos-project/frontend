@@ -6,20 +6,21 @@ import { Button } from '../../ui/button';
 
 function PopularProducts() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const fetchProducts = async () => {
-      // try {
-      //   console.log(baseUrl);
-      //   const res = await fetch(`${baseUrl}/products`);
-      //   const data = await res.json();
-      //   console.log(data);
-      //   setProducts(data);
-      // } catch (err) {
-      //   console.error('Erro ao buscar produtos:', err);
-      // }
+      try {
+        console.log(baseUrl);
+        const res = await fetch(`${baseUrl}/products`);
+        const data = await res.json();
+        setProducts(data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Erro ao buscar produtos:', err);
+      }
     };
 
     fetchProducts();
@@ -35,7 +36,7 @@ function PopularProducts() {
       else if (width > 640) maxItems = 6;
       else maxItems = 4;
 
-      setVisibleProducts(products.slice(0, maxItems));
+      if (products.length > 0) setVisibleProducts(products?.slice(0, maxItems));
     };
 
     handleResize();
@@ -44,6 +45,13 @@ function PopularProducts() {
     return () => window.removeEventListener('resize', handleResize);
   }, [products]);
 
+  if (isLoading)
+    return (
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-midnight mx-auto mb-4" />
+        <p className="text-midnight font-semibold">Carregando...</p>
+      </div>
+    );
   return (
     <>
       <div className="flex justify-between items-center">
