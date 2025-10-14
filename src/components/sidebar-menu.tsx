@@ -11,14 +11,15 @@ import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
 import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
 import {
   IoChevronDownOutline,
-  IoChevronUpOutline,
   IoChevronForward,
+  IoChevronUpOutline,
   IoDocumentOutline,
   IoMenu,
   IoPerson,
@@ -26,9 +27,7 @@ import {
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
-import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
 import { Button } from './ui/button';
-import { useEffect, useState } from 'react';
 
 type CategoryProps = {
   id: number;
@@ -47,6 +46,7 @@ function SideBarMenu() {
 
   function handleLogout() {
     resetStore();
+    localStorage.removeItem('artisan-register');
   }
 
   const isModerationRoute = pathname.startsWith('/moderator');
@@ -106,7 +106,14 @@ function SideBarMenu() {
           )}
           {!user.isAuthenticated && (
             <div className="flex justify-center items-center pl-auto">
-              <AuthenticationModal color="sakura" />
+              <Button asChild variant={'outline'} className="rounded-full p-5">
+                <Link
+                  href={'/auth'}
+                  className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-40 mt-2 text-sm"
+                >
+                  Entre ou Cadastre-se
+                </Link>
+              </Button>
             </div>
           )}
         </div>
@@ -178,7 +185,7 @@ function SideBarMenu() {
               )}
               <DropdownCategories />
               {user.isArtisan && (
-                <Link href={`/artisan/${user.userId}/add-product`}>
+                <Link href={`/artisan/add-product`}>
                   <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                     <RxPlusCircled color="#ff8c94" size={30} />
                     <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
