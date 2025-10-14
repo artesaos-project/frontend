@@ -9,15 +9,43 @@ import { IoIosSearch } from 'react-icons/io';
 import { IoClose, IoSwapVerticalOutline } from 'react-icons/io5';
 import { LuListFilter } from 'react-icons/lu';
 
+type CategoryProps = {
+  id: number;
+  nameFilter: string;
+  nameExhibit: string;
+  createdAt: string;
+  description: string;
+  isActive: true;
+  updatedAt: string;
+};
+
 function Page() {
+  const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
   const params = useParams();
-  const rawName = params.name;
+  const nameFilter = params.name as string;
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch('http://localhost:3333/catalog/materials');
+        const data = await response.json();
+        console.log(data);
+        const cat = data.items.find(
+          (c: CategoryProps) => c.nameFilter === nameFilter.toUpperCase(),
+        );
+        setCategory(cat);
+      } catch (err: unknown) {
+        if (err instanceof Error)
+          console.log('Erro ao buscar categorias', err.message);
+      }
+    }
+    fetchCategories();
+  }, []);
   const [action, setAction] = useState<'FILTER' | 'SORT' | 'NONE'>('NONE');
   const [sortSelection, setSortSelection] = useState<
     'LATEST' | 'OLDEST' | 'LOWEST' | 'HIGHEST'
   >('LATEST');
   const [controlsGap, setControlsGap] = useState(16);
-  const name = decodeURIComponent(rawName);
   useEffect(() => {
     if (action !== 'NONE') {
       setControlsGap(0);
@@ -26,8 +54,10 @@ function Page() {
     }
   }, [action]);
   return (
-    <main className="flex flex-col overflow-x-hidden items-center justify-items-center min-h-screen px-6 sm:px-12 lg:px-46 pb-10 py-8 font-[family-name:var(--font-poppins)]">
-      <h1 className="text-xl text-sakura font-bold mb-8">{name}</h1>
+    <main className="flex flex-col overflow-x-hidden justify-items-center min-h-screen px-6 sm:px-12 lg:px-46 pb-10 py-8 font-[family-name:var(--font-poppins)]">
+      <h1 className="text-xl text-sakura font-bold mb-8 text-center">
+        {category.nameExhibit}
+      </h1>
       <SearchInput />
       <div
         style={{ gap: controlsGap }}
