@@ -65,13 +65,13 @@ export const artisanApi = {
 
   approve: (artisanId: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'APPROVED' },
     }),
 
   reject: (artisanId: string, rejectionReason?: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
-      method: 'POST',
+      method: 'PATCH',
       body: { status: 'REJECTED', rejectionReason },
     }),
 };
