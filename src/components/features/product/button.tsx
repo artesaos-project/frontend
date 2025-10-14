@@ -1,15 +1,14 @@
 'use client';
 
-import React from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
-  Icon?: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
+  Icon?: ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
-  width?: string;
+  className?: string;
+  iconPosition?: 'left' | 'right';
 }
 
 const Button = ({
@@ -19,34 +18,44 @@ const Button = ({
   onClick,
   variant = 'primary',
   size = 'md',
-  width,
+  iconPosition = 'right',
+  type = 'button',
+  disabled,
+  ...rest
 }: ButtonProps) => {
   const baseClasses =
-    'flex items-center justify-center font-bold rounded transition-colors duration-300';
+    'flex items-center justify-center font-bold rounded transition-colors duration-300 border-2 rounded-lg disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-[#1B7132] text-white hover:bg-[#156029]',
-    secondary: 'bg-[#E0001E] text-white hover:bg-[#c5001a]',
+    primary:
+      'bg-olivine-600 border-olivine-600 text-white hover:bg-white hover:text-olivine-600',
+    secondary:
+      'border-sakura bg-sakura text-white hover:text-sakura hover:bg-white',
     outline:
-      'border-2 border-[#1B7132] text-[#1B7132] hover:bg-[#1B7132] hover:text-white',
-  };
+      'border-olivine-600 bg-white text-olivine-600 hover:bg-olivine-600 hover:text-white',
+  } as const;
 
   const sizeClasses = {
     sm: 'h-8 px-3 text-xs',
-    md: 'h-9.5 text-[10px] p-2.5 font-bold',
+    md: 'h-9.5 text-xs md:text-md p-2.5 font-bold',
     lg: 'h-12 px-6 text-base',
-  };
-
-  const widthStyle = width ? { width } : {};
+  } as const;
 
   return (
     <button
+      type={type}
+      disabled={disabled}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-      style={widthStyle}
       onClick={onClick}
+      {...rest}
     >
+      {iconPosition === 'left' && Icon && (
+        <div className="flex items-center justify-center">{Icon}</div>
+      )}
       <span className="mr-2">{text}</span>
-      {Icon && <div className="flex items-center justify-center">{Icon}</div>}
+      {iconPosition === 'right' && Icon && (
+        <div className="flex items-center justify-center">{Icon}</div>
+      )}
     </button>
   );
 };

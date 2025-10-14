@@ -10,6 +10,17 @@ type CreateUserPayload = {
   phone: string;
   socialName?: string;
 };
+export interface CreateArtisanPayload {
+  applicationId?: string;
+  rawMaterial: string[];
+  technique: string[];
+  finalityClassification: string[];
+  bio?: string;
+  photosIds?: string[];
+  sicab?: string;
+  sicabRegistrationDate?: string;
+  sicabValidUntil?: string;
+}
 
 interface CreateUserResponse {
   user: {
@@ -47,7 +58,7 @@ type ArtisanApplicationPayload = {
 
 export const artisanApi = {
   getProfile: (userName: string) =>
-    apiRequest<ArtisanProfile>(`/artisan-profile/${userName}`),
+    apiRequest<ArtisanProfile>(`/artisan-profiles/${userName}`),
 
   getApplications: () =>
     apiRequest<{ artisanApplications: Artisan[] }>(`/artisan-applications`),
@@ -85,8 +96,13 @@ export const productApi = {
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
   create: (productData: unknown) =>
-    apiRequest(`/products`, {
+    apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
+      body: productData,
+    }),
+  update: (id: string, productData: unknown) =>
+    apiRequest<{ message?: string }>(`/products/${id}`, {
+      method: 'PUT',
       body: productData,
     }),
 };
@@ -119,12 +135,22 @@ export const authApi = {
         email: string;
         roles: string[];
       };
-      session: {
-        id: string;
-        expiresAt: string;
-      };
     }>('/auth/login', {
       method: 'POST',
       body: credentials,
+    }),
+
+  initiate: (wantsToCompleteNow: boolean) =>
+    apiRequest<{ applicationId: string; message: string }>(
+      '/artisan-applications/initiate',
+      {
+        method: 'POST',
+        body: { wantsToCompleteNow },
+      },
+    ),
+  complete: (profileData: CreateArtisanPayload) =>
+    apiRequest(`/artisan-applications/${profileData.applicationId}/complete`, {
+      method: 'POST',
+      body: profileData,
     }),
 };

@@ -37,5 +37,6 @@ export interface ApiProduct {
   likesCount: number;
   averageRating: number;
   photos: string[];
+  photosIds: string[];
   coverPhoto: string;
 }
