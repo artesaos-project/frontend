@@ -11,15 +11,15 @@ function PopularProducts() {
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const fetchProducts = async () => {
-      try {
-        console.log(baseUrl);
-        const res = await fetch(`${baseUrl}/products`);
-        const data = await res.json();
-        console.log(data);
-        setProducts(data);
-      } catch (err) {
-        console.error('Erro ao buscar produtos:', err);
-      }
+      // try {
+      //   console.log(baseUrl);
+      //   const res = await fetch(`${baseUrl}/products`);
+      //   const data = await res.json();
+      //   console.log(data);
+      //   setProducts(data);
+      // } catch (err) {
+      //   console.error('Erro ao buscar produtos:', err);
+      // }
     };
 
     fetchProducts();

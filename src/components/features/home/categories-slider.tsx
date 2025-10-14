@@ -69,7 +69,11 @@ function CategoriesSlider() {
         >
           {categories.map((cat, index) => (
             <SwiperSlide key={index}>
-              <CategoryCard name={cat.name} img={cat.img} />
+              <CategoryCard
+                name={cat.name}
+                img={cat.img}
+                nameFilter={cat.nameFilter}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

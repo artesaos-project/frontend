@@ -14,7 +14,7 @@ type ProductCardProps = {
 
 function BaseCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg lg:max-w-65">
+    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg lg:max-w-65 h-full">
       {children}
     </div>
   );
@@ -44,7 +44,7 @@ function ProductCardBody({
 
   return (
     <>
-      <header className="flex justify-between items-center mt-2 mb-2">
+      <header className="flex justify-between items-center mt-2 mb-1">
         <p className="font-bold lg:text-xl md:text-lg text-mint-600 truncate">
           {Number(price).toLocaleString('pt-BR', {
             style: 'currency',
@@ -62,11 +62,11 @@ function ProductCardBody({
           )}
         </button>
       </header>
-      <p className="text-xs lg:text-lg truncate">{title}</p>
-      <p className="text-xs lg:text-lg truncate italic font-light">{author}</p>
+      <p className="text-sm lg:text-lg line-clamp-2">{title}</p>
+      <p className="text-sm lg:text-lg truncate italic font-light">{author}</p>
       <Button
         onClick={handleDetailsClick}
-        className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold"
+        className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold mt-auto"
       >
         <FaPlus />
         Detalhes
