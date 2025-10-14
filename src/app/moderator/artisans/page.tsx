@@ -4,8 +4,8 @@ import LoadingScreen from '@/components/common/loading-screen';
 import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
-import ModeratorTable from '../../../components/features/moderator/moderator-table';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 type Artisan = {

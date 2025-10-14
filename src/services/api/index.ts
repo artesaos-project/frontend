@@ -80,10 +80,10 @@ export const artisanApi = {
       body: { status: 'APPROVED' },
     }),
 
-  reject: (artisanId: string) =>
+  reject: (artisanId: string, rejectionReason?: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
       method: 'PATCH',
-      body: { status: 'REJECTED' },
+      body: { status: 'REJECTED', rejectionReason },
     }),
 };
 

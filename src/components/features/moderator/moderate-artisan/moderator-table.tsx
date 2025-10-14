@@ -4,6 +4,7 @@ import { artisanApi } from '@/services/api';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import ModerateArtisanButton from './moderate-artisan-button';
+import ModerateArtisanButtonWithDialog from './moderate-artisan-button-with-dialog';
 
 type Artisan = {
   id: string;
@@ -51,14 +52,15 @@ function ModeratorTable({
   const handleAction = async (
     action: 'approve' | 'reject',
     artisanId: string,
+    reason?: string,
   ) => {
     try {
       if (action === 'approve') {
         await artisanApi.approve(artisanId);
         console.log('Artesão aprovado');
       } else {
-        await artisanApi.reject(artisanId);
-        console.log('Artesão rejeitado');
+        await artisanApi.reject(artisanId, reason);
+        console.log('Artesão rejeitado', reason ? `- Motivo: ${reason}` : '');
       }
       onRefresh();
     } catch (error) {
@@ -66,23 +68,29 @@ function ModeratorTable({
     }
   };
 
-  const renderActionButtons = (artisan: Artisan) => {
-    const commonProps = {
-      onClick: (action: 'approve' | 'reject') =>
-        handleAction(action, artisan.id),
-    };
+  const handleReject = async (artisanId: string, reason?: string) => {
+    await handleAction('reject', artisanId, reason);
+  };
 
+  const handleApprove = async (artisanId: string) => {
+    await handleAction('approve', artisanId);
+  };
+
+  const renderActionButtons = (artisan: Artisan) => {
     switch (artisan.status) {
       case 'PENDING':
         return (
           <div className="flex py-1 justify-center items-center gap-2.5">
-            <div onClick={() => commonProps.onClick('approve')}>
-              <ModerateArtisanButton variant="approve" />
-            </div>
+            <ModerateArtisanButton
+              variant="approve"
+              onClick={() => handleApprove(artisan.id)}
+            />
             <ModerateArtisanButton variant="edit" />
-            <div onClick={() => commonProps.onClick('reject')}>
-              <ModerateArtisanButton variant="reject" />
-            </div>
+            <ModerateArtisanButtonWithDialog
+              variant="reject"
+              artisanName={artisan.artisanName}
+              onAction={(reason) => handleReject(artisan.id, reason)}
+            />
           </div>
         );
 
@@ -97,9 +105,10 @@ function ModeratorTable({
       case 'REJECTED':
         return (
           <div className="flex justify-center items-center gap-2.5">
-            <div onClick={() => commonProps.onClick('approve')}>
-              <ModerateArtisanButton variant="approve" />
-            </div>
+            <ModerateArtisanButton
+              variant="approve"
+              onClick={() => handleApprove(artisan.id)}
+            />
             <ModerateArtisanButton variant="edit" />
           </div>
         );
