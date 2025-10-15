@@ -35,6 +35,7 @@ function SignUp() {
   const router = useRouter();
   const resetArtisan = useArtisanRegister((s) => s.reset);
   const isAuthenticated = useStoreUser((s) => s.user.isAuthenticated);
+  const user = useStoreUser((s) => s.user);
   const artisanApplicationId = useArtisanRegister((s) => s.applicationId);
   const [step, setStep] = useState<number | null>(null);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -54,10 +55,15 @@ function SignUp() {
       setStep(1);
     } else if (isAuthenticated && step < 2) {
       setStep(2);
-    } else if (artisanApplicationId && step < 4) {
+    } else if (
+      (artisanApplicationId || user.postnedApplication == true) &&
+      step < 4
+    ) {
       setStep(4);
+    } else if (user.postnedApplication == false && step < 11) {
+      setStep(11);
     }
-  }, [isAuthenticated, artisanApplicationId, step]);
+  }, [isAuthenticated, artisanApplicationId, step, user.postnedApplication]);
 
   const handleError = (msg?: string) => {
     setErrorMessage(msg || 'Preencha com dados válidos');

@@ -93,7 +93,7 @@ function SideBarMenu() {
                   </p> */}
                   <Button asChild variant={'outline'} className="rounded-full">
                     <Link
-                      href={`/artisan/${user.userId}`}
+                      href={`/artisan/${user.artisanUserName}`}
                       className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
                     >
                       Ver meu perfil

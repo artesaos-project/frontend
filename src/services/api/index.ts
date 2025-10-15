@@ -22,14 +22,15 @@ export interface CreateArtisanPayload {
   sicabValidUntil?: string;
 }
 
-interface CreateUserResponse {
+interface UserResponse {
   user: {
     id: string;
     name: string;
     email: string;
     avatar?: string;
-    artisanUserName?: string;
+    artisanUsername?: string;
     roles: string[];
+    postnedApplication: boolean;
   };
   session: {
     id: string;
@@ -121,21 +122,14 @@ export const uploadApi = {
 };
 
 export const authApi = {
-  createUser: (userData: CreateUserPayload): Promise<CreateUserResponse> =>
-    apiRequest<CreateUserResponse>('/users', {
+  createUser: (userData: CreateUserPayload): Promise<UserResponse> =>
+    apiRequest<UserResponse>('/users', {
       method: 'POST',
       body: userData,
     }),
 
   login: (credentials: { email: string; password: string }) =>
-    apiRequest<{
-      user: {
-        id: string;
-        name: string;
-        email: string;
-        roles: string[];
-      };
-    }>('/auth/login', {
+    apiRequest<UserResponse>('/auth/login', {
       method: 'POST',
       body: credentials,
     }),

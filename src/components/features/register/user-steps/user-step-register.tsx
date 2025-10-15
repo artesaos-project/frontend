@@ -39,15 +39,29 @@ function StepRegister({
     };
     try {
       const response = await authApi.createUser(payload);
+      if (response.message) {
+        onError(response.message);
+        return;
+      }
+      const login = await authApi.login({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (login.message) {
+        onError(login.message);
+        return;
+      }
 
       const user: UserProps = {
-        userId: response.user.id,
-        userName: response.user.name,
-        userPhoto: response.user.avatar,
-        artisanUserName: response.user.artisanUserName,
+        userId: login.user.id,
+        userName: login.user.name,
+        userPhoto: login.user.avatar,
+        artisanUserName: login.user.artisanUsername,
         isAuthenticated: true,
-        isModerator: response.user.roles.includes('MODERATOR'),
-        isArtisan: response.user.roles.includes('ARTISAN'),
+        isModerator: login.user.roles.includes('MODERATOR'),
+        isArtisan: login.user.roles.includes('ARTISAN'),
+        postnedApplication: login.user.postnedApplication,
       };
 
       setUser(user);
