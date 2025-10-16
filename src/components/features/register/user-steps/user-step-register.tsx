@@ -61,7 +61,7 @@ function StepRegister({
         isAuthenticated: true,
         isModerator: login.user.roles.includes('MODERATOR'),
         isArtisan: login.user.roles.includes('ARTISAN'),
-        postnedApplication: login.user.postnedApplication,
+        postnedApplication: undefined,
       };
 
       setUser(user);
