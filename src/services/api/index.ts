@@ -2,6 +2,7 @@ import { ArtisanProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
+import { GetMyProfile } from '@/types/artisan';
 
 type CreateUserPayload = {
   name: string;
@@ -145,6 +146,12 @@ export const authApi = {
   complete: (profileData: CreateArtisanPayload) =>
     apiRequest(`/artisan-applications/${profileData.applicationId}/complete`, {
       method: 'POST',
+      body: profileData,
+    }),
+  getMe: () => apiRequest<{ user: GetMyProfile }>('/users/me'),
+  updateMe: (profileData: Partial<GetMyProfile>) =>
+    apiRequest('/users/me/profile', {
+      method: 'PUT',
       body: profileData,
     }),
 };

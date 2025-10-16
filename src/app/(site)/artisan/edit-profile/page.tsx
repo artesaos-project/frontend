@@ -2,19 +2,24 @@
 import AuthButton from '@/components/common/auth-button';
 import { PhotoSlot } from '@/components/features/artisan/add-product/photo-slot';
 import InputField from '@/components/features/artisan/input-field';
-import { ArtisanRegisterState } from '@/hooks/use-artisan-register';
 import { useProductForm } from '@/hooks/use-product-form';
+import { authApi } from '@/services/api';
+import { GetMyProfile } from '@/types/artisan';
+import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
-import { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 
 function EditProfilePage() {
   const {
     register,
     formState: { errors },
-  } = useForm<ArtisanRegisterState>({
+    handleSubmit,
+    reset,
+  } = useForm<GetMyProfile>({
     defaultValues: {},
   });
   const {
@@ -33,6 +38,56 @@ function EditProfilePage() {
     }
   };
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profile = await authApi.getMe();
+        console.log(profile);
+        if (profile) {
+          const phone = profile.user.phone || '';
+          let ddd = '';
+          let numero = '';
+          const match = phone.match(/^\+55(\d{2})(\d{4,5})(\d{4})$/);
+          if (match) {
+            ddd = match[1];
+            numero = `${match[2]}-${match[3]}`;
+          }
+          const mappedData = {
+            ...profile.user,
+            ddd,
+            phone: numero,
+          };
+          reset(mappedData);
+        }
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          const message = error.response?.data?.message;
+          toast.error(message);
+        }
+      }
+    };
+    fetchProfile();
+  }, [reset]);
+
+  const onSubmit: SubmitHandler<GetMyProfile> = async (data) => {
+    try {
+      const updatedData: Partial<GetMyProfile> = {
+        ...data,
+        phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
+      };
+      delete updatedData.ddd;
+      console.log(updatedData);
+      await authApi.updateMe(updatedData);
+      toast.success('Perfil atualizado com sucesso!');
+      router.push(`/artisan/${data.artisanUserName}`);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message;
+        toast.error(message);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
       <span className="flex justify-center items-center text-3xl font-bold">
@@ -48,7 +103,7 @@ function EditProfilePage() {
           <h1 className="text-xl font-bold text-midnight">Editar perfil</h1>
         </div>
         <div className="bg-white p-10 rounded-3xl text-midnight">
-          <form action="submit">
+          <form action="submit" onSubmit={handleSubmit(onSubmit)}>
             <h2 className="font-bold text-salmon text-2xl mb-2">
               Dados Pessoais
             </h2>
@@ -103,25 +158,25 @@ function EditProfilePage() {
                   label="Nome Artistico / Marca"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
+                  {...register('artisanUserName', {
                     required: 'Nome do produto é obrigatório',
                   })}
                 />
-                {errors && <span>{!!errors.nomeComercial}</span>}
+                {errors && <span>{!!errors.artisanUserName}</span>}
                 <InputField
                   label="Nome Completo"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('name', {
+                    required: 'Nome é obrigatório',
                   })}
                 />
                 <InputField
                   label="Email"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('email', {
+                    required: 'Email é obrigatório',
                   })}
                 />
                 <div className="flex flex-col gap-2">
@@ -132,16 +187,16 @@ function EditProfilePage() {
                     <InputField
                       type="text"
                       required={true}
-                      {...register('nomeComercial', {
-                        required: 'Nome do produto é obrigatório',
+                      {...register('ddd', {
+                        required: 'Telefone é obrigatório',
                       })}
                       className="w-20"
                     />
                     <InputField
                       type="text"
                       required={true}
-                      {...register('nomeComercial', {
-                        required: 'Nome do produto é obrigatório',
+                      {...register('phone', {
+                        required: 'Telefone é obrigatório',
                       })}
                     />
                   </div>
@@ -154,8 +209,8 @@ function EditProfilePage() {
                   label="CEP"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('cep', {
+                    required: 'CEP é obrigatório',
                   })}
                   className="w-2/8"
                 />
@@ -163,8 +218,8 @@ function EditProfilePage() {
                   label="Estado"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('state', {
+                    required: 'Estado é obrigatório',
                   })}
                   className="w-2/8"
                 />
@@ -172,8 +227,8 @@ function EditProfilePage() {
                   label="Cidade"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('city', {
+                    required: 'Cidade é obrigatória',
                   })}
                   className="w-4/8"
                 />
@@ -183,8 +238,8 @@ function EditProfilePage() {
                   label="Endereço"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('address', {
+                    required: 'Endereço é obrigatório',
                   })}
                 />
               </div>
@@ -193,8 +248,8 @@ function EditProfilePage() {
                   label="Nome de usuário"
                   type="text"
                   required={true}
-                  {...register('nomeComercial', {
-                    required: 'Nome do produto é obrigatório',
+                  {...register('artisanUserName', {
+                    required: 'Nome de usuário é obrigatório',
                   })}
                   className="w-2/8"
                 />
@@ -209,7 +264,7 @@ function EditProfilePage() {
               <span className="font-semibold text-sm">Biografia</span>
               <textarea
                 className="w-full border-2 border-sakura rounded-lg h-40 p-4 font-normal"
-                {...register('historico')}
+                {...register('bio')}
               />
             </div>
             <AuthButton
