@@ -59,8 +59,6 @@ function StepRegister({
         userPhoto: login.user.avatar,
         artisanUserName: login.user.artisanUsername,
         isAuthenticated: true,
-        isModerator: login.user.roles.includes('MODERATOR'),
-        isArtisan: login.user.roles.includes('ARTISAN'),
         postnedApplication: undefined,
       };
 
