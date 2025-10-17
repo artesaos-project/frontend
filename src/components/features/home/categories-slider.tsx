@@ -34,7 +34,7 @@ function CategoriesSlider() {
       }
     }
     fetchCategories();
-  }, []);
+  }, [categories]);
   return (
     <div className="w-[100vw] ml-12 sm:w-[95vw] sm:px-6 md:w-full sm:mx-20 mx-10 relative">
       {/* Custom navigation buttons */}

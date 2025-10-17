@@ -40,7 +40,7 @@ function Page() {
       }
     }
     fetchCategories();
-  }, []);
+  }, [nameFilter]);
   const [action, setAction] = useState<'FILTER' | 'SORT' | 'NONE'>('NONE');
   const [sortSelection, setSortSelection] = useState<
     'LATEST' | 'OLDEST' | 'LOWEST' | 'HIGHEST'
@@ -130,7 +130,7 @@ function ControlButton({ action, setAction, type, text }: ControlButtonProps) {
       setTextDisplay('block');
       setPadding('8px 16px');
     }
-  }, [action]);
+  }, [action, type]);
   return (
     <button
       onClick={handleClick}
