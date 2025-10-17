@@ -3,6 +3,7 @@ import ProductsList from '@/components/products-list';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { productApi } from '@/services/api';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
@@ -27,18 +28,14 @@ function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/materials`,
-        );
-        const data = await response.json();
-        console.log(data);
-        const cat = data.items.find(
+        const response = await productApi.getCatalogs();
+        const cat = response.items.find(
           (c: CategoryProps) => c.nameFilter === nameFilter.toUpperCase(),
         );
-        setCategory(cat);
+        setCategory(cat || ({} as CategoryProps));
       } catch (err: unknown) {
         if (err instanceof Error)
-          console.log('Erro ao buscar categorias', err.message);
+          console.error('Erro ao buscar categorias', err.message);
       }
     }
     fetchCategories();

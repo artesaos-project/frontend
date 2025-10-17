@@ -7,6 +7,7 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
+import { productApi } from '@/services/api';
 
 type CategoryProps = {
   id: number;
@@ -23,11 +24,8 @@ function CategoriesSlider() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/materials`,
-        );
-        const data = await response.json();
-        setCategories(data.items);
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
       } catch (error: unknown) {
         console.error('Erro ao buscar categorias', error);
       }

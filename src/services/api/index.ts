@@ -1,8 +1,7 @@
-import { ArtisanProfile } from '@/types/artisan';
+import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
-import { GetMyProfile } from '@/types/artisan';
 
 type CreateUserPayload = {
   name: string;
@@ -58,6 +57,16 @@ type ArtisanApplicationPayload = {
   sicabValidUntil: string;
 };
 
+type CategoryProps = {
+  id: number;
+  nameFilter: string;
+  nameExhibit: string;
+  createdAt: string;
+  description: string;
+  isActive: true;
+  updatedAt: string;
+};
+
 export const artisanApi = {
   getProfile: (userName: string) =>
     apiRequest<ArtisanProfile>(`/artisan-profiles/${userName}`),
@@ -107,6 +116,8 @@ export const productApi = {
       method: 'PUT',
       body: productData,
     }),
+  getCatalogs: () =>
+    apiRequest<{ items: CategoryProps[] }>('/catalog/materials'),
 };
 
 export const uploadApi = {
