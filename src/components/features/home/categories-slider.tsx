@@ -24,7 +24,7 @@ function CategoriesSlider() {
     async function fetchCategories() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/catalog/materials`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/materials`,
         );
         const data = await response.json();
         setCategories(data.items);
