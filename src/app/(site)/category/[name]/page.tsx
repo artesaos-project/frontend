@@ -27,7 +27,9 @@ function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:3333/catalog/materials');
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/catalog/materials`,
+        );
         const data = await response.json();
         console.log(data);
         const cat = data.items.find(
