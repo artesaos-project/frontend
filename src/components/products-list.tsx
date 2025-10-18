@@ -2,21 +2,17 @@
 import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
+import { productApi } from '@/services/api';
 
 function ProductsList() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
   useEffect(() => {
-    // setProducts(productsMock)
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const fetchProducts = async () => {
       try {
-        console.log(baseUrl);
-        const res = await fetch(`${baseUrl}/products`);
-        const data = await res.json();
-        console.log(data);
-        setProducts(data);
+        const res = await productApi.getAll();
+        setProducts(res);
       } catch (err) {
         console.error('Erro ao buscar produtos:', err);
       }

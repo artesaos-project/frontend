@@ -1,4 +1,4 @@
-import { artisanApi } from '@/services/api';
+//import { artisanApi } from '@/services/api';
 import { useEffect, useState } from 'react';
 
 type Artisan = {
@@ -32,8 +32,8 @@ export function useDebouncedSearch(searchTerm: string, delay: number = 2000) {
 
       setIsSearching(true);
       try {
-        const results = await artisanApi.search(debouncedTerm);
-        setSearchResults(results);
+        //const results = await artisanApi.search(debouncedTerm);
+        //setSearchResults(results);
       } catch (error) {
         console.error('Erro na busca:', error);
         setSearchResults([]);

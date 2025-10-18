@@ -11,12 +11,23 @@ import { ProductForm } from '@/types/product-form';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IoAdd } from 'react-icons/io5';
 import { toast, Toaster } from 'sonner';
 
 const AddProductPage = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const {
     photos,
     selectedPhotos,
@@ -56,6 +67,11 @@ const AddProductPage = () => {
       return;
     }
 
+    if (photoIds.length === 0) {
+      toast.error('Adicione pelo menos uma foto ao produto.');
+      return;
+    }
+
     const productData = {
       title: data.name.trim(),
       description: data.description.trim(),
@@ -68,22 +84,28 @@ const AddProductPage = () => {
       necessaryDays: data.isCustomOrder ? parseInt(data.necessaryDays) || 0 : 0,
     };
 
+    setIsLoading(true);
     try {
       await productApi.create(productData);
       toast.success('Produto adicionado com sucesso!');
       router.back();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data?.message;
+        const message =
+          error.response?.data?.message || 'Ocorreu um erro desconhecido.';
         toast.error(message);
+      } else {
+        toast.error('Ocorreu um erro ao criar o produto.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
       <Toaster richColors position="bottom-right" />
-      <div className="w-10/12 mx-auto pt-10">
+      <div className="w-11/12 md:w-10/12 mx-auto pt-10 pb-10">
         <div className="flex items-center mb-6">
           <ArrowLeft
             className="w-6 h-6 text-gray-700 mr-3 cursor-pointer hover:text-gray-900"
@@ -93,39 +115,9 @@ const AddProductPage = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="bg-white rounded-2xl shadow-lg p-4 mb-10">
-            {/* Mobile */}
-            <div className="lg:hidden">
-              <ProductInfoForm
-                register={register}
-                control={control}
-                errors={errors}
-                materiaPrima={materiaPrima}
-                tecnicas={tecnicas}
-              />
-
-              <div className="mb-8 mt-8">
-                <PhotoGallery
-                  photos={photos as File[]}
-                  selectedPhotos={selectedPhotos}
-                  isMobile={true}
-                  onPhotoSelect={handlePhotoSelect}
-                  onRemoveSelected={removeSelectedPhotos}
-                  onSelectAll={selectAllPhotos}
-                  onTriggerUpload={triggerFileUpload}
-                />
-              </div>
-
-              <PriceStockForm
-                register={register}
-                errors={errors}
-                isDesktop={false}
-              />
-            </div>
-
-            {/* Desktop */}
-            <div className="hidden lg:grid grid-cols-2 gap-8">
-              <div>
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-x-8">
+              <div className="lg:col-start-1 lg:row-start-1">
                 <ProductInfoForm
                   register={register}
                   control={control}
@@ -133,26 +125,22 @@ const AddProductPage = () => {
                   materiaPrima={materiaPrima}
                   tecnicas={tecnicas}
                 />
-
-                <div className="mt-6">
-                  <PriceStockForm
-                    register={register}
-                    errors={errors}
-                    isDesktop={true}
-                  />
-                </div>
               </div>
 
-              <div>
+              <div className="mt-8 lg:mt-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
                 <PhotoGallery
                   photos={photos as File[]}
                   selectedPhotos={selectedPhotos}
-                  isMobile={false}
                   onPhotoSelect={handlePhotoSelect}
                   onRemoveSelected={removeSelectedPhotos}
                   onSelectAll={selectAllPhotos}
                   onTriggerUpload={triggerFileUpload}
+                  isMobile={isMobile}
                 />
+              </div>
+
+              <div className="mt-6 lg:mt-8 lg:col-start-1 lg:row-start-2">
+                <PriceStockForm register={register} errors={errors} />
               </div>
             </div>
 
@@ -165,18 +153,18 @@ const AddProductPage = () => {
               className="hidden"
             />
 
-            <div className="flex w-full text-sm space-x-4 mt-4">
+            <div className="flex w-full mt-6">
               <button
                 type="submit"
-                disabled={isUploading}
-                className={`flex px-6 gap-2 py-2 w-full justify-center items-center rounded-lg transition-all ${
-                  isUploading
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-[#2AAA4C] hover:bg-green-600 cursor-pointer'
-                } text-white`}
+                disabled={isUploading || isLoading}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2AAA4C] px-6 py-3 text-white transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-gray-400"
               >
-                {isUploading ? 'Enviando fotos...' : 'Adicionar Produto'}
-                <IoAdd className="bg-gray-200/50 rounded-2xl" color="white" />
+                <span>
+                  {isUploading || isLoading
+                    ? 'Adicionando...'
+                    : 'Adicionar Produto'}
+                </span>
+                <IoAdd className="h-5 w-5 rounded-full bg-white/25" />
               </button>
             </div>
           </div>

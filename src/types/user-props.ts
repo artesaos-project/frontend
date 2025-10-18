@@ -4,6 +4,9 @@ export type UserProps = {
   isAuthenticated?: boolean;
   isModerator?: boolean;
   isArtisan?: boolean;
+  userPhoto?: string | undefined;
+  artisanUserName?: string | undefined;
+  postnedApplication?: boolean;
 };
 
 export type UserStore = {

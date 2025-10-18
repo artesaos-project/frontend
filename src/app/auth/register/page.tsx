@@ -35,6 +35,7 @@ function SignUp() {
   const router = useRouter();
   const resetArtisan = useArtisanRegister((s) => s.reset);
   const isAuthenticated = useStoreUser((s) => s.user.isAuthenticated);
+  const user = useStoreUser((s) => s.user);
   const artisanApplicationId = useArtisanRegister((s) => s.applicationId);
   const [step, setStep] = useState<number | null>(null);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -54,10 +55,15 @@ function SignUp() {
       setStep(1);
     } else if (isAuthenticated && step < 2) {
       setStep(2);
-    } else if (artisanApplicationId && step < 4) {
+    } else if (
+      (artisanApplicationId || user.postnedApplication == true) &&
+      step < 4
+    ) {
       setStep(4);
+    } else if (user.postnedApplication == false && step < 11) {
+      setStep(11);
     }
-  }, [isAuthenticated, artisanApplicationId, step]);
+  }, [isAuthenticated, artisanApplicationId, step, user.postnedApplication]);
 
   const handleError = (msg?: string) => {
     setErrorMessage(msg || 'Preencha com dados válidos');
@@ -70,8 +76,6 @@ function SignUp() {
       if (!user.isAuthenticated) {
         throw new Error('Usuário não autenticado');
       }
-      const sicabDataCadastro = useArtisanRegister.getState().sicabDataCadastro;
-      const sicabValidade = useArtisanRegister.getState().sicabValidade;
 
       await authApi.complete({
         applicationId: useArtisanRegister.getState().applicationId,
@@ -81,12 +85,8 @@ function SignUp() {
         finalityClassification: useArtisanRegister.getState().finalidades,
         bio: useArtisanRegister.getState().historico,
         sicab: useArtisanRegister.getState().sicab,
-        sicabRegistrationDate: sicabDataCadastro
-          ? new Date(sicabDataCadastro).toISOString()
-          : undefined,
-        sicabValidUntil: sicabValidade
-          ? new Date(sicabValidade).toISOString()
-          : undefined,
+        sicabRegistrationDate: useArtisanRegister.getState().sicabDataCadastro,
+        sicabValidUntil: useArtisanRegister.getState().sicabValidade,
       });
 
       setStep(11);
@@ -154,6 +154,33 @@ function SignUp() {
     );
   }
 
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return <StepRegister onNext={handleNext} onError={handleError} />;
+      case 2:
+        return <StepChoice onNext={handleNext} goHome={handleGoHome} />;
+      case 3:
+        return <StepComplete onNext={handleNext} goHome={handleGoHome} />;
+      case 4:
+        return <ArtisanStepAddress onNext={handleNext} />;
+      case 5:
+        return <ArtisanStepSicab onNext={handleNext} />;
+      case 6:
+        return <ArtisanStepRawMaterial onNext={handleNext} />;
+      case 7:
+        return <ArtisanStepTechnique onNext={handleNext} />;
+      case 8:
+        return <ArtisanStepPurpose onNext={handleNext} />;
+      case 9:
+        return <ArtisanStepHistory onNext={handleNext} />;
+      case 10:
+        return <ArtisanStepMedia onNext={handleNext} />;
+      default:
+        return <SignUpComplete goHome={handleGoHome} />;
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-[url('/fundo-cadastro-login.svg')] bg-no-repeat bg-cover bg-center md:p-4">
       <div className="w-full max-w-2xl mx-auto flex flex-col md:border-2 p-6 md:p-25 rounded-4xl md:shadow-2xl ">
@@ -212,21 +239,7 @@ function SignUp() {
             ))}
           </div>
         )}
-        {step === 1 && (
-          <StepRegister onNext={handleNext} onError={handleError} />
-        )}
-        {step === 2 && <StepChoice onNext={handleNext} goHome={handleGoHome} />}
-        {step === 3 && (
-          <StepComplete onNext={handleNext} goHome={handleGoHome} />
-        )}
-        {step === 4 && <ArtisanStepAddress onNext={handleNext} />}
-        {step === 5 && <ArtisanStepSicab onNext={handleNext} />}
-        {step === 6 && <ArtisanStepRawMaterial onNext={handleNext} />}
-        {step === 7 && <ArtisanStepTechnique onNext={handleNext} />}
-        {step === 8 && <ArtisanStepPurpose onNext={handleNext} />}
-        {step === 9 && <ArtisanStepHistory onNext={handleNext} />}
-        {step === 10 && <ArtisanStepMedia onNext={handleNext} />}
-        {step > 10 && <SignUpComplete goHome={handleGoHome} />}
+        <div>{renderStep()}</div>
       </div>
     </div>
   );

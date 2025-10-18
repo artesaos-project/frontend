@@ -44,9 +44,12 @@ function Page() {
       const user: UserProps = {
         userId: response.user.id,
         userName: response.user.name,
+        userPhoto: response.user.avatar,
+        artisanUserName: response.user.artisanUsername,
         isAuthenticated: true,
-        isModerator: response.user.roles?.includes('MODERATOR') || false,
-        isArtisan: response.user.roles?.includes('ARTISAN') || false,
+        isModerator: response.user.roles.includes('MODERATOR'),
+        isArtisan: response.user.roles.includes('ARTISAN'),
+        postnedApplication: !!response.user.postnedApplication,
       };
 
       setUser(user);

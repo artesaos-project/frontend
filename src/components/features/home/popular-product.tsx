@@ -3,6 +3,7 @@ import { ApiProduct } from '@/types/product';
 import { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from '../../card';
 import { Button } from '../../ui/button';
+import { productApi } from '@/services/api';
 
 function PopularProducts() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -10,13 +11,10 @@ function PopularProducts() {
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const fetchProducts = async () => {
       try {
-        console.log(baseUrl);
-        const res = await fetch(`${baseUrl}/products`);
-        const data = await res.json();
-        setProducts(data);
+        const res = await productApi.getAll();
+        setProducts(res);
         setIsLoading(false);
       } catch (err) {
         console.error('Erro ao buscar produtos:', err);

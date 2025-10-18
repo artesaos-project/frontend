@@ -3,7 +3,7 @@
 import LoadingScreen from '@/components/common/loading-screen';
 import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
 import ModeratorTable from '../../../components/features/moderator/moderator-table';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
@@ -22,21 +22,23 @@ function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const fetchArtisans = async () => {
+  const fetchArtisans = useCallback(async () => {
     try {
       setIsLoading(true);
       const result = await artisanApi.getApplications();
       setArtisans(result.artisanApplications);
       setIsLoading(false);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error fetching artisans:', error.message);
+      }
       router.replace('/');
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchArtisans();
-  }, []);
+  }, [fetchArtisans]);
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);

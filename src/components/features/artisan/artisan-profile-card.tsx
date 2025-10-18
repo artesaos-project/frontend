@@ -151,6 +151,14 @@ const ArtisanProfileCard = () => {
     route.push(`/artisan/add-product`);
   };
 
+  const handleEditProfile = () => {
+    if (!user.isAuthenticated) {
+      alert('Você precisa estar logado para editar o perfil');
+      return;
+    }
+    route.push(`/artisan/edit-profile`);
+  };
+
   return (
     <div className={`${bgcolor} pt-6 mx-auto shadow-md`}>
       <div className="flex flex-row justify-center gap-5">
@@ -199,7 +207,9 @@ const ArtisanProfileCard = () => {
               iconPosition="left"
               icon={<LuPencil size={20} color="#2AAA4C" />}
               className="flex justify-center px-10 min-w-[300px]  py-2 bg-white rounded-lg hover:bg-[#1F3A4D] hover:text-white"
+              onClick={handleEditProfile}
             />
+
             <ActionButtons
               nameButton="Adicionar Produtos"
               iconPosition="left"

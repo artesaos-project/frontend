@@ -1,4 +1,4 @@
-import { ArtisanProfile } from '@/types/artisan';
+import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
@@ -22,14 +22,15 @@ export interface CreateArtisanPayload {
   sicabValidUntil?: string;
 }
 
-interface CreateUserResponse {
+interface UserResponse {
   user: {
     id: string;
     name: string;
     email: string;
     avatar?: string;
-    artisanUserName?: string;
+    artisanUsername?: string;
     roles: string[];
+    postnedApplication: boolean;
   };
   session: {
     id: string;
@@ -54,6 +55,16 @@ type ArtisanApplicationPayload = {
   sicab: string;
   sicabRegistrationDate: string;
   sicabValidUntil: string;
+};
+
+type CategoryProps = {
+  id: number;
+  nameFilter: string;
+  nameExhibit: string;
+  createdAt: string;
+  description: string;
+  isActive: true;
+  updatedAt: string;
 };
 
 export const artisanApi = {
@@ -105,6 +116,8 @@ export const productApi = {
       method: 'PUT',
       body: productData,
     }),
+  getCatalogs: () =>
+    apiRequest<{ items: CategoryProps[] }>('/catalog/materials'),
 };
 
 export const uploadApi = {
@@ -121,21 +134,14 @@ export const uploadApi = {
 };
 
 export const authApi = {
-  createUser: (userData: CreateUserPayload): Promise<CreateUserResponse> =>
-    apiRequest<CreateUserResponse>('/users', {
+  createUser: (userData: CreateUserPayload): Promise<UserResponse> =>
+    apiRequest<UserResponse>('/users', {
       method: 'POST',
       body: userData,
     }),
 
   login: (credentials: { email: string; password: string }) =>
-    apiRequest<{
-      user: {
-        id: string;
-        name: string;
-        email: string;
-        roles: string[];
-      };
-    }>('/auth/login', {
+    apiRequest<UserResponse>('/auth/login', {
       method: 'POST',
       body: credentials,
     }),
@@ -151,6 +157,12 @@ export const authApi = {
   complete: (profileData: CreateArtisanPayload) =>
     apiRequest(`/artisan-applications/${profileData.applicationId}/complete`, {
       method: 'POST',
+      body: profileData,
+    }),
+  getMe: () => apiRequest<{ user: GetMyProfile }>('/users/me'),
+  updateMe: (profileData: Partial<GetMyProfile>) =>
+    apiRequest('/users/me/profile', {
+      method: 'PUT',
       body: profileData,
     }),
 };

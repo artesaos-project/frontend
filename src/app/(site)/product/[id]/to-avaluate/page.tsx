@@ -1,15 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import products from '@/db-mock/products.json';
-import { FileImage, Star, Video, MessageSquare } from 'lucide-react';
+import { productApi } from '@/services/api';
+import { ApiProduct } from '@/types/product';
+import { FileImage, MessageSquare, Star, Video } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const StarRating = ({
   rating,
@@ -48,16 +50,53 @@ const FileUploadBox = ({
   );
 };
 
-export default function ProductEvaluationPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const product = products.find((p) => p.id === Number(params.id));
+export default function ProductEvaluationPage() {
+  const params = useParams();
+  const [product, setProduct] = useState<ApiProduct | null>(null);
+
+  const id = params?.id as string;
+  useEffect(() => {
+    if (id) {
+      apiProduto(id);
+    }
+  }, [id]);
+
+  const apiProduto = async (id: string) => {
+    if (!id) return;
+    try {
+      if (id === '1') {
+        setProduct({
+          id: '1',
+          authorName: 'João Silva',
+          authorUserName: 'joao.silva',
+          authorId: 'user-1',
+          title: 'Vaso de Cerâmica Artesanal',
+          description: 'Vaso feito à mão, perfeito para decoração.',
+          priceInCents: 12000,
+          categoryId: 10,
+          stock: 5,
+          likesCount: 42,
+          averageRating: 4.7,
+          photos: [
+            'https://placehold.co/100x100.png',
+            'https://placehold.co/100x100.png',
+          ],
+          photosIds: ['photo-1', 'photo-2'],
+          coverPhoto: 'https://placehold.co/100x100.png',
+        });
+        return;
+      }
+      const response = await productApi.getById(id);
+      setProduct(response);
+    } catch (error) {
+      console.error('Erro ao buscar produto', error);
+    }
+  };
+
   const [rating, setRating] = React.useState(4);
 
   if (!product) {
-    notFound();
+    return <div>Produto não encontrado</div>;
   }
 
   return (
@@ -95,17 +134,17 @@ export default function ProductEvaluationPage({
           {/* Product Info */}
           <div className="flex items-center rounded-lg border p-4">
             <Image
-              src={`/${product.img}`}
+              src={product.coverPhoto || 'https://placeholder.com/100'}
               alt={product.title}
               width={100}
               height={100}
               className="rounded-lg"
             />
             <div className="ml-4">
-              <h2 className="text-xl font-semibold">{product.title}</h2>
+              <h2 className="text-xl font-semibold">{product?.title}</h2>
               <p className="text-sm text-gray-600">+ informações</p>
               <p className="mt-2 text-sm text-gray-500">
-                Artesão: {product.author}
+                Artesão: {product?.authorName}
               </p>
             </div>
           </div>
