@@ -63,6 +63,7 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
           placeholder="Sicab*"
           type="text"
           {...register('sicab')}
+          maxLength={32}
           hasError={!!errors.sicab}
           errorMessage={errors.sicab?.message}
         />

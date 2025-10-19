@@ -104,6 +104,7 @@ function StepRegister({
           placeholder="Nome*"
           type="text"
           {...register('name')}
+          maxLength={50}
           hasError={!!errors.name}
           errorMessage={errors.name?.message}
         />
@@ -111,6 +112,7 @@ function StepRegister({
           placeholder="Email*"
           type="email"
           {...register('email')}
+          maxLength={50}
           hasError={!!errors.email}
           errorMessage={errors.email?.message}
         />
@@ -120,6 +122,7 @@ function StepRegister({
           {...register('password')}
           hasError={!!errors.password}
           errorMessage={errors.password?.message}
+          maxLength={32}
           icon={
             visible.password ? (
               <FiEye
@@ -149,6 +152,7 @@ function StepRegister({
           {...register('confirmPassword')}
           hasError={!!errors.confirmPassword}
           errorMessage={errors.confirmPassword?.message}
+          maxLength={32}
           icon={
             visible.confirmPassword ? (
               <FiEye

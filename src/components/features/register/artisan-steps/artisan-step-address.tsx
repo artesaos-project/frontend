@@ -1,10 +1,10 @@
 import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
+import { useArtisanRegister } from '@/hooks/use-artisan-register';
+import { addressSchema } from '@/lib/schemas/andress-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { addressSchema } from '@/lib/schemas/andress-schema';
-import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { z } from 'zod';
 
 export type FormValues = z.infer<typeof addressSchema>;
@@ -86,6 +86,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
           placeholder="Nome Comercial"
           type="text"
           {...register('nomeComercial')}
+          maxLength={50}
           hasError={!!errors.nomeComercial}
           errorMessage={errors.nomeComercial?.message}
         />
@@ -93,6 +94,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
           placeholder="CEP"
           type="text"
           {...register('cep')}
+          maxLength={8}
           hasError={!!errors.cep}
           errorMessage={errors.cep?.message}
         />
@@ -100,6 +102,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
           placeholder="Endereço"
           type="text"
           {...register('endereco')}
+          maxLength={100}
           hasError={!!errors.endereco}
           errorMessage={errors.endereco?.message}
         />
@@ -110,6 +113,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
               type="text"
               className="pr-0 pl-5"
               {...register('numero')}
+              maxLength={10}
               hasError={!!errors.numero}
               errorMessage={errors.numero?.message}
             />
@@ -119,6 +123,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
               placeholder="Bairro"
               type="text"
               {...register('bairro')}
+              maxLength={50}
               hasError={!!errors.bairro}
               errorMessage={errors.bairro?.message}
             />
@@ -128,6 +133,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
           placeholder="Complemento"
           type="text"
           {...register('complemento')}
+          maxLength={50}
         />
         <div className="grid grid-cols-3 gap-4 mb-10">
           <div className="col-span-2">
@@ -135,6 +141,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
               placeholder="Cidade"
               type="text"
               {...register('cidade')}
+              maxLength={50}
               hasError={!!errors.cidade}
               errorMessage={errors.cidade?.message}
             />
@@ -145,6 +152,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
               type="text"
               className="p-0 text-center"
               {...register('estado')}
+              maxLength={2}
               hasError={!!errors.estado}
               errorMessage={errors.estado?.message}
             />
