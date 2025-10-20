@@ -24,6 +24,7 @@ function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
         placeholder="Escreva aqui..."
         value={artisanStore.historico || ''}
         onChange={(e) => artisanStore.update({ historico: e.target.value })}
+        maxLength={255}
       />
 
       <AuthButton onClick={handleNext} />

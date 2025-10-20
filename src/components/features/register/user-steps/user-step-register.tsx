@@ -39,15 +39,27 @@ function StepRegister({
     };
     try {
       const response = await authApi.createUser(payload);
+      if (response.message) {
+        onError(response.message);
+        return;
+      }
+      const login = await authApi.login({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (login.message) {
+        onError(login.message);
+        return;
+      }
 
       const user: UserProps = {
-        userId: response.user.id,
-        userName: response.user.name,
-        userPhoto: response.user.avatar,
-        artisanUserName: response.user.artisanUserName,
+        userId: login.user.id,
+        userName: login.user.name,
+        userPhoto: login.user.avatar,
+        artisanUserName: login.user.artisanUsername,
         isAuthenticated: true,
-        isModerator: response.user.roles.includes('MODERATOR'),
-        isArtisan: response.user.roles.includes('ARTISAN'),
+        postnedApplication: undefined,
       };
 
       setUser(user);
@@ -92,6 +104,7 @@ function StepRegister({
           placeholder="Nome*"
           type="text"
           {...register('name')}
+          maxLength={50}
           hasError={!!errors.name}
           errorMessage={errors.name?.message}
         />
@@ -99,6 +112,7 @@ function StepRegister({
           placeholder="Email*"
           type="email"
           {...register('email')}
+          maxLength={50}
           hasError={!!errors.email}
           errorMessage={errors.email?.message}
         />
@@ -108,6 +122,7 @@ function StepRegister({
           {...register('password')}
           hasError={!!errors.password}
           errorMessage={errors.password?.message}
+          maxLength={32}
           icon={
             visible.password ? (
               <FiEye
@@ -137,6 +152,7 @@ function StepRegister({
           {...register('confirmPassword')}
           hasError={!!errors.confirmPassword}
           errorMessage={errors.confirmPassword?.message}
+          maxLength={32}
           icon={
             visible.confirmPassword ? (
               <FiEye

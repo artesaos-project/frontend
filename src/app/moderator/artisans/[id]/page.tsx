@@ -7,7 +7,7 @@ import { artisanApi } from '@/services/api';
 import { artisanDetails } from '@/types/artisan-details';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BsXLg } from 'react-icons/bs';
 import { FaCheck } from 'react-icons/fa';
 import { IoIosArrowDown, IoIosInformationCircleOutline } from 'react-icons/io';
@@ -19,22 +19,25 @@ function Page() {
   const [artisan, setArtisan] = useState<artisanDetails | null>(null);
   const router = useRouter();
 
-  const fetchArtisans = async () => {
+  const fetchArtisans = useCallback(async () => {
     try {
       const result = await artisanApi.getApplication(artisanId);
       setArtisan(result.artisanApplication);
       console.log(result.artisanApplication);
-    } catch (error: any) {
-      if (error.message === 'UNAUTHORIZED') {
-        router.replace('/');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === 'UNAUTHORIZED') {
+          router.replace('/');
+        }
+        console.error('Erro ao buscar artesãos: ', error.message);
       }
       console.error('Erro ao buscar artesãos: ', error);
     }
-  };
+  }, [artisanId, router]);
 
   useEffect(() => {
     fetchArtisans();
-  }, [artisanId]);
+  }, [artisanId, router, fetchArtisans]);
 
   const handleApprove = async () => {
     try {

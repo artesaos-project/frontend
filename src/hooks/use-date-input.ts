@@ -11,10 +11,22 @@ export const useDateInput = ({
 }: UseDateInputProps = {}) => {
   const formatDateInput = useCallback((value: string): string => {
     const cleaned = value.replace(/\D/g, '');
-    if (cleaned.length <= 2) return cleaned;
-    if (cleaned.length <= 4)
-      return `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
-    return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
+
+    let day = cleaned.slice(0, 2);
+    let month = cleaned.slice(2, 4);
+    const year = cleaned.slice(4, 8);
+
+    if (day && Number(day) > 31) {
+      day = '31';
+    }
+
+    if (month && Number(month) > 12) {
+      month = '12';
+    }
+
+    if (cleaned.length <= 2) return day;
+    if (cleaned.length <= 4) return `${day}/${month}`;
+    return `${day}/${month}/${year}`;
   }, []);
 
   const validateAndFormatDate = useCallback(

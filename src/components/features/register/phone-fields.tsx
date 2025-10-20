@@ -24,6 +24,7 @@ export const PhoneFields = ({ register, errors }: PhoneFieldsProps) => (
           type="text"
           placeholder="DDD"
           {...register('ddd')}
+          maxLength={3}
           hasError={!!errors.ddd}
           className="pl-0! pr-0! text-center"
         />
@@ -34,6 +35,7 @@ export const PhoneFields = ({ register, errors }: PhoneFieldsProps) => (
           type="tel"
           {...register('phone')}
           hasError={!!errors.phone}
+          maxLength={9}
         />
       </div>
     </div>

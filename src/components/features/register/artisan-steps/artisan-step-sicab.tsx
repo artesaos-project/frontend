@@ -29,17 +29,19 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
   const { validateAndFormatDate: handleDateCadastro } = useDateInput({
     onFormattedChange: (val) =>
       setValue('dataCadastro', val, { shouldValidate: true }),
+    onValidDateChange: (isoDate) =>
+      artisanStore.update({ sicabDataCadastro: isoDate }),
   });
   const { validateAndFormatDate: handleDateValidade } = useDateInput({
     onFormattedChange: (val) =>
       setValue('dataValidade', val, { shouldValidate: true }),
+    onValidDateChange: (isoDate) =>
+      artisanStore.update({ sicabValidade: isoDate }),
   });
 
   const onSubmit: SubmitHandler<ArtisanProfileFormData> = (data) => {
     artisanStore.update({
       sicab: data.sicab,
-      sicabDataCadastro: data.dataCadastro,
-      sicabValidade: data.dataValidade,
     });
     onNext();
   };
@@ -61,6 +63,7 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
           placeholder="Sicab*"
           type="text"
           {...register('sicab')}
+          maxLength={32}
           hasError={!!errors.sicab}
           errorMessage={errors.sicab?.message}
         />
