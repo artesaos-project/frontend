@@ -86,6 +86,8 @@ function Header() {
                   variant={'ghost'}
                   onClick={() => {
                     resetStore();
+                    localStorage.removeItem('artisan-register');
+                    window.location.reload();
                   }}
                   className="text-xl text-red-500 hover:text-red-600 mt-2"
                 >

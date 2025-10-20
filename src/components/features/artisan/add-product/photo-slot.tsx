@@ -8,6 +8,8 @@ interface PhotoSlotProps {
   photo?: PhotoType;
   onClick: () => void;
   isSelected: boolean;
+  isPersonalized?: boolean;
+  className?: string;
 }
 
 export const PhotoSlot: React.FC<PhotoSlotProps> = ({
@@ -15,6 +17,8 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
   photo,
   onClick,
   isSelected,
+  isPersonalized = false,
+  className = '',
 }) => {
   const isMainPhoto = index === 0;
 
@@ -28,9 +32,11 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
   return (
     <div
       className={`${
-        isMainPhoto
-          ? 'lg:col-span-2 lg:row-span-2 lg:w-full lg:h-66 col-span-4 row-span-1 w-full h-40'
-          : 'lg:col-span-1 lg:row-span-1 lg:w-full lg:h-30 col-span-1 row-span-1 w-full h-20'
+        isPersonalized
+          ? `${className}`
+          : isMainPhoto
+            ? 'lg:col-span-2 lg:row-span-2 lg:w-full lg:h-66 col-span-4 row-span-1 w-full h-40'
+            : 'lg:col-span-1 lg:row-span-1 lg:w-full lg:h-30 col-span-1 row-span-1 w-full h-20'
       } border-2 rounded-lg cursor-pointer transition-all flex items-center justify-center
         ${photo ? 'border-gray-300 bg-gray-50' : 'border-sakura bg-white hover:bg-gray-50'}
         ${isSelected ? 'ring-2 ring-red-400 border-red-400' : ''}

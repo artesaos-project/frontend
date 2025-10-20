@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -6,7 +7,7 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
-import { useEffect, useState } from 'react';
+import { productApi } from '@/services/api';
 
 type CategoryProps = {
   id: number;
@@ -23,14 +24,10 @@ function CategoriesSlider() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:3333/catalog/materials');
-        const data = await response.json();
-        console.log('data', data);
-        setCategories(data.items);
-        console.log('categories', categories);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (err: unknown) {
-        console.log('Erro ao buscar categorias');
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
+      } catch (error: unknown) {
+        console.error('Erro ao buscar categorias', error);
       }
     }
     fetchCategories();
