@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
+import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
 
 type Artisan = {
   id: string;
