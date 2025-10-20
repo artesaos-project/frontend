@@ -5,7 +5,6 @@ import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
-import ModeratorTable from '../../../components/features/moderator/moderator-table';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 type Artisan = {
