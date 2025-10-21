@@ -57,7 +57,7 @@ function Header() {
                     alt="User Avatar"
                     width={60}
                     height={60}
-                    className="rounded-full user-select-none cursor-pointer bg-gray-300"
+                    className="rounded-full h-15 user-select-none cursor-pointer bg-gray-300"
                   />
                 </DialogTitle>
               </DialogHeader>
@@ -69,7 +69,7 @@ function Header() {
                   alt="User Avatar"
                   width={120}
                   height={120}
-                  className="rounded-full mb-4 bg-gray-300"
+                  className="rounded-full h-30 mb-4 bg-gray-300"
                 />
                 <h2 className="text-2xl font-bold">{user.userName}</h2>
                 {user.artisanUserName && <p>@{user.artisanUserName}</p>}

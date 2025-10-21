@@ -12,6 +12,14 @@ import { FaRegCalendarAlt } from 'react-icons/fa';
 
 function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
   const artisanStore = useArtisanRegister();
+
+  function formatDate(date?: string | null) {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(d);
+  }
+
   const {
     register,
     handleSubmit,
@@ -21,8 +29,8 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
     resolver: zodResolver(artisanProfileSchema),
     defaultValues: {
       sicab: artisanStore.sicab || '',
-      dataCadastro: artisanStore.sicabDataCadastro || '',
-      dataValidade: artisanStore.sicabValidade || '',
+      dataCadastro: formatDate(artisanStore.sicabDataCadastro) || '',
+      dataValidade: formatDate(artisanStore.sicabValidade) || '',
     },
   });
 

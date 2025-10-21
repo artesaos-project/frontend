@@ -33,4 +33,5 @@ export interface GetMyProfile {
   city: string;
   address?: string | null;
   ddd?: string | null;
+  avatarId?: string | null;
 }

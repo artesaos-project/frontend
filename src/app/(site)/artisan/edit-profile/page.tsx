@@ -28,6 +28,7 @@ function EditProfilePage() {
     handlePhotoSelect,
     removeSelectedPhotos,
     handlePhotoUpload,
+    photoIds,
   } = useProductForm();
   const router = useRouter();
   const handleSlotClick = (index: number) => {
@@ -74,6 +75,7 @@ function EditProfilePage() {
       const updatedData: Partial<GetMyProfile> = {
         ...data,
         phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
+        avatarId: photoIds[0] || null,
       };
       delete updatedData.ddd;
       console.log(updatedData);

@@ -87,6 +87,14 @@ function SignUp() {
         sicab: useArtisanRegister.getState().sicab,
         sicabRegistrationDate: useArtisanRegister.getState().sicabDataCadastro,
         sicabValidUntil: useArtisanRegister.getState().sicabValidade,
+        comercialName: useArtisanRegister.getState().nomeComercial,
+        address: useArtisanRegister.getState().endereco,
+        zipCode: useArtisanRegister.getState().cep,
+        addressNumber: useArtisanRegister.getState().numero,
+        addressComplement: useArtisanRegister.getState().complemento,
+        neighborhood: useArtisanRegister.getState().bairro,
+        city: useArtisanRegister.getState().cidade,
+        state: useArtisanRegister.getState().estado,
       });
 
       setStep(11);

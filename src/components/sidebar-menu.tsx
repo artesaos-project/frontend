@@ -69,11 +69,11 @@ function SideBarMenu() {
         </SheetHeader>
         <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
           <Image
-            src={'/default-avatar.webp'}
+            src={user.userPhoto ?? '/default-avatar.webp'}
             alt="User Avatar"
             width={110}
             height={110}
-            className="rounded-full sm:w-30"
+            className="rounded-full sm:w-30 sm:h-30 w-20 h-20"
           />
           {user.isAuthenticated && (
             <div
