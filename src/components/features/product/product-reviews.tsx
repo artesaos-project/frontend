@@ -52,10 +52,11 @@ function TotalEstrelas({ estrelas }: ITotalEstrelas) {
 function FiltroEstrelas({ estrelas, onClick, text, isActive }: Filtro) {
   return (
     <button
-      className={`flex items-center gap-1 cursor-pointer p-1 border rounded-sm transition-colors ${isActive
+      className={`flex items-center gap-1 cursor-pointer p-1 border rounded-sm transition-colors ${
+        isActive
           ? 'bg-[#82BC92] text-white border-[#82BC92]'
           : 'border-[#82BC92] hover:bg-[#82BC92] hover:text-white'
-        }`}
+      }`}
       onClick={onClick}
     >
       {text && <span className="text-xs font-bold">{text}</span>}
@@ -164,7 +165,6 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   const productId = params?.id as string | undefined;
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [activeFilter, setActiveFilter] = useState<number>(0);
-  const router = useRouter();
 
   const handleShowMore = () => {
     setReviewsToShow((prev) => prev + 3);
@@ -177,7 +177,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   const averageRating =
     reviewsData.length > 0
       ? reviewsData.reduce((sum, review) => sum + review.rating, 0) /
-      reviewsData.length
+        reviewsData.length
       : 0;
 
   const getFilteredReviews = (rating: number) => {
