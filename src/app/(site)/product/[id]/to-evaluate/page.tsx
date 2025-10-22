@@ -23,15 +23,21 @@ const StarRating = ({
   rating: number;
   setRating: (rating: number) => void;
 }) => {
+  const [hoveredRating, setHoveredRating] = useState<number>(0);
+
   return (
     <div className="flex items-center gap-2">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`h-8 w-8 cursor-pointer ${
-            star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+          className={`h-8 w-8 cursor-pointer transition-all duration-200 ${
+            star <= (hoveredRating || rating)
+              ? 'fill-yellow-400 text-yellow-400'
+              : 'text-gray-300'
           }`}
           onClick={() => setRating(star)}
+          onMouseEnter={() => setHoveredRating(star)}
+          onMouseLeave={() => setHoveredRating(0)}
         />
       ))}
     </div>
