@@ -124,6 +124,7 @@ export const useProductForm = () => {
 
   return {
     photos,
+    setPhotos,
     addApiPhotos,
     selectedPhotos,
     newPhotos,
