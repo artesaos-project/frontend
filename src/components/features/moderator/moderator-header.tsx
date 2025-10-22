@@ -10,7 +10,7 @@ function ModeratorHeader() {
   const pathName = usePathname();
   return (
     <>
-      <header className="invisible w-screen flex justify-center bg-midnight lg:visible">
+      <header className="invisible max-w-screen flex justify-center bg-midnight lg:visible">
         <nav className="pb-11 pt-17 flex gap-10 text-white font-semibold">
           <Button
             asChild
