@@ -6,7 +6,6 @@ import { FiPlus } from 'react-icons/fi';
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from 'react-icons/io';
 import { MdOutlineRateReview } from 'react-icons/md';
 import Button from './button';
-import { useRouter } from 'next/navigation';
 
 interface ITotalEstrelas {
   estrelas: number;
