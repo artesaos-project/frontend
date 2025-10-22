@@ -53,11 +53,10 @@ function TotalEstrelas({ estrelas }: ITotalEstrelas) {
 function FiltroEstrelas({ estrelas, onClick, text, isActive }: Filtro) {
   return (
     <button
-      className={`flex items-center gap-1 cursor-pointer p-1 border rounded-sm transition-colors ${
-        isActive
+      className={`flex items-center gap-1 cursor-pointer p-1 border rounded-sm transition-colors ${isActive
           ? 'bg-[#82BC92] text-white border-[#82BC92]'
           : 'border-[#82BC92] hover:bg-[#82BC92] hover:text-white'
-      }`}
+        }`}
       onClick={onClick}
     >
       {text && <span className="text-xs font-bold">{text}</span>}
@@ -179,7 +178,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   const averageRating =
     reviewsData.length > 0
       ? reviewsData.reduce((sum, review) => sum + review.rating, 0) /
-        reviewsData.length
+      reviewsData.length
       : 0;
 
   const getFilteredReviews = (rating: number) => {
