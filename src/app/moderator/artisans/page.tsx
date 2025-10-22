@@ -1,12 +1,13 @@
 'use client';
 
 import LoadingScreen from '@/components/common/loading-screen';
+import ModerateArtisanInstructions from '@/components/features/moderator/moderate-artisan/moderate-artisan-instructions';
 import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
-import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
 
 type Artisan = {
   id: string;
@@ -55,12 +56,16 @@ function Page() {
   return (
     <div className="overflow-x-hidden">
       <ModeratorTitle title={'Artesãos'} />
-      <ModeratorSearch
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        activeFilter={activeFilter}
-        onFilterChange={handleFilterChange}
-      />
+      <div className="mx-auto w-2/3">
+        <ModerateArtisanInstructions />
+        <ModeratorSearch
+          variant="artisans"
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
+      </div>
       <ModeratorTable
         searchTerm={searchTerm}
         activeFilter={activeFilter}

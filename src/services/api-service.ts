@@ -33,7 +33,6 @@ export const apiRequest = async <T>(
       headers: {
         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         ...headers,
-        'ngrok-skip-browser-warning': 'true',
       },
       withCredentials: withCredentials ?? true,
     });
