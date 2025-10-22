@@ -1,4 +1,5 @@
 'use client';
+import AlertDialog from '@/components/common/alert-dialog';
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,9 @@ import { Input } from '@/components/ui/input';
 import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
+import { LuDoorOpen } from 'react-icons/lu';
 import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -18,6 +21,14 @@ import { Separator } from './ui/separator';
 function Header() {
   const user = useStoreUser((state) => state.user);
   const resetStore = useStoreUser((state) => state.resetStore);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const handleLogoutConfirm = () => {
+    resetStore();
+    localStorage.removeItem('artisan-register');
+    setIsLogoutModalOpen(false);
+    window.location.reload();
+  };
 
   return (
     <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8 items-center">
@@ -57,44 +68,53 @@ function Header() {
                     alt="User Avatar"
                     width={60}
                     height={60}
-                    className="rounded-full user-select-none cursor-pointer bg-gray-300"
+                    className="rounded-full h-15 user-select-none cursor-pointer bg-gray-300"
                   />
                 </DialogTitle>
               </DialogHeader>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
-              <div className="flex flex-col items-center justify-center text-midnight">
-                <Image
-                  src={user.userPhoto ?? '/default-avatar.webp'}
-                  alt="User Avatar"
-                  width={120}
-                  height={120}
-                  className="rounded-full mb-4 bg-gray-300"
-                />
-                <h2 className="text-2xl font-bold">{user.userName}</h2>
-                {user.artisanUserName && <p>@{user.artisanUserName}</p>}
-                {user.isModerator && (
-                  <div className="w-fit">
-                    <Separator className="my-2" />
-                    <Link href="/moderator" className="text-xl">
-                      Moderação
-                    </Link>
-                    <Separator className="my-2" />
-                  </div>
-                )}
-                <Button
-                  variant={'ghost'}
-                  onClick={() => {
-                    resetStore();
-                    localStorage.removeItem('artisan-register');
-                    window.location.reload();
-                  }}
-                  className="text-xl text-red-500 hover:text-red-600 mt-2"
-                >
-                  Sair
-                </Button>
-              </div>
-            </DialogContent>
+            {!isLogoutModalOpen && (
+              <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
+                <div className="flex flex-col items-center justify-center text-midnight">
+                  <Image
+                    src={user.userPhoto ?? '/default-avatar.webp'}
+                    alt="User Avatar"
+                    width={120}
+                    height={120}
+                    className="rounded-full h-30 mb-4 bg-gray-300"
+                  />
+                  <h2 className="text-2xl font-bold">{user.userName}</h2>
+                  {user.artisanUserName && <p>@{user.artisanUserName}</p>}
+                  {user.isModerator && (
+                    <div className="w-fit">
+                      <Separator className="my-2" />
+                      <Link href="/moderator" className="text-xl">
+                        Moderação
+                      </Link>
+                      <Separator className="my-2" />
+                    </div>
+                  )}
+                  <Button
+                    variant={'ghost'}
+                    onClick={() => setIsLogoutModalOpen(true)}
+                    className="text-xl text-red-500 hover:text-red-600 mt-2"
+                  >
+                    Sair
+                  </Button>
+                </div>
+              </DialogContent>
+            )}
+            <AlertDialog
+              isOpen={isLogoutModalOpen}
+              onClose={() => setIsLogoutModalOpen(false)}
+              onConfirm={handleLogoutConfirm}
+              icon={<LuDoorOpen size={40} className="midnight" />}
+              dialogTitle="Confirmação de Logout"
+              dialogMessage={{
+                text: 'Tem certeza de que deseja sair da sua conta?',
+                color: 'text-midnight',
+              }}
+            />
           </Dialog>
         )}
       </div>

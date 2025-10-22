@@ -3,22 +3,38 @@ import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
 import { productApi } from '@/services/api';
+// import productsMock from '../db-mock/products.json';
+import { CardsListSkeleton } from './loading-state';
+
+// interface Product {
+//   id: number;
+//   title: string;
+//   priceInCents: number;
+//   authorName: string;
+//   description: string;
+//   coverPhoto: string;
+// }
 
 function ProductsList() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  // const [products, setProducts] = useState<Product[]>([]);
+  // const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await productApi.getAll();
         setProducts(res);
+        setLoading(false);
       } catch (err) {
         console.error('Erro ao buscar produtos:', err);
       }
     };
 
     fetchProducts();
+    // setProducts(productsMock);
   }, []);
 
   useEffect(() => {
@@ -39,6 +55,10 @@ function ProductsList() {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [products]);
+
+  if (loading) {
+    return <CardsListSkeleton />;
+  }
   return (
     <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4 lg:gap-y-6">
       {visibleProducts.map((product, i) => (
@@ -61,5 +81,4 @@ function ProductsList() {
     </div>
   );
 }
-
 export default ProductsList;

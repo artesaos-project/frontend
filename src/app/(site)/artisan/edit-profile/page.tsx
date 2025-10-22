@@ -28,6 +28,8 @@ function EditProfilePage() {
     handlePhotoSelect,
     removeSelectedPhotos,
     handlePhotoUpload,
+    photoIds,
+    setPhotos,
   } = useProductForm();
   const router = useRouter();
   const handleSlotClick = (index: number) => {
@@ -42,7 +44,6 @@ function EditProfilePage() {
     const fetchProfile = async () => {
       try {
         const profile = await authApi.getMe();
-        console.log(profile);
         if (profile) {
           const phone = profile.user.phone || '';
           let ddd = '';
@@ -58,6 +59,14 @@ function EditProfilePage() {
             phone: numero,
           };
           reset(mappedData);
+          if (profile.user.avatar) {
+            setPhotos([
+              {
+                id: '1',
+                url: profile.user.avatar,
+              },
+            ]);
+          }
         }
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
@@ -67,19 +76,21 @@ function EditProfilePage() {
       }
     };
     fetchProfile();
-  }, [reset]);
+  }, [reset, setPhotos]);
 
   const onSubmit: SubmitHandler<GetMyProfile> = async (data) => {
     try {
       const updatedData: Partial<GetMyProfile> = {
         ...data,
         phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
+        avatarId: photoIds[0] || null,
       };
       delete updatedData.ddd;
-      console.log(updatedData);
       await authApi.updateMe(updatedData);
       toast.success('Perfil atualizado com sucesso!');
-      router.push(`/artisan/${data.artisanUserName}`);
+      if (data.artisan?.artisanUserName) {
+        router.push(`/artisan/${data.artisan.artisanUserName}`);
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message;
@@ -90,9 +101,6 @@ function EditProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
-      <span className="flex justify-center items-center text-3xl font-bold">
-        Em Desenvolvimento
-      </span>
       <Toaster richColors position="bottom-right" />
       <div className="w-10/12 mx-auto pt-10">
         <div className="flex items-center mb-6">
@@ -158,11 +166,15 @@ function EditProfilePage() {
                   label="Nome Artistico / Marca"
                   type="text"
                   required={true}
-                  {...register('artisanUserName', {
+                  {...register('artisan.artisanUserName', {
                     required: 'Nome do produto é obrigatório',
                   })}
                 />
-                {errors && <span>{!!errors.artisanUserName}</span>}
+                {errors.artisan?.artisanUserName && (
+                  <span className="text-red-500 text-xs">
+                    {errors.artisan.artisanUserName.message}
+                  </span>
+                )}
                 <InputField
                   label="Nome Completo"
                   type="text"
@@ -209,7 +221,7 @@ function EditProfilePage() {
                   label="CEP"
                   type="text"
                   required={true}
-                  {...register('cep', {
+                  {...register('artisan.zipCode', {
                     required: 'CEP é obrigatório',
                   })}
                   className="w-2/8"
@@ -218,7 +230,7 @@ function EditProfilePage() {
                   label="Estado"
                   type="text"
                   required={true}
-                  {...register('state', {
+                  {...register('artisan.state', {
                     required: 'Estado é obrigatório',
                   })}
                   className="w-2/8"
@@ -227,7 +239,7 @@ function EditProfilePage() {
                   label="Cidade"
                   type="text"
                   required={true}
-                  {...register('city', {
+                  {...register('artisan.city', {
                     required: 'Cidade é obrigatória',
                   })}
                   className="w-4/8"
@@ -238,7 +250,7 @@ function EditProfilePage() {
                   label="Endereço"
                   type="text"
                   required={true}
-                  {...register('address', {
+                  {...register('artisan.address', {
                     required: 'Endereço é obrigatório',
                   })}
                 />
@@ -248,7 +260,7 @@ function EditProfilePage() {
                   label="Nome de usuário"
                   type="text"
                   required={true}
-                  {...register('artisanUserName', {
+                  {...register('artisan.artisanUserName', {
                     required: 'Nome de usuário é obrigatório',
                   })}
                   className="w-2/8"
@@ -264,7 +276,7 @@ function EditProfilePage() {
               <span className="font-semibold text-sm">Biografia</span>
               <textarea
                 className="w-full border-2 border-sakura rounded-lg h-40 p-4 font-normal"
-                {...register('bio')}
+                {...register('artisan.bio')}
               />
             </div>
             <AuthButton

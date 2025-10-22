@@ -20,6 +20,14 @@ export interface CreateArtisanPayload {
   sicab?: string;
   sicabRegistrationDate?: string;
   sicabValidUntil?: string;
+  comercialName?: string;
+  address?: string;
+  zipCode?: string;
+  addressNumber?: string;
+  addressComplement?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
 }
 
 interface UserResponse {
@@ -91,10 +99,10 @@ export const artisanApi = {
       body: { status: 'APPROVED' },
     }),
 
-  reject: (artisanId: string) =>
+  reject: (artisanId: string, rejectionReason?: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
       method: 'PATCH',
-      body: { status: 'REJECTED' },
+      body: { status: 'REJECTED', rejectionReason },
     }),
 };
 

@@ -24,9 +24,11 @@ import {
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
+import { LuDoorOpen } from 'react-icons/lu';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
+import AlertDialog from './common/alert-dialog';
 import { Button } from './ui/button';
 
 type CategoryProps = {
@@ -44,10 +46,17 @@ function SideBarMenu() {
   const pathname = usePathname();
   const resetStore = useStoreUser((state) => state.resetStore);
 
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   function handleLogout() {
     resetStore();
     localStorage.removeItem('artisan-register');
+    setIsLogoutModalOpen(false);
   }
+
+  const handleOpenLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
 
   const isModerationRoute = pathname.startsWith('/moderator');
   return (
@@ -69,11 +78,11 @@ function SideBarMenu() {
         </SheetHeader>
         <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
           <Image
-            src={'/default-avatar.webp'}
+            src={user.userPhoto ?? '/default-avatar.webp'}
             alt="User Avatar"
             width={110}
             height={110}
-            className="rounded-full sm:w-30"
+            className="rounded-full sm:w-30 sm:h-30 w-20 h-20"
           />
           {user.isAuthenticated && (
             <div
@@ -163,7 +172,10 @@ function SideBarMenu() {
                 </p>
               </div>
 
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              <div
+                onClick={handleOpenLogoutModal}
+                className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
+              >
                 <TbLogout2 color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Sair
@@ -214,7 +226,7 @@ function SideBarMenu() {
               </div>
               {user.isAuthenticated && (
                 <div
-                  onClick={handleLogout}
+                  onClick={handleOpenLogoutModal}
                   className="w-full cursor-pointer mb-60 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
                 >
                   <TbLogout2 color="#ff8c94" size={30} />
@@ -226,6 +238,15 @@ function SideBarMenu() {
             </>
           )}
         </ScrollArea>
+        <AlertDialog
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onConfirm={handleLogout}
+          icon={<LuDoorOpen size={40} color="midnight" />}
+          dialogTitle="Tem certeza que deseja sair?"
+          textButton1="Sair"
+          textButton2="Voltar"
+        />
       </SheetContent>
     </Sheet>
   );

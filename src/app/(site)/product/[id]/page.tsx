@@ -165,7 +165,10 @@ function ProductPage() {
 
             {productReviews && (
               <div className="bg-white md:rounded-4xl">
-                <ProductReviews reviews={productReviews} />
+                <ProductReviews
+                  reviews={productReviews}
+                  productId={productId}
+                />
               </div>
             )}
           </div>
