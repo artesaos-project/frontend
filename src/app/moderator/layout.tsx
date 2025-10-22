@@ -11,7 +11,7 @@ export default function RootLayout({
     <div>
       <ModeratorHeader />
       {children}
-      <Footer newsSubscription={false} />
+      <Footer />
     </div>
   );
 }
