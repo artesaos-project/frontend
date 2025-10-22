@@ -5,7 +5,6 @@ import ModerateReportInstructions from '@/components/features/moderator/moderate
 import ModeratorReportTable from '@/components/features/moderator/moderate-report/moderator-report-table';
 import ModeratorSearch from '@/components/features/moderator/moderator-search';
 import ModeratorTitle from '@/components/features/moderator/moderator-title';
-import reportsData from '@/db-mock/reports.json';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -30,7 +29,7 @@ function Page() {
       setIsLoading(true);
       // const result = await artisanApi.getApplications();
       // setReports(result.artisanApplications);
-      setReports(reportsData as unknown as Report[]);
+      setReports([] as unknown as Report[]);
       setIsLoading(false);
     } catch (error: unknown) {
       if (error instanceof Error) {
