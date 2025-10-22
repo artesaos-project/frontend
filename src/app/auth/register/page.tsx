@@ -1,5 +1,6 @@
 'use client';
 
+import AlertDialog from '@/components/common/alert-dialog';
 import {
   ArtisanStepAddress,
   ArtisanStepHistory,
@@ -42,6 +43,7 @@ function SignUp() {
   const [errorMessage, setErrorMessage] = useState(
     'Ocorreu um erro. Por favor, tente novamente.',
   );
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   useEffect(() => {
     if (errorAlert) {
@@ -135,15 +137,23 @@ function SignUp() {
 
   const handleGoHome = () => {
     if (step && step >= 4 && step <= 10) {
-      const confirmLeave = window.confirm(
-        'Seu cadastro será perdido. Deseja sair mesmo assim?',
-      );
-      if (!confirmLeave) return;
-      resetArtisan();
-    } else if (step && step > 10) {
-      resetArtisan();
+      setIsConfirmModalOpen(true);
+    } else {
+      if (step && step > 10) {
+        resetArtisan();
+      }
+      router.push('/');
     }
+  };
+
+  const handleModalClose = () => {
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleModalConfirm = () => {
+    resetArtisan();
     router.push('/');
+    setIsConfirmModalOpen(false);
   };
 
   const stepIcons = [
@@ -248,6 +258,15 @@ function SignUp() {
           </div>
         )}
         <div>{renderStep()}</div>
+        <AlertDialog
+          isOpen={isConfirmModalOpen}
+          onClose={handleModalClose}
+          onConfirm={handleModalConfirm}
+          icon={<IoIosWarning size={40} color="salmon" />}
+          dialogTitle="Se você sair agora, as alterações feitas serão perdidas"
+          textButton1="Sair"
+          textButton2="Voltar"
+        />
       </div>
     </div>
   );
