@@ -8,8 +8,8 @@ RUN npm install
 
 COPY . .
 
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm run build && npm run start"]
