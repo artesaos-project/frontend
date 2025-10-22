@@ -25,7 +25,10 @@ function CategoriesSlider() {
     async function fetchCategories() {
       try {
         const response = await productApi.getCatalogs();
-        setCategories(response.items);
+        console.log(response);
+        if (response instanceof Array) {
+          setCategories(response);
+        } else setCategories(response.items);
       } catch (error: unknown) {
         console.error('Erro ao buscar categorias', error);
       }

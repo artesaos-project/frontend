@@ -1,0 +1,273 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "email": "ana@example.com",
+      "password": "Password1!",
+      "roles": [
+        "USER",
+        "ARTISAN"
+      ],
+      "name": "Ana Souza",
+      "phone": "11999999999",
+      "social_name": "Ana Artes",
+      "avatar": "/uploads/avatars/ana.png",
+      "is_disabled": false,
+      "created_at": "2025-01-10T10:00:00Z",
+      "updated_at": "2025-01-10T10:00:00Z"
+    },
+    {
+      "id": "u2",
+      "email": "carlos@example.com",
+      "password": "Password1!",
+      "roles": [
+        "USER",
+        "MODERATOR"
+      ],
+      "name": "Carlos Lima",
+      "phone": "21988888888",
+      "social_name": null,
+      "avatar": null,
+      "is_disabled": false,
+      "created_at": "2025-02-01T15:00:00Z",
+      "updated_at": "2025-02-01T15:00:00Z"
+    }
+  ],
+  "user_profiles": [
+    {
+      "id": "p1",
+      "fk_user_id": "u1",
+      "cpf": "12345678900",
+      "phone": "11999999999",
+      "updated_at": "2025-01-15T12:00:00Z"
+    },
+    {
+      "id": "p2",
+      "fk_user_id": "u2",
+      "cpf": "98765432100",
+      "phone": "21988888888",
+      "updated_at": "2025-02-05T18:00:00Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "s1",
+      "fk_user_id": "u1",
+      "is_revoked": false,
+      "started_at": "2025-01-10T10:00:00Z",
+      "expires_at": "2025-02-10T10:00:00Z",
+      "ip_host": "192.168.0.10",
+      "user_agent": "Mozilla/5.0"
+    },
+    {
+      "id": "d9a3",
+      "email": "ana@example.com",
+      "password": "Password1!"
+    },
+    {
+      "id": "2b1b",
+      "email": "ana@example.com",
+      "password": "Password1!"
+    },
+    {
+      "id": "9818",
+      "email": "ana@example.com",
+      "password": "Password1!asd"
+    },
+    {
+      "id": "d23b",
+      "email": "ana@example.com",
+      "password": "Password1!asdasdasd"
+    },
+    {
+      "id": "679e",
+      "email": "ana@example.com",
+      "password": "Password1!asdasdasd"
+    },
+    {
+      "id": "1740",
+      "email": "ana@example.com",
+      "password": "Password1!asdasdasd"
+    },
+    {
+      "id": "4e47",
+      "email": "a@g.com",
+      "password": "Password1!asdasdasd"
+    },
+    {
+      "id": "6441",
+      "email": "a@g.com",
+      "password": "Password1!asdasdasd"
+    }
+  ],
+  "artisan_applications": [
+    {
+      "id": "aa1",
+      "fk_user_id": "u1",
+      "form_status": "SUBMITTED",
+      "type": "BE_ARTISAN",
+      "commercial_name": "Ateliê da Ana",
+      "zip_code": "01000-000",
+      "address": "Rua das Artes",
+      "address_number": "100",
+      "neighborhood": "Centro",
+      "city": "São Paulo",
+      "state": "SP",
+      "raw_material": [
+        "Barro",
+        "Cerâmica"
+      ],
+      "technique": [
+        "Modelagem",
+        "Pintura"
+      ],
+      "finality_classification": [
+        "Decorativo"
+      ],
+      "bio": "Trabalho com cerâmica artesanal há 10 anos.",
+      "status": "APPROVED",
+      "created_at": "2025-01-12T12:00:00Z",
+      "updated_at": "2025-01-20T14:00:00Z"
+    }
+  ],
+  "artisan_profiles": [
+    {
+      "id": "ap1",
+      "fk_user_id": "u1",
+      "artisan_user_name": "anaartes",
+      "commercial_name": "Ateliê da Ana",
+      "raw_material": [
+        "Barro",
+        "Cerâmica"
+      ],
+      "technique": [
+        "Modelagem",
+        "Pintura"
+      ],
+      "finality_classification": [
+        "Decorativo"
+      ],
+      "sicab": "SICAB-001",
+      "sicab_registration_date": "2024-12-01T00:00:00Z",
+      "sicab_valid_until": "2025-12-01T00:00:00Z",
+      "followers_count": 12,
+      "products_count": 3,
+      "bio": "Ceramista apaixonada por arte brasileira.",
+      "is_disabled": false,
+      "created_at": "2025-01-15T10:00:00Z",
+      "updated_at": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "artisan_profile_addresses": [
+    {
+      "id": 1,
+      "fk_artisan_id": "ap1",
+      "zip_code": "01000-000",
+      "address": "Rua das Artes",
+      "address_number": "100",
+      "address_complement": "Sala 2",
+      "neighborhood": "Centro",
+      "city": "São Paulo",
+      "state": "SP",
+      "created_at": "2025-01-15T10:00:00Z",
+      "updated_at": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "raw_materials": [
+    {
+      "id": 1,
+      "nameFilter": "BARRO",
+      "nameExhibit": "Barro",
+      "description": "Matéria-prima natural usada em cerâmica.",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "nameFilter": "CERAMICA",
+      "nameExhibit": "Cerâmica",
+      "description": "Material de artesanato queimado.",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "techniques": [
+    {
+      "id": 1,
+      "name_filter": "MODELAGEM",
+      "name_exhibit": "Modelagem",
+      "description": "Modelagem manual com barro.",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name_filter": "PINTURA",
+      "name_exhibit": "Pintura",
+      "description": "Pintura artesanal com tintas naturais.",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "product_categories": [
+    {
+      "id": 1,
+      "name_filter": "DECORACAO",
+      "name_exhibit": "Decoração",
+      "description": "Produtos decorativos para casa.",
+      "raw_material_ids": [
+        1,
+        2
+      ],
+      "technique_ids": [
+        1,
+        2
+      ],
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prd1",
+      "fk_artisan_id": "ap1",
+      "category_ids": [
+        1
+      ],
+      "title": "Vaso de Cerâmica Azul",
+      "description": "Vaso decorativo feito à mão.",
+      "priceInCents": 15000,
+      "stock": 10,
+      "isActive": true,
+      "slug": "vaso-ceramica-azul",
+      "viewsCount": 120,
+      "likesCount": 5,
+      "averageRating": 4.5,
+      "createdAt": "2025-01-18T10:00:00Z",
+      "updatedAt": "2025-01-20T12:00:00Z"
+    }
+  ],
+  "product_ratings": [
+    {
+      "id": "r1",
+      "fk_product_id": "prd1",
+      "fk_user_id": "u2",
+      "rating": 5,
+      "comment": "Produto excelente!",
+      "created_at": "2025-01-21T15:00:00Z"
+    }
+  ],
+  "product_likes": [
+    {
+      "id": "l1",
+      "fk_product_id": "prd1",
+      "fk_user_id": "u2",
+      "created_at": "2025-01-21T15:30:00Z"
+    }
+  ]
+}
