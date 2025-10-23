@@ -123,36 +123,31 @@ function SideBarMenu() {
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
           {isModerationRoute ? (
             <>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <FaHome color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                  Início
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoPerson color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Artesãos
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoCalendar color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Eventos
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <CgDanger color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Denúncias
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoDocumentOutline color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Documentação
-                </p>
-              </div>
+              <Link href="/moderator">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <FaHome color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                    Início
+                  </p>
+                </div>
+              </Link>
+              <Link href="/moderator/artisans">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <IoPerson color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Artesãos
+                  </p>
+                </div>
+              </Link>
+              <Link href="/moderator/reports">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <CgDanger color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Denúncias
+                  </p>
+                </div>
+              </Link>
+
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <SheetClose asChild>
                   <Link href={'/settings'} className="flex items-center">
@@ -169,7 +164,6 @@ function SideBarMenu() {
                   Suporte e Ajuda
                 </p>
               </div>
-
               <div
                 onClick={handleOpenLogoutModal}
                 className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
