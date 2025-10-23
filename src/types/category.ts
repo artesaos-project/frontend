@@ -2,7 +2,7 @@ type CategoryProps = {
   id: number;
   nameFilter: string;
   nameExhibit: string;
-  imagePath: string;
+  imageUrl: string;
   rawMaterialIds?: number[];
   techniqueIds?: number[];
   createdAt: string;

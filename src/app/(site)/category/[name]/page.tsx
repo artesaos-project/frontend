@@ -4,21 +4,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { IoClose, IoSwapVerticalOutline } from 'react-icons/io5';
 import { LuListFilter } from 'react-icons/lu';
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
 
 function Page() {
   const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
