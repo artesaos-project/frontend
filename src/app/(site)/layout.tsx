@@ -23,7 +23,7 @@ export default function LayoutSite({
     <div>
       <Header />
       {children}
-      <Footer newsSubscription />
+      <Footer />
     </div>
 =======
 <<<<<<< HEAD

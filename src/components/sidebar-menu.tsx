@@ -9,6 +9,8 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,12 +18,11 @@ import { useEffect, useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
-import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 import {
   IoChevronDownOutline,
   IoChevronForward,
   IoChevronUpOutline,
-  IoDocumentOutline,
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
@@ -31,16 +32,6 @@ import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
 import AlertDialog from './common/alert-dialog';
 import { Button } from './ui/button';
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
@@ -267,12 +258,10 @@ function DropdownCategories() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:3333/catalog/materials');
-        const data = await response.json();
-        setCategories(data.items);
-      } catch (err: unknown) {
-        if (err instanceof Error)
-          console.log('Erro ao buscar categorias', err.message);
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
+      } catch (error: unknown) {
+        console.error('Erro ao buscar categorias', error);
       }
     }
     fetchCategories();

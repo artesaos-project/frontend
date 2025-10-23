@@ -1,3 +1,4 @@
+import { FavoritesProvider } from '@/context/favorite-context';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>{children}</body>
+      <body className={`${poppins.variable} antialiased`}>
+        <FavoritesProvider>{children}</FavoritesProvider>
+      </body>
     </html>
   );
 }

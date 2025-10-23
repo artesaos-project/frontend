@@ -1,0 +1,194 @@
+[
+  {
+    "id": 1,
+    "reportType": "Produto impróprio",
+    "target": "Vaso de Cerâmica Decorado",
+    "denunciator": "Maria Silva",
+    "reason": "Produto com rachaduras",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "11",
+      "number": "98765-4321"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-15",
+    "time": "14:30",
+    "detailedDescription": "Recebi o produto com várias rachaduras na superfície. A peça estava mal embalada e chegou danificada. O artesão não ofereceu solução adequada e se recusou a trocar o produto. As rachaduras comprometem tanto a estética quanto a funcionalidade do vaso, que não pode ser usado para plantas com água."
+  },
+  {
+    "id": 2,
+    "reportType": "Perfil inadequado",
+    "target": "João Artesão",
+    "denunciator": "Carlos Souza",
+    "reason": "Informações falsas no perfil",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "21",
+      "number": "99123-4567"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-16",
+    "time": "10:15",
+    "detailedDescription": "O perfil do artesão contém informações completamente falsas. Ele afirma ter 20 anos de experiência, mas descobri que começou há apenas 2 anos. Além disso, usa fotos de trabalhos de outros artesãos como se fossem dele. Isso configura propaganda enganosa e prejudica consumidores que buscam profissionais qualificados."
+  },
+  {
+    "id": 3,
+    "reportType": "Produto impróprio",
+    "target": "Bolsa de Couro Artesanal",
+    "denunciator": "Ana Paula",
+    "reason": "Material não corresponde à descrição",
+    "status": "MODERATED",
+    "phone": {
+      "ddd": "47",
+      "number": "98888-7777"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-10",
+    "time": "16:45",
+    "detailedDescription": "A bolsa foi anunciada como sendo de couro legítimo de alta qualidade, mas o material é claramente sintético. Após apenas uma semana de uso, o material começou a descascar. Paguei um valor alto esperando um produto genuíno em couro, mas fui enganada. Solicitei devolução e o artesão ignorou minhas mensagens."
+  },
+  {
+    "id": 4,
+    "reportType": "Conduta inadequada",
+    "target": "Pedro Santos",
+    "denunciator": "Juliana Costa",
+    "reason": "Comentários ofensivos",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "85",
+      "number": "97654-3210"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-18",
+    "time": "09:20",
+    "detailedDescription": "Após fazer uma avaliação honesta sobre um produto que comprei, o artesão respondeu com comentários extremamente ofensivos e desrespeitosos. Ele usou linguagem inadequada, fez ataques pessoais e até ameaças veladas. Este comportamento é inaceitável e cria um ambiente hostil na plataforma."
+  },
+  {
+    "id": 5,
+    "reportType": "Produto impróprio",
+    "target": "Colar de Pedras Naturais",
+    "denunciator": "Roberto Lima",
+    "reason": "Produto com defeito de fabricação",
+    "status": "ARCHIVED",
+    "phone": {
+      "ddd": "19",
+      "number": "99876-5432"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-09-28",
+    "time": "11:00",
+    "detailedDescription": "O colar possui um defeito grave no fecho, que se solta facilmente. Perdi a peça duas vezes antes de perceber o problema. As pedras também não são naturais como anunciado - são acrílicas. A qualidade da montagem é muito ruim, com fios que se soltam. Solicitei reembolso mas o artesão não respondeu."
+  },
+  {
+    "id": 6,
+    "reportType": "Perfil inadequado",
+    "target": "Márcia Oliveira",
+    "denunciator": "Fernando Alves",
+    "reason": "Uso de imagens sem autorização",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "48",
+      "number": "98234-5678"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-17",
+    "time": "15:30",
+    "detailedDescription": "A artesã está usando fotos dos meus produtos em seu perfil sem minha autorização. Sou também artesão na plataforma e reconheci minhas próprias criações sendo apresentadas como trabalhos dela. Isso viola direitos autorais e engana os consumidores sobre a real capacidade técnica dela. Já tentei contato direto sem sucesso."
+  },
+  {
+    "id": 7,
+    "reportType": "Produto impróprio",
+    "target": "Quadro em Tela Pintado à Mão",
+    "denunciator": "Patrícia Rocha",
+    "reason": "Qualidade inferior ao anunciado",
+    "status": "MODERATED",
+    "phone": {
+      "ddd": "31",
+      "number": "99345-6789"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-12",
+    "time": "13:15",
+    "detailedDescription": "O quadro foi anunciado como pintura em tela feita à mão com tintas profissionais, mas claramente é uma impressão digital com alguns retoques superficiais. A qualidade é muito inferior ao mostrado nas fotos do anúncio. O acabamento é grosseiro e a tela é de má qualidade. Me sinto enganada pelo valor que paguei."
+  },
+  {
+    "id": 8,
+    "reportType": "Conduta inadequada",
+    "target": "Lucas Ferreira",
+    "denunciator": "Camila Martins",
+    "reason": "Práticas comerciais antiéticas",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "51",
+      "number": "98567-8901"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-19",
+    "time": "08:45",
+    "detailedDescription": "O artesão está criando avaliações falsas para seus próprios produtos usando perfis fake. Também descobri que ele oferece descontos para clientes que dão 5 estrelas, manipulando as avaliações. Além disso, faz comentários negativos nos perfis de concorrentes. Essas práticas são antiéticas e prejudicam a concorrência justa."
+  },
+  {
+    "id": 9,
+    "reportType": "Produto impróprio",
+    "target": "Luminária Artesanal",
+    "denunciator": "Ricardo Mendes",
+    "reason": "Produto não segue normas de segurança",
+    "status": "ARCHIVED",
+    "phone": {
+      "ddd": "12",
+      "number": "99678-9012"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-05",
+    "time": "17:00",
+    "detailedDescription": "A luminária apresenta sérios problemas de segurança elétrica. Os fios estão expostos, não possui aterramento adequado e o material usado é altamente inflamável. Ao ligar o produto, sentimos cheiro de queimado. Um eletricista confirmou que a instalação elétrica não segue nenhuma norma de segurança. É um risco de incêndio."
+  },
+  {
+    "id": 10,
+    "reportType": "Perfil inadequado",
+    "target": "Sofia Ribeiro",
+    "denunciator": "André Carvalho",
+    "reason": "Perfil duplicado",
+    "status": "MODERATED",
+    "phone": {
+      "ddd": "61",
+      "number": "98789-0123"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-14",
+    "time": "12:30",
+    "detailedDescription": "A artesã possui dois perfis na plataforma com nomes ligeiramente diferentes, vendendo os mesmos produtos. Isso confunde os consumidores e parece ser uma tentativa de burlar o sistema de avaliações, já que um dos perfis tem avaliações negativas que ela está tentando esconder criando um novo perfil."
+  },
+  {
+    "id": 11,
+    "reportType": "Produto impróprio",
+    "target": "Tapete de Crochê",
+    "denunciator": "Beatriz Gomes",
+    "reason": "Dimensões diferentes do anunciado",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "27",
+      "number": "99890-1234"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-20",
+    "time": "14:00",
+    "detailedDescription": "Comprei um tapete que foi anunciado com 2 metros de diâmetro, mas o produto recebido tem apenas 1,5 metros. A diferença é significativa e não serve para o espaço que eu havia planejado. Além disso, a cor é diferente das fotos e o acabamento é desleixado, com fios soltos. O artesão se recusa a aceitar devolução."
+  },
+  {
+    "id": 12,
+    "reportType": "Conduta inadequada",
+    "target": "Gabriel Pinto",
+    "denunciator": "Larissa Santos",
+    "reason": "Não cumprimento de prazos",
+    "status": "PENDING",
+    "phone": {
+      "ddd": "71",
+      "number": "98901-2345"
+    },
+    "photo": "https://github.com/marcus-santos.png",
+    "date": "2025-10-21",
+    "time": "10:30",
+    "detailedDescription": "Encomendei um produto personalizado há 3 meses com prazo de entrega de 30 dias. O artesão sempre dá desculpas diferentes e adia a entrega. Já paguei adiantado e não consigo reembolso. Ele não responde mensagens há semanas. Descobri que outras pessoas também estão na mesma situação. Parece ser um golpe recorrente."
+  }
+]

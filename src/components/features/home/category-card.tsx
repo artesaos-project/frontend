@@ -11,10 +11,10 @@ function CategoryCard({ name, img, nameFilter }: CategoryCardProps) {
   return (
     <Link
       href={`/category/${nameFilter.toLowerCase()}`}
-      className="flex flex-col mt-4 mb-10 items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
+      className="flex flex-col mt-4 mb-4 items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
     >
       <Image
-        src={'/' + img}
+        src={img}
         width={80}
         height={80}
         alt={name}

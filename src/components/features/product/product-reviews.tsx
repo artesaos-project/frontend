@@ -6,7 +6,6 @@ import { FiPlus } from 'react-icons/fi';
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from 'react-icons/io';
 import { MdOutlineRateReview } from 'react-icons/md';
 import Button from './button';
-import { useRouter } from 'next/navigation';
 
 interface ITotalEstrelas {
   estrelas: number;
@@ -166,7 +165,6 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   const productId = params?.id as string | undefined;
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [activeFilter, setActiveFilter] = useState<number>(0);
-  const router = useRouter();
 
   const handleShowMore = () => {
     setReviewsToShow((prev) => prev + 3);

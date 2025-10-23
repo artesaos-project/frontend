@@ -8,16 +8,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
 import { productApi } from '@/services/api';
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
+import { CategoryProps } from '@/types/category';
 
 function CategoriesSlider() {
   const [loading, setLoading] = useState(true);
@@ -96,7 +87,7 @@ function CategoriesSlider() {
             <SwiperSlide key={index}>
               <CategoryCard
                 name={cat.nameExhibit}
-                img={'ceramica-e-porcelana.webp'}
+                img={cat.imageUrl}
                 nameFilter={cat.nameFilter}
               />
             </SwiperSlide>

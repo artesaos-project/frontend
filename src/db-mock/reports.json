@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "reportType": "Produto impróprio",
+    "target": "Vaso de Cerâmica Decorado",
+    "denunciator": "Maria Silva",
+    "reason": "Produto com rachaduras",
+    "status": "PENDING"
+  },
+  {
+    "id": 2,
+    "reportType": "Perfil inadequado",
+    "target": "João Artesão",
+    "denunciator": "Carlos Souza",
+    "reason": "Informações falsas no perfil",
+    "status": "PENDING"
+  },
+  {
+    "id": 3,
+    "reportType": "Produto impróprio",
+    "target": "Bolsa de Couro Artesanal",
+    "denunciator": "Ana Paula",
+    "reason": "Material não corresponde à descrição",
+    "status": "MODERATED"
+  },
+  {
+    "id": 4,
+    "reportType": "Conduta inadequada",
+    "target": "Pedro Santos",
+    "denunciator": "Juliana Costa",
+    "reason": "Comentários ofensivos",
+    "status": "PENDING"
+  },
+  {
+    "id": 5,
+    "reportType": "Produto impróprio",
+    "target": "Colar de Pedras Naturais",
+    "denunciator": "Roberto Lima",
+    "reason": "Produto com defeito de fabricação",
+    "status": "ARCHIVED"
+  },
+  {
+    "id": 6,
+    "reportType": "Perfil inadequado",
+    "target": "Márcia Oliveira",
+    "denunciator": "Fernando Alves",
+    "reason": "Uso de imagens sem autorização",
+    "status": "PENDING"
+  },
+  {
+    "id": 7,
+    "reportType": "Produto impróprio",
+    "target": "Quadro em Tela Pintado à Mão",
+    "denunciator": "Patrícia Rocha",
+    "reason": "Qualidade inferior ao anunciado",
+    "status": "MODERATED"
+  },
+  {
+    "id": 8,
+    "reportType": "Conduta inadequada",
+    "target": "Lucas Ferreira",
+    "denunciator": "Camila Martins",
+    "reason": "Práticas comerciais antiéticas",
+    "status": "PENDING"
+  },
+  {
+    "id": 9,
+    "reportType": "Produto impróprio",
+    "target": "Luminária Artesanal",
+    "denunciator": "Ricardo Mendes",
+    "reason": "Produto não segue normas de segurança",
+    "status": "ARCHIVED"
+  },
+  {
+    "id": 10,
+    "reportType": "Perfil inadequado",
+    "target": "Sofia Ribeiro",
+    "denunciator": "André Carvalho",
+    "reason": "Perfil duplicado",
+    "status": "MODERATED"
+  },
+  {
+    "id": 11,
+    "reportType": "Produto impróprio",
+    "target": "Tapete de Crochê",
+    "denunciator": "Beatriz Gomes",
+    "reason": "Dimensões diferentes do anunciado",
+    "status": "PENDING"
+  },
+  {
+    "id": 12,
+    "reportType": "Conduta inadequada",
+    "target": "Gabriel Pinto",
+    "denunciator": "Larissa Santos",
+    "reason": "Não cumprimento de prazos",
+    "status": "PENDING"
+  }
+]
