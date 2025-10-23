@@ -1,7 +1,7 @@
 'use client';
 import { PhotoSlot } from '@/components/features/artisan/add-product/photo-slot';
 import InputField from '@/components/features/artisan/input-field';
-import Button from '@/components/features/product/button';
+import { Button } from '@/components/ui/button';
 import { useProductForm } from '@/hooks/use-product-form';
 import { authApi } from '@/services/api';
 import { GetMyProfile } from '@/types/artisan';
@@ -135,21 +135,23 @@ function EditProfilePage() {
                 <div className="flex flex-col gap-2 w-full mb-4">
                   <Button
                     type="button"
-                    className="p-2  transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:text-white disabled:border-gray-400 cursor-pointer"
+                    variant="primary"
+                    className="transition-all disabled:bg-gray-400 disabled:cursor-not-allowed disabled:text-white disabled:border-gray-400 cursor-pointer"
                     onClick={() => handleSlotClick(0)}
                     disabled={photos.length >= 1}
-                    text="+ Adicionar Nova Foto"
-                  />
+                  >
+                    + Adicionar Nova Foto
+                  </Button>
                   <Button
                     type="button"
                     variant="secondary"
                     className="flex justify-center items-center cursor-pointer"
                     onClick={removeSelectedPhotos}
                     disabled={selectedPhotos.length === 0}
-                    text="Remover Foto"
-                    Icon={<TbTrash className="mr-1" size={14} />}
-                    iconPosition="left"
-                  />
+                  >
+                    <TbTrash className="mr-1" size={14} />
+                    Remover Foto
+                  </Button>
                 </div>
               </div>
 
@@ -264,7 +266,9 @@ function EditProfilePage() {
               />
             </div>
 
-            <Button type="submit" variant="primary" text="Salvar" />
+            <Button type="submit" variant="primary">
+              Salvar Alterações
+            </Button>
           </form>
         </div>
       </div>

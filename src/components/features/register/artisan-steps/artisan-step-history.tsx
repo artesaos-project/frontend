@@ -1,4 +1,4 @@
-import AuthButton from '@/components/common/auth-button';
+import { Button } from '@/components/ui/button';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
 
 function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
@@ -27,7 +27,9 @@ function ArtisanStepHistory({ onNext }: { onNext: () => void }) {
         maxLength={255}
       />
 
-      <AuthButton onClick={handleNext} />
+      <Button onClick={handleNext} className="w-full">
+        Continuar
+      </Button>
     </div>
   );
 }

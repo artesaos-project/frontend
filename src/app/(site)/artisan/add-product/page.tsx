@@ -3,6 +3,7 @@
 import { PhotoGallery } from '@/components/features/artisan/add-product/photo-gallery';
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
+import { Button } from '@/components/ui/button';
 import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
 import { useProductForm } from '@/hooks/use-product-form';
@@ -154,10 +155,11 @@ const AddProductPage = () => {
             />
 
             <div className="flex w-full mt-6">
-              <button
+              <Button
                 type="submit"
+                variant="primary"
                 disabled={isUploading || isLoading}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2AAA4C] px-6 py-3 text-white transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-gray-400"
+                className="w-full disabled:cursor-not-allowed disabled:bg-gray-400"
               >
                 <span>
                   {isUploading || isLoading
@@ -165,7 +167,7 @@ const AddProductPage = () => {
                     : 'Adicionar Produto'}
                 </span>
                 <IoAdd className="h-5 w-5 rounded-full bg-white/25" />
-              </button>
+              </Button>
             </div>
           </div>
         </form>
