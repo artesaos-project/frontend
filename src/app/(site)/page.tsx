@@ -2,6 +2,7 @@ import BannerNovidades from '@/components/features/home/banner-novidades';
 import CategoriesSlider from '@/components/features/home/categories-slider';
 import NewsSection from '@/components/features/home/news-section';
 import PopularProducts from '@/components/features/home/popular-products';
+import RelatedArtists from '@/components/features/home/related-artists';
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <div className="flex flex-col w-full px-4 mt-7">
         <PopularProducts />
         <NewsSection />
+        <RelatedArtists />
       </div>
     </main>
   );
