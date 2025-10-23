@@ -1,9 +1,7 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
-import { FiChevronLeft, FiChevronRight, FiUser, FiLock } from 'react-icons/fi';
-import { IoIosSearch } from 'react-icons/io';
+import { FiChevronLeft, FiChevronRight, FiLock, FiUser } from 'react-icons/fi';
 import { MdPersonOff } from 'react-icons/md';
 import { RiFileList3Line } from 'react-icons/ri';
 
