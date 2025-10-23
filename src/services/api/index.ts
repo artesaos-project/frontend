@@ -1,8 +1,8 @@
 import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
+import { CategoryProps } from '@/types/category';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
-import { CategoryProps } from '@/types/category';
 
 type CreateUserPayload = {
   name: string;
@@ -164,4 +164,10 @@ export const authApi = {
       method: 'PUT',
       body: profileData,
     }),
+};
+
+export const favoritesApi = {
+  getAll: () => apiRequest<string[]>('/'),
+  like: (productId: string) =>
+    apiRequest(`/products/${productId}/like`, { method: 'POST' }),
 };
