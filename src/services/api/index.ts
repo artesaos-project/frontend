@@ -2,6 +2,7 @@ import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
+import { CategoryProps } from '@/types/category';
 
 type CreateUserPayload = {
   name: string;
@@ -63,19 +64,6 @@ type ArtisanApplicationPayload = {
   sicab: string;
   sicabRegistrationDate: string;
   sicabValidUntil: string;
-};
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  imagePath: string;
-  rawMaterialIds?: number[];
-  techniqueIds?: number[];
-  createdAt: string;
-  description?: string;
-  isActive: true;
-  updatedAt: string;
 };
 
 export const artisanApi = {
