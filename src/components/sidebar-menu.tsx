@@ -15,12 +15,11 @@ import { useEffect, useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
-import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 import {
   IoChevronDownOutline,
   IoChevronForward,
   IoChevronUpOutline,
-  IoDocumentOutline,
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
@@ -129,36 +128,30 @@ function SideBarMenu() {
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
           {isModerationRoute ? (
             <>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <FaHome color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                  Início
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoPerson color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Artesãos
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoMdCalendar color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Eventos
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <CgDanger color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Denúncias
-                </p>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoDocumentOutline color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Documentação
-                </p>
-              </div>
+              <Link href="/moderator">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <FaHome color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                    Início
+                  </p>
+                </div>
+              </Link>
+              <Link href="/moderator/artisans">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <IoPerson color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Artesãos
+                  </p>
+                </div>
+              </Link>
+              <Link href="/moderator/reports">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <CgDanger color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Denúncias
+                  </p>
+                </div>
+              </Link>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <BsGear color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
