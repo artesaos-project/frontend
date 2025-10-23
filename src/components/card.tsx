@@ -1,4 +1,5 @@
 'use client';
+import { useFavorites } from '@/context/favorite-context';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
@@ -29,7 +30,8 @@ function ProductCardBody({
   isEdit,
 }: ProductCardProps) {
   const router = useRouter();
-  const [isFavorited, setIsFavorited] = React.useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFavorited = isFavorite(String(id));
 
   const handleDetailsClick = () => {
     router.push(`/product/${id}`);
@@ -40,7 +42,7 @@ function ProductCardBody({
   };
 
   const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
+    toggleFavorite(String(id));
   };
 
   return (
