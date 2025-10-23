@@ -69,8 +69,11 @@ type CategoryProps = {
   id: number;
   nameFilter: string;
   nameExhibit: string;
+  imagePath: string;
+  rawMaterialIds?: number[];
+  techniqueIds?: number[];
   createdAt: string;
-  description: string;
+  description?: string;
   isActive: true;
   updatedAt: string;
 };
@@ -125,7 +128,7 @@ export const productApi = {
       body: productData,
     }),
   getCatalogs: () =>
-    apiRequest<{ items: CategoryProps[] }>('/catalog/materials'),
+    apiRequest<{ items: CategoryProps[] }>('/catalog/categories'),
 };
 
 export const uploadApi = {

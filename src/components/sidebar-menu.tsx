@@ -30,16 +30,8 @@ import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
 import AlertDialog from './common/alert-dialog';
 import { Button } from './ui/button';
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
@@ -258,12 +250,10 @@ function DropdownCategories() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:3333/catalog/materials');
-        const data = await response.json();
-        setCategories(data.items);
-      } catch (err: unknown) {
-        if (err instanceof Error)
-          console.log('Erro ao buscar categorias', err.message);
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
+      } catch (error: unknown) {
+        console.error('Erro ao buscar categorias', error);
       }
     }
     fetchCategories();
