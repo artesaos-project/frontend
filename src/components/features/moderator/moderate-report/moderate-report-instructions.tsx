@@ -2,7 +2,7 @@ import ModerateArtisanButton from './moderate-report-button';
 
 function ModerateReportInstructions() {
   return (
-    <div className="hidden lg:flex flex-col">
+    <div className="flex flex-col">
       <div className="w-full rounded-md border border-midnight p-2 text-midnight font-bold">
         <p>Instruções das ações</p>
       </div>
