@@ -3,7 +3,7 @@ import StrokedText from './stroked-text';
 
 function BannerNovidades() {
   return (
-    <div className="bg-[url('/bg-banner-novidades.png')] bg-cover bg-center h-50 w-full  sm:rounded-3xl md:rounded-4xl my-6 flex">
+    <div className="bg-[url('/bg-banner-novidades.png')] bg-cover bg-center h-50 w-full  sm:rounded-3xl md:rounded-4xl mt-6 flex">
       <div className="my-auto sm:m-auto space-y-2 px-6 w-full sm:w-fit">
         <div className="relative w-full sm:w-fit">
           <StrokedText
