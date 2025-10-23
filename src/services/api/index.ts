@@ -3,6 +3,7 @@ import { artisanDetails } from '@/types/artisan-details';
 import { CategoryProps } from '@/types/category';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
+import { FavoritesApiResponse } from '@/types/favorite';
 
 type CreateUserPayload = {
   name: string;
@@ -171,7 +172,7 @@ export const authApi = {
 };
 
 export const favoritesApi = {
-  getAll: () => apiRequest<string[]>('/'),
+  getAll: () => apiRequest<FavoritesApiResponse>('/users/my-favorites'),
   like: (productId: string) =>
     apiRequest(`/products/${productId}/like`, { method: 'POST' }),
 };
