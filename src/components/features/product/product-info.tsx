@@ -1,9 +1,16 @@
 'use client';
 
+import DropdownDenuncia from '@/components/common/dropdown-denuncia';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from '@radix-ui/react-dropdown-menu';
 import { CiHeart } from 'react-icons/ci';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
+import { TbDotsVertical } from 'react-icons/tb';
 import Button from './button';
+import { useState } from 'react';
 
 interface ProductInfoProps {
   title: string;
@@ -22,11 +29,22 @@ const ProductInfo = ({
   onAddToFavorites,
   onContact,
 }: ProductInfoProps) => {
+  const [open, setOpen] = useState(false);
   return (
     <div className="mx-9 my-4 space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-        <p className="text-[#1B7132] text-2xl font-bold mt-2">{price}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
+          <p className="text-[#1B7132] text-2xl font-bold mt-2">{price}</p>
+        </div>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger asChild>
+            <div className="p-2 rounded-full hover:outline-none hover:ring-2 hover:ring-gray-300">
+              <TbDotsVertical size={24} className="cursor-pointer" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownDenuncia onClose={() => setOpen(false)} />
+        </DropdownMenu>
       </div>
 
       <div className="pt-2">
