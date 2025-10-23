@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <div className="min-h-screen max-w-screen overflow-x-hidden">
       <ModeratorHeader />
       {children}
       <Footer />

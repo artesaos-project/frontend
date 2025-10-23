@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
-import ModerateReportButton from './moderate-report-button';
 
 type Report = {
   id: number;
@@ -17,7 +16,6 @@ interface ModeratorTableProps {
   searchTerm: string;
   activeFilter: string;
   reports: Report[];
-  onRefresh: () => void;
   searchResults?: Report[];
   isSearching?: boolean;
 }
@@ -32,7 +30,6 @@ function ModeratorReportTable({
   searchTerm,
   activeFilter,
   reports,
-  onRefresh,
   searchResults = [],
   isSearching = false,
 }: ModeratorTableProps) {
@@ -48,113 +45,73 @@ function ModeratorReportTable({
     return filtered;
   }, [reports, searchResults, searchTerm, activeFilter]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleAction = async (action: 'exclude', reportId: number) => {
-    try {
-      if (action === 'exclude') {
-        // await artisanApi.exclude(reportId);
-        console.log('Denuncia excluída');
-      }
-      onRefresh();
-    } catch (error) {
-      console.error(`Erro ao moderar artesão`, error);
-    }
-  };
-
-  const handleExclude = async (reportId: number) => {
-    await handleAction('exclude', reportId);
-  };
-
-  const renderActionButtons = (reports: Report) => {
-    switch (reports.status) {
-      case 'PENDING':
-        return (
-          <div className="flex py-1 justify-center items-center gap-2.5">
-            <ModerateReportButton
-              variant="exclude"
-              onClick={() => handleExclude(reports.id)}
-            />
-          </div>
-        );
-
-      case 'MODERATED':
-        return null;
-
-      case 'ARCHIVED':
-        return null;
-
-      default:
-        return null;
-    }
-  };
-
   if (isSearching) {
     return (
-      <div className="w-2/3 mx-auto mt-10 text-center">
+      <div className="w-full px-4 sm:w-11/12 md:w-5/6 lg:w-2/3 mx-auto mt-10 text-center">
         <p className="text-midnight">Buscando...</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <table className="w-2/3 mx-auto mt-10 text-center text-midnight border-b border-midnight text-sm mb-20">
-        <thead className="bg-baby-blue">
-          <tr>
-            <th className="font-semibold p-2 text-sm rounded-tl-md ring-[0.5px]">
-              ID
-            </th>
-            <th className="font-semibold text-sm ring-[0.5px] hidden md:table-cell">
-              Tipo
-            </th>
-            <th className="font-semibold text-sm ring-[0.5px] hidden md:table-cell">
-              Alvo
-            </th>
-            <th className="font-semibold text-sm ring-[0.5px] hidden md:table-cell">
-              Denunciante
-            </th>
-            <th className="font-semibold text-sm ring-[0.5px] hidden md:table-cell">
-              Motivo
-            </th>
-            <th className="font-semibold px-6 text-sm ring-[0.5px] hidden md:table-cell">
-              Status
-            </th>
-            <th className="font-semibold text-sm rounded-tr-md ring-[0.5px]">
-              Ações
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredReports.map((report) => (
-            <tr key={report.id} className="h-9">
-              <td className="ring-[0.5px]">
-                <Link
-                  href={`/moderator/reports/${report.id}`}
-                  className="hover:font-semibold transition underline"
-                >
-                  {report.id}
-                </Link>
-              </td>
-              <td className="ring-[0.5px] hidden md:table-cell">
-                {report.reportType}
-              </td>
-              <td className="ring-[0.5px] hidden md:table-cell">
-                {report.target}
-              </td>
-              <td className="ring-[0.5px] hidden md:table-cell">
-                {report.denunciator}
-              </td>
-              <td className="ring-[0.5px] hidden md:table-cell">
-                {report.reason}
-              </td>
-              <td className="font-semibold ring-[0.5px] hidden md:table-cell">
-                {STATUS_TRANSLATIONS[report.status]}
-              </td>
-              <td className="ring-[0.5px]">{renderActionButtons(report)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="w-full px-4 overflow-x-hidden">
+      <div className="w-full sm:w-11/12 md:w-5/6 lg:w-2/3 mx-auto mt-10 mb-20">
+        <div className="overflow-x-auto">
+          <table className="w-full text-center text-midnight border-b border-midnight text-sm">
+            <thead className="bg-baby-blue">
+              <tr>
+                <th className="font-semibold p-2 text-xs sm:text-sm rounded-tl-md ring-[0.5px] whitespace-nowrap">
+                  ID
+                </th>
+                <th className="font-semibold p-2 text-xs sm:text-sm ring-[0.5px] rounded-tr-md sm:rounded-none whitespace-nowrap">
+                  Alvo
+                </th>
+                <th className="font-semibold p-2 text-xs sm:text-sm ring-[0.5px] hidden sm:table-cell whitespace-nowrap">
+                  Status
+                </th>
+                <th className="font-semibold p-2 text-xs sm:text-sm ring-[0.5px] hidden md:table-cell whitespace-nowrap">
+                  Tipo
+                </th>
+                <th className="font-semibold p-2 text-xs sm:text-sm ring-[0.5px] hidden lg:table-cell whitespace-nowrap">
+                  Denunciante
+                </th>
+                <th className="font-semibold p-2 text-xs sm:text-sm ring-[0.5px] rounded-tr-md hidden xl:table-cell whitespace-nowrap">
+                  Motivo
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredReports.map((report) => (
+                <tr key={report.id} className="h-9">
+                  <td className="ring-[0.5px] border border-midnight p-1 sm:p-2 ">
+                    <Link
+                      href={`/moderator/reports/${report.id}`}
+                      className="hover:font-semibold transition underline text-xs sm:text-sm"
+                    >
+                      {report.id}
+                    </Link>
+                  </td>
+                  <td className="ring-[0.5px] p-1 sm:p-2 text-xs sm:text-sm border border-midnight max-w-[120px] sm:max-w-none truncate">
+                    {report.target}
+                  </td>
+                  <td className="font-semibold ring-[0.5px] p-1 sm:p-2 hidden sm:table-cell text-xs sm:text-sm border border-midnight whitespace-nowrap">
+                    {STATUS_TRANSLATIONS[report.status]}
+                  </td>
+                  <td className="ring-[0.5px] p-1 sm:p-2 hidden md:table-cell text-xs sm:text-sm border border-midnight whitespace-nowrap">
+                    {report.reportType}
+                  </td>
+                  <td className="ring-[0.5px] p-1 sm:p-2 hidden lg:table-cell text-xs sm:text-sm border border-midnight whitespace-nowrap">
+                    {report.denunciator}
+                  </td>
+                  <td className="ring-[0.5px] p-1 sm:p-2 hidden xl:table-cell text-xs sm:text-sm border border-midnight max-w-[200px] truncate">
+                    {report.reason}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
