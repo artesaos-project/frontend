@@ -39,8 +39,6 @@ function Page() {
         password: data.password,
       });
 
-      console.log(response);
-
       const user: UserProps = {
         userId: response.user.id,
         userName: response.user.name,

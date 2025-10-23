@@ -8,24 +8,17 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
 import { productApi } from '@/services/api';
-
-type CategoryProps = {
-  id: number;
-  nameFilter: string;
-  nameExhibit: string;
-  createdAt: string;
-  description: string;
-  isActive: true;
-  updatedAt: string;
-};
+import { CategoryProps } from '@/types/category';
 
 function CategoriesSlider() {
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   useEffect(() => {
     async function fetchCategories() {
       try {
         const response = await productApi.getCatalogs();
         setCategories(response.items);
+        setLoading(false);
       } catch (error: unknown) {
         console.error('Erro ao buscar categorias', error);
       }
@@ -94,11 +87,21 @@ function CategoriesSlider() {
             <SwiperSlide key={index}>
               <CategoryCard
                 name={cat.nameExhibit}
-                img={'ceramica-e-porcelana.webp'}
+                img={cat.imageUrl}
                 nameFilter={cat.nameFilter}
               />
             </SwiperSlide>
           ))}
+          {loading &&
+            Array.from({ length: 8 }).map((_, index) => (
+              <SwiperSlide key={index}>
+                <div className="flex flex-col mt-4 mb-10 items-center justify-center gap-2 cursor-pointer">
+                  <div className="animate-pulse flex flex-col gap-4">
+                    <div className="bg-gray-300 rounded-md h-20 w-20" />
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>

@@ -3,22 +3,26 @@ import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
 import { productApi } from '@/services/api';
+import { CardsListSkeleton } from './loading-state';
 
 function ProductsList() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await productApi.getAll();
         setProducts(res);
+        setLoading(false);
       } catch (err) {
         console.error('Erro ao buscar produtos:', err);
       }
     };
 
     fetchProducts();
+    // setProducts(productsMock);
   }, []);
 
   useEffect(() => {
@@ -39,6 +43,17 @@ function ProductsList() {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [products]);
+
+  if (loading) {
+    return <CardsListSkeleton />;
+  }
+  if (products.length === 0) {
+    return (
+      <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+        Nenhum produto disponível no momento.
+      </p>
+    );
+  }
   return (
     <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4 lg:gap-y-6">
       {visibleProducts.map((product, i) => (
@@ -61,5 +76,4 @@ function ProductsList() {
     </div>
   );
 }
-
 export default ProductsList;

@@ -1,3 +1,4 @@
+'use client';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
@@ -62,7 +63,7 @@ function ProductCardBody({
           )}
         </button>
       </header>
-      <p className="text-sm lg:text-lg line-clamp-2">{title}</p>
+      <p className="text-sm lg:text-lg truncate">{title}</p>
       <p className="text-sm lg:text-lg truncate italic font-light">{author}</p>
       <Button
         onClick={handleDetailsClick}

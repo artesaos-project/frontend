@@ -18,6 +18,7 @@ export const apiRequest = async <T>(
     isFormData = false,
   }: FetchOptions = {},
 ): Promise<T> => {
+  const devMode = process.env.NEXT_PUBLIC_DEVELOPMENT === 'true';
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   if (!baseUrl) {
     throw new Error('API_BASE_URL is not defined in environment variables');
@@ -33,9 +34,8 @@ export const apiRequest = async <T>(
       headers: {
         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         ...headers,
-        'ngrok-skip-browser-warning': 'true',
       },
-      withCredentials: withCredentials ?? true,
+      withCredentials: devMode ? false : (withCredentials ?? true),
     });
 
     return response.data;
