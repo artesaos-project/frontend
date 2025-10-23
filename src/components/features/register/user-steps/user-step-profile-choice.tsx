@@ -1,4 +1,4 @@
-import AuthButton from '@/components/common/auth-button';
+import { Button } from '@/components/ui/button';
 import { FaCheck } from 'react-icons/fa6';
 
 function StepChoice({
@@ -25,16 +25,22 @@ function StepChoice({
           Ao ativar essa opção, você poderá divulgar suas criações, exibir
           preços e alcançar mais pessoas interessadas no seu trabalho.
         </p>
-        <AuthButton
-          text="Sim, sou artesão"
-          className="bg-olivine-600 mt-4 hover:bg-midnight"
-          onClick={handleArtisan}
-        />
-        <AuthButton
-          text="Não sou artesão"
-          className="bg-sakura mt-4 hover:bg-salmon"
-          onClick={goHome}
-        />
+        <div className="flex flex-col gap-4 justify-center mt-6">
+          <Button
+            variant="primary"
+            className="rounded-2xl p-5"
+            onClick={handleArtisan}
+          >
+            Sim, sou artesão
+          </Button>
+          <Button
+            variant="secondary"
+            className="rounded-2xl p-5"
+            onClick={goHome}
+          >
+            Não sou artesão
+          </Button>
+        </div>
       </div>
     </div>
   );

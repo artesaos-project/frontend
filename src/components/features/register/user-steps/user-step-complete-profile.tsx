@@ -1,6 +1,6 @@
-import AuthButton from '@/components/common/auth-button';
-import { authApi } from '@/services/api';
+import { Button } from '@/components/ui/button';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
+import { authApi } from '@/services/api';
 
 function StepComplete({
   onNext,
@@ -31,16 +31,22 @@ function StepComplete({
       <p className="text-md text-midnight text-center mt-4">
         Se preferir, pode fazer isso depois.
       </p>
-      <AuthButton
-        text="Sim, quero responder agora"
-        className="bg-olivine-600 mt-10 hover:bg-midnight"
-        onClick={handleSubmit}
-      />
-      <AuthButton
-        text="Prefiro deixar para depois"
-        className="bg-sakura mt-4 hover:bg-salmon"
-        onClick={goHome}
-      />
+      <div className="flex flex-col">
+        <Button
+          variant="primary"
+          className="mt-10 rounded-2xl p-5"
+          onClick={handleSubmit}
+        >
+          Sim, quero responder agora
+        </Button>
+        <Button
+          variant="secondary"
+          className="mt-4 rounded-2xl p-5"
+          onClick={goHome}
+        >
+          Prefiro deixar para depois
+        </Button>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import AuthButton from '@/components/common/auth-button';
+import { Button } from '@/components/ui/button';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { uploadApi } from '@/services/api';
 import { useRef, useState } from 'react';
@@ -106,18 +106,21 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
           return null;
         })}
       </div>
-      <AuthButton
-        className="mb-4 bg-olivine"
-        text=" + Adicionar"
-        onClick={handleCustomClick}
-      />
-      <AuthButton
-        className=" bg-sakura hover:bg-salmon mb-15"
-        text="Remover todas as mídias"
-        onClick={handleRemove}
-        icon={<TbTrash size={20} className="inline-block mr-2" />}
-      />
-      <AuthButton onClick={handleNext} />
+      <div className="flex flex-col w-full gap-2">
+        <Button className=" bg-olivine" onClick={handleCustomClick}>
+          + Adicionar
+        </Button>
+        <Button
+          variant="secondary"
+          className="rounded-2xl mb-10"
+          onClick={handleRemove}
+        >
+          <TbTrash size={20} />
+          Remover todas as mídias
+        </Button>
+
+        <Button onClick={handleNext}>Continuar</Button>
+      </div>
     </div>
   );
 }

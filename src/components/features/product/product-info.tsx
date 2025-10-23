@@ -1,16 +1,16 @@
 'use client';
 
 import DropdownDenuncia from '@/components/common/dropdown-denuncia';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
+import { useState } from 'react';
 import { CiHeart } from 'react-icons/ci';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
 import { TbDotsVertical } from 'react-icons/tb';
-import Button from './button';
-import { useState } from 'react';
 
 interface ProductInfoProps {
   title: string;
@@ -47,33 +47,22 @@ const ProductInfo = ({
         </DropdownMenu>
       </div>
 
-      <div className="pt-2">
-        <Button
-          text="Compartilhar"
-          Icon={<IoMdShareAlt size={20} color="#E0001E" />}
-          variant="outline"
-          onClick={onShare}
-          className="w-full"
-        />
+      <div className="pt-2 w-full">
+        <Button variant="olivineOutline" onClick={onShare} className="w-full">
+          Compartilhar
+          <IoMdShareAlt size={20} color="#E0001E" />
+        </Button>
       </div>
 
-      <div className="flex gap-3 items-center">
-        <Button
-          text="Adicionar aos favoritos"
-          Icon={<CiHeart size={18} />}
-          variant="secondary"
-          size="md"
-          onClick={onAddToFavorites}
-          className="w-full"
-        />
-        <Button
-          text="Entrar em contato"
-          Icon={<FaWhatsapp size={18} />}
-          variant="primary"
-          size="md"
-          onClick={onContact}
-          className="w-full"
-        />
+      <div className="grid grid-cols-2 gap-3 items-center w-full">
+        <Button variant="secondary" onClick={onAddToFavorites}>
+          Adicionar aos favoritos
+          <CiHeart size={18} />
+        </Button>
+        <Button variant="primary" onClick={onContact}>
+          Entrar em contato
+          <FaWhatsapp size={18} />
+        </Button>
       </div>
 
       {description && (

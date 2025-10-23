@@ -1,8 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import * as React from 'react';
-import AuthButton from '@/components/common/auth-button';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -10,11 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { productApi } from '@/services/api';
 import { ApiProduct } from '@/types/product';
 import { MessageSquare, Star } from 'lucide-react';
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
 import { LuVideo } from 'react-icons/lu';
 import { TbTrash } from 'react-icons/tb';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
 
 const StarRating = ({
   rating,
@@ -338,17 +337,23 @@ export default function ProductEvaluationPage() {
               return null;
             })}
           </div>
-          <AuthButton
-            className="mb-4 bg-olivine"
-            text=" + Adicionar"
-            onClick={handleCustomClick}
-          />
-          <AuthButton
-            className=" bg-sakura hover:bg-salmon mb-4"
-            text="Remover todas as mídias"
-            onClick={handleRemove}
-            icon={<TbTrash size={20} className="inline-block mr-2" />}
-          />
+          <div className="w-full flex flex-col gap-5">
+            <Button
+              variant="primary"
+              onClick={handleCustomClick}
+              className="w-full rounded-full text-lg"
+            >
+              + Adicionar
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleRemove}
+              className="w-full rounded-full text-lg"
+            >
+              Remover todas as mídias
+              <TbTrash size={20} className="inline-block mr-2" />
+            </Button>
+          </div>
         </div>
 
         <div className="mt-8 flex items-center">
@@ -362,12 +367,14 @@ export default function ProductEvaluationPage() {
           </Label>
         </div>
 
-        <AuthButton
-          className="mt-8 bg-olivine"
-          text={isSubmitting ? 'Enviando...' : 'Enviar avaliação'}
+        <Button
+          variant="primary"
           onClick={handleSubmit}
           disabled={isSubmitting}
-        />
+          className="mt-8 w-full text-lg rounded-full"
+        >
+          {isSubmitting ? 'Enviando...' : 'Enviar avaliação'}
+        </Button>
         {/* <Button className="mt-8 w-full bg-green-600 py-3 text-lg text-white hover:bg-green-700">
           Enviar avaliação
         </Button> */}

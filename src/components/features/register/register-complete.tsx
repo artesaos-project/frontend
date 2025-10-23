@@ -1,4 +1,4 @@
-import AuthButton from '@/components/common/auth-button';
+import { Button } from '@/components/ui/button';
 import { Clock } from 'lucide-react';
 import { LiaClipboardSolid } from 'react-icons/lia';
 
@@ -17,7 +17,7 @@ function SignUpComplete({ goHome }: { goHome: () => void }) {
         Seu cadastro foi enviado com sucesso e está em análise. Você receberá
         uma notificação assim que for aprovado.
       </p>
-      <AuthButton onClick={goHome} />
+      <Button onClick={goHome}>Voltar para a página inicial</Button>
     </div>
   );
 }

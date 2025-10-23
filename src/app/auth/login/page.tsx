@@ -1,8 +1,8 @@
 'use client';
 
-import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import useStoreUser from '@/hooks/use-store-user';
 import { LoginFormData, loginSchema } from '@/lib/schemas/login-schema';
 import { authApi } from '@/services/api';
@@ -140,10 +140,9 @@ function Page() {
           >
             Esqueceu sua senha?
           </Link>
-          <AuthButton
-            text={isLoading ? 'Entrando...' : 'Continuar'}
-            disabled={isLoading}
-          />
+          <Button disabled={isLoading}>
+            {isLoading ? 'Entrando...' : 'Continuar'}
+          </Button>
         </form>
       </div>
     </div>
