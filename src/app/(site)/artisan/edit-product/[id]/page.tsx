@@ -3,6 +3,7 @@
 import { PhotoGallery } from '@/components/features/artisan/add-product/photo-gallery';
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
+import { Button } from '@/components/ui/button';
 import { materiaPrima } from '@/constants/materia-prima';
 import { tecnicas } from '@/constants/tecnicas';
 import { useProductForm } from '@/hooks/use-product-form';
@@ -13,7 +14,8 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { use, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IoAdd } from 'react-icons/io5';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa6';
 import { toast, Toaster } from 'sonner';
 
 const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
@@ -116,6 +118,25 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
+  const handleDelete = async () => {
+    if (isUploading) {
+      toast.warning('Por favor, aguarde o término do upload das fotos.');
+      return;
+    }
+    try {
+      await productApi.delete(id);
+      toast.success('Produto excluído com sucesso!');
+      router.back();
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message;
+        toast.error(message);
+      } else {
+        toast.error('Erro ao excluir o produto.');
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
       <Toaster richColors position="bottom-right" />
@@ -201,19 +222,24 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
               className="hidden"
             />
 
-            <div className="flex w-full text-sm space-x-4 mt-4">
-              <button
+            <div className="grid grid-cols-1 w-full text-sm mt-4 gap-2">
+              <Button
                 type="submit"
                 disabled={isUploading}
-                className={`flex px-6 gap-2 py-2 w-full justify-center items-center rounded-lg transition-all ${
+                variant="primary"
+                className={`w-full ${
                   isUploading
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-[#2AAA4C] hover:bg-green-600 cursor-pointer'
+                    : 'bg-olivine-600 hover:bg-white hover:text-olivine-600'
                 } text-white`}
               >
-                {isUploading ? 'Enviando fotos...' : 'Adicionar Produto'}
-                <IoAdd className="bg-gray-200/50 rounded-2xl" color="white" />
-              </button>
+                <FaCheck />
+                {isUploading ? 'Enviando fotos...' : 'Atualizar Produto'}
+              </Button>
+              <Button variant="secondary" onClick={handleDelete}>
+                <FaRegTrashAlt />
+                Excluir Produto
+              </Button>
             </div>
           </div>
         </form>

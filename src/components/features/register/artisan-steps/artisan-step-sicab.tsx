@@ -1,5 +1,5 @@
-import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
+import { Button } from '@/components/ui/button';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { useDateInput } from '@/hooks/use-date-input';
 import {
@@ -97,7 +97,7 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
           hasError={!!errors.dataValidade}
           errorMessage={errors.dataValidade?.message}
         />
-        <AuthButton text="Continuar" className="mt-10" />
+        <Button className="mt-10">Continuar</Button>
       </form>
     </div>
   );

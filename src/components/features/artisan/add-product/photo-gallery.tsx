@@ -1,8 +1,9 @@
+import { Button } from '@/components/ui/button';
+import { PhotoType } from '@/hooks/use-product-form';
 import { Trash2 } from 'lucide-react';
 import React from 'react';
 import { TbSelect, TbTrash } from 'react-icons/tb';
 import { PhotoSlot } from './photo-slot';
-import { PhotoType } from '@/hooks/use-product-form';
 
 interface PhotoGalleryProps {
   photos: PhotoType[];
@@ -95,37 +96,40 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
       </p>
 
       <div className="flex mb-2 text-xs font-semibold">
-        <button
+        <Button
           type="button"
-          className="p-2 w-full bg-olivine text-white rounded-lg hover:bg-green-600 transition-all disabled:bg-gray-400"
+          variant="primary"
+          className="p-2 w-full disabled:bg-gray-400 disabled:border-none rounded-lg"
           onClick={onTriggerUpload}
           disabled={photos.length >= 5}
         >
           + Adicionar Foto (Máximo 5)
-        </button>
+        </Button>
       </div>
 
       <div
-        className={`flex ${isMobile ? 'flex-col' : ''} ${isMobile ? 'mb-4' : 'mb-10'} text-xs space-x-2 font-semibold`}
+        className={`flex ${isMobile ? 'flex-col' : 'grid grid-cols-2'} ${isMobile ? 'mb-4' : 'mb-10'} text-xs gap-2 font-semibold`}
       >
-        <button
+        <Button
           type="button"
-          className={`flex px-2 py-2 ${isMobile ? 'mb-2' : ''} justify-center items-center w-full border-2 border-sakura text-sakura rounded-lg hover:bg-sakura hover:text-white transition-all disabled:opacity-50`}
+          variant="outlineSakura"
+          className="p-2"
           onClick={onSelectAll}
           disabled={photos.length === 0}
         >
           <TbSelect className="mr-1" />
           Selecionar Fotos
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
-          className="flex px-2 py-2 justify-center items-center w-full bg-sakura text-white rounded-lg hover:bg-salmon transition-all"
+          variant="secondary"
+          className="p-2"
           onClick={onRemoveSelected}
         >
           <TbTrash className="mr-1" />
           Remover Fotos Selecionadas
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -115,6 +115,10 @@ export const productApi = {
       method: 'PUT',
       body: productData,
     }),
+  delete: (id: string) =>
+    apiRequest<{ message?: string }>(`/products/${id}`, {
+      method: 'DELETE',
+    }),
   getCatalogs: () =>
     apiRequest<{ items: CategoryProps[] }>('/catalog/categories'),
 };

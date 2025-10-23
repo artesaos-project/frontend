@@ -1,6 +1,6 @@
-import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
 import { PhoneFields } from '@/components/features/register/phone-fields';
+import { Button } from '@/components/ui/button';
 import useStoreUser from '@/hooks/use-store-user';
 import { SignUpData, signUpSchema } from '@/lib/schemas/sign-up-schema';
 import { authApi } from '@/services/api';
@@ -185,7 +185,7 @@ function StepRegister({
             </Link>
           </span>
         </div>
-        <AuthButton />
+        <Button>Cadastrar</Button>
       </form>
     </>
   );

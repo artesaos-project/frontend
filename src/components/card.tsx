@@ -5,6 +5,7 @@ import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 import { Button } from './ui/button';
+import { Link } from 'lucide-react';
 
 type ProductCardProps = {
   id: string | number;
@@ -67,24 +68,53 @@ function ProductCardBody({
       </header>
       <p className="text-sm lg:text-lg truncate">{title}</p>
       <p className="text-sm lg:text-lg truncate italic font-light">{author}</p>
-      <Button
-        onClick={handleDetailsClick}
-        className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold mt-auto"
-      >
-        <FaPlus />
-        Detalhes
-      </Button>
-      {isEdit && (
+      <div className="flex flex-col gap-2 w-full">
         <Button
-          onClick={handleEditClick}
-          className="bg-olivine-600 cursor-pointer hover:bg-olivine-600/70 text-xl font-bold mt-1"
+          onClick={handleDetailsClick}
+          variant="secondary"
+          className="p-2"
         >
-          Editar
-          <HiOutlinePencilAlt />
+          <FaPlus />
+          Detalhes
         </Button>
-      )}
+        {isEdit && (
+          <Button onClick={handleEditClick} variant="primary" className="p-2">
+            Editar
+            <HiOutlinePencilAlt />
+          </Button>
+        )}
+      </div>
     </>
   );
 }
 
-export { BaseCard, ProductCardBody };
+function ArtisanCardBody({
+  name,
+  type,
+  id,
+}: {
+  name: string;
+  type: string;
+  id: number;
+}) {
+  return (
+    <>
+      <header className="flex justify-between items-center mt-2 mb-1">
+        <p className="font-bold lg:text-xl md:text-lg text-midnight truncate">
+          {name}
+        </p>
+        <button className="cursor-pointer hover:scale-110 transition-transform duration-200">
+          <FaPlus />
+        </button>
+      </header>
+      <p className="text-sm lg:text-lg truncate italic font-light">{type}</p>
+      <Link href={`/artisan/${id}`}>
+        <Button className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold mt-auto">
+          Ver Perfil
+        </Button>
+      </Link>
+    </>
+  );
+}
+
+export { BaseCard, ProductCardBody, ArtisanCardBody };

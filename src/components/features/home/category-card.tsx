@@ -8,6 +8,7 @@ type CategoryCardProps = {
 };
 
 function CategoryCard({ name, img, nameFilter }: CategoryCardProps) {
+  console.log(img);
   return (
     <Link
       href={`/category/${nameFilter.toLowerCase()}`}

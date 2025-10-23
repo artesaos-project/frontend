@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from 'react-icons/io';
 import { MdOutlineRateReview } from 'react-icons/md';
-import Button from './button';
 
 interface ITotalEstrelas {
   estrelas: number;
@@ -197,6 +197,15 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
     router.push(`/product/${productId}/to-evaluate`);
   };
 
+  const filtros = [
+    { estrelas: 0, text: `Todos(${reviewsData.length})` },
+    { estrelas: 5 },
+    { estrelas: 4 },
+    { estrelas: 3 },
+    { estrelas: 2 },
+    { estrelas: 1 },
+  ];
+
   return (
     <>
       <div className="flex flex-row w-full md:grid-cols-3 justify-center items-center gap-6 py-5 px-8 bg-[#FFFFFF] rounded-4xl shadow-lg">
@@ -206,48 +215,27 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
         </div>
 
         <div className="flex flex-wrap lg:flex-row justify-center items-center gap-2">
-          <FiltroEstrelas
-            text={`Todos(${reviewsData.length})`}
-            estrelas={0}
-            onClick={() => handleFilterClick(0)}
-            isActive={activeFilter === 0}
-          />
-          <FiltroEstrelas
-            estrelas={5}
-            onClick={() => handleFilterClick(5)}
-            isActive={activeFilter === 5}
-          />
-          <FiltroEstrelas
-            estrelas={4}
-            onClick={() => handleFilterClick(4)}
-            isActive={activeFilter === 4}
-          />
-          <FiltroEstrelas
-            estrelas={3}
-            onClick={() => handleFilterClick(3)}
-            isActive={activeFilter === 3}
-          />
-          <FiltroEstrelas
-            estrelas={2}
-            onClick={() => handleFilterClick(2)}
-            isActive={activeFilter === 2}
-          />
-          <FiltroEstrelas
-            estrelas={1}
-            onClick={() => handleFilterClick(1)}
-            isActive={activeFilter === 1}
-          />
+          {filtros.map(({ estrelas, text }) => (
+            <FiltroEstrelas
+              key={estrelas}
+              text={text}
+              estrelas={estrelas}
+              onClick={() => handleFilterClick(estrelas)}
+              isActive={activeFilter === estrelas}
+            />
+          ))}
         </div>
       </div>
 
       <div className="flex justify-center items-center w-full mt-6">
         <Button
           className="w-8/12"
-          variant="outline"
-          text="Avaliar Produto"
-          Icon={<MdOutlineRateReview size={20} />}
+          variant="olivineOutline"
           onClick={handleEvaluateClick}
-        />
+        >
+          <MdOutlineRateReview size={20} />
+          Avaliar Produto
+        </Button>
       </div>
 
       <div className="flex flex-col space-y-4 items-center justify-center">

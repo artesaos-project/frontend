@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'placehold.co',
       },
+      {
+        protocol: 'http',
+        hostname: '72.60.155.229',
+        port: '9000',
+        pathname: '/**',
+      },
     ],
   },
 };

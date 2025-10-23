@@ -1,5 +1,5 @@
-import AuthButton from '@/components/common/auth-button';
 import AuthInput from '@/components/common/auth-input';
+import { Button } from '@/components/ui/button';
 import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { addressSchema } from '@/lib/schemas/andress-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -158,7 +158,7 @@ function ArtisanStepAddress({ onNext }: { onNext: () => void }) {
             />
           </div>
         </div>
-        <AuthButton text="Continuar" />
+        <Button>Continuar</Button>
       </form>
     </div>
   );

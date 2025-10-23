@@ -1,4 +1,4 @@
-import AuthButton from '@/components/common/auth-button';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import SearchBar from './search-bar';
 
@@ -93,7 +93,9 @@ function MultiSelectStep({
           );
         })}
       </div>
-      <AuthButton onClick={handleNext} />
+      <Button onClick={handleNext} className="w-full">
+        Continuar
+      </Button>
     </div>
   );
 }
