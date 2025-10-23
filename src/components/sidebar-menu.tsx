@@ -2,11 +2,11 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
 import { productApi } from '@/services/api';
@@ -20,9 +20,11 @@ import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
 import { IoMdHelpCircleOutline } from 'react-icons/io';
 import {
+  IoCalendar,
   IoChevronDownOutline,
   IoChevronForward,
   IoChevronUpOutline,
+  IoDocumentOutline,
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
@@ -134,7 +136,7 @@ function SideBarMenu() {
                 </p>
               </div>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoMdCalendar color="#ff8c94" size={30} />
+                <IoCalendar color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Eventos
                 </p>
@@ -202,12 +204,14 @@ function SideBarMenu() {
                   </div>
                 </Link>
               )}
-              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <FaRegHeart color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Favoritos
-                </p>
-              </div>
+              <Link href={'/favorites'}>
+                <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <FaRegHeart color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Favoritos
+                  </p>
+                </div>
+              </Link>
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <SheetClose asChild>
                   <Link href={'/settings'} className="flex items-center">
