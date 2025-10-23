@@ -8,6 +8,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -29,8 +31,6 @@ import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
 import AlertDialog from './common/alert-dialog';
 import { Button } from './ui/button';
-import { productApi } from '@/services/api';
-import { CategoryProps } from '@/types/category';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
@@ -144,12 +144,14 @@ function SideBarMenu() {
                   </p>
                 </div>
               </Link>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <BsGear color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Configurações
-                </p>
-              </div>
+              <Link href="/settings">
+                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <BsGear color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Configurações
+                  </p>
+                </div>
+              </Link>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
@@ -197,12 +199,14 @@ function SideBarMenu() {
                   Favoritos
                 </p>
               </div>
-              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <BsGear color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Configurações
-                </p>
-              </div>
+              <Link href="/settings">
+                <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                  <BsGear color="#ff8c94" size={30} />
+                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                    Configurações
+                  </p>
+                </div>
+              </Link>
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
