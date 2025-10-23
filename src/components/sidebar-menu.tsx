@@ -6,6 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
 import { productApi } from '@/services/api';
@@ -120,38 +121,46 @@ function SideBarMenu() {
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
           {isModerationRoute ? (
             <>
-              <Link href="/moderator">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <FaHome color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                    Início
-                  </p>
-                </div>
-              </Link>
-              <Link href="/moderator/artisans">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <IoPerson color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Artesãos
-                  </p>
-                </div>
-              </Link>
-              <Link href="/moderator/reports">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <CgDanger color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Denúncias
-                  </p>
-                </div>
-              </Link>
-              <Link href="/settings">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <BsGear color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Configurações
-                  </p>
-                </div>
-              </Link>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <FaHome color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                  Início
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoPerson color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Artesãos
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoMdCalendar color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Eventos
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <CgDanger color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Denúncias
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <IoDocumentOutline color="#ff8c94" size={30} />
+                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                  Documentação
+                </p>
+              </div>
+              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <SheetClose asChild>
+                  <Link href={'/settings'} className="flex items-center">
+                    <BsGear color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Configurações
+                    </p>
+                  </Link>
+                </SheetClose>
+              </div>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
@@ -199,14 +208,16 @@ function SideBarMenu() {
                   Favoritos
                 </p>
               </div>
-              <Link href="/settings">
-                <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <BsGear color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Configurações
-                  </p>
-                </div>
-              </Link>
+              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                <SheetClose asChild>
+                  <Link href={'/settings'} className="flex items-center">
+                    <BsGear color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Configurações
+                    </p>
+                  </Link>
+                </SheetClose>
+              </div>
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
@@ -274,13 +285,15 @@ function DropdownCategories() {
       {isOpen && (
         <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
           {categories.map((category, index) => (
-            <Link
-              href={'/category/' + category.nameFilter}
-              key={category.nameFilter || 0 + index}
-              className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
-            >
-              {category.nameExhibit}
-            </Link>
+            <SheetClose asChild key={category.nameFilter || 0 + index}>
+              <Link
+                href={'/category/' + category.nameFilter}
+                key={category.nameFilter || 0 + index}
+                className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
+              >
+                {category.nameExhibit}
+              </Link>
+            </SheetClose>
           ))}
         </div>
       )}
