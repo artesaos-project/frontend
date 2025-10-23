@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 function Footer() {
   return (
+
     <footer>
       <div className="bg-dust-500 flex flex-col items-center text-sm py-6">
         <p className="text-midnight font-bold">Central de atendimento</p>

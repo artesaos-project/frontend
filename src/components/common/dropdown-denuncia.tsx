@@ -66,7 +66,7 @@ function DropdownDenuncia({ onClose }: { onClose: () => void }) {
   return (
     <DropdownMenuPortal>
       <DropdownMenuContent
-        className="w-[80vw] sm:w-full bg-white shadow-md rounded-md z-50"
+        className="w-[80vw] sm:w-full bg-white shadow-md rounded-md z-50 p-4"
         align="end"
         sideOffset={5}
         onCloseAutoFocus={() => {
