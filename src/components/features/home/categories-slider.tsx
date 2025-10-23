@@ -1,5 +1,5 @@
 'use client';
-import categories from '@/db-mock/categories.json';
+import { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -7,8 +7,24 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 
 function CategoriesSlider() {
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
+        setLoading(false);
+      } catch (error: unknown) {
+        console.error('Erro ao buscar categorias', error);
+      }
+    }
+    fetchCategories();
+  }, []);
   return (
     <div className="w-[100vw] ml-12 sm:w-[95vw] sm:px-6 md:w-full sm:mx-20 mx-10 relative">
       {/* Custom navigation buttons */}
@@ -70,12 +86,22 @@ function CategoriesSlider() {
           {categories.map((cat, index) => (
             <SwiperSlide key={index}>
               <CategoryCard
-                name={cat.name}
-                img={cat.img}
+                name={cat.nameExhibit}
+                img={cat.imageUrl}
                 nameFilter={cat.nameFilter}
               />
             </SwiperSlide>
           ))}
+          {loading &&
+            Array.from({ length: 8 }).map((_, index) => (
+              <SwiperSlide key={index}>
+                <div className="flex flex-col mt-4 mb-10 items-center justify-center gap-2 cursor-pointer">
+                  <div className="animate-pulse flex flex-col gap-4">
+                    <div className="bg-gray-300 rounded-md h-20 w-20" />
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>

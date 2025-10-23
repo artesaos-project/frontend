@@ -3,6 +3,8 @@ import ProductsList from '@/components/products-list';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
@@ -10,14 +12,30 @@ import { IoClose, IoSwapVerticalOutline } from 'react-icons/io5';
 import { LuListFilter } from 'react-icons/lu';
 
 function Page() {
+  const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
   const params = useParams();
-  const rawName = params.name;
+  const nameFilter = params.name as string;
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await productApi.getCatalogs();
+        const cat = response.items.find(
+          (c: CategoryProps) => c.nameFilter === nameFilter.toUpperCase(),
+        );
+        setCategory(cat || ({} as CategoryProps));
+      } catch (err: unknown) {
+        if (err instanceof Error)
+          console.error('Erro ao buscar categorias', err.message);
+      }
+    }
+    fetchCategories();
+  }, [nameFilter]);
   const [action, setAction] = useState<'FILTER' | 'SORT' | 'NONE'>('NONE');
   const [sortSelection, setSortSelection] = useState<
     'LATEST' | 'OLDEST' | 'LOWEST' | 'HIGHEST'
   >('LATEST');
   const [controlsGap, setControlsGap] = useState(16);
-  const name = decodeURIComponent(rawName);
   useEffect(() => {
     if (action !== 'NONE') {
       setControlsGap(0);
@@ -26,8 +44,10 @@ function Page() {
     }
   }, [action]);
   return (
-    <main className="flex flex-col overflow-x-hidden items-center justify-items-center min-h-screen px-6 sm:px-12 lg:px-46 pb-10 py-8 font-[family-name:var(--font-poppins)]">
-      <h1 className="text-xl text-sakura font-bold mb-8">{name}</h1>
+    <main className="flex flex-col overflow-x-hidden justify-items-center min-h-screen px-6 sm:px-12 lg:px-46 pb-10 py-8 font-[family-name:var(--font-poppins)]">
+      <h1 className="text-xl text-sakura font-bold mb-8 text-center">
+        {category.nameExhibit}
+      </h1>
       <SearchInput />
       <div
         style={{ gap: controlsGap }}
@@ -100,7 +120,7 @@ function ControlButton({ action, setAction, type, text }: ControlButtonProps) {
       setTextDisplay('block');
       setPadding('8px 16px');
     }
-  }, [action]);
+  }, [action, type]);
   return (
     <button
       onClick={handleClick}

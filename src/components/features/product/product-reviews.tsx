@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdStar, IoMdStarHalf, IoMdStarOutline } from 'react-icons/io';
 import { MdOutlineRateReview } from 'react-icons/md';
@@ -25,6 +28,7 @@ interface IReview {
 
 interface ProductReviewsProps {
   reviews?: IReview[];
+  productId?: string;
 }
 
 function TotalEstrelas({ estrelas }: ITotalEstrelas) {
@@ -156,6 +160,9 @@ function CardReview({
 }
 
 function ProductReviews({ reviews }: ProductReviewsProps) {
+  const router = useRouter();
+  const params = useParams();
+  const productId = params?.id as string | undefined;
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [activeFilter, setActiveFilter] = useState<number>(0);
 
@@ -183,6 +190,11 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   const handleFilterClick = (rating: number) => {
     setActiveFilter(rating);
     setReviewsToShow(3);
+  };
+
+  const handleEvaluateClick = () => {
+    if (!productId) return;
+    router.push(`/product/${productId}/to-evaluate`);
   };
 
   return (
@@ -234,6 +246,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
           variant="outline"
           text="Avaliar Produto"
           Icon={<MdOutlineRateReview size={20} />}
+          onClick={handleEvaluateClick}
         />
       </div>
 

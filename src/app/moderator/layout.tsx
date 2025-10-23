@@ -1,19 +1,6 @@
 import ModeratorHeader from '@/components/features/moderator/moderator-header';
 import Footer from '@/components/footer';
-import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
 import '../globals.css';
-
-const poppins = Poppins({
-  variable: '--font-poppins',
-  subsets: ['latin'],
-  weight: ['200', '400', '600', '700', '800'],
-});
-
-export const metadata: Metadata = {
-  title: 'Criarte',
-  description: 'Cirarte -  Uma plataforma de arte para artesãos',
-};
 
 export default function RootLayout({
   children,
@@ -21,12 +8,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
-        <ModeratorHeader />
-        {children}
-        <Footer newsSubscription={false} />
-      </body>
-    </html>
+    <div className="min-h-screen max-w-screen overflow-x-hidden">
+      <ModeratorHeader />
+      {children}
+      <Footer />
+    </div>
   );
 }

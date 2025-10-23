@@ -1,5 +1,6 @@
-import { ArtisanProfile } from '@/types/artisan';
+import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { artisanDetails } from '@/types/artisan-details';
+import { CategoryProps } from '@/types/category';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
 
@@ -20,16 +21,25 @@ export interface CreateArtisanPayload {
   sicab?: string;
   sicabRegistrationDate?: string;
   sicabValidUntil?: string;
+  comercialName?: string;
+  address?: string;
+  zipCode?: string;
+  addressNumber?: string;
+  addressComplement?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
 }
 
-interface CreateUserResponse {
+interface UserResponse {
   user: {
     id: string;
     name: string;
     email: string;
     avatar?: string;
-    artisanUserName?: string;
+    artisanUsername?: string;
     roles: string[];
+    postnedApplication: boolean;
   };
   session: {
     id: string;
@@ -80,10 +90,10 @@ export const artisanApi = {
       body: { status: 'APPROVED' },
     }),
 
-  reject: (artisanId: string) =>
+  reject: (artisanId: string, rejectionReason?: string) =>
     apiRequest(`/artisan-applications/${artisanId}/moderate`, {
       method: 'PATCH',
-      body: { status: 'REJECTED' },
+      body: { status: 'REJECTED', rejectionReason },
     }),
 };
 
@@ -105,6 +115,8 @@ export const productApi = {
       method: 'PUT',
       body: productData,
     }),
+  getCatalogs: () =>
+    apiRequest<{ items: CategoryProps[] }>('/catalog/categories'),
 };
 
 export const uploadApi = {
@@ -121,21 +133,14 @@ export const uploadApi = {
 };
 
 export const authApi = {
-  createUser: (userData: CreateUserPayload): Promise<CreateUserResponse> =>
-    apiRequest<CreateUserResponse>('/users', {
+  createUser: (userData: CreateUserPayload): Promise<UserResponse> =>
+    apiRequest<UserResponse>('/users', {
       method: 'POST',
       body: userData,
     }),
 
   login: (credentials: { email: string; password: string }) =>
-    apiRequest<{
-      user: {
-        id: string;
-        name: string;
-        email: string;
-        roles: string[];
-      };
-    }>('/auth/login', {
+    apiRequest<UserResponse>('/auth/login', {
       method: 'POST',
       body: credentials,
     }),
@@ -153,4 +158,16 @@ export const authApi = {
       method: 'POST',
       body: profileData,
     }),
+  getMe: () => apiRequest<{ user: GetMyProfile }>('/users/me'),
+  updateMe: (profileData: Partial<GetMyProfile>) =>
+    apiRequest('/users/me/profile', {
+      method: 'PUT',
+      body: profileData,
+    }),
+};
+
+export const favoritesApi = {
+  getAll: () => apiRequest<string[]>('/'),
+  like: (productId: string) =>
+    apiRequest(`/products/${productId}/like`, { method: 'POST' }),
 };

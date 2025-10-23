@@ -8,25 +8,11 @@ import ProductReviews from '@/components/features/product/product-reviews';
 import ProductSlide from '@/components/features/product/product-slide';
 import { useCarousel } from '@/hooks/use-carousel';
 import { useProductData } from '@/hooks/use-product-data';
+import { handleShare } from '@/lib/utils/share-utils';
 import { useParams, useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
 import { GoArrowLeft } from 'react-icons/go';
-
-const handleShare = async (title: string, text: string) => {
-  const shareData = { title, text, url: window.location.href };
-  if (navigator.share && navigator.canShare(shareData)) {
-    try {
-      await navigator.share(shareData);
-    } catch (error) {
-      console.log('Erro ao compartilhar:', error);
-      await navigator.clipboard.writeText(window.location.href);
-      alert('Link copiado para a área de transferência!');
-    }
-  } else {
-    await navigator.clipboard.writeText(window.location.href);
-    alert('Link copiado para a área de transferência!');
-  }
-};
+import { toast, Toaster } from 'sonner';
 
 function ProductPage() {
   const params = useParams();
@@ -72,8 +58,7 @@ function ProductPage() {
 
   const onAddToFavorites = () => {
     if (!product) return;
-    console.log('Adicionado aos favoritos:', product.title);
-    alert(`${product.title} foi adicionado aos favoritos!`);
+    toast.success('Adicionado aos favoritos: ' + product.title);
   };
 
   if (isLoading) {
@@ -108,6 +93,7 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toaster richColors position="top-right" />
       <main className="bg-white">
         <div className="max-w-6xl mx-auto">
           <button
@@ -165,7 +151,10 @@ function ProductPage() {
 
             {productReviews && (
               <div className="bg-white md:rounded-4xl">
-                <ProductReviews reviews={productReviews} />
+                <ProductReviews
+                  reviews={productReviews}
+                  productId={productId}
+                />
               </div>
             )}
           </div>

@@ -10,7 +10,7 @@ function ModeratorHeader() {
   const pathName = usePathname();
   return (
     <>
-      <header className="invisible w-screen flex justify-center bg-midnight lg:visible">
+      <header className="invisible max-w-screen flex justify-center bg-midnight lg:visible">
         <nav className="pb-11 pt-17 flex gap-10 text-white font-semibold">
           <Button
             asChild
@@ -37,23 +37,9 @@ function ModeratorHeader() {
           <Button
             asChild
             variant={'ghost'}
-            className={`${pathName.endsWith('/events') ? 'bg-baby-blue text-midnight drop-shadow-sm shadow-black/15' : 'bg-midnight text-white'} text-sm py-7 md:w-30 xl:w-40 hover:bg-baby-blue/80 rounded-xl cursor-pointer`}
-          >
-            <Link href="/moderator/events">EVENTOS</Link>
-          </Button>
-          <Button
-            asChild
-            variant={'ghost'}
             className={`${pathName.endsWith('/reports') ? 'bg-baby-blue text-midnight drop-shadow-sm shadow-black/15' : 'bg-midnight text-white'} text-sm py-7 md:w-30 xl:w-40  hover:bg-baby-blue/80 rounded-xl cursor-pointer`}
           >
             <Link href="/moderator/reports">DENUNCIAS</Link>
-          </Button>
-          <Button
-            asChild
-            variant={'ghost'}
-            className={`${pathName.endsWith('/documents') ? 'bg-baby-blue text-midnight drop-shadow-sm shadow-black/15' : 'bg-midnight text-white'} text-sm py-7 md:w-30 xl:w-40  hover:bg-baby-blue/80 rounded-xl cursor-pointer`}
-          >
-            <Link href="/moderator/documents">DOCUMENTAÇÃO</Link>
           </Button>
         </nav>
       </header>

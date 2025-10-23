@@ -1,11 +1,12 @@
 'use client';
 
 import LoadingScreen from '@/components/common/loading-screen';
+import ModerateArtisanInstructions from '@/components/features/moderator/moderate-artisan/moderate-artisan-instructions';
 import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
 import ModeratorSearch from '../../../components/features/moderator/moderator-search';
-import ModeratorTable from '../../../components/features/moderator/moderator-table';
 import ModeratorTitle from '../../../components/features/moderator/moderator-title';
 
 type Artisan = {
@@ -22,21 +23,23 @@ function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const fetchArtisans = async () => {
+  const fetchArtisans = useCallback(async () => {
     try {
       setIsLoading(true);
       const result = await artisanApi.getApplications();
       setArtisans(result.artisanApplications);
       setIsLoading(false);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error fetching artisans:', error.message);
+      }
       router.replace('/');
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchArtisans();
-  }, []);
+  }, [fetchArtisans]);
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
@@ -53,12 +56,16 @@ function Page() {
   return (
     <div className="overflow-x-hidden">
       <ModeratorTitle title={'Artesãos'} />
-      <ModeratorSearch
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        activeFilter={activeFilter}
-        onFilterChange={handleFilterChange}
-      />
+      <div className="mx-auto w-2/3">
+        <ModerateArtisanInstructions />
+        <ModeratorSearch
+          variant="artisans"
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
+      </div>
       <ModeratorTable
         searchTerm={searchTerm}
         activeFilter={activeFilter}

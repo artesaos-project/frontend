@@ -1,3 +1,5 @@
+'use client';
+import { useFavorites } from '@/context/favorite-context';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
@@ -28,7 +30,8 @@ function ProductCardBody({
   isEdit,
 }: ProductCardProps) {
   const router = useRouter();
-  const [isFavorited, setIsFavorited] = React.useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFavorited = isFavorite(String(id));
 
   const handleDetailsClick = () => {
     router.push(`/product/${id}`);
@@ -39,7 +42,7 @@ function ProductCardBody({
   };
 
   const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
+    toggleFavorite(String(id));
   };
 
   return (
@@ -62,7 +65,7 @@ function ProductCardBody({
           )}
         </button>
       </header>
-      <p className="text-sm lg:text-lg line-clamp-2">{title}</p>
+      <p className="text-sm lg:text-lg truncate">{title}</p>
       <p className="text-sm lg:text-lg truncate italic font-light">{author}</p>
       <Button
         onClick={handleDetailsClick}

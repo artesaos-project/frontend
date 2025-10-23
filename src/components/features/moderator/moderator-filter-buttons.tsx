@@ -6,9 +6,10 @@ import { GoClockFill } from 'react-icons/go';
 interface FilterButtonsProps {
   activeFilter: string;
   onFilterChange: (filter: string) => void;
+  variant: 'reports' | 'artisans';
 }
 
-const filterButtons = [
+const artisanFilterButtons = [
   { key: 'all', label: 'Mais recentes', icon: null },
   {
     key: 'PENDING',
@@ -27,10 +28,33 @@ const filterButtons = [
   },
 ];
 
+const reportFilterButtons = [
+  { key: 'all', label: 'Mais recentes', icon: null },
+  {
+    key: 'PENDING',
+    label: 'Pendentes',
+    icon: <GoClockFill className="text-amber-400" />,
+  },
+  {
+    key: 'MODERATED',
+    label: 'Moderados',
+    icon: <FiX className="text-red-600 font-bold" />,
+  },
+  {
+    key: 'ARCHIVED',
+    label: 'Arquivados',
+    icon: <FaCheck className="text-green-600" />,
+  },
+];
+
 function ModeratorFilterButtons({
   activeFilter,
   onFilterChange,
+  variant = 'artisans',
 }: FilterButtonsProps) {
+  const filterButtons =
+    variant === 'reports' ? reportFilterButtons : artisanFilterButtons;
+
   return (
     <>
       {filterButtons.map(({ key, label, icon }) => (

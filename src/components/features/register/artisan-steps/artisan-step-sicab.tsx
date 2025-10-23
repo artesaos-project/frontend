@@ -12,6 +12,14 @@ import { FaRegCalendarAlt } from 'react-icons/fa';
 
 function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
   const artisanStore = useArtisanRegister();
+
+  function formatDate(date?: string | null) {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(d);
+  }
+
   const {
     register,
     handleSubmit,
@@ -21,25 +29,27 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
     resolver: zodResolver(artisanProfileSchema),
     defaultValues: {
       sicab: artisanStore.sicab || '',
-      dataCadastro: artisanStore.sicabDataCadastro || '',
-      dataValidade: artisanStore.sicabValidade || '',
+      dataCadastro: formatDate(artisanStore.sicabDataCadastro) || '',
+      dataValidade: formatDate(artisanStore.sicabValidade) || '',
     },
   });
 
   const { validateAndFormatDate: handleDateCadastro } = useDateInput({
     onFormattedChange: (val) =>
       setValue('dataCadastro', val, { shouldValidate: true }),
+    onValidDateChange: (isoDate) =>
+      artisanStore.update({ sicabDataCadastro: isoDate }),
   });
   const { validateAndFormatDate: handleDateValidade } = useDateInput({
     onFormattedChange: (val) =>
       setValue('dataValidade', val, { shouldValidate: true }),
+    onValidDateChange: (isoDate) =>
+      artisanStore.update({ sicabValidade: isoDate }),
   });
 
   const onSubmit: SubmitHandler<ArtisanProfileFormData> = (data) => {
     artisanStore.update({
       sicab: data.sicab,
-      sicabDataCadastro: data.dataCadastro,
-      sicabValidade: data.dataValidade,
     });
     onNext();
   };
@@ -61,6 +71,7 @@ function ArtisanStepSicab({ onNext }: { onNext: () => void }) {
           placeholder="Sicab*"
           type="text"
           {...register('sicab')}
+          maxLength={32}
           hasError={!!errors.sicab}
           errorMessage={errors.sicab?.message}
         />

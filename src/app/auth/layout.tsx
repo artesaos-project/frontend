@@ -1,26 +1,27 @@
-import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
+<<<<<<< Updated upstream
 import '../globals.css';
 
-const poppins = Poppins({
-  variable: '--font-poppins',
-  subsets: ['latin'],
-  weight: ['200', '400', '600', '700', '800'],
-});
+export default function LayoutAuth({
+=======
+<<<<<<< HEAD
+export default function AuthLayout({
+=======
+import '../globals.css';
 
-export const metadata: Metadata = {
-  title: 'Criarte',
-  description: 'Cirarte -  Uma plataforma de arte para artesãos',
-};
-
-export default function RootLayout({
+export default function LayoutAuth({
+>>>>>>> afaa67f9ab8f5a1670aaf9d60a9a9f6e08f23968
+>>>>>>> Stashed changes
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>{children}</body>
-    </html>
-  );
+<<<<<<< Updated upstream
+  return <div>{children}</div>;
+=======
+<<<<<<< HEAD
+  return <>{children}</>;
+=======
+  return <div>{children}</div>;
+>>>>>>> afaa67f9ab8f5a1670aaf9d60a9a9f6e08f23968
+>>>>>>> Stashed changes
 }

@@ -1,6 +1,7 @@
 import BannerNovidades from '@/components/features/home/banner-novidades';
 import CategoriesSlider from '@/components/features/home/categories-slider';
-import PopularProducts from '@/components/features/home/popular-product';
+import NewsSection from '@/components/features/home/news-section';
+import PopularProducts from '@/components/features/home/popular-products';
 
 export default function Home() {
   return (
@@ -9,11 +10,12 @@ export default function Home() {
         O que você procura?
       </h2>
       <CategoriesSlider />
-      <div className="w-full order-2 sm:order-1">
+      <div className="w-full">
         <BannerNovidades />
       </div>
-      <div className="order-1 sm:order-2 flex flex-col w-full px-4 mt-7 ">
+      <div className="flex flex-col w-full px-4 mt-7">
         <PopularProducts />
+        <NewsSection />
       </div>
     </main>
   );

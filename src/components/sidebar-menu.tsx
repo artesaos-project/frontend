@@ -6,40 +6,49 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
+import { productApi } from '@/services/api';
+import { CategoryProps } from '@/types/category';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
-import { IoMdCalendar, IoMdHelpCircleOutline } from 'react-icons/io';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 import {
   IoChevronDownOutline,
-  IoChevronUpOutline,
   IoChevronForward,
-  IoDocumentOutline,
+  IoChevronUpOutline,
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
+import { LuDoorOpen } from 'react-icons/lu';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
-import AuthenticationModal from './AuthenticationModal/AuthenticationModal';
+import AlertDialog from './common/alert-dialog';
 import { Button } from './ui/button';
-import { useState } from 'react';
-
-import categories from '@/db-mock/categories.json';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
   const pathname = usePathname();
   const resetStore = useStoreUser((state) => state.resetStore);
 
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   function handleLogout() {
     resetStore();
+    localStorage.removeItem('artisan-register');
+    setIsLogoutModalOpen(false);
   }
+
+  const handleOpenLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
 
   const isModerationRoute = pathname.startsWith('/moderator');
   return (
@@ -61,11 +70,11 @@ function SideBarMenu() {
         </SheetHeader>
         <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
           <Image
-            src={user.userPhoto || '/default-avatar.webp'}
+            src={user.userPhoto ?? '/default-avatar.webp'}
             alt="User Avatar"
             width={110}
             height={110}
-            className="rounded-full sm:w-30"
+            className="rounded-full sm:w-30 sm:h-30 w-20 h-20"
           />
           {user.isAuthenticated && (
             <div
@@ -80,9 +89,9 @@ function SideBarMenu() {
               </h2>
               {user.isArtisan && (
                 <>
-                  <p className="text-sm text-midnight font-semibold">
+                  {/* <p className="text-sm text-midnight font-semibold">
                     @{user.artisanUserName}
-                  </p>
+                  </p> */}
                   <Button asChild variant={'outline'} className="rounded-full">
                     <Link
                       href={`/artisan/${user.artisanUserName}`}
@@ -98,7 +107,14 @@ function SideBarMenu() {
           )}
           {!user.isAuthenticated && (
             <div className="flex justify-center items-center pl-auto">
-              <AuthenticationModal color="sakura" />
+              <Button asChild variant={'outline'} className="rounded-full p-5">
+                <Link
+                  href={'/auth'}
+                  className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-40 mt-2 text-sm"
+                >
+                  Entre ou Cadastre-se
+                </Link>
+              </Button>
             </div>
           )}
         </div>
@@ -136,10 +152,14 @@ function SideBarMenu() {
                 </p>
               </div>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <BsGear color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Configurações
-                </p>
+                <SheetClose asChild>
+                  <Link href={'/settings'} className="flex items-center">
+                    <BsGear color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Configurações
+                    </p>
+                  </Link>
+                </SheetClose>
               </div>
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
@@ -148,7 +168,10 @@ function SideBarMenu() {
                 </p>
               </div>
 
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+              <div
+                onClick={handleOpenLogoutModal}
+                className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
+              >
                 <TbLogout2 color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
                   Sair
@@ -186,10 +209,14 @@ function SideBarMenu() {
                 </p>
               </div>
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <BsGear color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Configurações
-                </p>
+                <SheetClose asChild>
+                  <Link href={'/settings'} className="flex items-center">
+                    <BsGear color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Configurações
+                    </p>
+                  </Link>
+                </SheetClose>
               </div>
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
@@ -199,7 +226,7 @@ function SideBarMenu() {
               </div>
               {user.isAuthenticated && (
                 <div
-                  onClick={handleLogout}
+                  onClick={handleOpenLogoutModal}
                   className="w-full cursor-pointer mb-60 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
                 >
                   <TbLogout2 color="#ff8c94" size={30} />
@@ -211,14 +238,34 @@ function SideBarMenu() {
             </>
           )}
         </ScrollArea>
+        <AlertDialog
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onConfirm={handleLogout}
+          icon={<LuDoorOpen size={40} color="midnight" />}
+          dialogTitle="Tem certeza que deseja sair?"
+          textButton1="Sair"
+          textButton2="Voltar"
+        />
       </SheetContent>
     </Sheet>
   );
 }
 
 function DropdownCategories() {
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  // PUXAR CATEGORIAS DA API
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await productApi.getCatalogs();
+        setCategories(response.items);
+      } catch (error: unknown) {
+        console.error('Erro ao buscar categorias', error);
+      }
+    }
+    fetchCategories();
+  }, []);
   return (
     <div>
       <div
@@ -238,13 +285,15 @@ function DropdownCategories() {
       {isOpen && (
         <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
           {categories.map((category, index) => (
-            <Link
-              href={'/category/' + category.name}
-              key={category.name || 0 + index}
-              className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
-            >
-              {category.name}
-            </Link>
+            <SheetClose asChild key={category.nameFilter || 0 + index}>
+              <Link
+                href={'/category/' + category.nameFilter}
+                key={category.nameFilter || 0 + index}
+                className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
+              >
+                {category.nameExhibit}
+              </Link>
+            </SheetClose>
           ))}
         </div>
       )}
