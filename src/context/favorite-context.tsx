@@ -1,5 +1,6 @@
 'use client';
 
+import useUserStore from '@/hooks/use-store-user';
 import { favoritesApi } from '@/services/api';
 import { FavoritesApiResponse, Product } from '@/types/favorite';
 import {
@@ -9,6 +10,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { toast } from 'sonner';
 
 interface FavoritesContextType {
   favorites: string[];
@@ -25,11 +27,18 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
 
+  const { user } = useUserStore();
+
   useEffect(() => {
+    if (!user?.isAuthenticated) {
+      setFavorites([]);
+      setFavoriteProducts([]);
+      return;
+    }
+
     const fetchFavorites = async () => {
       try {
         const response: FavoritesApiResponse = await favoritesApi.getAll();
-
         const products = response.data.products;
         const ids = products.map((p) => p.id);
 
@@ -41,10 +50,16 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
         setFavoriteProducts([]);
       }
     };
+
     fetchFavorites();
-  }, []);
+  }, [user?.isAuthenticated]);
 
   const toggleFavorite = async (productId: string) => {
+    if (!user?.isAuthenticated) {
+      toast.warning('Faça login para adicionar produtos aos favoritos.');
+      return;
+    }
+
     try {
       await favoritesApi.like(productId);
 
@@ -61,14 +76,14 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
           return prev.filter((p) => p.id !== productId);
         } else {
           favoritesApi.getAll().then((res: FavoritesApiResponse) => {
-            const updatedProducts = res.data.products;
-            setFavoriteProducts(updatedProducts);
+            setFavoriteProducts(res.data.products);
           });
           return prev;
         }
       });
     } catch (err) {
       console.error('Erro ao atualizar favorito', err);
+      toast.error('Não foi possível atualizar os favoritos.');
     }
   };
 
