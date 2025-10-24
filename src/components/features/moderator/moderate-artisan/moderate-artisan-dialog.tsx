@@ -82,7 +82,7 @@ function ModerateArtisanDialog({
           <Button
             onClick={handleConfirm}
             disabled={isLoading}
-            className="flex-1 bg-red-700 hover:bg-white hover:text-red-700 border hover:border-red-700 text-white"
+            className="flex-1 rounded-md bg-red-700 hover:bg-white hover:text-red-700 border hover:border-red-700 text-white"
           >
             {isLoading ? 'Processando...' : 'Rejeitar'}
           </Button>

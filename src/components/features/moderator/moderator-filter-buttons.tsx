@@ -60,7 +60,7 @@ function ModeratorFilterButtons({
       {filterButtons.map(({ key, label, icon }) => (
         <Button
           key={key}
-          className={`hidden lg:flex text-xs transition ${
+          className={`hidden lg:flex text-xs transition rounded-lg ${
             activeFilter === key
               ? 'bg-midnight text-white'
               : 'bg-white border-[1px] border-midnight text-midnight hover:bg-midnight hover:text-white'

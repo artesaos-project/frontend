@@ -12,35 +12,14 @@ function ModerateArtisanInstructions() {
           <span>Ação/Botão</span>
           <span>Função</span>
         </div>
-
-        <div className="flex gap-4 pt-2 items-center">
-          <ModerateArtisanButton variant={'activate'} />
-          <span>
-            Ativar usuários desativados anteriormente, permitindo que o usuário
-            volte a acessar o sistema.
-          </span>
-        </div>
-
-        <div className="flex gap-4 pt-2 items-center">
-          <ModerateArtisanButton variant={'deactivate'} />
-          <span>Desativar usuários e bloqueiar o acesso ao sistema.</span>
-        </div>
-
-        <div className="flex gap-4 pt-2 items-center">
+        <div className="flex gap-4 pt-4 items-center">
           <ModerateArtisanButton variant={'approve'} />
           <span>Validar a ação ou cadastro.</span>
         </div>
 
-        <div className="flex gap-4 pt-2 items-center">
+        <div className="flex gap-4 pt-4 items-center">
           <ModerateArtisanButton variant={'reject'} />
           <span>Rejeitar o pedido de cadastro e impedir a continuidade.</span>
-        </div>
-        <div className="flex gap-4 pt-2 items-center">
-          <ModerateArtisanButton variant={'edit'} />
-          <span>
-            Abrir as informações deste registro para atualização ou correção de
-            dados.
-          </span>
         </div>
       </div>
     </div>

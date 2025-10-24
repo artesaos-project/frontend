@@ -18,7 +18,7 @@ type Artisan = {
 
 function Page() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('PENDING');
   const [artisans, setArtisans] = useState<Artisan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -70,7 +70,6 @@ function Page() {
         searchTerm={searchTerm}
         activeFilter={activeFilter}
         artisans={artisans}
-        onRefresh={fetchArtisans}
       />
     </div>
   );

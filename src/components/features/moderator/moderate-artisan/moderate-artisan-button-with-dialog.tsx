@@ -5,28 +5,23 @@ import ModerateArtisanButton from './moderate-artisan-button';
 import ModerateArtisanDialog from './moderate-artisan-dialog';
 
 interface ModerateArtisanButtonWithDialogProps {
-  variant: 'approve' | 'reject' | 'activate' | 'deactivate' | 'edit';
+  variant: 'reject';
   artisanName: string;
   onAction: (reason?: string) => void;
   isLoading?: boolean;
 }
 
 function ModerateArtisanButtonWithDialog({
-  variant,
   artisanName,
   onAction,
   isLoading = false,
+  variant,
 }: ModerateArtisanButtonWithDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleButtonClick = () => {
     // Apenas botões que precisam de confirmação abrem o dialog
-    if (variant === 'reject' || variant === 'deactivate') {
-      setIsDialogOpen(true);
-    } else {
-      // Ações diretas (approve, activate, edit)
-      onAction();
-    }
+    setIsDialogOpen(true);
   };
 
   const handleDialogConfirm = (reason?: string) => {
@@ -42,7 +37,7 @@ function ModerateArtisanButtonWithDialog({
     <>
       <ModerateArtisanButton variant={variant} onClick={handleButtonClick} />
 
-      {(variant === 'reject' || variant === 'deactivate') && isDialogOpen && (
+      {isDialogOpen && (
         <ModerateArtisanDialog
           isOpen={isDialogOpen}
           onClose={handleDialogClose}

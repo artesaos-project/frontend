@@ -1,10 +1,7 @@
 'use client';
 
-import { artisanApi } from '@/services/api';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import ModerateArtisanButton from './moderate-artisan-button';
-import ModerateArtisanButtonWithDialog from './moderate-artisan-button-with-dialog';
 
 type Artisan = {
   id: string;
@@ -17,7 +14,6 @@ interface ModeratorTableProps {
   searchTerm: string;
   activeFilter: string;
   artisans: Artisan[];
-  onRefresh: () => void;
   searchResults?: Artisan[];
   isSearching?: boolean;
 }
@@ -33,7 +29,6 @@ function ModeratorTable({
   searchTerm,
   activeFilter,
   artisans,
-  onRefresh,
   searchResults = [],
   isSearching = false,
 }: ModeratorTableProps) {
@@ -48,83 +43,6 @@ function ModeratorTable({
 
     return filtered;
   }, [artisans, searchResults, searchTerm, activeFilter]);
-
-  const handleAction = async (
-    action: 'approve' | 'reject',
-    artisanId: string,
-    reason?: string,
-  ) => {
-    try {
-      if (action === 'approve') {
-        await artisanApi.approve(artisanId);
-        console.log('Artesão aprovado');
-      } else {
-        await artisanApi.reject(artisanId, reason);
-        console.log('Artesão rejeitado', reason ? `- Motivo: ${reason}` : '');
-      }
-      onRefresh();
-    } catch (error) {
-      console.error(`Erro ao moderar artesão`, error);
-    }
-  };
-
-  const handleReject = async (artisanId: string, reason?: string) => {
-    await handleAction('reject', artisanId, reason);
-  };
-
-  const handleApprove = async (artisanId: string) => {
-    await handleAction('approve', artisanId);
-  };
-
-  const renderActionButtons = (artisan: Artisan) => {
-    switch (artisan.status) {
-      case 'PENDING':
-        return (
-          <div className="flex py-1 justify-center items-center gap-2.5">
-            <ModerateArtisanButton
-              variant="approve"
-              onClick={() => handleApprove(artisan.id)}
-            />
-            <ModerateArtisanButton variant="edit" />
-            <ModerateArtisanButtonWithDialog
-              variant="reject"
-              artisanName={artisan.artisanName}
-              onAction={(reason) => handleReject(artisan.id, reason)}
-            />
-          </div>
-        );
-
-      case 'APPROVED':
-        return (
-          <div className="flex justify-center items-center gap-2.5">
-            <ModerateArtisanButton variant="edit" />
-            <ModerateArtisanButton variant="deactivate" />
-          </div>
-        );
-
-      case 'REJECTED':
-        return (
-          <div className="flex justify-center items-center gap-2.5">
-            <ModerateArtisanButton
-              variant="approve"
-              onClick={() => handleApprove(artisan.id)}
-            />
-            <ModerateArtisanButton variant="edit" />
-          </div>
-        );
-
-      case 'INACTIVE':
-        return (
-          <div className="flex justify-center items-center gap-2.5">
-            <ModerateArtisanButton variant="activate" />
-            <ModerateArtisanButton variant="edit" />
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
 
   if (isSearching) {
     return (
@@ -148,9 +66,6 @@ function ModeratorTable({
             <th className="font-semibold px-6 text-sm ring-[0.5px] hidden md:table-cell">
               Status
             </th>
-            <th className="font-semibold text-sm rounded-tr-md ring-[0.5px]">
-              Ações
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -170,7 +85,6 @@ function ModeratorTable({
               <td className="font-semibold ring-[0.5px] hidden md:table-cell">
                 {STATUS_TRANSLATIONS[artisan.status]}
               </td>
-              <td className="ring-[0.5px]">{renderActionButtons(artisan)}</td>
             </tr>
           ))}
         </tbody>
