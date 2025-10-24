@@ -20,11 +20,9 @@ import { CgDanger } from 'react-icons/cg';
 import { FaHome, FaRegHeart } from 'react-icons/fa';
 import { IoMdHelpCircleOutline } from 'react-icons/io';
 import {
-  IoCalendar,
   IoChevronDownOutline,
   IoChevronForward,
   IoChevronUpOutline,
-  IoDocumentOutline,
   IoMenu,
   IoPerson,
 } from 'react-icons/io5';
