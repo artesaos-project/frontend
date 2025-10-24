@@ -18,10 +18,10 @@ jobs:
         id: setenv
         run: |
           if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "DEPLOY_PATH=/devops/prd" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/root/devops/prd" >> $GITHUB_ENV
             echo "BRANCH=main" >> $GITHUB_ENV
           else
-            echo "DEPLOY_PATH=/devops/dev" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/root/devops/dev" >> $GITHUB_ENV
             echo "BRANCH=develop" >> $GITHUB_ENV
           fi
 
