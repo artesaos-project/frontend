@@ -1,4 +1,4 @@
-import ModeratorHeader from '@/components/features/moderator/moderator-header';
+import ModerationHeader from '@/components/features/moderator/moderation-header';
 import Footer from '@/components/footer';
 import '../globals.css';
 
@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="min-h-screen max-w-screen overflow-x-hidden">
-      <ModeratorHeader />
+      <ModerationHeader />
       {children}
       <Footer />
     </div>

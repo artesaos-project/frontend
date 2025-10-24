@@ -2,21 +2,21 @@
 
 import { useState } from 'react';
 import ModerateArtisanButton from './moderate-artisan-button';
-import ModerateArtisanDialog from './moderate-artisan-dialog';
+import ModerateArtisanDialog from './reject-artisan-dialog';
 
-interface ModerateArtisanButtonWithDialogProps {
+interface RejectArtisanButtonProps {
   variant: 'reject';
   artisanName: string;
   onAction: (reason?: string) => void;
   isLoading?: boolean;
 }
 
-function ModerateArtisanButtonWithDialog({
+function RejectArtisanButton({
   artisanName,
   onAction,
   isLoading = false,
   variant,
-}: ModerateArtisanButtonWithDialogProps) {
+}: RejectArtisanButtonProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -51,4 +51,4 @@ function ModerateArtisanButtonWithDialog({
   );
 }
 
-export default ModerateArtisanButtonWithDialog;
+export default RejectArtisanButton;

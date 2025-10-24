@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-function ModeratorTitle({ title }: { title: string }) {
+function ModerationTitle({ title }: { title: string }) {
   return (
     <div className="w-2/3 flex text-midnight mx-auto mt-32 md:mt-16 md:gap-17">
       <div className="relative w-[150px] h-[100px]">
@@ -20,4 +20,4 @@ function ModeratorTitle({ title }: { title: string }) {
   );
 }
 
-export default ModeratorTitle;
+export default ModerationTitle;

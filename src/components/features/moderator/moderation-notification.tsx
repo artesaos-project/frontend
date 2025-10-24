@@ -11,7 +11,7 @@ type Notification = {
   date: string;
 };
 
-function ModeratorNotification() {
+function ModerationNotification() {
   const notifications: Notification[] = notificationsData;
 
   return (
@@ -64,4 +64,4 @@ function ModeratorNotification() {
   );
 }
 
-export default ModeratorNotification;
+export default ModerationNotification;

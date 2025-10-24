@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 
-interface ModerateArtisanDialogProps {
+interface RejectArtisanDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (reason?: string) => void;
@@ -19,14 +19,14 @@ interface ModerateArtisanDialogProps {
   isLoading?: boolean;
 }
 
-function ModerateArtisanDialog({
+function RejectArtisanDialog({
   isOpen,
   onClose,
   onConfirm,
   artisanName,
   action,
   isLoading = false,
-}: ModerateArtisanDialogProps) {
+}: RejectArtisanDialogProps) {
   const [reason, setReason] = useState('');
 
   const handleConfirm = () => {
@@ -92,4 +92,4 @@ function ModerateArtisanDialog({
   );
 }
 
-export default ModerateArtisanDialog;
+export default RejectArtisanDialog;

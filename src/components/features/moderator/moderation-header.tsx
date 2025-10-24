@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiChevronLeft } from 'react-icons/fi';
 
-function ModeratorHeader() {
+function ModerationHeader() {
   const pathName = usePathname();
   return (
     <>
@@ -50,4 +50,4 @@ function ModeratorHeader() {
   );
 }
 
-export default ModeratorHeader;
+export default ModerationHeader;

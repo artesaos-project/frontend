@@ -1,8 +1,8 @@
 'use client';
 
-import ModerateReportButton from '@/components/features/moderator/moderate-report/moderate-report-button';
-import ModerateReportInstructions from '@/components/features/moderator/moderate-report/moderate-report-instructions';
-import ModeratorTitle from '@/components/features/moderator/moderator-title';
+import ModerationTitle from '@/components/features/moderator/moderation-title';
+import ModerateReportButton from '@/components/features/moderator/reports/moderate-report-button';
+import ModerateReportInstructions from '@/components/features/moderator/reports/moderate-report-instructions';
 import reportsDetailedMock from '@/db-mock/reports-detailed.json';
 import type { ReportDetailed } from '@/types/report';
 import { ArrowLeft } from 'lucide-react';
@@ -41,7 +41,7 @@ function Page() {
 
   return (
     <div>
-      <ModeratorTitle title={'Denúncias'} />
+      <ModerationTitle title={'Denúncias'} />
       <div className="max-w-[295px] sm:max-w-full sm:w-2/3 mx-auto mt-15 mb-7.5">
         <div className="flex gap-10  text-midnight ">
           <Link href="/moderator/reports">

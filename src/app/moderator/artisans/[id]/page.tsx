@@ -1,8 +1,8 @@
 'use client';
 
-import ModerateArtisanButton from '@/components/features/moderator/moderate-artisan/moderate-artisan-button';
-import ModerateArtisanButtonWithDialog from '@/components/features/moderator/moderate-artisan/moderate-artisan-button-with-dialog';
-import ModeratorTitle from '@/components/features/moderator/moderator-title';
+import ModerateArtisanButton from '@/components/features/moderator/artisans/moderate-artisan-button';
+import RejectArtisanButton from '@/components/features/moderator/artisans/reject-artisan-button';
+import ModerationTitle from '@/components/features/moderator/moderation-title';
 import { artisanApi } from '@/services/api';
 import { artisanDetails } from '@/types/artisan-details';
 import { ArrowLeft } from 'lucide-react';
@@ -65,23 +65,24 @@ function Page() {
   return (
     <div>
       <Toaster richColors position="top-center" />
-      <ModeratorTitle title={'Detalhes do Artesão'} />
-      <div className="w-2/3 mx-auto my-15 flex justify-between">
-        <div className="flex items-center gap-4 text-midnight font-semibold text-2xl">
+      <ModerationTitle title={'Detalhes do Artesão'} />
+      <div className="w-2/3 mx-auto my-15 flex flex-col sm:flex-row gap-4 sm:justify-between text-midnight font-semibold text-2xl">
+        <div className="flex items-center gap-12 sm:gap-4">
           <Link href="/moderator/artisans">
             <ArrowLeft size={24} />
           </Link>
           <h2>{artisan?.artisanName}</h2>
         </div>
+
         {artisan?.status === 'PENDING' && (
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 justify-center items-center">
             <ModerateArtisanButton
               variant="approve"
               onClick={() => {
                 handleApprove();
               }}
             />
-            <ModerateArtisanButtonWithDialog
+            <RejectArtisanButton
               variant="reject"
               artisanName={artisan?.artisanName || ''}
               onAction={(reason) => {
@@ -91,9 +92,9 @@ function Page() {
           </div>
         )}
       </div>
-      <main className="w-2/3 mx-auto rounded-xl border border-neutral-200 p-8.5">
+      <main className="w-80 sm:w-2/3 mx-auto rounded-xl border border-neutral-200 p-8.5">
         <h3 className="text-salmon font-semibold mb-5">Dados Pessoais</h3>
-        <section className="flex gap-5">
+        <section className="flex flex-col md:flex-row gap-5">
           <div className="flex flex-col gap-2 text-midnight">
             <label className=" font-semibold text-sm">Foto de perfil</label>
             <div className="w-56 h-44 border border-sakura rounded-lg">
@@ -105,12 +106,14 @@ function Page() {
                 className="w-full h-full rounded-lg"
               />
             </div>
-            <label className="mb-1 mt-4 font-semibold text-sm">Cep</label>
+            <label className="mb-1 mt-4 font-semibold text-sm hidden md:block">
+              Cep
+            </label>
             <input
               type="text"
               value={artisan?.zipCode || ''}
               readOnly
-              className="w-full border border-sakura rounded-lg p-1"
+              className="w-full border border-sakura rounded-lg p-1 hidden md:block"
             />
           </div>
           <div className="flex flex-col gap-4 text-sm w-full text-midnight">
@@ -162,6 +165,15 @@ function Page() {
         </section>
         <section className="text-sm text-midnight flex flex-col gap-2 mt-2">
           <div className="flex flex-col font-semibold gap-2">
+            <label className="mb-1 mt-4 font-semibold text-sm md:hidden">
+              Cep
+            </label>
+            <input
+              type="text"
+              value={artisan?.zipCode || ''}
+              readOnly
+              className="w-full border border-sakura rounded-lg p-1 md:hidden "
+            />
             <label>Endereço</label>
             <input
               type="text"
@@ -224,7 +236,7 @@ function Page() {
           <h3 className="text-salmon font-semibold mb-5">
             Dados Profissionais
           </h3>
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-col gap-2">
               <label className="font-semibold">Sicab</label>
               <input
@@ -243,7 +255,7 @@ function Page() {
                 className="w-full border border-sakura p-1.5 rounded-lg"
               />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col  gap-2">
               <label className="font-semibold">Data de Validade</label>
               <input
                 type="text"
@@ -253,7 +265,7 @@ function Page() {
               />
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-col w-full md:flex-row gap-4">
             <div className="flex flex-col gap-2">
               <label className="font-semibold">Materiais</label>
               <input
@@ -269,7 +281,7 @@ function Page() {
                 type="text"
                 value={artisan?.technique?.join(', ') || ''}
                 readOnly
-                className="w-3xs border border-sakura p-1.5 rounded-lg"
+                className="max-w-3xs w-full border border-sakura p-1.5 rounded-lg"
               />
             </div>
           </div>
@@ -284,7 +296,7 @@ function Page() {
           </div>
         </section>
       </main>
-      <div className="w-2/3 mx-auto rounded-xl border text-midnight border-neutral-200 p-8.5 mb-15 mt-8">
+      <div className="w-80 sm:w-2/3 mx-auto rounded-xl border text-midnight border-neutral-200 p-8.5 mb-15 mt-8">
         <h3 className="font-semibold">Experiências</h3>
         <p className="text-sm font-semibold mt-6 mb-2">
           Breve histórico profissional como Artesão
@@ -297,7 +309,7 @@ function Page() {
         <div className="flex flex-col mt-2 gap-2">
           <p className="font-semibold">Mídias</p>
           <p className="text-sm">clique para ampliar</p>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-col md:flex-row flex-wrap">
             {artisan?.photos && artisan.photos.length > 0 ? (
               artisan.photos.map((photo, index) => (
                 <div
@@ -319,14 +331,14 @@ function Page() {
             )}
           </div>
           {artisan?.status === 'PENDING' && (
-            <div className="flex gap-4 items-center ml-auto">
+            <div className="flex gap-4 mt-5 items-center ml-auto">
               <ModerateArtisanButton
                 variant="approve"
                 onClick={() => {
                   handleApprove();
                 }}
               />
-              <ModerateArtisanButtonWithDialog
+              <RejectArtisanButton
                 variant="reject"
                 artisanName={artisan?.artisanName || ''}
                 onAction={(reason) => {
