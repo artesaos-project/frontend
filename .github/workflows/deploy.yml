@@ -1,0 +1,79 @@
+name: Deploy to VPS (main & develop)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        id: setenv
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "DEPLOY_PATH=/root/devops/prd" >> $GITHUB_ENV
+            echo "BRANCH=main" >> $GITHUB_ENV
+            echo "LOCKFILE=/tmp/deploy-prd.lock" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_PATH=/root/devops/dev" >> $GITHUB_ENV
+            echo "BRANCH=develop" >> $GITHUB_ENV
+            echo "LOCKFILE=/tmp/deploy-dev.lock" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            echo "Deploying branch ${{ env.BRANCH }} to ${{ env.DEPLOY_PATH }}"
+
+            # === LOCKFILE SETUP ===
+            LOCKFILE="${{ env.LOCKFILE }}"
+            TIMEOUT=600
+            INTERVAL=10
+            ELAPSED=0
+
+            while [ -f "$LOCKFILE" ]; do
+              echo "Another deployment is in progress (lockfile: $LOCKFILE). Waiting..."
+              sleep $INTERVAL
+              ELAPSED=$((ELAPSED + INTERVAL))
+              if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+                echo "Timeout waiting for lockfile ($LOCKFILE). Exiting."
+                exit 1
+              fi
+            done
+
+            echo "$$ - $(date)" > "$LOCKFILE"
+            trap 'rm -f "$LOCKFILE"' EXIT
+
+            # === DEPLOYMENT START ===
+            if [ ! -d "${{ env.DEPLOY_PATH }}/frontend/.git" ]; then
+              git clone git@frontend:artesaos-project/frontend.git ${{ env.DEPLOY_PATH }}/frontend
+            fi
+
+            cd ${{ env.DEPLOY_PATH }}/frontend
+            git fetch origin
+            git reset --hard origin/${{ env.BRANCH }}
+
+            cd ${{ env.DEPLOY_PATH }}
+
+            docker compose pull
+            docker compose down
+            docker compose up -d --build
+            docker image prune -f
+
+            echo "Deployment completed successfully!"
