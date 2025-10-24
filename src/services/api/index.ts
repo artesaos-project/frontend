@@ -1,8 +1,10 @@
 import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { ArtisanDetails } from '@/types/artisan-details';
 import { CategoryProps } from '@/types/category';
+import { FavoritesApiResponse } from '@/types/favorite';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
+import { FollowResponse } from '@/types/follow';
 
 type CreateUserPayload = {
   name: string;
@@ -169,7 +171,15 @@ export const authApi = {
 };
 
 export const favoritesApi = {
-  getAll: () => apiRequest<string[]>('/'),
+  getAll: () => apiRequest<FavoritesApiResponse>('/users/my-favorites'),
   like: (productId: string) =>
     apiRequest(`/products/${productId}/like`, { method: 'POST' }),
+};
+
+export const followersApi = {
+  getAll: () => apiRequest<FollowResponse>(`/artisans/following`),
+  toggleFollow: (artisanId: string) =>
+    apiRequest(`/artisans/${artisanId}/follow`, {
+      method: 'POST',
+    }),
 };

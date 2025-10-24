@@ -8,11 +8,13 @@ function ProductArtisan({
   visibleCount = 5,
   isEdit,
   onTotalChange,
+  search,
 }: {
   artistId?: string;
   visibleCount?: number;
   isEdit?: boolean;
   onTotalChange?: (total: number) => void;
+  search?: string;
 }) {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,9 +73,20 @@ function ProductArtisan({
     );
   }
 
+  const filteredProducts = search
+    ? products.filter((p) =>
+        p.title.toLowerCase().includes(search.toLowerCase()),
+      )
+    : products;
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center gap-4 lg:w-6/12">
-      {products.slice(0, visibleCount).map((product, i) => (
+      {filteredProducts.length === 0 && (
+        <div className="col-span-full text-center text-gray-500">
+          Nenhum produto corresponde à busca.
+        </div>
+      )}
+      {filteredProducts.slice(0, visibleCount).map((product, i) => (
         <BaseCard key={product.id || i}>
           <div className="w-full h-40 overflow-hidden">
             <img

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useFollowContext } from '@/context/follow-context';
 import useStoreUser from '@/hooks/use-store-user';
 import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
@@ -14,12 +15,12 @@ import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
 import { LuPencil } from 'react-icons/lu';
 import { PiPlusCircleLight } from 'react-icons/pi';
 import ProductReviews from '../product/product-reviews';
+import SearchBar from '../register/search-bar';
 import artisanProductMock from './artisan-product-mock.json';
 import ProductArtisan from './product-artisan';
 import ProfileDescription from './product-description';
 import ProfileInfo from './profile-info';
 import ProfilePicture from './profile-picture';
-import SearchBar from './search-bar';
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<'produtos' | 'avaliacoes'>(
@@ -27,15 +28,16 @@ const ArtisanProfileCard = () => {
   );
   const params = useParams();
   const userName = params.id as string;
-  const [follow, setFollow] = useState(false);
   const [isArtisan, setIsArtisan] = useState(false);
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [visibleProducts, setVisibleProducts] = useState(6);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [search, setSearch] = useState('');
   const { user } = useStoreUser();
   const route = useRouter();
+  const { isFollowing, toggleFollow } = useFollowContext();
 
   const getLoggedUserId = useCallback(() => user.userId, [user.userId]);
 
@@ -101,12 +103,7 @@ const ArtisanProfileCard = () => {
   const textColor = 'text-[#1F3A4D]';
 
   const handleFollow = () => {
-    setFollow(!follow);
-    alert(
-      follow
-        ? 'Você deixou de seguir o artista.'
-        : 'Você começou a seguir o artista.',
-    );
+    toggleFollow(artisan.userId);
   };
 
   const handleAddProduct = () => {
@@ -135,12 +132,20 @@ const ArtisanProfileCard = () => {
           <ProfileInfo artisan={artisan} textColor={textColor} />
           {!isArtisan && (
             <Button
-              variant={follow ? 'outlineSakura' : 'outlineMidnight'}
+              variant={
+                isFollowing(artisan.userId)
+                  ? 'outlineSakura'
+                  : 'outlineMidnight'
+              }
               onClick={handleFollow}
               className="flex gap-2 items-center px-4 py-1 w-full"
             >
-              {follow ? 'Seguindo' : 'Seguir'}
-              {follow ? <IoIosArrowDown size={16} /> : <FaPlus size={16} />}
+              {isFollowing(artisan.userId) ? 'Seguindo' : 'Seguir'}
+              {isFollowing(artisan.userId) ? (
+                <IoIosArrowDown size={16} />
+              ) : (
+                <FaPlus size={16} />
+              )}
             </Button>
           )}
         </div>
@@ -233,17 +238,20 @@ const ArtisanProfileCard = () => {
         </div>
       </div>
 
-      <div className={`${activeTab === 'produtos' ? 'block' : 'hidden'}`}>
-        <div className="flex bg-white items-center justify-center p-4">
-          <SearchBar />
+      <div
+        className={`${activeTab === 'produtos' ? 'flex flex-col bg-white justify-center items-center' : 'hidden'}`}
+      >
+        <div className="flex bg-white items-center justify-center p-4 w-full md:w-1/2">
+          <SearchBar value={search} onChange={setSearch} />
         </div>
 
-        <div className="flex bg-white items-center justify-center p-4">
+        <div className="flex w-full bg-white items-center justify-center p-4">
           <ProductArtisan
             artistId={artisan.userId}
             visibleCount={visibleProducts}
             onTotalChange={setTotalProducts}
             isEdit={isArtisan}
+            search={search}
           />
         </div>
 
