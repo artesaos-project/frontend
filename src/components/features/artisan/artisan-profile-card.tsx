@@ -14,12 +14,12 @@ import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
 import { LuPencil } from 'react-icons/lu';
 import { PiPlusCircleLight } from 'react-icons/pi';
 import ProductReviews from '../product/product-reviews';
+import SearchBar from '../register/search-bar';
 import artisanProductMock from './artisan-product-mock.json';
 import ProductArtisan from './product-artisan';
 import ProfileDescription from './product-description';
 import ProfileInfo from './profile-info';
 import ProfilePicture from './profile-picture';
-import SearchBar from './search-bar';
 
 const ArtisanProfileCard = () => {
   const [activeTab, setActiveTab] = useState<'produtos' | 'avaliacoes'>(
@@ -34,6 +34,7 @@ const ArtisanProfileCard = () => {
   const [error, setError] = useState<string | null>(null);
   const [visibleProducts, setVisibleProducts] = useState(6);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [search, setSearch] = useState('');
   const { user } = useStoreUser();
   const route = useRouter();
 
@@ -233,17 +234,20 @@ const ArtisanProfileCard = () => {
         </div>
       </div>
 
-      <div className={`${activeTab === 'produtos' ? 'block' : 'hidden'}`}>
-        <div className="flex bg-white items-center justify-center p-4">
-          <SearchBar />
+      <div
+        className={`${activeTab === 'produtos' ? 'flex flex-col bg-white justify-center items-center' : 'hidden'}`}
+      >
+        <div className="flex bg-white items-center justify-center p-4 w-full md:w-1/2">
+          <SearchBar value={search} onChange={setSearch} />
         </div>
 
-        <div className="flex bg-white items-center justify-center p-4">
+        <div className="flex w-full bg-white items-center justify-center p-4">
           <ProductArtisan
             artistId={artisan.userId}
             visibleCount={visibleProducts}
             onTotalChange={setTotalProducts}
             isEdit={isArtisan}
+            search={search}
           />
         </div>
 

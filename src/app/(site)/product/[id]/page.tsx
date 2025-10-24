@@ -6,18 +6,19 @@ import ProductGallery from '@/components/features/product/product-gallery';
 import ProductInfo from '@/components/features/product/product-info';
 import ProductReviews from '@/components/features/product/product-reviews';
 import ProductSlide from '@/components/features/product/product-slide';
+import { useFavorites } from '@/context/favorite-context';
 import { useCarousel } from '@/hooks/use-carousel';
 import { useProductData } from '@/hooks/use-product-data';
 import { handleShare } from '@/lib/utils/share-utils';
 import { useParams, useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
 import { GoArrowLeft } from 'react-icons/go';
-import { toast, Toaster } from 'sonner';
 
 function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const productId = params.id as string;
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   const { product, artistProducts, relatedProducts, isLoading, error } =
     useProductData(productId);
@@ -58,7 +59,7 @@ function ProductPage() {
 
   const onAddToFavorites = () => {
     if (!product) return;
-    toast.success('Adicionado aos favoritos: ' + product.title);
+    toggleFavorite(product.id);
   };
 
   if (isLoading) {
@@ -75,7 +76,7 @@ function ProductPage() {
     );
   }
 
-  if (error || !product || !product) {
+  if (error || !product) {
     return (
       <div className="min-h-screen bg-gray-50">
         <main className="bg-white">
@@ -93,7 +94,6 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Toaster richColors position="top-right" />
       <main className="bg-white">
         <div className="max-w-6xl mx-auto">
           <button
@@ -131,6 +131,7 @@ function ProductPage() {
                 onShare={onShare}
                 onAddToFavorites={onAddToFavorites}
                 onContact={onContact}
+                isFavorited={isFavorite(product.id)}
               />
             </div>
           </div>

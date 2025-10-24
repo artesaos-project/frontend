@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import { CiHeart } from 'react-icons/ci';
 import { FaWhatsapp } from 'react-icons/fa';
-import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
+import { IoIosArrowDown, IoMdShareAlt, IoMdClose } from 'react-icons/io';
 import { TbDotsVertical } from 'react-icons/tb';
 
 interface ProductInfoProps {
@@ -19,6 +19,7 @@ interface ProductInfoProps {
   onShare?: () => void;
   onAddToFavorites?: () => void;
   onContact?: () => void;
+  isFavorited?: boolean;
 }
 
 const ProductInfo = ({
@@ -28,6 +29,7 @@ const ProductInfo = ({
   onShare,
   onAddToFavorites,
   onContact,
+  isFavorited,
 }: ProductInfoProps) => {
   const [open, setOpen] = useState(false);
   return (
@@ -55,9 +57,12 @@ const ProductInfo = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3 items-center w-full">
-        <Button variant="secondary" onClick={onAddToFavorites}>
-          Adicionar aos favoritos
-          <CiHeart size={18} />
+        <Button
+          variant={isFavorited ? 'secondary' : 'outlineSakura'}
+          onClick={onAddToFavorites}
+        >
+          {isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+          {isFavorited ? <IoMdClose size={18} /> : <CiHeart size={18} />}
         </Button>
         <Button variant="primary" onClick={onContact}>
           Entrar em contato
