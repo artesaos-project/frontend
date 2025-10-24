@@ -37,7 +37,7 @@ jobs:
 
             # Clone or update repo
             if [ ! -d "${{ env.DEPLOY_PATH }}/.git" ]; then
-              git clone git@github.com:<YOUR_USER>/<YOUR_REPO>.git ${{ env.DEPLOY_PATH }}
+              git clone git@frontend:artesaos-project/frontend.git ${{ env.DEPLOY_PATH }}
             fi
 
             cd ${{ env.DEPLOY_PATH }}
