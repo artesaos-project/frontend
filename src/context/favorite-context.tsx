@@ -3,6 +3,7 @@
 import useUserStore from '@/hooks/use-store-user';
 import { favoritesApi } from '@/services/api';
 import { FavoritesApiResponse, Product } from '@/types/favorite';
+import { useRouter } from 'next/navigation';
 import {
   createContext,
   ReactNode,
@@ -26,6 +27,7 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(
 export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
+  const router = useRouter();
 
   const { user } = useUserStore();
 
@@ -57,30 +59,31 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const toggleFavorite = async (productId: string) => {
     if (!user?.isAuthenticated) {
       toast.warning('Faça login para adicionar produtos aos favoritos.');
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 1000);
       return;
     }
 
     try {
       await favoritesApi.like(productId);
 
+      const isAlreadyFavorite = favorites.includes(productId);
+
       setFavorites((prev) =>
-        prev.includes(productId)
+        isAlreadyFavorite
           ? prev.filter((id) => id !== productId)
           : [...prev, productId],
       );
 
-      setFavoriteProducts((prev) => {
-        const isAlreadyFavorite = prev.some((p) => p.id === productId);
-
-        if (isAlreadyFavorite) {
-          return prev.filter((p) => p.id !== productId);
-        } else {
-          favoritesApi.getAll().then((res: FavoritesApiResponse) => {
-            setFavoriteProducts(res.data.products);
-          });
-          return prev;
-        }
-      });
+      if (isAlreadyFavorite) {
+        setFavoriteProducts((prev) => prev.filter((p) => p.id !== productId));
+        toast.warning('Produto removido dos favoritos');
+      } else {
+        const response: FavoritesApiResponse = await favoritesApi.getAll();
+        setFavoriteProducts(response.data.products);
+        toast.success('Produto adicionado aos favoritos');
+      }
     } catch (err) {
       console.error('Erro ao atualizar favorito', err);
       toast.error('Não foi possível atualizar os favoritos.');

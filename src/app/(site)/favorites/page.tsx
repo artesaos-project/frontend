@@ -1,15 +1,24 @@
 'use client';
 
 import { BaseCard, ProductCardBody } from '@/components/card';
-import SearchBar from '@/components/features/artisan/search-bar';
+import SearchBar from '@/components/features/register/search-bar';
 import { useFavorites } from '@/context/favorite-context';
 import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { GoArrowLeft } from 'react-icons/go';
 
 function FavoritePage() {
   const router = useRouter();
   const { favoriteProducts } = useFavorites();
+  const [search, setSearch] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    if (!search) return favoriteProducts;
+    return favoriteProducts.filter((product) =>
+      product.title.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [search, favoriteProducts]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -26,14 +35,14 @@ function FavoritePage() {
             <h1 className="font-bold text-2xl text-midnight">Favoritos</h1>
             <span className="text-gray-500">({favoriteProducts.length})</span>
           </div>
-          <div className="flex md:justify-end w-full">
-            <SearchBar />
+          <div className="flex w-full md:justify-end md:w-1/2">
+            <SearchBar value={search} onChange={setSearch} />
           </div>
         </div>
 
-        <main className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6  gap-6 p-6">
-          {favoriteProducts.length > 0 ? (
-            favoriteProducts.map((product) => (
+        <main className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-6 p-6">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
               <BaseCard key={product.id}>
                 <div className="relative w-full h-34 md:h-44">
                   <img
@@ -52,7 +61,7 @@ function FavoritePage() {
             ))
           ) : (
             <div className="text-gray-500 text-center col-span-full mt-12">
-              Você ainda não possui produtos favoritos.
+              Nenhum produto favorito encontrado.
             </div>
           )}
         </main>
