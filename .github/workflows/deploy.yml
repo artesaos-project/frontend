@@ -1,0 +1,51 @@
+name: Deploy to VPS (main & develop)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        id: setenv
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "DEPLOY_PATH=/root/devops/prd" >> $GITHUB_ENV
+            echo "BRANCH=main" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_PATH=/root/devops/dev" >> $GITHUB_ENV
+            echo "BRANCH=develop" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            echo "Deploying branch ${{ env.BRANCH }} to ${{ env.DEPLOY_PATH }}"
+
+            # Clone or update repo
+            if [ ! -d "${{ env.DEPLOY_PATH }}/frontend/.git" ]; then
+              git clone git@frontend:artesaos-project/frontend.git ${{ env.DEPLOY_PATH }}
+            fi
+
+            cd ${{ env.DEPLOY_PATH }}/frontend
+            git fetch origin
+            git reset --hard origin/${{ env.BRANCH }}
+
+            cd ${{ env.DEPLOY_PATH }}
+
+            docker compose pull
+            docker compose up -d --build
+            docker image prune -f
