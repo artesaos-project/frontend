@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useFollowContext } from '@/context/follow-context';
 import useStoreUser from '@/hooks/use-store-user';
 import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
@@ -27,7 +28,6 @@ const ArtisanProfileCard = () => {
   );
   const params = useParams();
   const userName = params.id as string;
-  const [follow, setFollow] = useState(false);
   const [isArtisan, setIsArtisan] = useState(false);
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,6 +37,7 @@ const ArtisanProfileCard = () => {
   const [search, setSearch] = useState('');
   const { user } = useStoreUser();
   const route = useRouter();
+  const { isFollowing, toggleFollow } = useFollowContext();
 
   const getLoggedUserId = useCallback(() => user.userId, [user.userId]);
 
@@ -102,12 +103,7 @@ const ArtisanProfileCard = () => {
   const textColor = 'text-[#1F3A4D]';
 
   const handleFollow = () => {
-    setFollow(!follow);
-    alert(
-      follow
-        ? 'Você deixou de seguir o artista.'
-        : 'Você começou a seguir o artista.',
-    );
+    toggleFollow(artisan.userId);
   };
 
   const handleAddProduct = () => {
@@ -136,12 +132,20 @@ const ArtisanProfileCard = () => {
           <ProfileInfo artisan={artisan} textColor={textColor} />
           {!isArtisan && (
             <Button
-              variant={follow ? 'outlineSakura' : 'outlineMidnight'}
+              variant={
+                isFollowing(artisan.userId)
+                  ? 'outlineSakura'
+                  : 'outlineMidnight'
+              }
               onClick={handleFollow}
               className="flex gap-2 items-center px-4 py-1 w-full"
             >
-              {follow ? 'Seguindo' : 'Seguir'}
-              {follow ? <IoIosArrowDown size={16} /> : <FaPlus size={16} />}
+              {isFollowing(artisan.userId) ? 'Seguindo' : 'Seguir'}
+              {isFollowing(artisan.userId) ? (
+                <IoIosArrowDown size={16} />
+              ) : (
+                <FaPlus size={16} />
+              )}
             </Button>
           )}
         </div>
