@@ -57,6 +57,7 @@ function StepRegister({
         userId: login.user.id,
         userName: login.user.name,
         userPhoto: login.user.avatar,
+        userEmail: login.user.email,
         artisanUserName: login.user.artisanUsername,
         isAuthenticated: true,
         postnedApplication: undefined,

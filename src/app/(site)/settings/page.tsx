@@ -1,6 +1,11 @@
 'use client';
 
+import LoadingScreen from '@/components/common/loading-screen';
+import ExcludeUserDialog from '@/components/features/settings/exclude-user-dialog';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiLock, FiUser } from 'react-icons/fi';
 import { MdPersonOff } from 'react-icons/md';
 import { RiFileList3Line } from 'react-icons/ri';
@@ -29,6 +34,12 @@ function SettingItem({ icon, label, onClick }: SettingItemProps) {
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { hasHydrated } = useAuthGuard();
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!hasHydrated) {
+    return <LoadingScreen />;
+  }
 
   return (
     <main className="bg-gray-100 pb-20">
@@ -48,6 +59,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Card de opções */}
+        <ExcludeUserDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
         <div className="bg-white rounded-xl shadow-md overflow-hidden divide-y divide-gray-200">
           <SettingItem
             icon={<FiUser />}
@@ -59,20 +71,14 @@ export default function SettingsPage() {
           />
           <SettingItem
             icon={<MdPersonOff />}
-            label="Inativar conta"
+            label="Excluir conta"
             onClick={() => {
-              // Abrir modal de confirmação
-              console.log('Inativar conta');
+              setIsOpen(true);
             }}
           />
-          <SettingItem
-            icon={<FiLock />}
-            label="Trocar senha de acesso"
-            onClick={() => {
-              // Navegar para página de trocar senha
-              console.log('Trocar senha');
-            }}
-          />
+          <Link href="/settings/change-password">
+            <SettingItem icon={<FiLock />} label="Trocar senha de acesso" />
+          </Link>
           <SettingItem
             icon={<RiFileList3Line />}
             label="Dados do perfil"

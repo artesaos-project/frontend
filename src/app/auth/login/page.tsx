@@ -43,6 +43,7 @@ function Page() {
         userId: response.user.id,
         userName: response.user.name,
         userPhoto: response.user.avatar,
+        userEmail: response.user.email,
         artisanUserName: response.user.artisanUsername,
         isAuthenticated: true,
         isModerator: response.user.roles.includes('MODERATOR'),
