@@ -1,16 +1,20 @@
 import { Button } from '@/components/ui/button';
 import { FaCheck } from 'react-icons/fa6';
-import { FiX } from 'react-icons/fi';
+import { FiChevronDown, FiX } from 'react-icons/fi';
 import { GoClockFill } from 'react-icons/go';
 
 interface FilterButtonsProps {
-  activeFilter: string;
-  onFilterChange: (filter: string) => void;
-  variant: 'reports' | 'artisans';
+  activeFilter?: string;
+  onFilterChange?: (filter: string) => void;
+  variant: 'reports' | 'artisans' | 'users';
 }
 
 const artisanFilterButtons = [
-  { key: 'all', label: 'Mais recentes', icon: null },
+  {
+    key: 'all',
+    label: 'Mais recentes',
+    icon: <FiChevronDown />,
+  },
   {
     key: 'PENDING',
     label: 'Pendentes',
@@ -22,14 +26,18 @@ const artisanFilterButtons = [
     icon: <FaCheck className="text-green-600" />,
   },
   {
-    key: 'INACTIVE',
-    label: 'Inativos',
+    key: 'REJECTED',
+    label: 'Recusados',
     icon: <FiX className="text-red-600 font-bold" />,
   },
 ];
 
 const reportFilterButtons = [
-  { key: 'all', label: 'Mais recentes', icon: null },
+  {
+    key: 'all',
+    label: 'Mais recentes',
+    icon: <FiChevronDown />,
+  },
   {
     key: 'PENDING',
     label: 'Pendentes',
@@ -47,7 +55,7 @@ const reportFilterButtons = [
   },
 ];
 
-function ModeratorFilterButtons({
+function ModerationFilterButtons({
   activeFilter,
   onFilterChange,
   variant = 'artisans',
@@ -55,17 +63,21 @@ function ModeratorFilterButtons({
   const filterButtons =
     variant === 'reports' ? reportFilterButtons : artisanFilterButtons;
 
+  if (variant === 'users') {
+    return null;
+  }
+
   return (
     <>
       {filterButtons.map(({ key, label, icon }) => (
         <Button
           key={key}
-          className={`hidden lg:flex text-xs transition ${
+          className={`hidden lg:flex text-xs transition rounded-lg ${
             activeFilter === key
               ? 'bg-midnight text-white'
               : 'bg-white border-[1px] border-midnight text-midnight hover:bg-midnight hover:text-white'
           }`}
-          onClick={() => onFilterChange(key)}
+          onClick={() => (onFilterChange ? onFilterChange(key) : null)}
         >
           {icon}
           {label}
@@ -75,4 +87,4 @@ function ModeratorFilterButtons({
   );
 }
 
-export default ModeratorFilterButtons;
+export default ModerationFilterButtons;

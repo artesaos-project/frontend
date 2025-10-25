@@ -1,19 +1,19 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-interface ModeratorCardProps {
+interface ModerationCardProps {
   title: string;
   description: string;
   pending: number;
   finished: number;
 }
 
-function ModeratorCard({
+function ModerationCard({
   title,
   description,
   pending,
   finished,
-}: ModeratorCardProps) {
+}: ModerationCardProps) {
   return (
     <div className="w-52 flex flex-col text-midnight justify-center text-sm items-center text-center px-4 py-7 ring-2 ring-black/10 shadow-md shadow-black/10 rounded-xl hover:transform hover:scale-105 duration-300">
       <p className="font-bold my-4">{title}</p>
@@ -38,4 +38,4 @@ function ModeratorCard({
   );
 }
 
-export default ModeratorCard;
+export default ModerationCard;

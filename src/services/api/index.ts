@@ -1,5 +1,5 @@
 import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
-import { artisanDetails } from '@/types/artisan-details';
+import { ArtisanDetails } from '@/types/artisan-details';
 import { CategoryProps } from '@/types/category';
 import { FavoritesApiResponse } from '@/types/favorite';
 import { ApiProduct } from '@/types/product';
@@ -76,9 +76,7 @@ export const artisanApi = {
     apiRequest<{ artisanApplications: Artisan[] }>(`/artisan-applications`),
 
   getApplication: (artisanId: string) =>
-    apiRequest<{ artisanApplication: artisanDetails }>(
-      `/artisan-applications/${artisanId}`,
-    ),
+    apiRequest<ArtisanDetails>(`/artisan-applications/${artisanId}`),
 
   createApplication: (data: ArtisanApplicationPayload) =>
     apiRequest(`/artisan-applications`, {

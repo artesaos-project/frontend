@@ -1,24 +1,24 @@
 import { Input } from '@/components/ui/input';
 import { IoIosSearch } from 'react-icons/io';
-import ModeratorFilterButtons from './moderator-filter-buttons';
+import ModerationFilterButtons from './moderation-filter-buttons';
 
-interface ModeratorSearchProps {
+interface ModerationSearchBarProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  activeFilter: string;
-  onFilterChange: (filter: string) => void;
+  activeFilter?: string;
+  onFilterChange?: (filter: string) => void;
   isSearching?: boolean;
-  variant: 'reports' | 'artisans';
+  variant: 'reports' | 'artisans' | 'users';
 }
 
-function ModeratorSearch({
+function ModerationSearchBar({
   searchTerm,
   onSearchChange,
   activeFilter,
   onFilterChange,
   isSearching = false,
   variant,
-}: ModeratorSearchProps) {
+}: ModerationSearchBarProps) {
   return (
     <div className="mx-auto flex flex-col mt-4 md:mt-10">
       <div className="flex w-full justify-center items-center gap-5 mt-10">
@@ -39,7 +39,7 @@ function ModeratorSearch({
           />
         </div>
 
-        <ModeratorFilterButtons
+        <ModerationFilterButtons
           variant={variant}
           activeFilter={activeFilter}
           onFilterChange={onFilterChange}
@@ -49,4 +49,4 @@ function ModeratorSearch({
   );
 }
 
-export default ModeratorSearch;
+export default ModerationSearchBar;

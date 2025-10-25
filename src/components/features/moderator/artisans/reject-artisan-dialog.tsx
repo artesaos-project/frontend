@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 
-interface ModerateArtisanDialogProps {
+interface RejectArtisanDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (reason?: string) => void;
@@ -19,14 +19,14 @@ interface ModerateArtisanDialogProps {
   isLoading?: boolean;
 }
 
-function ModerateArtisanDialog({
+function RejectArtisanDialog({
   isOpen,
   onClose,
   onConfirm,
   artisanName,
   action,
   isLoading = false,
-}: ModerateArtisanDialogProps) {
+}: RejectArtisanDialogProps) {
   const [reason, setReason] = useState('');
 
   const handleConfirm = () => {
@@ -82,7 +82,7 @@ function ModerateArtisanDialog({
           <Button
             onClick={handleConfirm}
             disabled={isLoading}
-            className="flex-1 bg-red-700 hover:bg-white hover:text-red-700 border hover:border-red-700 text-white"
+            className="flex-1 rounded-md bg-red-700 hover:bg-white hover:text-red-700 border hover:border-red-700 text-white"
           >
             {isLoading ? 'Processando...' : 'Rejeitar'}
           </Button>
@@ -92,4 +92,4 @@ function ModerateArtisanDialog({
   );
 }
 
-export default ModerateArtisanDialog;
+export default RejectArtisanDialog;

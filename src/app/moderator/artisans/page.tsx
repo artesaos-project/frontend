@@ -1,13 +1,12 @@
 'use client';
 
 import LoadingScreen from '@/components/common/loading-screen';
-import ModerateArtisanInstructions from '@/components/features/moderator/moderate-artisan/moderate-artisan-instructions';
+import ModeratorTable from '@/components/features/moderator/moderation-table';
 import { artisanApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import ModeratorTable from '../../../components/features/moderator/moderate-artisan/moderator-table';
-import ModeratorSearch from '../../../components/features/moderator/moderator-search';
-import ModeratorTitle from '../../../components/features/moderator/moderator-title';
+import ModerationSearchBar from '../../../components/features/moderator/moderation-searchbar';
+import ModeratorTitle from '../../../components/features/moderator/moderation-title';
 
 type Artisan = {
   id: string;
@@ -18,7 +17,7 @@ type Artisan = {
 
 function Page() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('PENDING');
   const [artisans, setArtisans] = useState<Artisan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -57,8 +56,7 @@ function Page() {
     <div className="overflow-x-hidden">
       <ModeratorTitle title={'Artesãos'} />
       <div className="mx-auto w-2/3">
-        <ModerateArtisanInstructions />
-        <ModeratorSearch
+        <ModerationSearchBar
           variant="artisans"
           searchTerm={searchTerm}
           onSearchChange={handleSearchChange}
@@ -67,10 +65,10 @@ function Page() {
         />
       </div>
       <ModeratorTable
+        type="artisans"
         searchTerm={searchTerm}
         activeFilter={activeFilter}
-        artisans={artisans}
-        onRefresh={fetchArtisans}
+        data={artisans}
       />
     </div>
   );

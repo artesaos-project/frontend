@@ -20,7 +20,7 @@ function ModerateArtisanButton({
           onClick={onClick}
         >
           <FaCheck size={12} />
-          <p className="hidden md:inline">APROVAR</p>
+          <p>APROVAR</p>
         </button>
       )}
 
@@ -31,7 +31,7 @@ function ModerateArtisanButton({
           onClick={onClick}
         >
           <FiX size={16} />
-          <p className="hidden md:inline">RECUSAR</p>
+          <p>RECUSAR</p>
         </button>
       )}
 
@@ -42,7 +42,7 @@ function ModerateArtisanButton({
           onClick={onClick}
         >
           <FaCheck />
-          <p className="hidden md:inline">ATIVAR</p>
+          <p>ATIVAR</p>
         </button>
       )}
 
@@ -53,7 +53,7 @@ function ModerateArtisanButton({
           onClick={onClick}
         >
           <FiX size={16} />
-          <p className="hidden md:inline">DESATIVAR</p>
+          <p>DESATIVAR</p>
         </button>
       )}
 
@@ -64,7 +64,7 @@ function ModerateArtisanButton({
           onClick={onClick}
         >
           <LuPencil size={14} />
-          <p className="hidden md:inline">EDITAR</p>
+          <p>EDITAR</p>
         </button>
       )}
     </>
