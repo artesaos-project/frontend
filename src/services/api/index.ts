@@ -2,9 +2,9 @@ import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
 import { ArtisanDetails } from '@/types/artisan-details';
 import { CategoryProps } from '@/types/category';
 import { FavoritesApiResponse } from '@/types/favorite';
+import { FollowResponse } from '@/types/follow';
 import { ApiProduct } from '@/types/product';
 import { apiRequest } from '../api-service';
-import { FollowResponse } from '@/types/follow';
 
 type CreateUserPayload = {
   name: string;
@@ -181,5 +181,20 @@ export const followersApi = {
   toggleFollow: (artisanId: string) =>
     apiRequest(`/artisans/${artisanId}/follow`, {
       method: 'POST',
+    }),
+};
+
+export const userApi = {
+  changePassword: (data: {
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<void> =>
+    apiRequest<void>('/users/me/password', {
+      method: 'PATCH',
+      body: data,
+    }),
+  deleteAccount: (): Promise<{ message: string }> =>
+    apiRequest<{ message: string }>('/users/me', {
+      method: 'DELETE',
     }),
 };

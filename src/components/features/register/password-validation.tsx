@@ -41,7 +41,14 @@ export const PasswordValidationBox = ({
   showInfo,
   error,
 }: PasswordValidationBoxProps) => {
-  if (!(name === 'password' && showInfo && !error && shouldValidate))
+  if (
+    !(
+      (name === 'password' || name === 'newPassword') &&
+      showInfo &&
+      !error &&
+      shouldValidate
+    )
+  )
     return null;
 
   return (

@@ -9,17 +9,25 @@ const useStoreUser = create<UserStore>()(
         userId: undefined,
         userName: undefined,
         userPhoto: undefined,
+        userEmail: undefined,
         artisanUserName: undefined,
         isAuthenticated: false,
         isModerator: false,
         isArtisan: false,
         postnedApplication: undefined,
       },
+      _hasHydrated: false,
+      setHasHydrated: (state) => {
+        set({
+          _hasHydrated: state,
+        });
+      },
       setUser: (user: UserProps) =>
         set(() => ({
           user: {
             userId: user.userId,
             userName: user.userName,
+            userEmail: user.userEmail,
             isAuthenticated: true,
             userPhoto: user.userPhoto,
             artisanUserName: user.artisanUserName,
@@ -34,6 +42,7 @@ const useStoreUser = create<UserStore>()(
             userId: undefined,
             userName: undefined,
             userPhoto: undefined,
+            userEmail: undefined,
             artisanUserName: undefined,
             isAuthenticated: false,
             isModerator: false,
@@ -44,6 +53,9 @@ const useStoreUser = create<UserStore>()(
     }),
     {
       name: 'loginStore',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );
