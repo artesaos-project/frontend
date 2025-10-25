@@ -141,11 +141,10 @@ function ProductPage() {
               <ProductAuthor
                 name={product.authorName}
                 authorUserName={product.authorUserName}
-                avatar={'https://placehold.co/48x48'}
-                followers={1000}
-                totalProducts={5}
-                isFollowing={false}
-                onFollow={() => alert('Seguindo!')}
+                avatar={product.authorAvatarUrl || 'https://placehold.co/48x48'}
+                followers={product.authorFollowersCount || 0}
+                totalProducts={product.authorProductsCount || 0}
+                authorId={product.authorId}
                 onViewProfile={handleViewArtistProfile}
               />
             </div>

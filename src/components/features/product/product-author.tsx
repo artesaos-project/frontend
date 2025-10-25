@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useFollowContext } from '@/context/follow-context';
 import { FiPlus, FiUser, FiUserCheck } from 'react-icons/fi';
 
 interface AuthorProfileProps {
@@ -9,8 +9,7 @@ interface AuthorProfileProps {
   avatar?: string;
   followers: number;
   totalProducts: number;
-  isFollowing?: boolean;
-  onFollow?: () => void;
+  authorId: string;
   onViewProfile?: () => void;
 }
 
@@ -20,15 +19,13 @@ const AuthorProfile = ({
   avatar,
   followers,
   totalProducts,
-  isFollowing = false,
-  onFollow,
+  authorId,
   onViewProfile,
 }: AuthorProfileProps) => {
-  const [following, setFollowing] = useState(isFollowing);
+  const { isFollowing, toggleFollow } = useFollowContext();
 
   const handleFollow = () => {
-    setFollowing(!following);
-    onFollow?.();
+    toggleFollow(authorId);
   };
 
   const formatNumber = (num: number): string => {
@@ -93,12 +90,12 @@ const AuthorProfile = ({
           <button
             onClick={handleFollow}
             className={`flex items-center mt-2 gap-2 px-10 py-2 border-2 rounded-4xl font-bold transition-colors ${
-              following
+              isFollowing(authorId)
                 ? 'bg-white text-sakura border-sakura hover:bg-sakura hover:text-white'
                 : 'bg-white text-midnight border-midnight hover:bg-midnight hover:text-white'
             }`}
           >
-            {following ? (
+            {isFollowing(authorId) ? (
               <>
                 <FiUserCheck className="text-sm" />
                 <span>Seguindo</span>

@@ -39,4 +39,7 @@ export interface ApiProduct {
   photos: string[];
   photosIds: string[];
   coverPhoto: string;
+  authorAvatarUrl?: string;
+  authorFollowersCount?: number;
+  authorProductsCount?: number;
 }

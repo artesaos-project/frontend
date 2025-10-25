@@ -1,5 +1,6 @@
 'use client';
 
+import AlertDialog from '@/components/common/alert-dialog';
 import { PhotoGallery } from '@/components/features/artisan/add-product/photo-gallery';
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
@@ -12,7 +13,7 @@ import { ProductForm } from '@/types/product-form';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { use, useEffect } from 'react';
+import { use, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa6';
@@ -21,6 +22,8 @@ import { toast, Toaster } from 'sonner';
 const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
   const { id } = use(params);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
   const {
     photos,
     addApiPhotos,
@@ -118,22 +121,23 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
-  const handleDelete = async () => {
-    if (isUploading) {
-      toast.warning('Por favor, aguarde o término do upload das fotos.');
-      return;
-    }
+  const handleDelete = () => {
+    setIsAlertOpen(true);
+  };
+
+  const confirmDelete = async () => {
     try {
       await productApi.delete(id);
       toast.success('Produto excluído com sucesso!');
       router.back();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data?.message;
-        toast.error(message);
+        toast.error(error.response?.data?.message);
       } else {
         toast.error('Erro ao excluir o produto.');
       }
+    } finally {
+      setIsAlertOpen(false);
     }
   };
 
@@ -148,6 +152,19 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
           />
           <h1 className="text-xl font-bold text-gray-800">Editar produto</h1>
         </div>
+
+        <AlertDialog
+          isOpen={isAlertOpen}
+          onClose={() => setIsAlertOpen(false)}
+          onConfirm={confirmDelete}
+          dialogTitle="Você tem certeza?"
+          dialogMessage={{
+            text: 'Essa ação não pode ser desfeita. O produto será excluído permanentemente.',
+            color: 'text-red-500',
+          }}
+          textButton1="Sim"
+          textButton2="Cancelar"
+        />
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="bg-white rounded-2xl shadow-lg p-4 mb-10">
@@ -236,7 +253,7 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
                 <FaCheck />
                 {isUploading ? 'Enviando fotos...' : 'Atualizar Produto'}
               </Button>
-              <Button variant="secondary" onClick={handleDelete}>
+              <Button variant="secondary" type="button" onClick={handleDelete}>
                 <FaRegTrashAlt />
                 Excluir Produto
               </Button>
