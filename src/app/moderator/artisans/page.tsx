@@ -18,9 +18,9 @@ type Artisan = {
 function Page() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('PENDING');
-  const [artisans, setArtisans] = useState<Artisan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [artisans, setArtisans] = useState<Artisan[]>([]);
 
   const fetchArtisans = useCallback(async () => {
     try {
