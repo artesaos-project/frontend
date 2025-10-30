@@ -6,6 +6,8 @@ import PopularProducts from '@/components/features/home/popular-products';
 import NewArtisans from '@/components/features/home/new-artisans';
 import { homeApi, HomeApiResponse } from '@/services/api';
 import { useEffect, useState } from 'react';
+import { useSearch } from '@/context/SearchContext';
+import SearchResults from '@/components/features/home/search-results';
 
 export default function Home() {
   const [data, setData] = useState<HomeApiResponse>({
@@ -15,6 +17,7 @@ export default function Home() {
     followedArtisansProducts: [],
   });
   const [loading, setLoading] = useState(true);
+  const { query } = useSearch();
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -30,6 +33,7 @@ export default function Home() {
 
     fetchHomeData();
   }, []);
+
   return (
     <main className="flex flex-col overflow-x-hidden items-center justify-items-center min-h-screen sm:px-12 lg:px-46 pb-10 py-8 font-[family-name:var(--font-poppins)]">
       <h2 className="text-2xl sm:text-3xl text-center font-bold mb-3">
@@ -40,9 +44,18 @@ export default function Home() {
         <BannerNovidades />
       </div>
       <div className="flex flex-col w-full px-4 mt-7">
-        <PopularProducts products={data.popularProducts} loading={loading} />
-        <NewsSection products={data.recentProducts} loading={loading} />
-        <NewArtisans artisans={data.newArtisans} loading={loading} />
+        {!query ? (
+          <>
+            <PopularProducts
+              products={data.popularProducts}
+              loading={loading}
+            />
+            <NewsSection products={data.recentProducts} loading={loading} />
+            <NewArtisans artisans={data.newArtisans} loading={loading} />
+          </>
+        ) : (
+          <SearchResults query={query} />
+        )}
       </div>
     </main>
   );

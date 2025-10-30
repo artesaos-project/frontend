@@ -17,11 +17,13 @@ import { LuDoorOpen } from 'react-icons/lu';
 import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
+import { useSearch } from '@/context/SearchContext';
 
 function Header() {
   const user = useStoreUser((state) => state.user);
   const resetStore = useStoreUser((state) => state.resetStore);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const { query, setQuery } = useSearch();
 
   const handleLogoutConfirm = () => {
     resetStore();
@@ -121,8 +123,10 @@ function Header() {
       <div className="relative md:col-span-4">
         <Input
           type="text"
+          value={query}
           placeholder="Pesquise aqui..."
           className="bg-white rounded-3xl pl-10 pr-6 py-7 drop-shadow-lg shadow-black/40"
+          onChange={(e) => setQuery(e.target.value)}
         />
         <IoIosSearch className="absolute left-1.5 top-[25%]" size={30} />
       </div>

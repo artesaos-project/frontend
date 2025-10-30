@@ -25,6 +25,7 @@ export const apiRequest = async <T>(
   }
 
   const url = `${baseUrl}${endpoint}`;
+  console.log(url);
 
   try {
     const response = await axios<T>({

@@ -7,9 +7,11 @@ import { CardsListSkeleton } from './loading-state';
 function ProductsList({
   products,
   loading,
+  emptyStateMessage,
 }: {
   products: ApiProduct[];
   loading: boolean;
+  emptyStateMessage?: string;
 }) {
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
@@ -37,8 +39,8 @@ function ProductsList({
   }
   if (!products || products.length === 0) {
     return (
-      <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
-        Nenhum produto disponível no momento.
+      <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500 truncate line-clamp-2">
+        {emptyStateMessage ?? 'Nenhum produto disponível no momento.'}
       </p>
     );
   }
