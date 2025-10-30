@@ -125,6 +125,7 @@ export const productApi = {
     }),
   getCatalogs: () =>
     apiRequest<{ items: CategoryProps[] }>('/catalog/categories'),
+  search: (query: string) => apiRequest<ApiProduct[]>(`/products?${query}`),
 };
 
 export const uploadApi = {
