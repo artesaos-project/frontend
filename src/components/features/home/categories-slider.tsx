@@ -58,12 +58,12 @@ function CategoriesSlider() {
               slidesPerGroup: 8,
             },
           }}
-          onSwiper={(swiper) => console.log(swiper)}
+          onSwiper={() => {}}
           navigation={{
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
           }}
-          onPaginationShow={(swiper) => console.log(swiper)}
+          onPaginationShow={() => {}}
           pagination={{
             clickable: true,
             type: 'custom',

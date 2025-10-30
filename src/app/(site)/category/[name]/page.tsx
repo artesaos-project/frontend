@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { productApi } from '@/services/api';
 import { CategoryProps } from '@/types/category';
+import { ApiProduct } from '@/types/product';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
@@ -13,8 +14,26 @@ import { LuListFilter } from 'react-icons/lu';
 
 function Page() {
   const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
+  const [products, setProducts] = useState<ApiProduct[]>([]);
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   const nameFilter = params.name as string;
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await productApi.getAll();
+        setProducts(response);
+      } catch (err: unknown) {
+        if (err instanceof Error)
+          console.error('Erro ao buscar produtos', err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, [nameFilter]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -73,7 +92,7 @@ function Page() {
           setSortSelection={setSortSelection}
         />
       )}
-      <ProductsList />
+      <ProductsList products={products} loading={loading} />
     </main>
   );
 }
