@@ -2,40 +2,28 @@
 import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
-import { productApi } from '@/services/api';
 import { CardsListSkeleton } from './loading-state';
 
-function ProductsList() {
-  const [products, setProducts] = useState<ApiProduct[]>([]);
+function ProductsList({
+  products,
+  loading,
+}: {
+  products: ApiProduct[];
+  loading: boolean;
+}) {
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await productApi.getAll();
-        setProducts(res);
-        setLoading(false);
-      } catch (err) {
-        console.error('Erro ao buscar produtos:', err);
-      }
-    };
-
-    fetchProducts();
-    // setProducts(productsMock);
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      let maxItems = products.length;
+      let maxItems = products?.length;
 
       if (width > 1024) maxItems = 15;
       else if (width > 768) maxItems = 8;
       else if (width > 640) maxItems = 6;
       else maxItems = 4;
 
-      setVisibleProducts(products.slice(0, maxItems));
+      setVisibleProducts(products?.slice(0, maxItems) || []);
     };
 
     handleResize();
@@ -47,7 +35,7 @@ function ProductsList() {
   if (loading) {
     return <CardsListSkeleton />;
   }
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
         Nenhum produto disponível no momento.

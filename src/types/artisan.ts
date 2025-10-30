@@ -10,6 +10,15 @@ export interface ArtisanProfile {
   bio: string | null;
   avatar: string | null;
 }
+export interface NewArtisanCardProps {
+  id: number;
+  name: string;
+  userName: string;
+  avatar?: string;
+  bio?: string;
+  productsCount?: number;
+  followersCount?: number;
+}
 
 export interface GetMyProfile {
   id: string;

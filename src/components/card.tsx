@@ -5,7 +5,7 @@ import React from 'react';
 import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 import { Button } from './ui/button';
-import { Link } from 'lucide-react';
+import Link from 'next/link';
 
 type ProductCardProps = {
   id: string | number;
@@ -103,14 +103,17 @@ function ArtisanCardBody({
         <p className="font-bold lg:text-xl md:text-lg text-midnight truncate">
           {name}
         </p>
-        <button className="cursor-pointer hover:scale-110 transition-transform duration-200">
+        <button className="cursor-pointer hover:scale-110 transition-transform duration-200 rounded-full border text-midnight border-midnight px-2 py-1">
           <FaPlus />
         </button>
       </header>
-      <p className="text-sm lg:text-lg truncate italic font-light">{type}</p>
+      {/* por enquanto não tem utilidade para esse subtitulo de type então está hidden */}
+      <p className="text-sm lg:text-lg truncate italic font-light hidden">
+        {type}
+      </p>
       <Link href={`/artisan/${id}`}>
-        <Button className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold mt-auto">
-          Ver Perfil
+        <Button variant="secondary" className="p-2 w-full mt-2">
+          Ver perfil
         </Button>
       </Link>
     </>

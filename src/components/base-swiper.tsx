@@ -53,12 +53,12 @@ function BaseSwiper<T>({ cards, loading, children }: CardsSwiperProps<T>) {
               spaceBetween: 20,
             },
           }}
-          onSwiper={(swiper) => console.log(swiper)}
+          onSwiper={() => {}}
           navigation={{
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
           }}
-          onPaginationShow={(swiper) => console.log(swiper)}
+          onPaginationShow={() => {}}
           pagination={{
             clickable: true,
             type: 'custom',

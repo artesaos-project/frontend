@@ -1,4 +1,8 @@
-import { ArtisanProfile, GetMyProfile } from '@/types/artisan';
+import {
+  ArtisanProfile,
+  GetMyProfile,
+  NewArtisanCardProps,
+} from '@/types/artisan';
 import { ArtisanDetails } from '@/types/artisan-details';
 import { CategoryProps } from '@/types/category';
 import { FavoritesApiResponse } from '@/types/favorite';
@@ -197,4 +201,15 @@ export const userApi = {
     apiRequest<{ message: string }>('/users/me', {
       method: 'DELETE',
     }),
+};
+
+export interface HomeApiResponse {
+  newArtisans: NewArtisanCardProps[];
+  popularProducts: ApiProduct[];
+  recentProducts: ApiProduct[];
+  followedArtisansProducts?: ApiProduct[];
+}
+
+export const homeApi = {
+  getHome: () => apiRequest<{ data: HomeApiResponse }>('/home'),
 };

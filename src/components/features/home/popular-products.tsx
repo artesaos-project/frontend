@@ -1,10 +1,17 @@
 import ProductsList from '@/components/products-list';
 import SectionStructure from '@/components/section-structure';
+import { ApiProduct } from '@/types/product';
 
-function PopularProducts() {
+function PopularProducts({
+  products,
+  loading,
+}: {
+  products: ApiProduct[];
+  loading: boolean;
+}) {
   return (
     <SectionStructure title="Produtos Populares">
-      <ProductsList />
+      <ProductsList products={products} loading={loading} />
     </SectionStructure>
   );
 }
