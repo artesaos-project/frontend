@@ -5,8 +5,6 @@ import { PhotoGallery } from '@/components/features/artisan/add-product/photo-ga
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
 import { Button } from '@/components/ui/button';
-import { materiaPrima } from '@/constants/materia-prima';
-import { tecnicas } from '@/constants/tecnicas';
 import { useProductForm } from '@/hooks/use-product-form';
 import { productApi } from '@/services/api';
 import { ProductForm } from '@/types/product-form';
@@ -174,8 +172,6 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
                 register={register}
                 control={control}
                 errors={errors}
-                materiaPrima={materiaPrima}
-                tecnicas={tecnicas}
               />
 
               <div className="mb-8 mt-8">
@@ -204,8 +200,6 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
                   register={register}
                   control={control}
                   errors={errors}
-                  materiaPrima={materiaPrima}
-                  tecnicas={tecnicas}
                 />
 
                 <div className="mt-6">

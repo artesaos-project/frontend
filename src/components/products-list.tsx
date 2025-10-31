@@ -3,6 +3,7 @@ import { ApiProduct } from '@/types/product';
 import React, { useEffect, useState } from 'react';
 import { BaseCard, ProductCardBody } from './card';
 import { CardsListSkeleton } from './loading-state';
+import Image from 'next/image';
 
 function ProductsList({
   products,
@@ -49,10 +50,13 @@ function ProductsList({
       {visibleProducts.map((product, i) => (
         <BaseCard key={i}>
           <div className="w-full h-34 md:h-40">
-            <img
+            <Image
               src={product.coverPhoto}
               alt="Imagem do Produto"
               className="rounded-lg object-cover h-34 md:h-40 w-full"
+              width={256}
+              height={160}
+              loading="lazy"
             />
           </div>
           <ProductCardBody
