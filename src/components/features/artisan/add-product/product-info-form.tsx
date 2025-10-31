@@ -8,8 +8,8 @@ interface ProductInfoFormProps {
   register: ReturnType<typeof useForm<ProductForm>>['register'];
   control: Control<ProductForm>;
   errors: FieldErrors<ProductForm>;
-  materiaPrima: string[];
-  tecnicas: string[];
+  materiaPrima?: string[] | null;
+  tecnicas?: string[] | null;
 }
 
 export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
@@ -52,42 +52,44 @@ export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <Controller
-            name="category"
-            control={control}
-            rules={{ required: 'Selecione ao menos uma categoria.' }}
-            render={({ field }) => (
-              <CategoryTechniqueSelect
-                title="Categoria"
-                items={materiaPrima}
-                selectedValues={field.value}
-                onSelect={field.onChange}
-                required={true}
-              />
+        {materiaPrima && tecnicas && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Controller
+              name="category"
+              control={control}
+              rules={{ required: 'Selecione ao menos uma categoria.' }}
+              render={({ field }) => (
+                <CategoryTechniqueSelect
+                  title="Categoria"
+                  items={materiaPrima}
+                  selectedValues={field.value}
+                  onSelect={field.onChange}
+                  required={true}
+                />
+              )}
+            />
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category.message}</p>
             )}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category.message}</p>
-          )}
 
-          <Controller
-            name="technical"
-            control={control}
-            render={({ field }) => (
-              <CategoryTechniqueSelect
-                title="Técnica"
-                items={tecnicas}
-                selectedValues={field.value}
-                onSelect={field.onChange}
-                required={false}
-              />
+            <Controller
+              name="technical"
+              control={control}
+              render={({ field }) => (
+                <CategoryTechniqueSelect
+                  title="Técnica"
+                  items={tecnicas}
+                  selectedValues={field.value}
+                  onSelect={field.onChange}
+                  required={false}
+                />
+              )}
+            />
+            {errors.technical && (
+              <p className="text-red-500 text-sm">{errors.technical.message}</p>
             )}
-          />
-          {errors.technical && (
-            <p className="text-red-500 text-sm">{errors.technical.message}</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
