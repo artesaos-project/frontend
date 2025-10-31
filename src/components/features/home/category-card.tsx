@@ -4,13 +4,13 @@ import Image from 'next/image';
 type CategoryCardProps = {
   name: string;
   img: string;
-  nameFilter: string;
+  id: number;
 };
 
-function CategoryCard({ name, img, nameFilter }: CategoryCardProps) {
+function CategoryCard({ name, img, id }: CategoryCardProps) {
   return (
     <Link
-      href={`/category/${nameFilter.toLowerCase()}`}
+      href={`/category/${id}`}
       className="flex flex-col mt-4 mb-4 items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
     >
       <Image
