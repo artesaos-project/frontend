@@ -214,3 +214,15 @@ export interface HomeApiResponse {
 export const homeApi = {
   getHome: () => apiRequest<{ data: HomeApiResponse }>('/home'),
 };
+
+export const reportApi = {
+  reportProduct: (data: {
+    productId: string;
+    reason: string;
+    details: string;
+  }) =>
+    apiRequest<{ message: string }>('/reports/products', {
+      method: 'POST',
+      body: data,
+    }),
+};

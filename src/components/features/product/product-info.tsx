@@ -2,17 +2,21 @@
 
 import DropdownDenuncia from '@/components/common/dropdown-denuncia';
 import { Button } from '@/components/ui/button';
+import { reportApi } from '@/services/api';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { CiHeart } from 'react-icons/ci';
 import { FaWhatsapp } from 'react-icons/fa';
-import { IoIosArrowDown, IoMdShareAlt, IoMdClose } from 'react-icons/io';
+import { IoIosArrowDown, IoMdClose, IoMdShareAlt } from 'react-icons/io';
 import { TbDotsVertical } from 'react-icons/tb';
+import { toast } from 'sonner';
 
 interface ProductInfoProps {
+  productId: string;
   title: string;
   price: string;
   description?: string;
@@ -23,6 +27,7 @@ interface ProductInfoProps {
 }
 
 const ProductInfo = ({
+  productId,
   title,
   price,
   description,
@@ -45,7 +50,31 @@ const ProductInfo = ({
               <TbDotsVertical size={24} className="cursor-pointer" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownDenuncia onClose={() => setOpen(false)} />
+          <DropdownDenuncia
+            onClose={() => setOpen(false)}
+            targetId={productId}
+            onSubmit={async (data) => {
+              try {
+                await reportApi.reportProduct({
+                  ...data,
+                  productId,
+                });
+
+                toast.success('Denúncia enviada com sucesso!');
+              } catch (error: unknown) {
+                if (error instanceof AxiosError) {
+                  if (error.response?.status === 401) {
+                    toast.error(
+                      'Você precisa estar logado para enviar uma denúncia.',
+                    );
+                    return;
+                  }
+                  const message = error.response?.data?.message;
+                  toast.error(message);
+                }
+              }
+            }}
+          />
         </DropdownMenu>
       </div>
 
