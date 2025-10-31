@@ -88,7 +88,7 @@ function CategoriesSlider() {
               <CategoryCard
                 name={cat.nameExhibit}
                 img={cat.imageUrl}
-                nameFilter={cat.nameFilter}
+                id={cat.id}
               />
             </SwiperSlide>
           ))}
