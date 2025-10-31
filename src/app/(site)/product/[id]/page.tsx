@@ -122,6 +122,7 @@ function ProductPage() {
 
             <div className="flex flex-col mt-5">
               <ProductInfo
+                productId={product.id}
                 title={product.title}
                 price={new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
