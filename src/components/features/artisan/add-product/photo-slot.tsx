@@ -2,6 +2,7 @@ import { PhotoType } from '@/hooks/use-product-form';
 import { Upload } from 'lucide-react';
 import React from 'react';
 import { FaRegImage } from 'react-icons/fa6';
+import Image from 'next/image';
 
 interface PhotoSlotProps {
   index: number;
@@ -45,10 +46,13 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
     >
       {photo ? (
         <div className="w-full h-full rounded-lg overflow-hidden">
-          <img
+          <Image
             src={getPhotoUrl(photo)}
             alt={`Preview ${index}`}
             className="w-full h-full object-cover"
+            width={256}
+            height={160}
+            loading="lazy"
           />
           {isSelected && (
             <div className="bg-salmon rounded-lg flex items-center justify-center">
