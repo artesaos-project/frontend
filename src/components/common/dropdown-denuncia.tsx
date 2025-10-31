@@ -12,34 +12,48 @@ import { CgDanger } from 'react-icons/cg';
 import { FaHouse } from 'react-icons/fa6';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-const reportOptions = [
-  'Conteúdo impróprio (violência, nudez, etc.)',
-  'Conteúdo ofensivo',
-  'Informação falsa/enganosa',
-  'Direitos autorais violados',
-  'Venda ou divulgação de itens proibidos',
-  'Linguagem inapropriada',
-  'Fora do tema/irrelevante',
-  'Outros',
-];
+const reportOptionsMap: Record<string, string> = {
+  INAPPROPRIATE_CONTENT: 'Conteúdo impróprio (violência, nudez, etc.)',
+  OFFENSIVE_CONTENT: 'Conteúdo ofensivo',
+  FALSE_OR_MISLEADING_INFORMATION: 'Informação falsa/enganosa',
+  COPYRIGHT_VIOLATION: 'Direitos autorais violados',
+  PROHIBITED_ITEM_SALE_OR_DISCLOSURE: 'Venda ou divulgação de itens proibidos',
+  INAPPROPRIATE_LANGUAGE: 'Linguagem inapropriada',
+  OFF_TOPIC_OR_IRRELEVANT: 'Fora do tema/irrelevante',
+  OTHER: 'Outros',
+};
 
 const itemClasses =
   'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-gray-100 flex flex-row items-center gap-2';
 
 type MenuView = 'main' | 'report' | 'other';
 
-function DropdownDenuncia({ onClose }: { onClose: () => void }) {
+function DropdownDenuncia({
+  targetId,
+  onClose,
+  onSubmit,
+}: {
+  targetId: string;
+  onClose: () => void;
+  onSubmit: (data: {
+    targetId: string;
+    reason: string;
+    details: string;
+  }) => void;
+}) {
   const [currentView, setCurrentView] = useState<MenuView>('main');
   const [selectedReason, setSelectedReason] = useState('');
   const [additionalDetails, setAdditionalDetails] = useState('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const handleReport = () => {
-    console.log('Motivo da Denúncia:', selectedReason);
-    console.log('Detalhes Adicionais:', additionalDetails);
+    onSubmit({
+      targetId,
+      reason: selectedReason,
+      details: additionalDetails,
+    });
 
     if (onClose) onClose();
-
     setCurrentView('main');
     setSelectedReason('');
     setAdditionalDetails('');
@@ -104,18 +118,19 @@ function DropdownDenuncia({ onClose }: { onClose: () => void }) {
             </DropdownMenuItem>
             <DropdownMenuSeparator className="h-px bg-gray-200 my-1" />
 
-            {reportOptions.map((option) => (
+            {Object.entries(reportOptionsMap).map(([value, label]) => (
               <DropdownMenuItem
-                key={option}
+                key={label}
                 className={itemClasses}
                 onSelect={(e) => {
                   e.preventDefault();
-                  setSelectedReason(option);
+                  setSelectedReason(value);
                   setCurrentView('other');
                 }}
               >
-                {option}
-                {option !== 'Outros' && (
+                {label}
+
+                {value !== 'OTHER' && (
                   <IoIosArrowForward className="ml-auto h-4 w-4" />
                 )}
               </DropdownMenuItem>
@@ -139,7 +154,7 @@ function DropdownDenuncia({ onClose }: { onClose: () => void }) {
                 <p className="px-1 text-sm text-gray-500">
                   Motivo:
                   <span className="block font-medium text-gray-700">
-                    {selectedReason}
+                    {reportOptionsMap[selectedReason]}
                   </span>
                 </p>
 
