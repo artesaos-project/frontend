@@ -35,15 +35,17 @@ import { Button } from './ui/button';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
+  const resetStoreUser = useStoreUser((state) => state.resetStore);
   const pathname = usePathname();
-  const resetStore = useStoreUser((state) => state.resetStore);
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   function handleLogout() {
-    resetStore();
     localStorage.removeItem('artisan-register');
+    localStorage.removeItem('loginStore');
+    resetStoreUser();
     setIsLogoutModalOpen(false);
+    window.location.reload();
   }
 
   const handleOpenLogoutModal = () => {

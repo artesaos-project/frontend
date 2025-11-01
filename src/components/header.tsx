@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { useSearch } from '@/context/SearchContext';
 import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,17 +18,17 @@ import { LuDoorOpen } from 'react-icons/lu';
 import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
-import { useSearch } from '@/context/SearchContext';
 
 function Header() {
   const user = useStoreUser((state) => state.user);
-  const resetStore = useStoreUser((state) => state.resetStore);
+  const resetStoreUser = useStoreUser((state) => state.resetStore);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { query, setQuery } = useSearch();
 
   const handleLogoutConfirm = () => {
-    resetStore();
     localStorage.removeItem('artisan-register');
+    localStorage.removeItem('loginStore');
+    resetStoreUser();
     setIsLogoutModalOpen(false);
     window.location.reload();
   };
