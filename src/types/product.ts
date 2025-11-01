@@ -29,6 +29,7 @@ export interface ApiProduct {
   authorName: string;
   authorUserName: string;
   authorId: string;
+  authorPhoneNumber?: string;
   title: string;
   description: string;
   priceInCents: number;
