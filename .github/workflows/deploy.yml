@@ -66,6 +66,7 @@ jobs:
             fi
 
             cd ${{ env.DEPLOY_PATH }}/frontend
+            git checkout ${{ env.BRANCH }}
             git fetch origin
             git reset --hard origin/${{ env.BRANCH }}
 
