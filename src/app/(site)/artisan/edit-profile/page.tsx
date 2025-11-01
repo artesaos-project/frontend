@@ -3,6 +3,7 @@ import { PhotoSlot } from '@/components/features/artisan/add-product/photo-slot'
 import InputField from '@/components/features/artisan/input-field';
 import { Button } from '@/components/ui/button';
 import { useProductForm } from '@/hooks/use-product-form';
+import useStoreUser from '@/hooks/use-store-user';
 import { authApi } from '@/services/api';
 import { GetMyProfile } from '@/types/artisan';
 import { AxiosError } from 'axios';
@@ -14,6 +15,7 @@ import { TbTrash } from 'react-icons/tb';
 import { toast, Toaster } from 'sonner';
 
 function EditProfilePage() {
+  const setUser = useStoreUser((state) => state.setUser);
   const {
     register,
     formState: { errors },
@@ -37,6 +39,22 @@ function EditProfilePage() {
       document.getElementById('photo-upload')?.click();
   };
 
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, '');
+
+    if (!digits) return '';
+
+    if (digits.length <= 4) {
+      return digits;
+    }
+
+    if (digits.length <= 8) {
+      return digits.replace(/(\d{4})(\d{1,4})/, '$1-$2');
+    }
+
+    return digits.replace(/(\d{5})(\d{1,4})/, '$1-$2');
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -45,7 +63,9 @@ function EditProfilePage() {
           const phone = profile.user.phone || '';
           let ddd = '';
           let numero = '';
-          const match = phone.match(/^\+55(\d{2})(\d{4,5})(\d{4})$/);
+          const match =
+            phone.match(/^\+55(\d{2})(\d{4,5})(\d{4})$/) ||
+            phone.match(/^\(?(\d{2})\)?[\s-]?(\d{4,5})[\s-]?(\d{4})$/);
           if (match) {
             ddd = match[1];
             numero = `${match[2]}-${match[3]}`;
@@ -75,6 +95,13 @@ function EditProfilePage() {
       };
       delete updatedData.ddd;
       await authApi.updateMe(updatedData);
+      const updatedProfile = await authApi.getMe();
+      setUser({
+        userId: updatedProfile.user.id,
+        userName: updatedProfile.user.name,
+        userPhoto: updatedProfile.user.avatar,
+        artisanUserName: updatedProfile.user.artisan?.artisanUserName,
+      });
       toast.success('Perfil atualizado com sucesso!');
       if (data.artisan?.artisanUserName)
         router.push(`/artisan/${data.artisan.artisanUserName}`);
@@ -161,7 +188,7 @@ function EditProfilePage() {
                   type="text"
                   required
                   {...register('artisan.artisanUserName', {
-                    required: 'Nome do produto é obrigatório',
+                    required: 'Nome é obrigatório',
                   })}
                 />
                 {errors.artisan?.artisanUserName && (
@@ -193,13 +220,18 @@ function EditProfilePage() {
                         required: 'Telefone é obrigatório',
                       })}
                       className="w-16"
+                      maxLength={3}
                     />
                     <InputField
                       type="text"
                       required
                       {...register('phone', {
                         required: 'Telefone é obrigatório',
+                        onChange: (e) => {
+                          e.target.value = formatPhone(e.target.value);
+                        },
                       })}
+                      maxLength={10}
                     />
                   </div>
                 </div>

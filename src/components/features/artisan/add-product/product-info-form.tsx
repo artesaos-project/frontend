@@ -57,10 +57,10 @@ export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
             <Controller
               name="category"
               control={control}
-              rules={{ required: 'Selecione ao menos uma categoria.' }}
+              rules={{ required: 'Selecione ao menos uma materia Prima.' }}
               render={({ field }) => (
                 <CategoryTechniqueSelect
-                  title="Categoria"
+                  title="Materia Prima"
                   items={materiaPrima}
                   selectedValues={field.value}
                   onSelect={field.onChange}

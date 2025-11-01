@@ -38,7 +38,8 @@ function NewArtisans({
                   />
                 </div>
                 <ArtisanCardBody
-                  id={1}
+                  id={artisan.id}
+                  userName={artisan.userName}
                   name={artisan.name}
                   type={'Acessórios'}
                 />

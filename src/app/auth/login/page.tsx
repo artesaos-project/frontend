@@ -48,7 +48,7 @@ function Page() {
         isAuthenticated: true,
         isModerator: response.user.roles.includes('MODERATOR'),
         isArtisan: response.user.roles.includes('ARTISAN'),
-        postnedApplication: !!response.user.postnedApplication,
+        postnedApplication: !!response.user.postnedApplication || undefined,
       };
 
       setUser(user);

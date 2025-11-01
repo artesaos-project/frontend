@@ -11,7 +11,7 @@ export interface ArtisanProfile {
   avatar: string | null;
 }
 export interface NewArtisanCardProps {
-  id: number;
+  id: string;
   name: string;
   userName: string;
   avatar?: string;

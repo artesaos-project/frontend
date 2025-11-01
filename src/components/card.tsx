@@ -1,11 +1,12 @@
 'use client';
 import { useFavorites } from '@/context/favorite-context';
+import { useFollowContext } from '@/context/follow-context';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
+import { FaCheck, FaHeart, FaPlus, FaRegHeart } from 'react-icons/fa';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 import { Button } from './ui/button';
-import Link from 'next/link';
 
 type ProductCardProps = {
   id: string | number;
@@ -91,27 +92,38 @@ function ProductCardBody({
 function ArtisanCardBody({
   name,
   type,
+  userName,
   id,
 }: {
   name: string;
   type: string;
-  id: number;
+  userName: string;
+  id: string;
 }) {
+  const { isFollowing, toggleFollow } = useFollowContext();
+  const handleFollow = () => {
+    toggleFollow(id);
+  };
+
   return (
     <>
       <header className="flex justify-between items-center mt-2 mb-1">
         <p className="font-bold lg:text-xl md:text-lg text-midnight truncate">
           {name}
         </p>
-        <button className="cursor-pointer hover:scale-110 transition-transform duration-200 rounded-full border text-midnight border-midnight px-2 py-1">
-          <FaPlus />
+        <button
+          className={`cursor-pointer hover:scale-110 transition-transform duration-200 rounded-full border px-2 py-1 
+            ${isFollowing(id) ? 'text-white bg-midnight border-midnight ' : 'text-midnight border-midnight '}`}
+          onClick={handleFollow}
+        >
+          {isFollowing(id) ? <FaCheck /> : <FaPlus />}
         </button>
       </header>
       {/* por enquanto não tem utilidade para esse subtitulo de type então está hidden */}
       <p className="text-sm lg:text-lg truncate italic font-light hidden">
         {type}
       </p>
-      <Link href={`/artisan/${id}`}>
+      <Link href={`/artisan/${userName}`}>
         <Button variant="secondary" className="p-2 w-full mt-2">
           Ver perfil
         </Button>
@@ -120,4 +132,4 @@ function ArtisanCardBody({
   );
 }
 
-export { BaseCard, ProductCardBody, ArtisanCardBody };
+export { ArtisanCardBody, BaseCard, ProductCardBody };

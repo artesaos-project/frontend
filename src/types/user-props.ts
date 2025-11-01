@@ -1,13 +1,13 @@
 export type UserProps = {
   userId: string | undefined;
   userName: string | undefined;
-  userPhoto?: string | undefined;
+  userPhoto?: string | undefined | null;
   userEmail?: string | undefined;
   artisanUserName?: string | undefined;
   isAuthenticated?: boolean;
   isModerator?: boolean;
   isArtisan?: boolean;
-  postnedApplication?: boolean;
+  postnedApplication?: boolean | undefined;
 };
 
 export type UserStore = {
