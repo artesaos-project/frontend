@@ -9,6 +9,7 @@ import ProductSlide from '@/components/features/product/product-slide';
 import { useFavorites } from '@/context/favorite-context';
 import { useCarousel } from '@/hooks/use-carousel';
 import { useProductData } from '@/hooks/use-product-data';
+import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
 import { useParams, useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
@@ -52,9 +53,13 @@ function ProductPage() {
 
   const onContact = () => {
     if (!product) return;
-    const message = `Olá! Tenho interesse no produto: ${product.title} (ID: ${product.id}) por ${product.authorName}. Preço: ${product.priceInCents / 100}`;
-    const whatsappUrl = `https://wa.me/+5512999999999?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    handleContact({
+      contactInfo: product.authorPhoneNumber || '',
+      productId: product.id,
+      productTitle: product.title,
+      productAuthor: product.authorName,
+      priceInCents: product.priceInCents,
+    });
   };
 
   const onAddToFavorites = () => {
