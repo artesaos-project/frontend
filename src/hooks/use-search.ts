@@ -5,7 +5,7 @@ type Artisan = {
   id: string;
   artisanName: string;
   email: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INACTIVE';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
 };
 
 export function useDebouncedSearch(searchTerm: string, delay: number = 2000) {

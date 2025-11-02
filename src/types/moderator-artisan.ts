@@ -25,7 +25,7 @@ export interface ArtisanApplicationsResponse {
   artisanApplications: ArtisanApplication[];
   pagination?: {
     page: number;
-    totalPages: number; // Backend usa totalPages (camelCase)
+    totalPages: number;
     limit: number;
     total: number;
   };

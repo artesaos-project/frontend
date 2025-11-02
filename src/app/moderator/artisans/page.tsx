@@ -13,6 +13,7 @@ import {
   useFetchArtisans,
 } from '@/hooks/use-fetch-artisans';
 import { ArtisanFilterType } from '@/types/moderator-artisan';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 function ArtisansPage() {
@@ -23,6 +24,7 @@ function ArtisansPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+  const router = useRouter();
 
   useEffect(() => {
     const params = buildArtisanParams(
@@ -60,19 +62,12 @@ function ArtisansPage() {
     window.scrollTo({ top: 200, behavior: 'smooth' });
   };
 
-  if (error) {
-    return (
-      <div className="overflow-x-hidden">
-        <ModeratorTitle title="Artesãos" />
-        <div className="w-2/3 mx-auto mt-10 text-center">
-          <p className="text-red-600">Erro: {error}</p>
-        </div>
-      </div>
-    );
-  }
-
   if (isLoading && artisans.length === 0) {
     return <LoadingScreen />;
+  }
+
+  if (error) {
+    return router.push('/');
   }
 
   return (

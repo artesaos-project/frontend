@@ -21,7 +21,7 @@ interface UseFetchArtisansReturn {
 
 export function useFetchArtisans(): UseFetchArtisansReturn {
   const [artisans, setArtisans] = useState<ArtisanApplication[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<{
     page: number;
@@ -85,14 +85,20 @@ export function buildArtisanParams(
   }
 
   if (filter === 'POSTPONED') {
+    // Filtro "Incompletos" - apenas POSTPONED
     params.formStatus = 'POSTPONED';
   } else if (filter !== 'all') {
+    // Filtros específicos (PENDING, APPROVED, REJECTED) - apenas SUBMITTED
     params.status = filter as 'PENDING' | 'APPROVED' | 'REJECTED';
     params.formStatus = 'SUBMITTED';
-  } else if (searchQuery.trim()) {
-    params.formStatus = 'SUBMITTED';
   } else {
-    params.formStatus = 'SUBMITTED';
+    // Filtro "all"
+    if (searchQuery.trim()) {
+      // Com busca: NÃO especifica formStatus para buscar em ambos (SUBMITTED e POSTPONED)
+      // params.formStatus não é definido
+    } else {
+      // Sem busca: mostra todos (comportamento padrão)
+    }
   }
 
   return params;
