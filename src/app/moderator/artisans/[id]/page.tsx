@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 function Page() {
   const params = useParams();
@@ -64,7 +64,6 @@ function Page() {
 
   return (
     <div>
-      <Toaster richColors position="top-center" />
       <ModerationTitle title={'Detalhes do Artesão'} />
       <div className="w-2/3 mx-auto my-15 flex flex-col sm:flex-row gap-4 sm:justify-between text-midnight font-semibold text-2xl">
         <div className="flex items-center gap-12 sm:gap-4">
@@ -74,23 +73,24 @@ function Page() {
           <h2>{artisan?.artisanName}</h2>
         </div>
 
-        {artisan?.status === 'PENDING' && (
-          <div className="flex gap-4 justify-center items-center">
-            <ModerateArtisanButton
-              variant="approve"
-              onClick={() => {
-                handleApprove();
-              }}
-            />
-            <RejectArtisanButton
-              variant="reject"
-              artisanName={artisan?.artisanName || ''}
-              onAction={(reason) => {
-                handleRejection(reason);
-              }}
-            />
-          </div>
-        )}
+        {artisan?.status === 'PENDING' &&
+          artisan?.formStatus === 'SUBMITTED' && (
+            <div className="flex gap-4 justify-center items-center">
+              <ModerateArtisanButton
+                variant="approve"
+                onClick={() => {
+                  handleApprove();
+                }}
+              />
+              <RejectArtisanButton
+                variant="reject"
+                artisanName={artisan?.artisanName || ''}
+                onAction={(reason) => {
+                  handleRejection(reason);
+                }}
+              />
+            </div>
+          )}
       </div>
       <main className="w-80 sm:w-2/3 mx-auto rounded-xl border border-neutral-200 p-8.5">
         <h3 className="text-salmon font-semibold mb-5">Dados Pessoais</h3>
@@ -330,23 +330,24 @@ function Page() {
               </p>
             )}
           </div>
-          {artisan?.status === 'PENDING' && (
-            <div className="flex gap-4 mt-5 items-center ml-auto">
-              <ModerateArtisanButton
-                variant="approve"
-                onClick={() => {
-                  handleApprove();
-                }}
-              />
-              <RejectArtisanButton
-                variant="reject"
-                artisanName={artisan?.artisanName || ''}
-                onAction={(reason) => {
-                  handleRejection(reason);
-                }}
-              />
-            </div>
-          )}
+          {artisan?.status === 'PENDING' &&
+            artisan?.formStatus === 'SUBMITTED' && (
+              <div className="flex gap-4 mt-5 items-center ml-auto">
+                <ModerateArtisanButton
+                  variant="approve"
+                  onClick={() => {
+                    handleApprove();
+                  }}
+                />
+                <RejectArtisanButton
+                  variant="reject"
+                  artisanName={artisan?.artisanName || ''}
+                  onAction={(reason) => {
+                    handleRejection(reason);
+                  }}
+                />
+              </div>
+            )}
         </div>
       </div>
     </div>
