@@ -2,24 +2,16 @@
 
 import LoadingScreen from '@/components/common/loading-screen';
 import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
-import ModerationTable from '@/components/features/moderator/moderation-table';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
+import ReportsTable from '@/components/features/moderator/reports/reports-table';
 import reportsMock from '@/db-mock/reports.json';
+import { Report, ReportFilterType } from '@/types/moderator-report';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-type Report = {
-  id: number;
-  reportType: string;
-  target: string;
-  denunciator: string;
-  reason: string;
-  status: 'PENDING' | 'MODERATED' | 'ARCHIVED';
-};
-
-function Page() {
+function ReportsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('PENDING');
+  const [activeFilter, setActiveFilter] = useState<ReportFilterType>('PENDING');
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -29,7 +21,8 @@ function Page() {
       setIsLoading(true);
       // Simulando delay de API
       await new Promise((resolve) => setTimeout(resolve, 500));
-      // const result = await artisanApi.getReports();
+      // TODO: Implement real API call
+      // const result = await reportsApi.getReports({ status: activeFilter, search: searchTerm });
       // setReports(result.reports);
       setReports(reportsMock as Report[]);
       setIsLoading(false);
@@ -50,8 +43,21 @@ function Page() {
   };
 
   const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter);
+    setActiveFilter(filter as ReportFilterType);
   };
+
+  // Filter reports client-side for now
+  const filteredReports = reports.filter((report) => {
+    const matchesFilter =
+      activeFilter === 'all' || report.status === activeFilter;
+    const matchesSearch =
+      searchTerm === '' ||
+      report.target.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      report.denunciator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      report.reportType.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesFilter && matchesSearch;
+  });
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -59,7 +65,7 @@ function Page() {
 
   return (
     <div className="w-full h-full overflow-x-hidden">
-      <ModerationTitle title={'Denúncias'} />
+      <ModerationTitle title="Denúncias" />
       <div className="w-2/3 mx-auto">
         <ModerationSearchBar
           searchTerm={searchTerm}
@@ -69,14 +75,9 @@ function Page() {
           variant="reports"
         />
       </div>
-      <ModerationTable
-        type="reports"
-        searchTerm={searchTerm}
-        activeFilter={activeFilter}
-        data={reports}
-      />
+      <ReportsTable reports={filteredReports} isLoading={isLoading} />
     </div>
   );
 }
 
-export default Page;
+export default ReportsPage;
