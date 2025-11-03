@@ -61,6 +61,7 @@ function StepRegister({
         artisanUserName: login.user.artisanUsername,
         isAuthenticated: true,
         postnedApplication: undefined,
+        expiresAt: new Date(login.session.expiresAt).getTime(),
       };
 
       setUser(user);

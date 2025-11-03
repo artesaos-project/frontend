@@ -1,9 +1,6 @@
-import { FavoritesProvider } from '@/context/favorite-context';
-import { FollowProvider } from '@/context/follow-context';
-import { SearchProvider } from '@/context/SearchContext';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
-import { Toaster } from 'sonner';
+import { ClientProviders } from './client-providers';
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -24,12 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <Toaster richColors position="top-right" />
-        <FavoritesProvider>
-          <FollowProvider>
-            <SearchProvider>{children}</SearchProvider>
-          </FollowProvider>
-        </FavoritesProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );
