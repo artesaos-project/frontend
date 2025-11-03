@@ -15,7 +15,7 @@ import { use, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa6';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
@@ -141,7 +141,6 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
-      <Toaster richColors position="bottom-right" />
       <div className="w-10/12 mx-auto pt-10">
         <div className="flex items-center mb-6">
           <ArrowLeft

@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 function EditProfilePage() {
   const setUser = useStoreUser((state) => state.setUser);
@@ -115,7 +115,6 @@ function EditProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
-      <Toaster richColors position="bottom-right" />
       <div className="w-11/12 md:w-10/12 mx-auto pt-6 md:pt-10">
         <div className="flex items-center mb-6">
           <ArrowLeft
