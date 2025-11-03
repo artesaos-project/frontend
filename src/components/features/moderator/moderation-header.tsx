@@ -1,16 +1,39 @@
 'use client';
 
-import Header from '@/components/header';
+import AlertDialog from '@/components/common/alert-dialog';
+import SideBarMenu from '@/components/sidebar-menu';
 import { Button } from '@/components/ui/button';
+import { DialogHeader } from '@/components/ui/dialog';
+import useStoreUser from '@/hooks/use-store-user';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@radix-ui/react-dialog';
+import { Separator } from '@radix-ui/react-separator';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
+import { LuDoorOpen } from 'react-icons/lu';
 
 function ModerationHeader() {
+  const user = useStoreUser((state) => state.user);
+  const resetStore = useStoreUser((state) => state.resetStore);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const pathName = usePathname();
+
+  const handleLogoutConfirm = () => {
+    resetStore();
+    localStorage.removeItem('artisan-register');
+    setIsLogoutModalOpen(false);
+    window.location.reload();
+  };
   return (
     <>
-      <header className="invisible max-w-screen flex justify-center bg-midnight lg:visible">
+      <header className="invisible max-w-screen flex justify-center bg-midnight md:visible">
         <nav className="pb-11 pt-17 flex gap-10 text-white font-semibold">
           <Button
             asChild
@@ -43,8 +66,95 @@ function ModerationHeader() {
           </Button>
         </nav>
       </header>
-      <div className="w-screen lg:hidden absolute top-0">
-        <Header />
+      <div className="w-screen md:hidden absolute top-0">
+        <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8 items-center">
+          <div className="flex items-center md:col-span-8">
+            <SideBarMenu />
+            <Link
+              href={'/'}
+              className="mx-auto md:mx-0 md:ml-8 md:mr-auto cursor-pointer"
+            >
+              <Image
+                src="/horizontal-logo.svg"
+                alt="Criarte Logo"
+                className="md:w-36"
+                width={120}
+                height={60}
+                priority
+              />
+            </Link>
+            {!user.isAuthenticated && (
+              <Link href="/auth">
+                <Button
+                  onClick={() => {}}
+                  variant="outline"
+                  className={`bg-transparent cursor-pointer hover:bg-white/20 hover:text-white border-white text-white inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-2 text-xs`}
+                >
+                  Entre ou cadastre-se
+                </Button>
+              </Link>
+            )}
+            {user.isAuthenticated && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <DialogHeader>
+                    <DialogTitle>
+                      <Image
+                        src={user.userPhoto ?? '/default-avatar.webp'}
+                        alt="User Avatar"
+                        width={60}
+                        height={60}
+                        className="rounded-full h-15 user-select-none cursor-pointer bg-gray-300"
+                      />
+                    </DialogTitle>
+                  </DialogHeader>
+                </DialogTrigger>
+                {!isLogoutModalOpen && (
+                  <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
+                    <div className="flex flex-col items-center justify-center text-midnight">
+                      <Image
+                        src={user.userPhoto ?? '/default-avatar.webp'}
+                        alt="User Avatar"
+                        width={120}
+                        height={120}
+                        className="rounded-full h-30 mb-4 bg-gray-300"
+                      />
+                      <h2 className="text-2xl font-bold">{user.userName}</h2>
+                      {user.artisanUserName && <p>@{user.artisanUserName}</p>}
+                      {user.isModerator && (
+                        <div className="w-fit">
+                          <Separator className="my-2" />
+                          <Link href="/moderator" className="text-xl">
+                            Moderação
+                          </Link>
+                          <Separator className="my-2" />
+                        </div>
+                      )}
+                      <Button
+                        variant={'ghost'}
+                        onClick={() => setIsLogoutModalOpen(true)}
+                        className="text-xl text-red-500 hover:text-red-600 mt-2"
+                      >
+                        Sair
+                      </Button>
+                    </div>
+                  </DialogContent>
+                )}
+                <AlertDialog
+                  isOpen={isLogoutModalOpen}
+                  onClose={() => setIsLogoutModalOpen(false)}
+                  onConfirm={handleLogoutConfirm}
+                  icon={<LuDoorOpen size={40} className="midnight" />}
+                  dialogTitle="Confirmação de Logout"
+                  dialogMessage={{
+                    text: 'Tem certeza de que deseja sair da sua conta?',
+                    color: 'text-midnight',
+                  }}
+                />
+              </Dialog>
+            )}
+          </div>
+        </header>
       </div>
     </>
   );
