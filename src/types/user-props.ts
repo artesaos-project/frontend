@@ -8,6 +8,7 @@ export type UserProps = {
   isModerator?: boolean;
   isArtisan?: boolean;
   postnedApplication?: boolean | undefined;
+  expiresAt?: number | null;
 };
 
 export type UserStore = {

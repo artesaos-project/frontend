@@ -9,6 +9,7 @@ import { FaCheck } from 'react-icons/fa6';
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import { GoClockFill } from 'react-icons/go';
 import { IoFilter } from 'react-icons/io5';
+import { MdHourglassEmpty } from 'react-icons/md';
 
 interface FilterButtonsProps {
   activeFilter?: string;
@@ -36,6 +37,11 @@ const artisanFilterButtons = [
     key: 'REJECTED',
     label: 'Recusados',
     icon: <FiX className="text-red-600 font-bold" />,
+  },
+  {
+    key: 'POSTPONED',
+    label: 'Incompletos',
+    icon: <MdHourglassEmpty />,
   },
 ];
 
@@ -121,6 +127,13 @@ function ModerationFilterButtons({
           >
             Recusados
             <FiX className="text-red-600 font-bold" />
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => onFilterChange?.('POSTPONED')}
+            className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+          >
+            Incompletos
+            <MdHourglassEmpty />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -15,6 +15,7 @@ const useStoreUser = create<UserStore>()(
         isModerator: false,
         isArtisan: false,
         postnedApplication: undefined,
+        expiresAt: undefined,
       },
       _hasHydrated: false,
       setHasHydrated: (state) => {
@@ -34,6 +35,7 @@ const useStoreUser = create<UserStore>()(
             isModerator: user.isModerator,
             isArtisan: user.isArtisan,
             postnedApplication: user.postnedApplication,
+            expiresAt: user.expiresAt,
           },
         })),
       resetStore: () =>
@@ -48,6 +50,7 @@ const useStoreUser = create<UserStore>()(
             isModerator: false,
             isArtisan: false,
             postnedApplication: undefined,
+            expiresAt: undefined,
           },
         })),
     }),
