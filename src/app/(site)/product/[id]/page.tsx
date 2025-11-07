@@ -5,12 +5,15 @@ import ProductAuthor from '@/components/features/product/product-author';
 import ProductGallery from '@/components/features/product/product-gallery';
 import ProductInfo from '@/components/features/product/product-info';
 import ProductReviews from '@/components/features/product/product-reviews';
+import { ProductPageSkeleton } from '@/components/features/product/product-skeleton';
 import ProductSlide from '@/components/features/product/product-slide';
 import { useFavorites } from '@/context/favorite-context';
 import { useCarousel } from '@/hooks/use-carousel';
 import { useProductData } from '@/hooks/use-product-data';
+import { useProductReviews } from '@/hooks/use-product-review';
 import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
 import { GoArrowLeft } from 'react-icons/go';
@@ -23,6 +26,8 @@ function ProductPage() {
 
   const { product, artistProducts, relatedProducts, isLoading, error } =
     useProductData(productId);
+  const { reviews } = useProductReviews(productId);
+  console.log(reviews);
 
   const imagesCount = product
     ? product.photos.length > 0
@@ -71,11 +76,7 @@ function ProductPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <main className="bg-white">
-          <div className="max-w-6xl mx-auto p-8">
-            <div className="text-center">
-              <p>Carregando produto...</p>
-            </div>
-          </div>
+          <ProductPageSkeleton />
         </main>
       </div>
     );
@@ -94,7 +95,6 @@ function ProductPage() {
       </div>
     );
   }
-
   const productReviews: [] = [];
 
   return (
@@ -166,72 +166,76 @@ function ProductPage() {
           </div>
 
           <div>
-            <ProductSlide
-              icon={<FiPlus className="text-2xl" />}
-              title="Produtos do Artista"
-              onViewMore={handleViewMoreArtistProducts}
-            >
-              {artistProducts.length > 0
-                ? artistProducts.slice(0, 12).map((artistProduct) => (
-                    <BaseCard key={artistProduct.id}>
-                      <div className="relative w-full h-34 md:h-44">
-                        <img
-                          src={artistProduct.coverPhoto}
-                          alt={artistProduct.title}
-                          className="rounded-lg w-full h-34 md:h-44"
-                        />
-                      </div>
-                      <ProductCardBody
-                        id={artistProduct.id}
-                        price={artistProduct.priceInCents / 100}
-                        title={artistProduct.title}
-                        author={artistProduct.authorName}
+            {artistProducts.length > 0 ? (
+              <ProductSlide
+                icon={<FiPlus className="text-2xl" />}
+                title="Produtos do Artista"
+                onViewMore={handleViewMoreArtistProducts}
+              >
+                {artistProducts.slice(0, 12).map((artistProduct) => (
+                  <BaseCard key={artistProduct.id}>
+                    <div className="relative w-full h-34 md:h-44">
+                      <Image
+                        src={artistProduct.coverPhoto}
+                        alt={artistProduct.title}
+                        className="object-fill rounded-lg w-full h-34 md:h-44"
+                        width={800}
+                        height={400}
                       />
-                    </BaseCard>
-                  ))
-                : [
-                    <div
-                      key="no-artist-products"
-                      className="flex justify-center items-center p-8 col-auto-span-full"
-                    >
-                      <p>Este artista ainda não possui outros produtos.</p>
-                    </div>,
-                  ]}
-            </ProductSlide>
+                    </div>
+                    <ProductCardBody
+                      id={artistProduct.id}
+                      price={artistProduct.priceInCents / 100}
+                      title={artistProduct.title}
+                      author={artistProduct.authorName}
+                    />
+                  </BaseCard>
+                ))}
+              </ProductSlide>
+            ) : (
+              <div className="mt-8 p-4">
+                <p className="text-2xl font-bold mb-4">Produtos do Artista</p>
+                <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+                  Nenhum outro produto do artista encontrado.
+                </p>
+              </div>
+            )}
           </div>
 
           <div>
-            <ProductSlide
-              title="Produtos Relacionados"
-              onViewMore={() => router.push('/')}
-            >
-              {relatedProducts.length > 0
-                ? relatedProducts.map((relatedProduct) => (
-                    <BaseCard key={relatedProduct.id}>
-                      <div className="relative w-full h-34 md:h-44">
-                        <img
-                          src={relatedProduct.coverPhoto}
-                          alt={relatedProduct.title}
-                          className="rounded-lg h-34 md:h-44 w-full"
-                        />
-                      </div>
-                      <ProductCardBody
-                        id={relatedProduct.id}
-                        price={relatedProduct.priceInCents / 100}
-                        title={relatedProduct.title}
-                        author={relatedProduct.authorName}
+            {relatedProducts.length > 0 ? (
+              <ProductSlide
+                title="Produtos Relacionados"
+                onViewMore={() => router.push('/')}
+              >
+                {relatedProducts.map((relatedProduct) => (
+                  <BaseCard key={relatedProduct.id}>
+                    <div className="relative w-full h-34 md:h-44">
+                      <Image
+                        src={relatedProduct.coverPhoto}
+                        alt={relatedProduct.title}
+                        className="object-fill rounded-lg w-full h-34 md:h-44"
+                        width={800}
+                        height={400}
                       />
-                    </BaseCard>
-                  ))
-                : [
-                    <div
-                      key="no-related-products"
-                      className="flex justify-center items-center pl-8"
-                    >
-                      <p>Nenhum produto relacionado encontrado.</p>
-                    </div>,
-                  ]}
-            </ProductSlide>
+                    </div>
+                    <ProductCardBody
+                      id={relatedProduct.id}
+                      price={relatedProduct.priceInCents / 100}
+                      title={relatedProduct.title}
+                      author={relatedProduct.authorName}
+                    />
+                  </BaseCard>
+                ))}
+              </ProductSlide>
+            ) : (
+              <div className="mt-8 p-4">
+                <p className="text-2xl font-bold mb-4">Produtos Relacionados</p>
+                <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+                  Nenhum produto relacionado encontrado.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>

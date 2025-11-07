@@ -8,6 +8,7 @@ import { CategoryProps } from '@/types/category';
 import { FavoritesApiResponse } from '@/types/favorite';
 import { FollowResponse } from '@/types/follow';
 import { ApiProduct } from '@/types/product';
+import { Review } from '@/types/review';
 import { apiRequest } from '../api-service';
 
 type CreateUserPayload = {
@@ -63,6 +64,11 @@ type ArtisanApplicationPayload = {
   sicab: string;
   sicabRegistrationDate: string;
   sicabValidUntil: string;
+};
+
+export const reviewsApi = {
+  getByProductId: (productId: string) =>
+    apiRequest<Review[]>(`/products/${productId}/reviews`),
 };
 
 export const artisanApi = {

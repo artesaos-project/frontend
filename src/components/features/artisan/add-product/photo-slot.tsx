@@ -49,9 +49,10 @@ export const PhotoSlot: React.FC<PhotoSlotProps> = ({
           <Image
             src={getPhotoUrl(photo)}
             alt={`Preview ${index}`}
-            className="w-full h-full object-cover"
-            width={256}
-            height={160}
+            className="w-full h-full object-fill"
+            width={800}
+            height={400}
+            quality={90}
             loading="lazy"
           />
           {isSelected && (

@@ -54,8 +54,9 @@ function ProductsList({
               src={product.coverPhoto}
               alt="Imagem do Produto"
               className="rounded-lg object-cover h-34 md:h-40 w-full"
-              width={256}
-              height={160}
+              width={400}
+              height={200}
+              quality={75}
               loading="lazy"
             />
           </div>
