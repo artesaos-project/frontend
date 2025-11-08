@@ -10,7 +10,6 @@ import ProductSlide from '@/components/features/product/product-slide';
 import { useFavorites } from '@/context/favorite-context';
 import { useCarousel } from '@/hooks/use-carousel';
 import { useProductData } from '@/hooks/use-product-data';
-import { useProductReviews } from '@/hooks/use-product-review';
 import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
 import Image from 'next/image';
@@ -26,8 +25,6 @@ function ProductPage() {
 
   const { product, artistProducts, relatedProducts, isLoading, error } =
     useProductData(productId);
-  const { reviews } = useProductReviews(productId);
-  console.log(reviews);
 
   const imagesCount = product
     ? product.photos.length > 0
@@ -95,7 +92,6 @@ function ProductPage() {
       </div>
     );
   }
-  const productReviews: [] = [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,14 +151,9 @@ function ProductPage() {
               />
             </div>
 
-            {productReviews && (
-              <div className="bg-white md:rounded-4xl">
-                <ProductReviews
-                  reviews={productReviews}
-                  productId={productId}
-                />
-              </div>
-            )}
+            <div className="bg-white md:rounded-4xl">
+              <ProductReviews />
+            </div>
           </div>
 
           <div>

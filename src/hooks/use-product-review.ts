@@ -14,8 +14,9 @@ export function useProductReviews(productId: string) {
     setError(null);
 
     try {
-      const reviews = await reviewsApi.getByProductId(productId);
-      setReviews(reviews);
+      const data = await reviewsApi.getByProductId(productId);
+
+      setReviews(data.reviews);
     } catch (err) {
       setError(
         err instanceof Error

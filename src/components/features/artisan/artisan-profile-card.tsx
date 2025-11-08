@@ -272,7 +272,7 @@ const ArtisanProfileCard = () => {
       >
         <div className="justify-center items-center mx-auto lg:w-7/12">
           {filteredReviews.length > 0 ? (
-            <ProductReviews reviews={filteredReviews} />
+            <ProductReviews />
           ) : (
             <div className="text-center py-8 text-gray-500">
               <p>Este artesão ainda não possui avaliações.</p>

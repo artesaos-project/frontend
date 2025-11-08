@@ -1,6 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useProductReviews } from '@/hooks/use-product-review';
+import { Review } from '@/types/review';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
@@ -16,19 +19,6 @@ interface Filtro {
   estrelas: number;
   onClick: () => void;
   isActive?: boolean;
-}
-
-interface IReview {
-  reviewerImage?: string;
-  reviewerName: string;
-  rating: number;
-  reviewText: string;
-  reviewImages?: string[];
-}
-
-interface ProductReviewsProps {
-  reviews?: IReview[];
-  productId?: string;
 }
 
 function TotalEstrelas({ estrelas }: ITotalEstrelas) {
@@ -73,30 +63,55 @@ function FiltroEstrelas({ estrelas, onClick, text, isActive }: Filtro) {
 }
 
 function CardReview({
-  reviewerImage,
-  reviewerName,
   rating,
-  reviewText,
-  reviewImages,
-}: IReview) {
+  comment,
+  user: { name, avatar },
+  images: reviewImages,
+}: Review) {
   const [showAllImages, setShowAllImages] = useState(false);
-  const hasMoreImages = reviewImages && reviewImages.length > 3;
+
+  const fallbackImages = [
+    {
+      attachmentId:
+        'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&h=200&fit=crop',
+    },
+    {
+      attachmentId:
+        'https://images.unsplash.com/photo-1503602642458-232111445657?w=300&h=200&fit=crop',
+    },
+    {
+      attachmentId:
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=200&fit=crop',
+    },
+    {
+      attachmentId:
+        'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&h=200&fit=crop',
+    },
+  ];
+
+  const displayImages =
+    reviewImages && reviewImages.length > 0 ? fallbackImages : reviewImages;
+
+  const hasMoreImages = displayImages.length > 3;
 
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  console.log(avatar);
 
   return (
     <div className="flex flex-col mt-2 w-10/12 rounded-lg shadow-md p-4 mb-4 bg-white">
       <div className="flex flex-col gap-2 w-full">
-        <div className="flex flex-row items-center gap-2 ">
-          <img
-            className="rounded-full w-12 h-12 object-cover"
-            src={reviewerImage ?? 'https://placehold.co/26'}
-            alt={`Imagem do usuario ${reviewerName}`}
+        <div className="flex flex-row items-start">
+          <Image
+            className="rounded-full object-cover mx-2"
+            src={'/default-avatar.webp'}
+            alt={`Imagem do usuario ${name}`}
+            width={58}
+            height={58}
           />
-          <div className="flex flex-col gap-2 px-2 justify-center items-center">
-            <h3 className="font-bold text-black">{reviewerName}</h3>
+          <div className="flex flex-col gap-2 px-2 justify-center">
+            <h3 className="font-bold text-black">{name}</h3>
             <div className="flex">
               {Array.from({ length: fullStars }, (_, index) => (
                 <IoMdStar
@@ -116,58 +131,66 @@ function CardReview({
                 />
               ))}
             </div>
+            <p className="text-gray-600 text-sm mt-2 mb-2">{comment}</p>
+            <div className="flex w-full">
+              {displayImages.length > 0 && (
+                <div className="flex flex-wrap gap-2 w-full">
+                  {displayImages
+                    .slice(0, showAllImages ? displayImages.length : 3)
+                    .map((image, index) => (
+                      <Image
+                        key={index}
+                        src={image.attachmentId}
+                        alt={`Review image ${index + 1}`}
+                        className="w-20 h-20 lg:w-32 lg:h-32 rounded-2xl object-cover"
+                        height={400}
+                        width={400}
+                      />
+                    ))}
+
+                  {!showAllImages && hasMoreImages && (
+                    <div className="relative w-20 h-20 lg:w-32 lg:h-32 rounded-2xl overflow-hidden">
+                      <Image
+                        src={displayImages[3].attachmentId}
+                        alt="Review image 4"
+                        className="w-20 h-20 lg:w-32 lg:h-32 rounded-2xl object-cover"
+                        height={400}
+                        width={400}
+                      />
+                      <button
+                        onClick={() => setShowAllImages(true)}
+                        className="absolute inset-0 flex items-center justify-center backdrop-blur-sm transition-all"
+                      >
+                        <div className="text-center text-white">
+                          <FiPlus className="text-xl" />
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <p className="text-gray-600 text-sm">{reviewText}</p>
-      </div>
-
-      <div className="flex w-full p-4">
-        {reviewImages && reviewImages.length > 0 && (
-          <div className="flex flex-wrap gap-2 w-full">
-            {reviewImages
-              .slice(0, showAllImages ? reviewImages.length : 3)
-              .map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Review image ${index + 1}`}
-                  className="w-18 h-20 lg:w-30 lg:h-29 rounded-2xl object-cover"
-                />
-              ))}
-
-            {!showAllImages && hasMoreImages && (
-              <div className="relative w-18 h-20 lg:w-30 lg:h-29 rounded-2xl overflow-hidden">
-                <img
-                  src={reviewImages[3]}
-                  alt="Review image 4"
-                  className="w-18 h-20 lg:w-30 lg:h-29 rounded-2xl object-cover"
-                />
-                <button
-                  onClick={() => setShowAllImages(true)}
-                  className="absolute inset-0 flex items-center justify-center backdrop-blur-sm transition-all"
-                >
-                  <div className="text-center text-white">
-                    <FiPlus className="text-xl" />
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
 }
 
-function ProductReviews({ reviews }: ProductReviewsProps) {
+function ProductReviews() {
   const router = useRouter();
   const params = useParams();
-  const productId = params?.id as string | undefined;
+  const Id = params?.id as string;
+  const { reviews } = useProductReviews(Id);
+
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [activeFilter, setActiveFilter] = useState<number>(0);
 
   const handleShowMore = () => {
     setReviewsToShow((prev) => prev + 3);
+  };
+  const handleShowLess = () => {
+    setReviewsToShow(3);
   };
 
   const reviewsData = reviews || [];
@@ -193,8 +216,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
   };
 
   const handleEvaluateClick = () => {
-    if (!productId) return;
-    router.push(`/product/${productId}/to-evaluate`);
+    router.push(`/product/${Id}/to-evaluate`);
   };
 
   const filtros = [
@@ -208,7 +230,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
 
   return (
     <>
-      <div className="flex flex-row w-full md:grid-cols-3 justify-center items-center gap-6 py-5 px-8 bg-[#FFFFFF] rounded-4xl shadow-lg">
+      <div className="flex flex-row w-full md:grid-cols-3 justify-center items-center gap-6 py-5 px-8 bg-[#FFFFFF] rounded-3xl shadow-lg">
         <div className="flex flex-col justify-center items-center font-bold">
           <h2 className="text-3xl">{averageRating.toFixed(1)}</h2>
           <TotalEstrelas estrelas={averageRating} />
@@ -217,7 +239,7 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
         <div className="flex flex-wrap lg:flex-row justify-center items-center gap-2">
           {filtros.map(({ estrelas, text }) => (
             <FiltroEstrelas
-              key={estrelas}
+              key={text ?? estrelas}
               text={text}
               estrelas={estrelas}
               onClick={() => handleFilterClick(estrelas)}
@@ -240,22 +262,23 @@ function ProductReviews({ reviews }: ProductReviewsProps) {
 
       <div className="flex flex-col space-y-4 items-center justify-center">
         {filteredReviews.slice(0, reviewsToShow).map((review, index) => (
-          <CardReview
-            key={index}
-            reviewerImage={review.reviewerImage}
-            reviewerName={review.reviewerName}
-            rating={review.rating}
-            reviewText={review.reviewText}
-            reviewImages={review.reviewImages}
-          />
+          <CardReview key={index} {...review} />
         ))}
 
         {reviewsToShow < filteredReviews.length && (
           <button
             onClick={handleShowMore}
-            className="mt-4 px-1.5 py-1 mb-2 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-lg hover:bg-[#ABCFB5] hover:text-white transition-colors"
+            className="mt-4 px-1.5 py-1 mb-2 bg-white text-[#1B7132] border border-[#ABCFB5] rounded-2xl hover:bg-[#ABCFB5] hover:text-white transition-colors cursor-pointer"
           >
             Ver mais
+          </button>
+        )}
+        {filteredReviews.length > 3 && (
+          <button
+            onClick={handleShowLess}
+            className="px-1.5 py-1 mb-4 bg-white text-[#1B7132] border border-[#ABCFB5] rounded-2xl hover:bg-[#ABCFB5] hover:text-white transition-colors cursor-pointer"
+          >
+            Ver menos
           </button>
         )}
 

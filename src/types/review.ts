@@ -11,3 +11,13 @@ type reviews = {
   images: Array<{ attachmentId: string }>;
 };
 export type Review = reviews;
+
+export interface ReviewsResponse {
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  reviews: Review[];
+}
