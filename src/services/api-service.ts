@@ -36,7 +36,7 @@ apiClient.interceptors.response.use(
         'Interceptador: Acesso proibido (403). O usuário está logado, mas não tem permissão.',
       );
     }
-    return new Promise(() => {});
+    return Promise.reject(error);
   },
 );
 

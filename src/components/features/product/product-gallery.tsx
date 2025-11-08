@@ -1,6 +1,6 @@
 import ProductImage from '@/components/features/product/product-image';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Image from 'next/image';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface ProductGalleryProps {
   images: string[];
@@ -33,11 +33,7 @@ export default function ProductGallery({
   return (
     <div className="w-full">
       <div className="relative" {...touchHandlers}>
-        <ProductImage
-          src={images[currentIndex]}
-          alt={title}
-          className="aspect-rectangle max-h-83 rounded-lg"
-        />
+        <ProductImage src={images[currentIndex]} alt={title} />
 
         <span className="absolute bottom-2 right-2 bg-white text-black font-bold text-xs px-2 py-2 rounded-lg">
           {currentIndex + 1} / {images.length}
@@ -79,6 +75,7 @@ export default function ProductGallery({
                   ${index === currentIndex ? 'ring-2 ring-black border-transparent' : 'border-gray-200 hover:border-gray-300'}`}
                 width={256}
                 height={160}
+                quality={95}
                 loading="lazy"
               />
             </button>

@@ -30,11 +30,12 @@ function NewArtisans({
               <BaseCard>
                 <div className="w-full h-34 md:h-40">
                   <Image
-                    width={100}
+                    width={200}
                     height={100}
                     src={artisan.avatar || '/placeholder-artisan-avatar.svg'}
                     alt="Imagem do Produto"
                     className="rounded-lg object-cover h-34 md:h-40 w-full"
+                    quality={75}
                   />
                 </div>
                 <ArtisanCardBody

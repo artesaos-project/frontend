@@ -4,7 +4,7 @@ import InputField from '@/components/features/artisan/input-field';
 import { Button } from '@/components/ui/button';
 import { useProductForm } from '@/hooks/use-product-form';
 import useStoreUser from '@/hooks/use-store-user';
-import { authApi } from '@/services/api';
+import { userApi } from '@/services/api';
 import { GetMyProfile } from '@/types/artisan';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
@@ -58,7 +58,7 @@ function EditProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profile = await authApi.getMe();
+        const profile = await userApi.getMe();
         if (profile) {
           const phone = profile.user.phone || '';
           let ddd = '';
@@ -94,8 +94,8 @@ function EditProfilePage() {
         avatarId: photoIds[0] || null,
       };
       delete updatedData.ddd;
-      await authApi.updateMe(updatedData);
-      const updatedProfile = await authApi.getMe();
+      await userApi.updateMe(updatedData);
+      const updatedProfile = await userApi.getMe();
       setUser({
         userId: updatedProfile.user.id,
         userName: updatedProfile.user.name,
