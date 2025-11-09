@@ -12,9 +12,9 @@ const ProductImage = ({ src, alt, className = '' }: ProductImageProps) => {
       <Image
         src={src}
         alt={alt}
-        className="w-full h-83 hover:scale-105 transition-transform duration-300"
-        width={256}
-        height={160}
+        className="object-fill w-full h-83 hover:scale-105 transition-transform duration-300"
+        width={800}
+        height={400}
         loading="lazy"
       />
     </div>

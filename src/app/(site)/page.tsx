@@ -1,13 +1,14 @@
 'use client';
 import BannerNovidades from '@/components/features/home/banner-novidades';
 import CategoriesSlider from '@/components/features/home/categories-slider';
+import NewArtisans from '@/components/features/home/new-artisans';
 import NewsSection from '@/components/features/home/news-section';
 import PopularProducts from '@/components/features/home/popular-products';
-import NewArtisans from '@/components/features/home/new-artisans';
-import { homeApi, HomeApiResponse } from '@/services/api';
-import { useEffect, useState } from 'react';
-import { useSearch } from '@/context/SearchContext';
 import SearchResults from '@/components/features/home/search-results';
+import { useSearch } from '@/context/SearchContext';
+import { homeApi } from '@/services/api';
+import type { HomeApiResponse } from '@/services/api/home';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [data, setData] = useState<HomeApiResponse>({

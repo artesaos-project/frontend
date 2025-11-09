@@ -3,6 +3,7 @@ import BaseSwiper from '@/components/base-swiper';
 import { BaseCard, ProductCardBody } from '@/components/card';
 import SectionStructure from '@/components/section-structure';
 import { ApiProduct } from '@/types/product';
+import Image from 'next/image';
 
 function NewsSection({
   products,
@@ -27,10 +28,13 @@ function NewsSection({
           return (
             <BaseCard>
               <div className="w-full h-34 md:h-40">
-                <img
+                <Image
+                  width={400}
+                  height={200}
                   src={product.coverPhoto}
                   alt="Imagem do Produto"
                   className="rounded-lg object-cover h-34 md:h-40 w-full"
+                  quality={75}
                 />
               </div>
               <ProductCardBody
