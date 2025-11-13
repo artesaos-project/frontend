@@ -29,6 +29,7 @@ export interface GetMyProfile {
   email: string;
   avatar?: string | null;
   avatarId?: string | null;
+  artisanUserName?: string;
   artisan?: {
     comercialName: string;
     zipCode: string;
@@ -49,4 +50,22 @@ export interface GetMyProfile {
     technique: string[];
     finalityClassification: string[];
   };
+}
+
+export interface updateMyProfilePayload {
+  avatarId?: string | null;
+  artisanUserName?: string;
+  name?: string;
+  socialName?: string | null;
+  email?: string;
+  ddd?: string;
+  phone?: string;
+  zipCode?: string;
+  state?: string;
+  city?: string;
+  neighborhood?: string;
+  address?: string;
+  addressNumber?: string;
+  comercialName?: string;
+  bio?: string | null;
 }

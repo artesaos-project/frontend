@@ -34,7 +34,7 @@ function SettingItem({ icon, label, onClick }: SettingItemProps) {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { hasHydrated } = useAuthGuard();
+  const { hasHydrated, user } = useAuthGuard();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!hasHydrated) {
@@ -66,7 +66,7 @@ export default function SettingsPage() {
             label="Meu perfil"
             onClick={() => {
               // Navegar para página de perfil
-              console.log('Meu perfil');
+              router.push(`/artisan/${user.artisanUserName}`);
             }}
           />
           <SettingItem
@@ -84,7 +84,7 @@ export default function SettingsPage() {
             label="Dados do perfil"
             onClick={() => {
               // Navegar para página de dados do perfil
-              console.log('Dados do perfil');
+              router.push(`/artisan/edit-profile`);
             }}
           />
         </div>

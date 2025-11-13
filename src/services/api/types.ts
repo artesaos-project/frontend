@@ -34,7 +34,8 @@ export interface UserResponse {
     avatar?: string;
     artisanUsername?: string;
     roles: string[];
-    postnedApplication: boolean;
+    applicationId?: string | null;
+    postnedApplication: boolean | undefined;
   };
   session: { id: string; expiresAt: string };
   error?: boolean;

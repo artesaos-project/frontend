@@ -14,6 +14,7 @@ const useStoreUser = create<UserStore>()(
         isAuthenticated: false,
         isModerator: false,
         isArtisan: false,
+        applicationId: undefined,
         postnedApplication: undefined,
         expiresAt: undefined,
       },
@@ -34,6 +35,7 @@ const useStoreUser = create<UserStore>()(
             artisanUserName: user.artisanUserName,
             isModerator: user.isModerator,
             isArtisan: user.isArtisan,
+            applicationId: user.applicationId,
             postnedApplication: user.postnedApplication,
             expiresAt: user.expiresAt,
           },
@@ -49,8 +51,16 @@ const useStoreUser = create<UserStore>()(
             isAuthenticated: false,
             isModerator: false,
             isArtisan: false,
+            applicationId: undefined,
             postnedApplication: undefined,
             expiresAt: undefined,
+          },
+        })),
+      updateUser: (data: Partial<UserProps>) =>
+        set((state) => ({
+          user: {
+            ...state.user,
+            ...data,
           },
         })),
     }),
