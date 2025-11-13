@@ -70,42 +70,19 @@ function CardReview({
 }: Review) {
   const [showAllImages, setShowAllImages] = useState(false);
 
-  const fallbackImages = [
-    {
-      attachmentId:
-        'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&h=200&fit=crop',
-    },
-    {
-      attachmentId:
-        'https://images.unsplash.com/photo-1503602642458-232111445657?w=300&h=200&fit=crop',
-    },
-    {
-      attachmentId:
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=200&fit=crop',
-    },
-    {
-      attachmentId:
-        'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&h=200&fit=crop',
-    },
-  ];
-
-  const displayImages =
-    reviewImages && reviewImages.length > 0 ? fallbackImages : reviewImages;
-
-  const hasMoreImages = displayImages.length > 3;
+  const hasMoreImages = reviewImages.length > 3;
 
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-  console.log(avatar);
 
   return (
     <div className="flex flex-col mt-2 w-10/12 rounded-lg shadow-md p-4 mb-4 bg-white">
       <div className="flex flex-col gap-2 w-full">
         <div className="flex flex-row items-start">
           <Image
-            className="rounded-full object-cover mx-2"
-            src={'/default-avatar.webp'}
+            className="rounded-full h-15 w-15 object-cover mx-2"
+            src={avatar || '/default-avatar.webp'}
             alt={`Imagem do usuario ${name}`}
             width={58}
             height={58}
@@ -133,14 +110,14 @@ function CardReview({
             </div>
             <p className="text-gray-600 text-sm mt-2 mb-2">{comment}</p>
             <div className="flex w-full">
-              {displayImages.length > 0 && (
+              {reviewImages.length > 0 && (
                 <div className="flex flex-wrap gap-2 w-full">
-                  {displayImages
-                    .slice(0, showAllImages ? displayImages.length : 3)
-                    .map((image, index) => (
+                  {reviewImages
+                    .slice(0, showAllImages ? reviewImages.length : 3)
+                    .map((url, index) => (
                       <Image
                         key={index}
-                        src={image.attachmentId}
+                        src={url}
                         alt={`Review image ${index + 1}`}
                         className="w-20 h-20 lg:w-32 lg:h-32 rounded-2xl object-cover"
                         height={400}
@@ -148,10 +125,10 @@ function CardReview({
                       />
                     ))}
 
-                  {!showAllImages && hasMoreImages && (
+                  {!showAllImages && hasMoreImages && reviewImages[3] && (
                     <div className="relative w-20 h-20 lg:w-32 lg:h-32 rounded-2xl overflow-hidden">
                       <Image
-                        src={displayImages[3].attachmentId}
+                        src={reviewImages[3]}
                         alt="Review image 4"
                         className="w-20 h-20 lg:w-32 lg:h-32 rounded-2xl object-cover"
                         height={400}

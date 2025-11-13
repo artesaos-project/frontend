@@ -2,14 +2,15 @@ import InputField from '@/components/features/artisan/input-field';
 import { ProductForm } from '@/types/product-form';
 import React from 'react';
 import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
-import { CategoryTechniqueSelect } from './category-technique-select';
+import { MaterialTechniqueSelect } from './material-technique-select';
+import { CatalogItem } from '@/services/api/catalog';
 
 interface ProductInfoFormProps {
   register: ReturnType<typeof useForm<ProductForm>>['register'];
   control: Control<ProductForm>;
   errors: FieldErrors<ProductForm>;
-  materiaPrima?: string[] | null;
-  tecnicas?: string[] | null;
+  materiaPrima?: CatalogItem[] | null;
+  tecnicas?: CatalogItem[] | null;
 }
 
 export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
@@ -59,7 +60,7 @@ export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
               control={control}
               rules={{ required: 'Selecione ao menos uma materia Prima.' }}
               render={({ field }) => (
-                <CategoryTechniqueSelect
+                <MaterialTechniqueSelect
                   title="Materia Prima"
                   items={materiaPrima}
                   selectedValues={field.value}
@@ -76,7 +77,7 @@ export const ProductInfoForm: React.FC<ProductInfoFormProps> = ({
               name="technical"
               control={control}
               render={({ field }) => (
-                <CategoryTechniqueSelect
+                <MaterialTechniqueSelect
                   title="Técnica"
                   items={tecnicas}
                   selectedValues={field.value}
