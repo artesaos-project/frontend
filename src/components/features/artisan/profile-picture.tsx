@@ -1,4 +1,5 @@
 import { ArtisanProfile } from '@/types/artisan';
+import Image from 'next/image';
 
 function ProfilePicture({
   artisan,
@@ -9,22 +10,26 @@ function ProfilePicture({
 }) {
   if (!artisan?.avatar) {
     return (
-      <div>
-        <img
+      <div className="h-30 w-30">
+        <Image
           src="https://placehold.co/100x100"
           className={className}
           alt="Profile"
+          width={100}
+          height={100}
         />
       </div>
     );
   }
 
   return (
-    <div>
-      <img
+    <div className="h-30 w-30">
+      <Image
         src={artisan.avatar}
         alt={`${artisan.artisanName}'s profile`}
         className={className}
+        width={100}
+        height={100}
       />
     </div>
   );

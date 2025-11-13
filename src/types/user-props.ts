@@ -7,7 +7,8 @@ export type UserProps = {
   isAuthenticated?: boolean;
   isModerator?: boolean;
   isArtisan?: boolean;
-  postnedApplication?: boolean | undefined;
+  applicationId?: string | null;
+  postnedApplication: boolean | undefined;
   expiresAt?: number | null;
 };
 
@@ -17,4 +18,5 @@ export type UserStore = {
   setHasHydrated: (state: boolean) => void;
   setUser: (user: UserProps) => void;
   resetStore: () => void;
+  updateUser: (user: Partial<UserProps>) => void;
 };

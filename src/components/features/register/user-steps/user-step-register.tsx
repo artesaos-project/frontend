@@ -33,7 +33,7 @@ function StepRegister({
   const onSubmit = async (data: SignUpData) => {
     const payload = {
       name: data.name,
-      email: data.email,
+      email: data.email.toLowerCase(),
       password: data.password,
       phone: `${data.codigoPais}${data.ddd}${data.phone}`,
     };
@@ -44,7 +44,7 @@ function StepRegister({
         return;
       }
       const login = await authApi.login({
-        email: data.email,
+        email: data.email.toLowerCase(),
         password: data.password,
       });
 

@@ -1,18 +1,19 @@
 'use client';
 import SearchBar from '@/components/features/register/search-bar';
+import { CatalogItem } from '@/services/api';
 import { useState } from 'react';
 
-interface CategoryTechniqueSelectProps {
+interface MaterialTechniqueSelectProps {
   title: string;
-  items: string[];
+  items: CatalogItem[];
   selectedValues: string[];
   onSelect: (values: string[]) => void;
   required?: boolean;
   emptyLabel?: string;
 }
 
-export const CategoryTechniqueSelect: React.FC<
-  CategoryTechniqueSelectProps
+export const MaterialTechniqueSelect: React.FC<
+  MaterialTechniqueSelectProps
 > = ({
   title,
   items,
@@ -24,7 +25,7 @@ export const CategoryTechniqueSelect: React.FC<
   const [search, setSearch] = useState('');
 
   const filtered = items.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase()),
+    item.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const toggle = (value: string) => {
@@ -53,30 +54,28 @@ export const CategoryTechniqueSelect: React.FC<
         {filtered.length === 0 && (
           <p className="text-center text-gray-400">{emptyLabel}</p>
         )}
-        {filtered.map((item, index) => {
-          const itemValue = String(index + 1);
-          const isChecked = selectedValues.includes(itemValue);
+
+        {filtered.map((item) => {
+          const isChecked = selectedValues.includes(item.id);
           return (
-            <label
-              key={item}
-              htmlFor={`${title}-${item}`}
-              onClick={() => toggle(itemValue)}
-              className={`flex border-2 mt-2 p-2 rounded-lg items-center cursor-pointer border-midnight transition-colors
-                ${isChecked ? 'bg-olivine-100 ' : ' bg-white hover:bg-gray-50'}`}
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => toggle(item.id)}
+              className={`w-full flex border-2 mt-2 p-2 rounded-lg items-center text-left cursor-pointer border-midnight transition-colors
+                ${isChecked ? 'bg-olivine-100' : 'bg-white hover:bg-gray-50'}`}
             >
               <input
                 type="checkbox"
-                id={`${index}`}
-                name={title}
-                value={itemValue}
+                value={item.id}
                 checked={isChecked}
                 readOnly
-                className="accent-midnight"
+                className="accent-midnight cursor-pointer"
               />
-              <span className="ml-2 flex-1 min-w-0 truncate" title={item}>
-                {item}
+              <span className="ml-2 flex-1 min-w-0 truncate" title={item.name}>
+                {item.name}
               </span>
-            </label>
+            </button>
           );
         })}
       </div>
