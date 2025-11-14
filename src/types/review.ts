@@ -8,7 +8,7 @@ type reviews = {
     name: string;
     avatar: string | null;
   };
-  images: Array<{ attachmentId: string }>;
+  images: Array<string>;
 };
 export type Review = reviews;
 

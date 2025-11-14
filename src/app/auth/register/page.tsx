@@ -53,19 +53,26 @@ function SignUp() {
   }, [errorAlert]);
 
   useEffect(() => {
-    if (step === null) {
-      setStep(1);
-    } else if (isAuthenticated && step < 2) {
-      setStep(2);
+    if (step === null) setStep(1);
+    else if (user.postnedApplication === false && step < 11) {
+      setStep(11);
     } else if (
-      (artisanApplicationId || user.postnedApplication == true) &&
+      (artisanApplicationId ||
+        user.applicationId ||
+        user.postnedApplication === true) &&
       step < 4
     ) {
       setStep(4);
-    } else if (user.postnedApplication == false && step < 11) {
-      setStep(11);
+    } else if (isAuthenticated && step < 2) {
+      setStep(2);
     }
-  }, [isAuthenticated, artisanApplicationId, step, user.postnedApplication]);
+  }, [
+    isAuthenticated,
+    artisanApplicationId,
+    step,
+    user.applicationId,
+    user.postnedApplication,
+  ]);
 
   const handleError = (msg?: string) => {
     setErrorMessage(msg || 'Preencha com dados válidos');
@@ -80,7 +87,8 @@ function SignUp() {
       }
 
       await authApi.complete({
-        applicationId: useArtisanRegister.getState().applicationId,
+        applicationId:
+          useArtisanRegister.getState().applicationId || user.applicationId!,
         photosIds: useArtisanRegister.getState().attachmentIds,
         rawMaterial: useArtisanRegister.getState().materiasPrimas,
         technique: useArtisanRegister.getState().tecnicas,

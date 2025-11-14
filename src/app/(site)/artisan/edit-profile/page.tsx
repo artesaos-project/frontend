@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useProductForm } from '@/hooks/use-product-form';
 import useStoreUser from '@/hooks/use-store-user';
 import { userApi } from '@/services/api';
-import { GetMyProfile } from '@/types/artisan';
+import { GetMyProfile, updateMyProfilePayload } from '@/types/artisan';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,7 @@ import { TbTrash } from 'react-icons/tb';
 import { toast } from 'sonner';
 
 function EditProfilePage() {
-  const setUser = useStoreUser((state) => state.setUser);
+  const updateUser = useStoreUser((state) => state.updateUser);
   const {
     register,
     formState: { errors },
@@ -88,15 +88,18 @@ function EditProfilePage() {
 
   const onSubmit: SubmitHandler<GetMyProfile> = async (data) => {
     try {
-      const updatedData: Partial<GetMyProfile> = {
+      const updatedData: Partial<updateMyProfilePayload> = {
         ...data,
+        bio: data.artisan?.bio || '',
+        artisanUserName: data.artisan?.artisanUserName || '',
         phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
         avatarId: photoIds[0] || null,
       };
       delete updatedData.ddd;
       await userApi.updateMe(updatedData);
+
       const updatedProfile = await userApi.getMe();
-      setUser({
+      updateUser({
         userId: updatedProfile.user.id,
         userName: updatedProfile.user.name,
         userPhoto: updatedProfile.user.avatar,
@@ -186,13 +189,13 @@ function EditProfilePage() {
                   label="Nome Artístico / Marca"
                   type="text"
                   required
-                  {...register('artisan.artisanUserName', {
+                  {...register('socialName', {
                     required: 'Nome é obrigatório',
                   })}
                 />
-                {errors.artisan?.artisanUserName && (
+                {errors.socialName && (
                   <span className="text-red-500 text-xs">
-                    {errors.artisan.artisanUserName.message}
+                    {errors.socialName.message}
                   </span>
                 )}
                 <InputField
@@ -206,6 +209,7 @@ function EditProfilePage() {
                   type="text"
                   required
                   {...register('email', { required: 'Email é obrigatório' })}
+                  disabled
                 />
                 <div className="flex flex-col gap-2">
                   <span className="font-semibold text-sm">

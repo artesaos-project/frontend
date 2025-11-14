@@ -9,3 +9,5 @@ export { reviewsApi } from './reviews';
 export * from './types';
 export { uploadApi } from './uploads';
 export { userApi } from './users';
+export { catalogApi } from './catalog';
+export type { CatalogItem } from './catalog';

@@ -4,15 +4,14 @@ import { PhotoGallery } from '@/components/features/artisan/add-product/photo-ga
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
 import { Button } from '@/components/ui/button';
-import { materiaPrima } from '@/constants/materia-prima';
-import { tecnicas } from '@/constants/tecnicas';
 import { useProductForm } from '@/hooks/use-product-form';
-import { productApi } from '@/services/api';
+import { catalogApi, productApi } from '@/services/api';
 import { ProductForm } from '@/types/product-form';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IoAdd } from 'react-icons/io5';
 import { toast } from 'sonner';
@@ -57,6 +56,21 @@ const AddProductPage = () => {
       necessaryDays: '',
     },
   });
+
+  const { data: materialsRes } = useQuery({
+    queryKey: ['catalog', 'materials'],
+    queryFn: () => catalogApi.getMaterials(),
+    staleTime: 1000 * 60 * 60,
+  });
+
+  const { data: techniquesRes } = useQuery({
+    queryKey: ['catalog', 'techniques'],
+    queryFn: () => catalogApi.getTechniques(),
+    staleTime: 1000 * 60 * 60,
+  });
+
+  const materiaPrima = materialsRes?.items ?? [];
+  const tecnicas = techniquesRes?.items ?? [];
 
   const triggerFileUpload = () => {
     document.getElementById('photo-upload')?.click();
