@@ -11,7 +11,7 @@ export const handleShare = async (
   if (navigator.share) {
     try {
       await navigator.share(shareData);
-      toast.success('Compartilhado com sucesso!');
+      toast.success('Link copiado com sucesso!');
     } catch (err) {
       toast.error('Erro ao compartilhar:' + err);
     }
