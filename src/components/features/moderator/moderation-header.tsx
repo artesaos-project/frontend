@@ -3,18 +3,18 @@
 import AlertDialog from '@/components/common/alert-dialog';
 import SideBarMenu from '@/components/sidebar-menu';
 import { Button } from '@/components/ui/button';
-import { DialogHeader } from '@/components/ui/dialog';
-import useStoreUser from '@/hooks/use-store-user';
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@radix-ui/react-dialog';
-import { Separator } from '@radix-ui/react-separator';
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
 import { LuDoorOpen } from 'react-icons/lu';
@@ -24,12 +24,13 @@ function ModerationHeader() {
   const resetStore = useStoreUser((state) => state.resetStore);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const pathName = usePathname();
+  const router = useRouter();
 
   const handleLogoutConfirm = () => {
     resetStore();
     localStorage.removeItem('artisan-register');
     setIsLogoutModalOpen(false);
-    window.location.reload();
+    router.push('/');
   };
   return (
     <>
@@ -95,51 +96,53 @@ function ModerationHeader() {
               </Link>
             )}
             {user.isAuthenticated && (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <DialogHeader>
-                    <DialogTitle>
-                      <Image
-                        src={user.userPhoto ?? '/default-avatar.webp'}
-                        alt="User Avatar"
-                        width={60}
-                        height={60}
-                        className="rounded-full h-15 user-select-none cursor-pointer bg-gray-300"
-                      />
-                    </DialogTitle>
-                  </DialogHeader>
-                </DialogTrigger>
-                {!isLogoutModalOpen && (
-                  <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
-                    <div className="flex flex-col items-center justify-center text-midnight">
-                      <Image
-                        src={user.userPhoto ?? '/default-avatar.webp'}
-                        alt="User Avatar"
-                        width={120}
-                        height={120}
-                        className="rounded-full h-30 mb-4 bg-gray-300"
-                      />
-                      <h2 className="text-2xl font-bold">{user.userName}</h2>
-                      {user.artisanUserName && <p>@{user.artisanUserName}</p>}
-                      {user.isModerator && (
-                        <div className="w-fit">
-                          <Separator className="my-2" />
-                          <Link href="/moderator" className="text-xl">
-                            Moderação
-                          </Link>
-                          <Separator className="my-2" />
-                        </div>
-                      )}
-                      <Button
-                        variant={'ghost'}
-                        onClick={() => setIsLogoutModalOpen(true)}
-                        className="text-xl text-red-500 hover:text-red-600 mt-2"
-                      >
-                        Sair
-                      </Button>
-                    </div>
-                  </DialogContent>
-                )}
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <DialogHeader>
+                      <DialogTitle>
+                        <Image
+                          src={user.userPhoto ?? '/default-avatar.webp'}
+                          alt="User Avatar"
+                          width={60}
+                          height={60}
+                          className="rounded-full h-15 user-select-none cursor-pointer bg-gray-300"
+                        />
+                      </DialogTitle>
+                    </DialogHeader>
+                  </DialogTrigger>
+                  {!isLogoutModalOpen && (
+                    <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
+                      <div className="flex flex-col items-center justify-center text-midnight">
+                        <Image
+                          src={user.userPhoto ?? '/default-avatar.webp'}
+                          alt="User Avatar"
+                          width={120}
+                          height={120}
+                          className="rounded-full h-30 mb-4 bg-gray-300"
+                        />
+                        <h2 className="text-2xl font-bold">{user.userName}</h2>
+                        {user.artisanUserName && <p>@{user.artisanUserName}</p>}
+                        {user.isModerator && (
+                          <div className="w-fit">
+                            <Separator className="my-2" />
+                            <Link href="/moderator" className="text-xl">
+                              Moderação
+                            </Link>
+                            <Separator className="my-2" />
+                          </div>
+                        )}
+                        <Button
+                          variant={'ghost'}
+                          onClick={() => setIsLogoutModalOpen(true)}
+                          className="text-xl text-red-500 hover:text-red-600 mt-2"
+                        >
+                          Sair
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  )}
+                </Dialog>
                 <AlertDialog
                   isOpen={isLogoutModalOpen}
                   onClose={() => setIsLogoutModalOpen(false)}
@@ -151,7 +154,7 @@ function ModerationHeader() {
                     color: 'text-midnight',
                   }}
                 />
-              </Dialog>
+              </>
             )}
           </div>
         </header>

@@ -3,7 +3,7 @@
 import { Report } from '@/types/moderator-report';
 import Link from 'next/link';
 import { FaCheck } from 'react-icons/fa';
-import { FiChevronRight, FiX } from 'react-icons/fi';
+import { FiChevronRight } from 'react-icons/fi';
 import { GoClockFill } from 'react-icons/go';
 
 interface ReportsTableProps {
@@ -11,44 +11,53 @@ interface ReportsTableProps {
   isLoading?: boolean;
 }
 
-const STATUS_TRANSLATIONS: Record<string, string> = {
-  PENDING: 'Pendente',
-  MODERATED: 'Moderado',
-  ARCHIVED: 'Arquivado',
+const REASON_TRANSLATIONS: Record<string, string> = {
+  COPYRIGHT_VIOLATION: 'Violação de Direitos Autorais',
+  INAPPROPRIATE_LANGUAGE: 'Linguagem Inapropriada',
+  OTHER: 'Outro',
+  FALSE_OR_MISLEADING_INFORMATION: 'Informação Falsa ou Enganosa',
+  OFF_TOPIC_OR_IRRELEVANT: 'Fora do Tópico ou Irrelevante',
+  PROHIBITED_ITEM_SALE_OR_DISCLOSURE: 'Venda ou Divulgação de Item Proibido',
+  INAPPROPRIATE_CONTENT: 'Conteúdo Inapropriado',
 };
 
-function StatusLabel({ status }: { status: string }) {
-  const statusConfig = {
-    PENDING: {
-      icon: <GoClockFill className="text-amber-400" size={16} />,
-      label: STATUS_TRANSLATIONS[status],
-    },
-    MODERATED: {
-      icon: <FiX className="text-red-600 font-bold" size={18} />,
-      label: STATUS_TRANSLATIONS[status],
-    },
-    ARCHIVED: {
-      icon: <FaCheck className="text-green-600" size={16} />,
-      label: STATUS_TRANSLATIONS[status],
-    },
-  };
+function getReportedName(report: Report): string {
+  // Para denúncias de usuário
+  if (report.ReportUser && report.ReportUser.length > 0) {
+    const reportedUser = report.ReportUser[0];
+    return reportedUser?.ReportedUserEntity?.name || 'Usuário Desconhecido';
+  }
 
-  const config = statusConfig[status as keyof typeof statusConfig];
+  // Para denúncias de produto
+  if (report.product) {
+    const productName = report.product.ProductEntity?.name;
+    const artisanName = report.product.ProductEntity?.artisan?.user?.name;
+    return productName || artisanName || 'Produto Desconhecido';
+  }
 
-  if (!config) {
+  // Para denúncias de avaliação
+  if (report.productRating) {
+    const userName = report.productRating.ProductRatingEntity?.user?.name;
+    return userName || 'Usuário Desconhecido';
+  }
+
+  return 'Desconhecido';
+}
+
+function StatusLabel({ isSolved }: { isSolved: boolean }) {
+  if (isSolved) {
     return (
-      <div className="flex items-center justify-center">
-        <p className="font-semibold text-xs sm:text-sm">
-          {STATUS_TRANSLATIONS[status]}
-        </p>
+      <div className="flex items-center gap-2.5">
+        <FaCheck className="text-green-600" size={16} />
+        <p className="p-1 hidden md:inline">Resolvido</p>
       </div>
     );
   }
 
   return (
     <div className="flex items-center gap-2.5">
-      {config.icon}
-      <p className="p-1 hidden md:inline">{config.label}</p>
+      <GoClockFill className="text-amber-400" size={16} />
+      <p className="p-1 hidden md:inline">Pendente</p>
     </div>
   );
 }
@@ -73,7 +82,7 @@ function ReportsTable({ reports, isLoading }: ReportsTableProps) {
             Nenhum relatório encontrado.
           </p>
         ) : (
-          reports.map((report) => (
+          reports.map((report, index) => (
             <Link
               key={report.id}
               href={`/moderator/reports/${report.id}`}
@@ -81,17 +90,19 @@ function ReportsTable({ reports, isLoading }: ReportsTableProps) {
             >
               <div className="flex text-sm">
                 <div className="flex items-center">
-                  <div className="border-r py-2.5 text-center w-9">
-                    {report.id}
+                  <div className="border-r py-2.5 text-center w-9 truncate px-1">
+                    {index}
                   </div>
                 </div>
                 <div className="grid grid-cols-3 items-center px-3 w-full">
-                  <p className="truncate text-left">{report.target}</p>
+                  <p className="truncate text-left">
+                    {getReportedName(report)}
+                  </p>
                   <p className="hidden md:inline text-center whitespace-nowrap">
-                    {report.reportType}
+                    {REASON_TRANSLATIONS[report.reason] || report.reason}
                   </p>
                   <div className="flex gap-2 md:gap-7 items-center justify-end">
-                    <StatusLabel status={report.status} />
+                    <StatusLabel isSolved={report.isSolved} />
                     <FiChevronRight
                       className="md:mr-3 group-hover:translate-x-1 transition-transform"
                       size={16}
