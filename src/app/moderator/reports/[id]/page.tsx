@@ -23,21 +23,20 @@ function Page() {
   const reportId = Number(params.id);
   const [report, setReport] = useState<ReportDetailed | null>(null);
 
-  const fetchReportDetails = async () => {
-    try {
-      // Simulando delay de API
-      const foundReport = reportsDetailedMock.find((r) => r.id === reportId);
-      setReport(foundReport as ReportDetailed);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      console.log('erro');
-    }
-  };
-
   useEffect(() => {
+    const fetchReportDetails = async () => {
+      try {
+        // Simulando delay de API
+        const foundReport = reportsDetailedMock.find((r) => r.id === reportId);
+        setReport(foundReport as ReportDetailed);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        console.log('erro');
+      }
+    };
+
     fetchReportDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reportId]);
 
   return (
     <div>

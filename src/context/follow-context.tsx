@@ -76,12 +76,6 @@ export const FollowProvider = ({ children }: { children: ReactNode }) => {
       console.error('Erro ao seguir/deixar de seguir artesão', err);
       toast.error('Não foi possível atualizar o status de seguimento.');
     }
-
-    if (isFollowing(artisanId)) {
-      followers.splice(followers.indexOf(artisanId), 1);
-    } else {
-      followers.push(artisanId);
-    }
   };
 
   const isFollowing = (artisanId: string) => {

@@ -1,7 +1,6 @@
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import '../globals.css';
-import { SearchProvider } from '@/context/SearchContext';
 
 export default function LayoutSite({
   children,
@@ -10,11 +9,9 @@ export default function LayoutSite({
 }>) {
   return (
     <div>
-      <SearchProvider>
-        <Header />
-        {children}
-        <Footer />
-      </SearchProvider>
+      <Header />
+      {children}
+      <Footer />
     </div>
   );
 }
