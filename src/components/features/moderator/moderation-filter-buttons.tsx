@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
-import { FaCheck } from 'react-icons/fa6';
+import { FaCheck, FaUser } from 'react-icons/fa6';
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import { GoClockFill } from 'react-icons/go';
 import { IoFilter } from 'react-icons/io5';
-import { MdHourglassEmpty } from 'react-icons/md';
+import { MdHourglassEmpty, MdRateReview, MdShoppingBag } from 'react-icons/md';
 
 interface FilterButtonsProps {
   activeFilter?: string;
@@ -52,19 +52,29 @@ const reportFilterButtons = [
     icon: <FiChevronDown />,
   },
   {
-    key: 'PENDING',
-    label: 'Pendentes',
-    icon: <GoClockFill className="text-amber-400" />,
+    key: 'user',
+    label: 'Usuários',
+    icon: <FaUser className="text-blue-500" />,
   },
   {
-    key: 'MODERATED',
-    label: 'Moderados',
-    icon: <FiX className="text-red-600 font-bold" />,
+    key: 'product',
+    label: 'Produtos',
+    icon: <MdShoppingBag className="text-purple-600" />,
   },
   {
-    key: 'ARCHIVED',
-    label: 'Arquivados',
+    key: 'review',
+    label: 'Avaliações',
+    icon: <MdRateReview className="text-orange-500" />,
+  },
+  {
+    key: 'resolved',
+    label: 'Resolvidos',
     icon: <FaCheck className="text-green-600" />,
+  },
+  {
+    key: 'deleted',
+    label: 'Excluídos',
+    icon: <FiX className="text-red-600" />,
   },
 ];
 
@@ -107,34 +117,76 @@ function ModerationFilterButtons({
           >
             Mais Recentes
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onFilterChange?.('PENDING')}
-            className="hover:bg-gray-200 transition cursor-pointer flex justify-between items-center focus:outline-none focus-visible:outline-none px-2 py-1 rounded-md"
-          >
-            Pendentes
-            <GoClockFill className="text-amber-400" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onFilterChange?.('APPROVED')}
-            className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
-          >
-            Aprovados
-            <FaCheck className="text-green-600" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onFilterChange?.('REJECTED')}
-            className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
-          >
-            Recusados
-            <FiX className="text-red-600 font-bold" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onFilterChange?.('POSTPONED')}
-            className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
-          >
-            Incompletos
-            <MdHourglassEmpty />
-          </DropdownMenuItem>
+          {variant === 'reports' ? (
+            <>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('user')}
+                className="hover:bg-gray-200 transition cursor-pointer flex justify-between items-center focus:outline-none focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Usuários
+                <FaUser className="text-blue-500" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('product')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Produtos
+                <MdShoppingBag className="text-purple-600" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('review')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Avaliações
+                <MdRateReview className="text-orange-500" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('resolved')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Resolvidos
+                <FaCheck className="text-green-600" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('deleted')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Excluídos
+                <FiX className="text-red-600" />
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('PENDING')}
+                className="hover:bg-gray-200 transition cursor-pointer flex justify-between items-center focus:outline-none focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Pendentes
+                <GoClockFill className="text-amber-400" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('APPROVED')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Aprovados
+                <FaCheck className="text-green-600" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('REJECTED')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Recusados
+                <FiX className="text-red-600 font-bold" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onFilterChange?.('POSTPONED')}
+                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
+              >
+                Incompletos
+                <MdHourglassEmpty />
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
