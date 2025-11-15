@@ -7,6 +7,7 @@ export type UserProps = {
   isAuthenticated?: boolean;
   isModerator?: boolean;
   isArtisan?: boolean;
+  applicationStatus?: string;
   applicationId?: string | null;
   postnedApplication: boolean | undefined;
   expiresAt?: number | null;

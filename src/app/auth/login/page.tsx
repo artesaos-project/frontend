@@ -48,6 +48,7 @@ function Page() {
         isAuthenticated: true,
         isModerator: response.user.roles.includes('MODERATOR'),
         isArtisan: response.user.roles.includes('ARTISAN'),
+        applicationStatus: response.user.applicationStatus,
         applicationId: response.user.applicationId,
         postnedApplication: response.user.postnedApplication,
         expiresAt: new Date(response.session.expiresAt).getTime(),
