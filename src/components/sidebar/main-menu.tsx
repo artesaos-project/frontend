@@ -59,7 +59,7 @@ export function MainMenu({ onLogoutClick }: MainMenuProps) {
       {user.isAuthenticated && (
         <div
           onClick={onLogoutClick}
-          className="w-full cursor-pointer mb-60 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
+          className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
         >
           <TbLogout2 color="#ff8c94" size={30} />
           <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">

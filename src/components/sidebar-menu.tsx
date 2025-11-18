@@ -19,7 +19,6 @@ import { ModerationMenu } from './sidebar/moderation-menu';
 import { UserProfile } from './sidebar/user-profile';
 
 function SideBarMenu() {
-  const user = useStoreUser((state) => state.user);
   const resetStoreUser = useStoreUser((state) => state.resetStore);
   const pathname = usePathname();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -43,7 +42,10 @@ function SideBarMenu() {
       <SheetTrigger asChild>
         <IoMenu size={30} color="white" className="cursor-pointer" />
       </SheetTrigger>
-      <SheetContent side="left" className="bg-[#FAFAFA] p-5 w-[90%]">
+      <SheetContent
+        side="left"
+        className="bg-[#FAFAFA] p-5 w-[90%] flex flex-col"
+      >
         <SheetHeader>
           <SheetTitle asChild>
             <Image
@@ -58,13 +60,15 @@ function SideBarMenu() {
 
         <UserProfile />
 
-        <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
-          {isModerationRoute ? (
-            <ModerationMenu onLogoutClick={handleOpenLogoutModal} />
-          ) : (
-            <MainMenu onLogoutClick={handleOpenLogoutModal} />
-          )}
-        </ScrollArea>
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full w-full">
+            {isModerationRoute ? (
+              <ModerationMenu onLogoutClick={handleOpenLogoutModal} />
+            ) : (
+              <MainMenu onLogoutClick={handleOpenLogoutModal} />
+            )}
+          </ScrollArea>
+        </div>
 
         <AlertDialog
           isOpen={isLogoutModalOpen}
