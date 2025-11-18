@@ -34,6 +34,7 @@ export interface UserResponse {
     avatar?: string;
     artisanUsername?: string;
     roles: string[];
+    applicationStatus: string;
     applicationId?: string | null;
     postnedApplication: boolean | undefined;
   };
