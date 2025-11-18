@@ -196,13 +196,13 @@ function Page() {
                 </button>
               </div>
               <div className="flex flex-col text-xs text-midnight font-semibold">
-                <div className="flex flex-col lg:flex-row gap-4 pl-5">
+                <div className="flex flex-col gap-4 pl-5">
                   <div className="flex flex-col gap-2">
                     <label>Id</label>
                     <input
                       readOnly
                       value={report?.id || ''}
-                      className="border border-sakura rounded-md truncate h-8.5 max-w-28 px-2"
+                      className="border border-sakura rounded-md truncate h-8.5 max-w-72 px-2"
                       title={report?.id || ''}
                     />
                   </div>
@@ -219,26 +219,6 @@ function Page() {
                       }
                       className="border border-sakura rounded-md h-8.5 max-w-72 px-2"
                     />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label>Alvo</label>
-                    <input
-                      readOnly
-                      value="N/A"
-                      className="border border-sakura w-full rounded-md h-8.5 max-w-63 px-2"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2 pl-5">
-                  <div className="flex flex-col gap-2 mt-4">
-                    <label>Telefone/Whatsapp</label>
-                    <div className="flex gap-1">
-                      <input
-                        readOnly
-                        value={report?.reporter?.phone || ''}
-                        className="border border-sakura rounded-md h-8.5 w-full px-2"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
