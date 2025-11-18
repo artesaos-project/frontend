@@ -92,7 +92,8 @@ export const useProductForm = () => {
   useEffect(() => {
     const uploadPhotos = async () => {
       const filesToUpload = photos.filter(
-        (photo) => photo instanceof File && !uploadedFilesRef.current.has(photo),
+        (photo) =>
+          photo instanceof File && !uploadedFilesRef.current.has(photo),
       ) as File[];
 
       if (filesToUpload.length === 0) {

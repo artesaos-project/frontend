@@ -1,9 +1,6 @@
 import { CategoryProps } from '@/types/category';
 import { ApiProduct } from '@/types/product';
-import {
-  ProductCreateData,
-  ProductUpdateData,
-} from '@/types/product-form';
+import { ProductCreateData, ProductUpdateData } from '@/types/product-form';
 import { apiRequest } from '../api-service';
 
 export const productApi = {

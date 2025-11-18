@@ -10,7 +10,13 @@ interface MenuItemProps {
   onClick?: () => void;
 }
 
-export function MenuItem({ href, icon, label, endIcon, onClick }: MenuItemProps) {
+export function MenuItem({
+  href,
+  icon,
+  label,
+  endIcon,
+  onClick,
+}: MenuItemProps) {
   return (
     <SheetClose asChild>
       <Link href={href} onClick={onClick}>

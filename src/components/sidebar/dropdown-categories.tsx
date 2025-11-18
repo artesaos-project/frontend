@@ -3,10 +3,7 @@ import { productApi } from '@/services/api';
 import { CategoryProps } from '@/types/category';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {
-  IoChevronDownOutline,
-  IoChevronUpOutline,
-} from 'react-icons/io5';
+import { IoChevronDownOutline, IoChevronUpOutline } from 'react-icons/io5';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 
 export function DropdownCategories() {
