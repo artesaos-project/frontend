@@ -9,14 +9,21 @@ function ProductsList({
   products,
   loading,
   emptyStateMessage,
+  showAll = false,
 }: {
   products: ApiProduct[];
   loading: boolean;
   emptyStateMessage?: string;
+  showAll?: boolean;
 }) {
   const [visibleProducts, setVisibleProducts] = useState<ApiProduct[]>([]);
 
   useEffect(() => {
+    if (showAll) {
+      setVisibleProducts(products || []);
+      return;
+    }
+
     const handleResize = () => {
       const width = window.innerWidth;
       let maxItems = products?.length;
@@ -33,7 +40,7 @@ function ProductsList({
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [products]);
+  }, [products, showAll]);
 
   if (loading) {
     return <CardsListSkeleton />;

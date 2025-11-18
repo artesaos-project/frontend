@@ -1,5 +1,6 @@
 import { CategoryProps } from '@/types/category';
 import { ApiProduct } from '@/types/product';
+import { ProductCreateData, ProductUpdateData } from '@/types/product-form';
 import { apiRequest } from '../api-service';
 
 export const productApi = {
@@ -10,13 +11,13 @@ export const productApi = {
 
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
-  create: (productData: unknown) =>
+  create: (productData: ProductCreateData) =>
     apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
       body: productData,
     }),
 
-  update: (id: string, productData: unknown) =>
+  update: (id: string, productData: ProductUpdateData) =>
     apiRequest<{ message?: string }>(`/products/${id}`, {
       method: 'PUT',
       body: productData,
