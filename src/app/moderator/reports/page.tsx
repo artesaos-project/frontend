@@ -4,59 +4,74 @@ import LoadingScreen from '@/components/common/loading-screen';
 import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
 import ReportsTable from '@/components/features/moderator/reports/reports-table';
-import reportsMock from '@/db-mock/reports.json';
+import { reportApi } from '@/services/api';
 import { Report, ReportFilterType } from '@/types/moderator-report';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 function ReportsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState<ReportFilterType>('PENDING');
+  const [searchTerm] = useState('');
+  const [activeFilter, setActiveFilter] = useState<ReportFilterType>('all');
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const fetchReports = useCallback(async () => {
     try {
       setIsLoading(true);
-      // Simulando delay de API
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // TODO: Implement real API call
-      // const result = await reportsApi.getReports({ status: activeFilter, search: searchTerm });
-      // setReports(result.reports);
-      setReports(reportsMock as Report[]);
-      setIsLoading(false);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Error fetching reports:', error.message);
+
+      const params: {
+        isSolved?: boolean;
+        isDeleted?: boolean;
+        targetType?: 'product' | 'productRating' | 'user';
+      } = {};
+
+      if (activeFilter === 'resolved') {
+        params.isSolved = true;
+      } else if (activeFilter === 'deleted') {
+        params.isDeleted = true;
+      } else if (activeFilter === 'product') {
+        params.targetType = 'product';
+      } else if (activeFilter === 'review') {
+        params.targetType = 'productRating';
+      } else if (activeFilter === 'user') {
+        params.targetType = 'user';
       }
-      router.replace('/');
+
+      const result = await reportApi.listReports(params);
+
+      if (Array.isArray(result)) {
+        setReports(result);
+      } else {
+        console.warn('API did not return an array:', result);
+        setReports([]);
+      }
+
+      setIsLoading(false);
+    } catch {
+      setReports([]);
+      setIsLoading(false);
     }
-  }, [router]);
+  }, [activeFilter]);
 
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-  };
-
+  const handleSearchChange = () => {};
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter as ReportFilterType);
   };
 
-  // Filter reports client-side for now
   const filteredReports = reports.filter((report) => {
-    const matchesFilter =
-      activeFilter === 'all' || report.status === activeFilter;
-    const matchesSearch =
-      searchTerm === '' ||
-      report.target.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.denunciator.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.reportType.toLowerCase().includes(searchTerm.toLowerCase());
+    if (searchTerm === '') return true;
 
-    return matchesFilter && matchesSearch;
+    const searchLower = searchTerm.toLowerCase();
+    const reasonMatch = report.reason.toLowerCase().includes(searchLower);
+    const descriptionMatch = report.description
+      .toLowerCase()
+      .includes(searchLower);
+    const idMatch = report.id.toLowerCase().includes(searchLower);
+
+    return reasonMatch || descriptionMatch || idMatch;
   });
 
   if (isLoading) {

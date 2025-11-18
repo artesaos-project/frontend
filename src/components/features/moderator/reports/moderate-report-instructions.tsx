@@ -13,46 +13,46 @@ function ModerateReportInstructions() {
           <span>Função</span>
         </div>
 
-        <div className="flex gap-4 pt-2 items-center">
+        {/* <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'warn'} />
           <span>
             Envia uma notificação ao usuário alertando sobre a violação das
             regras, sem aplicar bloqueio.
           </span>
-        </div>
+        </div> */}
 
-        <div className="flex gap-4 pt-2 items-center">
+        <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'exclude'} />
           <span>
             Exclui a publicação, comentário ou item denunciado da plataforma.
           </span>
         </div>
 
-        <div className="flex gap-4 pt-2 items-center">
+        {/* <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'suspend'} />
           <span>Suspende o acesso do usuário por um período determinado.</span>
-        </div>
+        </div> */}
 
-        <div className="flex gap-4 pt-2 items-center">
+        {/* <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'ban'} />
           <span>
             Remove o acesso do usuário de forma definitiva, sem possibilidade de
             retorno.
           </span>
-        </div>
-        <div className="flex gap-4 pt-2 items-center">
+        </div> */}
+        <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'archive'} />
           <span>
             Marca a denúncia como encerrada, mantendo apenas o histórico para
             consulta.
           </span>
         </div>
-        <div className="flex gap-4 pt-2 items-center">
+        {/* <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'revert'} />
           <span>
             Reverte a remoção de um conteúdo que foi apagado por engano.
           </span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

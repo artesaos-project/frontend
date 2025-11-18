@@ -3,41 +3,128 @@
 import ModerationTitle from '@/components/features/moderator/moderation-title';
 import ModerateReportButton from '@/components/features/moderator/reports/moderate-report-button';
 import ModerateReportInstructions from '@/components/features/moderator/reports/moderate-report-instructions';
-import reportsDetailedMock from '@/db-mock/reports-detailed.json';
-import type { ReportDetailed } from '@/types/report';
+import { reportApi } from '@/services/api';
 import { ArrowLeft } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
+import { toast } from 'sonner';
 
-const STATUS_TRANSLATIONS: Record<string, string> = {
-  PENDING: 'Pendente',
-  MODERATED: 'Moderado',
-  ARCHIVED: 'Arquivado',
+const getReportStatus = (report: BackendReport | null): string => {
+  if (!report) return 'Desconhecido';
+  if (report.isSolved) return 'Resolvido';
+  return 'Pendente';
 };
+
+const REASON_TRANSLATIONS: Record<string, string> = {
+  COPYRIGHT_VIOLATION: 'Violação de Direitos Autorais',
+  INAPPROPRIATE_LANGUAGE: 'Linguagem Inapropriada',
+  OTHER: 'Outro',
+  FALSE_OR_MISLEADING_INFORMATION: 'Informação Falsa ou Enganosa',
+  OFF_TOPIC_OR_IRRELEVANT: 'Fora do Tópico ou Irrelevante',
+  PROHIBITED_ITEM_SALE_OR_DISCLOSURE: 'Venda ou Divulgação de Item Proibido',
+  INAPPROPRIATE_CONTENT: 'Conteúdo Inapropriado',
+};
+
+interface BackendReport {
+  id: string;
+  reporterId: string;
+  reason: string;
+  description: string;
+  isSolved: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  product: unknown | null;
+  productRating: unknown | null;
+  ReportUser: unknown[];
+  reporter?: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    avatar: string | null;
+  };
+}
 
 function Page() {
   const params = useParams();
-  const reportId = Number(params.id);
-  const [report, setReport] = useState<ReportDetailed | null>(null);
+  const reportId = params.id as string;
+  const [report, setReport] = useState<BackendReport | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const fetchReportDetails = async () => {
+  useEffect(() => {
+    const fetchReportDetails = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const result = await reportApi.getReportById(reportId);
+
+        if (!result || typeof result !== 'object') {
+          throw new Error('Dados inválidos retornados pela API');
+        }
+
+        setReport(result as BackendReport);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Erro desconhecido';
+        setError(`Erro ao carregar detalhes da denúncia: ${errorMessage}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (reportId) {
+      fetchReportDetails();
+    }
+  }, [reportId]);
+
+  const handleSolveReport = async () => {
+    if (!report || isProcessing) return;
+
     try {
-      // Simulando delay de API
-      const foundReport = reportsDetailedMock.find((r) => r.id === reportId);
-      setReport(foundReport as ReportDetailed);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      console.log('erro');
+      setIsProcessing(true);
+      await reportApi.solveReport(reportId);
+      toast.success('Denúncia marcada como resolvida!');
+      setReport({ ...report, isSolved: true });
+    } catch {
+      toast.error('Erro ao resolver denúncia');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  useEffect(() => {
-    fetchReportDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (isLoading) {
+    return (
+      <div>
+        <ModerationTitle title={'Denúncias'} />
+        <div className="w-full h-64 flex items-center justify-center">
+          <p className="text-midnight">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !report) {
+    return (
+      <div>
+        <ModerationTitle title={'Denúncias'} />
+        <div className="w-full h-64 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">
+              {error || 'Denúncia não encontrada'}
+            </p>
+            <Link href="/moderator/reports" className="text-midnight underline">
+              Voltar para lista de denúncias
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -53,12 +140,16 @@ function Page() {
           <div className="w-full border border-neutral-300 mt-7.5 rounded-xl">
             <div className="flex justify-between pl-5 text-midnight items-center">
               <h3 className="text-xl font-semibold py-5">
-                Status:{' '}
-                {report?.status ? STATUS_TRANSLATIONS[report.status] : ''}
+                Status: {getReportStatus(report)}
               </h3>
-              <div>
-                <ModerateReportButton variant="exclude" />
-              </div>
+              {!report?.isSolved && (
+                <div className="flex mr-8.5 gap-3">
+                  <ModerateReportButton
+                    variant="archive"
+                    onClick={handleSolveReport}
+                  />
+                </div>
+              )}
             </div>
             <div className="pl-5 pr-7.5 pb-5">
               <ModerateReportInstructions />
@@ -70,16 +161,8 @@ function Page() {
             </h3>
             <div className="flex flex-col sm:flex-row gap-10 sm:gap-0">
               <div className="flex flex-col gap-2">
-                <div className="w-[215px] h-[175px] border border-sakura rounded-xl overflow-hidden">
-                  {report?.photo && (
-                    <Image
-                      src={report.photo}
-                      width={215}
-                      height={175}
-                      alt="Foto do denunciante"
-                      className="object-cover w-full h-full"
-                    />
-                  )}
+                <div className="w-[215px] h-[175px] border border-sakura rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <p className="text-gray-400 text-sm">Sem imagem</p>
                 </div>
                 <button className="bg-midnight flex gap-2 justify-center items-center rounded-full w-full text-white text-xs font-semibold py-1.5 cursor-pointer hover:text-midnight hover:bg-white border border-midnight transition">
                   ACESSAR
@@ -92,15 +175,24 @@ function Page() {
                     <label>Id</label>
                     <input
                       readOnly
-                      value={report?.id || ''}
+                      value={report?.id?.substring(0, 8) || ''}
                       className="border border-sakura rounded-md h-8.5 max-w-28 px-2"
+                      title={report?.id || ''}
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label>Tipo de Denúncia</label>
                     <input
                       readOnly
-                      value={report?.reportType || ''}
+                      value={
+                        report?.product
+                          ? 'Produto'
+                          : report?.productRating
+                            ? 'Avaliação'
+                            : report?.ReportUser?.length
+                              ? 'Usuário'
+                              : 'Desconhecido'
+                      }
                       className="border border-sakura rounded-md h-8.5 max-w-72 px-2"
                     />
                   </div>
@@ -108,7 +200,7 @@ function Page() {
                     <label>Alvo</label>
                     <input
                       readOnly
-                      value={report?.target || ''}
+                      value="N/A"
                       className="border border-sakura w-full rounded-md h-8.5 max-w-63 px-2"
                     />
                   </div>
@@ -119,13 +211,8 @@ function Page() {
                     <div className="flex gap-1">
                       <input
                         readOnly
-                        value={report?.phone.ddd || ''}
-                        className="border border-sakura rounded-md h-8.5 w-11 px-2"
-                      />
-                      <input
-                        readOnly
-                        value={report?.phone.number || ''}
-                        className="border border-sakura rounded-md h-8.5 w-23 px-2"
+                        value={report?.reporter?.phone || ''}
+                        className="border border-sakura rounded-md h-8.5 w-full px-2"
                       />
                     </div>
                   </div>
@@ -142,7 +229,7 @@ function Page() {
                   <div className="flex flex-col gap-1 sm:flex-row">
                     <input
                       readOnly
-                      value={report?.denunciator || ''}
+                      value={report?.reporter?.name || ''}
                       className="border border-sakura rounded-md h-8.5 max-w-96 px-2"
                     />
                     <Link href={'/'}>
@@ -157,8 +244,10 @@ function Page() {
                       <input
                         readOnly
                         value={
-                          report?.date
-                            ? new Date(report.date).toLocaleDateString('pt-BR')
+                          report?.createdAt
+                            ? new Date(report.createdAt).toLocaleDateString(
+                                'pt-BR',
+                              )
                             : ''
                         }
                         className="border border-sakura rounded-md h-8.5 max-w-32 px-2"
@@ -168,7 +257,14 @@ function Page() {
                       <label>Hora</label>
                       <input
                         readOnly
-                        value={report?.time || ''}
+                        value={
+                          report?.createdAt
+                            ? new Date(report.createdAt).toLocaleTimeString(
+                                'pt-BR',
+                                { hour: '2-digit', minute: '2-digit' },
+                              )
+                            : ''
+                        }
                         className="border border-sakura rounded-md h-8.5 max-w-32 px-2"
                       />
                     </div>
@@ -182,13 +278,17 @@ function Page() {
                 <label className="mb-2">Motivo Selecionado</label>
                 <input
                   readOnly
-                  value={report?.reason || ''}
+                  value={
+                    REASON_TRANSLATIONS[report?.reason || ''] ||
+                    report?.reason ||
+                    ''
+                  }
                   className="border border-sakura rounded-md h-8.5 max-w-60 px-2"
                 />
                 <label className="my-2">Descrição</label>
                 <textarea
                   readOnly
-                  value={report?.detailedDescription || ''}
+                  value={report?.description || ''}
                   className="border border-sakura rounded-md h-28 max-w-[450px] p-2 resize-none"
                 />
               </div>
