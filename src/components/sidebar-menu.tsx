@@ -1,44 +1,30 @@
 'use client';
+import AlertDialog from '@/components/common/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
-import { productApi } from '@/services/api';
-import { CategoryProps } from '@/types/category';
 import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { BsGear } from 'react-icons/bs';
-import { CgDanger } from 'react-icons/cg';
-import { FaHome, FaRegHeart } from 'react-icons/fa';
-import { IoMdHelpCircleOutline } from 'react-icons/io';
-import {
-  IoChevronDownOutline,
-  IoChevronForward,
-  IoChevronUpOutline,
-  IoMenu,
-  IoPerson,
-} from 'react-icons/io5';
+import { useState } from 'react';
+import { IoMenu } from 'react-icons/io5';
 import { LuDoorOpen } from 'react-icons/lu';
-import { MdOutlineShoppingBag } from 'react-icons/md';
-import { RxPlusCircled } from 'react-icons/rx';
-import { TbLogout2 } from 'react-icons/tb';
-import AlertDialog from './common/alert-dialog';
-import { Button } from './ui/button';
+import { MainMenu } from './sidebar/main-menu';
+import { ModerationMenu } from './sidebar/moderation-menu';
+import { UserProfile } from './sidebar/user-profile';
 
 function SideBarMenu() {
   const user = useStoreUser((state) => state.user);
   const resetStoreUser = useStoreUser((state) => state.resetStore);
   const pathname = usePathname();
-
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const isModerationRoute = pathname.startsWith('/moderator');
 
   function handleLogout() {
     localStorage.removeItem('artisan-register');
@@ -52,7 +38,6 @@ function SideBarMenu() {
     setIsLogoutModalOpen(true);
   };
 
-  const isModerationRoute = pathname.startsWith('/moderator');
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -70,186 +55,17 @@ function SideBarMenu() {
             />
           </SheetTitle>
         </SheetHeader>
-        <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
-          <Image
-            src={user.userPhoto ?? '/default-avatar.webp'}
-            alt="User Avatar"
-            width={110}
-            height={110}
-            className="rounded-full sm:w-30 sm:h-30 w-20 h-20"
-          />
-          {user.isAuthenticated && (
-            <div
-              className={
-                user.isArtisan
-                  ? 'sm:ml-auto mr-2'
-                  : 'flex justify-center items-center ml-auto mr-auto'
-              }
-            >
-              <h2 className="font-bold text-2xl text-midnight mb-1 line-clamp-2">
-                {user.userName}
-              </h2>
-              {user.isArtisan && (
-                <>
-                  {/* <p className="text-sm text-midnight font-semibold">
-                    @{user.artisanUserName}
-                  </p> */}
-                  <Button asChild variant={'outline'} className="rounded-full">
-                    <Link
-                      href={`/artisan/${user.artisanUserName}`}
-                      className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
-                    >
-                      Ver meu perfil
-                      <IoChevronForward />
-                    </Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
-          {!user.isAuthenticated && (
-            <div className="flex justify-center items-center pl-auto">
-              <Button asChild variant={'outline'} className="rounded-full p-5">
-                <Link
-                  href={'/auth'}
-                  className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-40 mt-2 text-sm"
-                >
-                  Entre ou Cadastre-se
-                </Link>
-              </Button>
-            </div>
-          )}
-        </div>
+
+        <UserProfile />
+
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
           {isModerationRoute ? (
-            <>
-              <SheetClose asChild>
-                <Link href="/moderator">
-                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <FaHome color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                      Início
-                    </p>
-                  </div>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link href="/moderator/artisans">
-                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <IoPerson color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Artesãos
-                    </p>
-                  </div>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link href="/moderator/reports">
-                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <CgDanger color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Denúncias
-                    </p>
-                  </div>
-                </Link>
-              </SheetClose>
-
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <SheetClose asChild>
-                  <Link href={'/settings'} className="flex items-center">
-                    <BsGear color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Configurações
-                    </p>
-                  </Link>
-                </SheetClose>
-              </div>
-              <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoMdHelpCircleOutline color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Suporte e Ajuda
-                </p>
-              </div>
-              <div
-                onClick={handleOpenLogoutModal}
-                className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
-              >
-                <TbLogout2 color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Sair
-                </p>
-              </div>
-            </>
+            <ModerationMenu onLogoutClick={handleOpenLogoutModal} />
           ) : (
-            <>
-              {user.isModerator && (
-                <SheetClose asChild>
-                  <Link href="/moderator">
-                    <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                      <CgDanger color="#ff8c94" size={30} />
-                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                        Moderação
-                      </p>
-                      <IoChevronForward size={25} />
-                    </div>
-                  </Link>
-                </SheetClose>
-              )}
-              <DropdownCategories />
-              {user.isArtisan && (
-                <SheetClose asChild>
-                  <Link href={`/artisan/add-product`}>
-                    <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                      <RxPlusCircled color="#ff8c94" size={30} />
-                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                        Adicionar Produto
-                      </p>
-                    </div>
-                  </Link>
-                </SheetClose>
-              )}
-              <SheetClose asChild>
-                <Link href={'/favorites'}>
-                  <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <FaRegHeart color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Favoritos
-                    </p>
-                  </div>
-                </Link>
-              </SheetClose>
-              {user.isAuthenticated && (
-                <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <SheetClose asChild>
-                    <Link href={'/settings'} className="flex items-center">
-                      <BsGear color="#ff8c94" size={30} />
-                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                        Configurações
-                      </p>
-                    </Link>
-                  </SheetClose>
-                </div>
-              )}
-              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <IoMdHelpCircleOutline color="#ff8c94" size={30} />
-                <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                  Suporte e Ajuda
-                </p>
-              </div>
-              {user.isAuthenticated && (
-                <div
-                  onClick={handleOpenLogoutModal}
-                  className="w-full cursor-pointer mb-60 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
-                >
-                  <TbLogout2 color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Sair
-                  </p>
-                </div>
-              )}
-            </>
+            <MainMenu onLogoutClick={handleOpenLogoutModal} />
           )}
         </ScrollArea>
+
         <AlertDialog
           isOpen={isLogoutModalOpen}
           onClose={() => setIsLogoutModalOpen(false)}
@@ -261,54 +77,6 @@ function SideBarMenu() {
         />
       </SheetContent>
     </Sheet>
-  );
-}
-
-function DropdownCategories() {
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const response = await productApi.getCatalogs();
-        setCategories(response.items);
-      } catch (error: unknown) {
-        console.error('Erro ao buscar categorias', error);
-      }
-    }
-    fetchCategories();
-  }, []);
-  return (
-    <div>
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center"
-      >
-        <MdOutlineShoppingBag color="#ff8c94" size={30} />
-        <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-          Produtos
-        </p>
-        {isOpen ? (
-          <IoChevronUpOutline size={25} />
-        ) : (
-          <IoChevronDownOutline size={25} />
-        )}
-      </div>
-      {isOpen && (
-        <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
-          {categories.map((category, index) => (
-            <SheetClose asChild key={category.id || index}>
-              <Link
-                href={'/category/' + category.id}
-                className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
-              >
-                {category.nameExhibit}
-              </Link>
-            </SheetClose>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
 
