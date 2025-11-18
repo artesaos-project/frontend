@@ -24,7 +24,7 @@ function ModerateReportInstructions() {
         <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'exclude'} />
           <span>
-            Exclui a publicação, comentário ou item denunciado da plataforma.
+            Exclui a publicação denunciada da plataforma e marca como resolvida.
           </span>
         </div>
 
@@ -43,7 +43,7 @@ function ModerateReportInstructions() {
         <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
           <ModerateArtisanButton variant={'archive'} />
           <span>
-            Marca a denúncia como encerrada, mantendo apenas o histórico para
+            Marca a denúncia como resolvida, mantendo apenas o histórico para
             consulta.
           </span>
         </div>

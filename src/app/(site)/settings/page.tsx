@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiLock, FiUser } from 'react-icons/fi';
 import { MdPersonOff } from 'react-icons/md';
-import { RiFileList3Line } from 'react-icons/ri';
 
 interface SettingItemProps {
   icon: React.ReactNode;
@@ -34,7 +33,7 @@ function SettingItem({ icon, label, onClick }: SettingItemProps) {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { hasHydrated, user } = useAuthGuard();
+  const { hasHydrated } = useAuthGuard();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!hasHydrated) {
@@ -66,7 +65,7 @@ export default function SettingsPage() {
             label="Meu perfil"
             onClick={() => {
               // Navegar para página de perfil
-              router.push(`/artisan/${user.artisanUserName}`);
+              router.push(`/artisan/edit-profile`);
             }}
           />
           <SettingItem
@@ -79,14 +78,6 @@ export default function SettingsPage() {
           <Link href="/settings/change-password">
             <SettingItem icon={<FiLock />} label="Trocar senha de acesso" />
           </Link>
-          <SettingItem
-            icon={<RiFileList3Line />}
-            label="Dados do perfil"
-            onClick={() => {
-              // Navegar para página de dados do perfil
-              router.push(`/artisan/edit-profile`);
-            }}
-          />
         </div>
       </div>
     </main>

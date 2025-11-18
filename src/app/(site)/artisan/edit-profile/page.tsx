@@ -9,13 +9,14 @@ import { GetMyProfile, updateMyProfilePayload } from '@/types/artisan';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
 import { toast } from 'sonner';
 
 function EditProfilePage() {
   const updateUser = useStoreUser((state) => state.updateUser);
+  const [isArtisan, setIsArtisan] = useState(false);
   const {
     register,
     formState: { errors },
@@ -59,7 +60,9 @@ function EditProfilePage() {
     const fetchProfile = async () => {
       try {
         const profile = await userApi.getMe();
+        console.log('Perfil do usuário:', profile);
         if (profile) {
+          setIsArtisan(!!profile.user.artisan);
           const phone = profile.user.phone || '';
           let ddd = '';
           let numero = '';
@@ -89,13 +92,25 @@ function EditProfilePage() {
   const onSubmit: SubmitHandler<GetMyProfile> = async (data) => {
     try {
       const updatedData: Partial<updateMyProfilePayload> = {
-        ...data,
-        bio: data.artisan?.bio || '',
-        artisanUserName: data.artisan?.artisanUserName || '',
+        name: data.name,
+        email: data.email,
         phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
         avatarId: photoIds[0] || null,
       };
-      delete updatedData.ddd;
+
+      if (isArtisan) {
+        updatedData.socialName = data.socialName || null;
+        updatedData.bio = data.artisan?.bio || '';
+        updatedData.artisanUserName = data.artisan?.artisanUserName || '';
+        updatedData.comercialName = data.artisan?.comercialName || '';
+        updatedData.zipCode = data.artisan?.zipCode || '';
+        updatedData.state = data.artisan?.state || '';
+        updatedData.city = data.artisan?.city || '';
+        updatedData.neighborhood = data.artisan?.neighborhood || '';
+        updatedData.address = data.artisan?.address || '';
+        updatedData.addressNumber = data.artisan?.addressNumber || '';
+      }
+
       await userApi.updateMe(updatedData);
 
       const updatedProfile = await userApi.getMe();
@@ -106,8 +121,11 @@ function EditProfilePage() {
         artisanUserName: updatedProfile.user.artisan?.artisanUserName,
       });
       toast.success('Perfil atualizado com sucesso!');
-      if (data.artisan?.artisanUserName)
+      if (isArtisan && data.artisan?.artisanUserName) {
         router.push(`/artisan/${data.artisan.artisanUserName}`);
+      } else {
+        router.back();
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message;
@@ -185,18 +203,22 @@ function EditProfilePage() {
               </div>
 
               <div className="flex flex-col col-span-2 gap-4">
-                <InputField
-                  label="Nome Artístico / Marca"
-                  type="text"
-                  required
-                  {...register('socialName', {
-                    required: 'Nome é obrigatório',
-                  })}
-                />
-                {errors.socialName && (
-                  <span className="text-red-500 text-xs">
-                    {errors.socialName.message}
-                  </span>
+                {isArtisan && (
+                  <>
+                    <InputField
+                      label="Nome Artístico / Marca"
+                      type="text"
+                      required
+                      {...register('artisan.comercialName', {
+                        required: 'Nome é obrigatório',
+                      })}
+                    />
+                    {errors.artisan?.comercialName && (
+                      <span className="text-red-500 text-xs">
+                        {errors.artisan?.comercialName.message}
+                      </span>
+                    )}
+                  </>
                 )}
                 <InputField
                   label="Nome Completo"
@@ -241,65 +263,71 @@ function EditProfilePage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5 w-11/12">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <InputField
-                  label="CEP"
-                  type="text"
-                  required
-                  {...register('artisan.zipCode', {
-                    required: 'CEP é obrigatório',
-                  })}
-                />
-                <InputField
-                  label="Estado"
-                  type="text"
-                  required
-                  {...register('artisan.state', {
-                    required: 'Estado é obrigatório',
-                  })}
-                />
-                <InputField
-                  label="Cidade"
-                  type="text"
-                  required
-                  {...register('artisan.city', {
-                    required: 'Cidade é obrigatória',
-                  })}
-                />
-              </div>
-              <InputField
-                label="Endereço"
-                type="text"
-                required
-                {...register('artisan.address', {
-                  required: 'Endereço é obrigatório',
-                })}
-              />
-              <div className="flex flex-col gap-2">
-                <InputField
-                  label="Nome de usuário"
-                  type="text"
-                  required
-                  {...register('artisan.artisanUserName', {
-                    required: 'Nome de usuário é obrigatório',
-                  })}
-                />
-                <ul className="list-disc text-xs font-bold px-6">
-                  <li>Ter pelo menos 5 caracteres</li>
-                  <li>Começar com uma letra</li>
-                  <li>Usar apenas letras e números, sem espaços ou símbolos</li>
-                </ul>
-              </div>
-            </div>
+            {isArtisan && (
+              <>
+                <div className="flex flex-col gap-5 w-11/12">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <InputField
+                      label="CEP"
+                      type="text"
+                      required
+                      {...register('artisan.zipCode', {
+                        required: 'CEP é obrigatório',
+                      })}
+                    />
+                    <InputField
+                      label="Estado"
+                      type="text"
+                      required
+                      {...register('artisan.state', {
+                        required: 'Estado é obrigatório',
+                      })}
+                    />
+                    <InputField
+                      label="Cidade"
+                      type="text"
+                      required
+                      {...register('artisan.city', {
+                        required: 'Cidade é obrigatória',
+                      })}
+                    />
+                  </div>
+                  <InputField
+                    label="Endereço"
+                    type="text"
+                    required
+                    {...register('artisan.address', {
+                      required: 'Endereço é obrigatório',
+                    })}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <InputField
+                      label="Nome de usuário"
+                      type="text"
+                      required
+                      {...register('artisan.artisanUserName', {
+                        required: 'Nome de usuário é obrigatório',
+                      })}
+                    />
+                    <ul className="list-disc text-xs font-bold px-6">
+                      <li>Ter pelo menos 5 caracteres</li>
+                      <li>Começar com uma letra</li>
+                      <li>
+                        Usar apenas letras e números, sem espaços ou símbolos
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
-            <div>
-              <span className="font-semibold text-sm">Biografia</span>
-              <textarea
-                className="w-full border-2 border-sakura rounded-lg h-32 md:h-40 p-4 font-normal"
-                {...register('artisan.bio')}
-              />
-            </div>
+                <div>
+                  <span className="font-semibold text-sm">Biografia</span>
+                  <textarea
+                    className="w-full border-2 border-sakura rounded-lg h-32 md:h-40 p-4 font-normal"
+                    {...register('artisan.bio')}
+                  />
+                </div>
+              </>
+            )}
 
             <Button type="submit" variant="primary">
               Salvar Alterações

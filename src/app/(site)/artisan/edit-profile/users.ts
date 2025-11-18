@@ -1,5 +1,5 @@
+import { apiRequest } from '@/services/api-service';
 import { GetMyProfile, updateMyProfilePayload } from '@/types/artisan';
-import { apiRequest } from '../api-service';
 
 export const userApi = {
   changePassword: (data: {

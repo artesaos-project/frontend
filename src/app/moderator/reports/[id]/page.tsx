@@ -6,7 +6,7 @@ import ModerateReportInstructions from '@/components/features/moderator/reports/
 import { reportApi } from '@/services/api';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { toast } from 'sonner';
@@ -38,6 +38,7 @@ interface BackendReport {
   updatedAt: string;
   product: unknown | null;
   productRating: unknown | null;
+  reportType: 'PRODUCT' | 'PRODUCT_RATING' | 'USER';
   ReportUser: unknown[];
   reporter?: {
     id: string;
@@ -55,6 +56,7 @@ function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchReportDetails = async () => {
@@ -62,6 +64,7 @@ function Page() {
         setIsLoading(true);
         setError(null);
         const result = await reportApi.getReportById(reportId);
+        console.log('Detalhes da denúncia:', result);
 
         if (!result || typeof result !== 'object') {
           throw new Error('Dados inválidos retornados pela API');
@@ -90,9 +93,28 @@ function Page() {
       await reportApi.solveReport(reportId);
       toast.success('Denúncia marcada como resolvida!');
       setReport({ ...report, isSolved: true });
+      setTimeout(() => {
+        router.back();
+      }, 1000);
     } catch {
       toast.error('Erro ao resolver denúncia');
-    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDeleteReport = async () => {
+    if (!report || isProcessing) return;
+
+    try {
+      setIsProcessing(true);
+      await reportApi.deleteReport(reportId);
+      toast.success('Denúncia deletada com sucesso!');
+      setReport({ ...report, isDeleted: true });
+      setTimeout(() => {
+        router.back();
+      }, 1000);
+    } catch {
+      toast.error('Erro ao deletar denúncia');
       setIsProcessing(false);
     }
   };
@@ -148,6 +170,10 @@ function Page() {
                     variant="archive"
                     onClick={handleSolveReport}
                   />
+                  <ModerateReportButton
+                    variant="exclude"
+                    onClick={handleDeleteReport}
+                  />
                 </div>
               )}
             </div>
@@ -175,8 +201,8 @@ function Page() {
                     <label>Id</label>
                     <input
                       readOnly
-                      value={report?.id?.substring(0, 8) || ''}
-                      className="border border-sakura rounded-md h-8.5 max-w-28 px-2"
+                      value={report?.id || ''}
+                      className="border border-sakura rounded-md truncate h-8.5 max-w-28 px-2"
                       title={report?.id || ''}
                     />
                   </div>
@@ -185,13 +211,11 @@ function Page() {
                     <input
                       readOnly
                       value={
-                        report?.product
+                        report.reportType === 'PRODUCT'
                           ? 'Produto'
-                          : report?.productRating
-                            ? 'Avaliação'
-                            : report?.ReportUser?.length
-                              ? 'Usuário'
-                              : 'Desconhecido'
+                          : report.reportType === 'PRODUCT_RATING'
+                            ? 'Avaliação de Produto'
+                            : 'Usuário'
                       }
                       className="border border-sakura rounded-md h-8.5 max-w-72 px-2"
                     />

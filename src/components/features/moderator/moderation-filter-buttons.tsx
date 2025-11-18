@@ -71,11 +71,6 @@ const reportFilterButtons = [
     label: 'Resolvidos',
     icon: <FaCheck className="text-green-600" />,
   },
-  {
-    key: 'deleted',
-    label: 'Excluídos',
-    icon: <FiX className="text-red-600" />,
-  },
 ];
 
 function ModerationFilterButtons({
@@ -146,13 +141,6 @@ function ModerationFilterButtons({
               >
                 Resolvidos
                 <FaCheck className="text-green-600" />
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onFilterChange?.('deleted')}
-                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
-              >
-                Excluídos
-                <FiX className="text-red-600" />
               </DropdownMenuItem>
             </>
           ) : (
