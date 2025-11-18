@@ -123,30 +123,36 @@ function SideBarMenu() {
         <ScrollArea className="h-[50vh] sm:h-[70vh] w-full">
           {isModerationRoute ? (
             <>
-              <Link href="/moderator">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <FaHome color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                    Início
-                  </p>
-                </div>
-              </Link>
-              <Link href="/moderator/artisans">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <IoPerson color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Artesãos
-                  </p>
-                </div>
-              </Link>
-              <Link href="/moderator/reports">
-                <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <CgDanger color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Denúncias
-                  </p>
-                </div>
-              </Link>
+              <SheetClose asChild>
+                <Link href="/moderator">
+                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                    <FaHome color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                      Início
+                    </p>
+                  </div>
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link href="/moderator/artisans">
+                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                    <IoPerson color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Artesãos
+                    </p>
+                  </div>
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link href="/moderator/reports">
+                  <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                    <CgDanger color="#ff8c94" size={30} />
+                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                      Denúncias
+                    </p>
+                  </div>
+                </Link>
+              </SheetClose>
 
               <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <SheetClose asChild>
@@ -177,45 +183,53 @@ function SideBarMenu() {
           ) : (
             <>
               {user.isModerator && (
-                <Link href="/moderator">
-                  <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <CgDanger color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
-                      Moderação
-                    </p>
-                    <IoChevronForward size={25} />
-                  </div>
-                </Link>
+                <SheetClose asChild>
+                  <Link href="/moderator">
+                    <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                      <CgDanger color="#ff8c94" size={30} />
+                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6 mr-auto">
+                        Moderação
+                      </p>
+                      <IoChevronForward size={25} />
+                    </div>
+                  </Link>
+                </SheetClose>
               )}
               <DropdownCategories />
               {user.isArtisan && (
-                <Link href={`/artisan/add-product`}>
+                <SheetClose asChild>
+                  <Link href={`/artisan/add-product`}>
+                    <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
+                      <RxPlusCircled color="#ff8c94" size={30} />
+                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                        Adicionar Produto
+                      </p>
+                    </div>
+                  </Link>
+                </SheetClose>
+              )}
+              <SheetClose asChild>
+                <Link href={'/favorites'}>
                   <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                    <RxPlusCircled color="#ff8c94" size={30} />
+                    <FaRegHeart color="#ff8c94" size={30} />
                     <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Adicionar Produto
+                      Favoritos
                     </p>
                   </div>
                 </Link>
-              )}
-              <Link href={'/favorites'}>
+              </SheetClose>
+              {user.isAuthenticated && (
                 <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                  <FaRegHeart color="#ff8c94" size={30} />
-                  <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                    Favoritos
-                  </p>
+                  <SheetClose asChild>
+                    <Link href={'/settings'} className="flex items-center">
+                      <BsGear color="#ff8c94" size={30} />
+                      <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
+                        Configurações
+                      </p>
+                    </Link>
+                  </SheetClose>
                 </div>
-              </Link>
-              <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
-                <SheetClose asChild>
-                  <Link href={'/settings'} className="flex items-center">
-                    <BsGear color="#ff8c94" size={30} />
-                    <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
-                      Configurações
-                    </p>
-                  </Link>
-                </SheetClose>
-              </div>
+              )}
               <div className="w-full cursor-pointer mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex items-center">
                 <IoMdHelpCircleOutline color="#ff8c94" size={30} />
                 <p className="text-midnight font-bold text-lg sm:text-2xl ml-6">
@@ -283,10 +297,9 @@ function DropdownCategories() {
       {isOpen && (
         <div className="flex flex-col animate-slide-in-bottom animate-duration-300 animate-ease-in-out gap-2">
           {categories.map((category, index) => (
-            <SheetClose asChild key={category.nameFilter || 0 + index}>
+            <SheetClose asChild key={category.id || index}>
               <Link
-                href={'/category/' + category.nameFilter}
-                key={category.nameFilter || 0 + index}
+                href={'/category/' + category.id}
                 className="w-full bg-white shadow-md shadow-black/40 rounded-lg p-2 text-midnight font-semibold cursor-pointer"
               >
                 {category.nameExhibit}

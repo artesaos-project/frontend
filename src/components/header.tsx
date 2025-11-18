@@ -8,10 +8,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { useSearch } from '@/context/SearchContext';
 import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { LuDoorOpen } from 'react-icons/lu';
@@ -23,7 +23,8 @@ function Header() {
   const user = useStoreUser((state) => state.user);
   const resetStoreUser = useStoreUser((state) => state.resetStore);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const { query, setQuery } = useSearch();
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   const handleLogoutConfirm = () => {
     // Clear artisan register data if exists
@@ -33,6 +34,18 @@ function Header() {
     setIsLogoutModalOpen(false);
     // Use router.push instead of window.location.reload for smoother navigation
     window.location.href = '/auth/login';
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   return (
@@ -126,12 +139,24 @@ function Header() {
       <div className="relative md:col-span-4">
         <Input
           type="text"
-          value={query}
+          value={searchQuery}
           placeholder="Pesquise aqui..."
-          className="bg-white rounded-3xl pl-10 pr-6 py-7 drop-shadow-lg shadow-black/40"
-          onChange={(e) => setQuery(e.target.value)}
+          className="bg-white rounded-3xl pl-10 pr-14 py-7 drop-shadow-lg shadow-black/40"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <IoIosSearch className="absolute left-1.5 top-[25%]" size={30} />
+        <button
+          onClick={handleSearch}
+          className={`absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-200 rounded-full p-2 ${
+            searchQuery.trim()
+              ? 'bg-midnight text-white hover:bg-midnight/90 cursor-pointer'
+              : 'text-gray-400 cursor-default'
+          }`}
+          aria-label="Buscar"
+          disabled={!searchQuery.trim()}
+        >
+          <IoIosSearch size={28} />
+        </button>
       </div>
     </header>
   );
