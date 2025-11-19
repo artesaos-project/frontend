@@ -1,6 +1,7 @@
 import ModerationHeader from '@/components/features/moderator/moderation-header';
 import Footer from '@/components/footer';
 import '../globals.css';
+import { SearchProvider } from '@/context/SearchContext';
 
 export default function RootLayout({
   children,
@@ -9,9 +10,11 @@ export default function RootLayout({
 }>) {
   return (
     <div className="min-h-screen max-w-screen overflow-x-hidden">
-      <ModerationHeader />
-      {children}
-      <Footer />
+      <SearchProvider>
+        <ModerationHeader />
+        {children}
+        <Footer />
+      </SearchProvider>
     </div>
   );
 }
