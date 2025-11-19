@@ -4,8 +4,6 @@ import CategoriesSlider from '@/components/features/home/categories-slider';
 import NewArtisans from '@/components/features/home/new-artisans';
 import NewsSection from '@/components/features/home/news-section';
 import PopularProducts from '@/components/features/home/popular-products';
-import SearchResults from '@/components/features/home/search-results';
-import { useSearch } from '@/context/SearchContext';
 import { homeApi } from '@/services/api';
 import type { HomeApiResponse } from '@/services/api/home';
 import { useEffect, useState } from 'react';
@@ -18,7 +16,6 @@ export default function Home() {
     followedArtisansProducts: [],
   });
   const [loading, setLoading] = useState(true);
-  const { query } = useSearch();
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -45,18 +42,9 @@ export default function Home() {
         <BannerNovidades />
       </div>
       <div className="flex flex-col w-full px-4 mt-7">
-        {!query ? (
-          <>
-            <PopularProducts
-              products={data.popularProducts}
-              loading={loading}
-            />
-            <NewsSection products={data.recentProducts} loading={loading} />
-            <NewArtisans artisans={data.newArtisans} loading={loading} />
-          </>
-        ) : (
-          <SearchResults query={query} />
-        )}
+        <PopularProducts products={data.popularProducts} loading={loading} />
+        <NewsSection products={data.recentProducts} loading={loading} />
+        <NewArtisans artisans={data.newArtisans} loading={loading} />
       </div>
     </main>
   );

@@ -1,4 +1,5 @@
 'use client';
+import { Pagination } from '@/components/pagination';
 import ProductsList from '@/components/products-list';
 // import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -16,21 +17,13 @@ function Page() {
   const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages] = useState(5); // Mock: será substituído por dados reais do backend
+  const [searchQuery, setSearchQuery] = useState('');
   const params = useParams();
   const categoryId = params.id as string;
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await productApi.search(`categoryId=${categoryId}`);
-        setProducts(response);
-      } catch (err: unknown) {
-        if (err instanceof Error)
-          console.error('Erro ao buscar produtos', err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
 
+  useEffect(() => {
     async function fetchCategories() {
       const { items } = await productApi.getCatalogs();
       const found = items.find((c) => String(c.id) === String(categoryId));
@@ -41,9 +34,29 @@ function Page() {
       }
     }
 
-    fetchProducts();
     fetchCategories();
-  }, []);
+  }, [categoryId]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      try {
+        setLoading(true);
+        let query = `categoryId=${categoryId}`;
+        if (searchQuery.trim()) {
+          query += `&title=${searchQuery.trim()}`;
+        }
+        const response = await productApi.search(query);
+        setProducts(response);
+      } catch (err: unknown) {
+        if (err instanceof Error)
+          console.error('Erro ao buscar produtos', err.message);
+      } finally {
+        setLoading(false);
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, categoryId]);
 
   // const [action, setAction] = useState<'FILTER' | 'SORT' | 'NONE'>('NONE');
   // const [sortSelection, setSortSelection] = useState<
@@ -62,7 +75,7 @@ function Page() {
       <h1 className="text-xl text-sakura font-bold mb-8 text-center">
         {category.nameExhibit}
       </h1>
-      <SearchInput />
+      <SearchInput value={searchQuery} onChange={setSearchQuery} />
       {/* controles de filtro e ordenar comentados para teste dia 1 */}
       {/* <div
         style={{ gap: controlsGap }}
@@ -92,17 +105,37 @@ function Page() {
         products={products}
         loading={loading}
         emptyStateMessage={'Nenhum produto encontrado'}
+        showAll={true}
       />
+      {!loading && products.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+            // TODO: Quando o backend implementar paginação, fazer nova requisição aqui
+            console.log('Página selecionada:', page);
+          }}
+        />
+      )}
     </main>
   );
 }
 
-function SearchInput() {
+function SearchInput({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
   return (
     <div className="relative w-full">
       <Input
         type="text"
         placeholder="Pesquisar produto"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="pl-8 py-5 text-sm border-gray-400 focus-visible:border-gray-600 focus-visible:ring-0"
       />
       <IoIosSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />

@@ -5,8 +5,10 @@ import { PriceStockForm } from '@/components/features/artisan/add-product/price-
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
 import { Button } from '@/components/ui/button';
 import { useProductForm } from '@/hooks/use-product-form';
+import { productSchema } from '@/lib/schemas/product-schema';
 import { catalogApi, productApi } from '@/services/api';
 import { ProductForm } from '@/types/product-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
@@ -45,6 +47,7 @@ const AddProductPage = () => {
     control,
     formState: { errors },
   } = useForm<ProductForm>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: '',
       description: '',

@@ -80,8 +80,8 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
         setFavoriteProducts((prev) => prev.filter((p) => p.id !== productId));
         toast.warning('Produto removido dos favoritos');
       } else {
-        const response: FavoritesApiResponse = await favoritesApi.getAll();
-        setFavoriteProducts(response.data.products);
+        // Optimistically update - product details will be fetched when user visits favorites page
+        // This avoids unnecessary API call fetching all favorites
         toast.success('Produto adicionado aos favoritos');
       }
     } catch (err) {
