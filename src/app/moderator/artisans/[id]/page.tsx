@@ -18,24 +18,25 @@ function Page() {
   const [artisan, setArtisan] = useState<artisanDetails | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchArtisans = async () => {
-      try {
-        const result = await artisanApi.getApplication(artisanId);
-        setArtisan(result);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          if (error.message === 'UNAUTHORIZED') {
-            router.replace('/auth/login');
-          }
-          console.error('Erro ao buscar artesãos: ', error.message);
+  const fetchArtisans = async () => {
+    try {
+      const result = await artisanApi.getApplication(artisanId);
+      setArtisan(result);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === 'UNAUTHORIZED') {
+          router.replace('/auth/login');
         }
-        console.error('Erro ao buscar artesãos: ', error);
+        console.error('Erro ao buscar artesãos: ', error.message);
       }
-    };
+      console.error('Erro ao buscar artesãos: ', error);
+    }
+  };
 
+  useEffect(() => {
     fetchArtisans();
-  }, [artisanId, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleApprove = () => {
     try {
