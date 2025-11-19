@@ -1,47 +1,37 @@
 'use client';
 
 import LoadingScreen from '@/components/common/loading-screen';
-import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
+import Pagination from '@/components/common/pagination';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
 import ReportsTable from '@/components/features/moderator/reports/reports-table';
 import { reportApi } from '@/services/api';
-import { Report, ReportFilterType } from '@/types/moderator-report';
+import { Report } from '@/types/moderator-report';
 import { useCallback, useEffect, useState } from 'react';
 
 function ReportsPage() {
-  const [searchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState<ReportFilterType>('all');
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 15,
+    total: 0,
+    totalPages: 1,
+  });
 
   const fetchReports = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      const params: {
-        isSolved?: boolean;
-        isDeleted?: boolean;
-        targetType?: 'product' | 'productRating' | 'user';
-      } = {};
+      const result = await reportApi.listReports({
+        page: currentPage,
+        limit: 15,
+      });
 
-      if (activeFilter === 'resolved') {
-        params.isSolved = true;
-      } else if (activeFilter === 'deleted') {
-        params.isDeleted = true;
-      } else if (activeFilter === 'product') {
-        params.targetType = 'product';
-      } else if (activeFilter === 'review') {
-        params.targetType = 'productRating';
-      } else if (activeFilter === 'user') {
-        params.targetType = 'user';
-      }
-
-      const result = await reportApi.listReports(params);
-
-      if (Array.isArray(result)) {
-        setReports(result);
+      if (result && result.data && Array.isArray(result.data)) {
+        setReports(result.data);
+        setPagination(result.pagination);
       } else {
-        console.warn('API did not return an array:', result);
         setReports([]);
       }
 
@@ -50,47 +40,32 @@ function ReportsPage() {
       setReports([]);
       setIsLoading(false);
     }
-  }, [activeFilter]);
+  }, [currentPage]);
 
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
 
-  const handleSearchChange = () => {};
-  const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter as ReportFilterType);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 200, behavior: 'smooth' });
   };
 
-  const filteredReports = reports.filter((report) => {
-    if (searchTerm === '') return true;
-
-    const searchLower = searchTerm.toLowerCase();
-    const reasonMatch = report.reason.toLowerCase().includes(searchLower);
-    const descriptionMatch = report.description
-      .toLowerCase()
-      .includes(searchLower);
-    const idMatch = report.id.toLowerCase().includes(searchLower);
-
-    return reasonMatch || descriptionMatch || idMatch;
-  });
-
-  if (isLoading) {
+  if (isLoading && reports.length === 0) {
     return <LoadingScreen />;
   }
 
   return (
     <div className="w-full h-full overflow-x-hidden">
       <ModerationTitle title="Denúncias" />
-      <div className="w-2/3 mx-auto">
-        <ModerationSearchBar
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          activeFilter={activeFilter}
-          onFilterChange={handleFilterChange}
-          variant="reports"
+      <ReportsTable reports={reports} isLoading={isLoading} />
+      <div className="my-8">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
         />
       </div>
-      <ReportsTable reports={filteredReports} isLoading={isLoading} />
     </div>
   );
 }
