@@ -11,13 +11,13 @@ export const productApi = {
 
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
-  create: (productData: ProductCreateData) =>
+  create: (productData: unknown) =>
     apiRequest<{ message?: string }>(`/products`, {
       method: 'POST',
       body: productData,
     }),
 
-  update: (id: string, productData: ProductUpdateData) =>
+  update: (id: string, productData: unknown) =>
     apiRequest<{ message?: string }>(`/products/${id}`, {
       method: 'PUT',
       body: productData,

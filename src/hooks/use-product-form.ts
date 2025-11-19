@@ -1,5 +1,5 @@
 import { uploadApi } from '@/services/api';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 export type PhotoType = File | { id: string; url: string };
 export const useProductForm = () => {
   const [photos, setPhotos] = useState<PhotoType[]>([]);
@@ -9,7 +9,6 @@ export const useProductForm = () => {
   const [coverPhotoId, setCoverPhotoId] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [deletedPhotos, setDeletedPhotos] = useState<string[]>([]);
-  const uploadedFilesRef = useRef<Set<File>>(new Set());
 
   const addApiPhotos = useCallback(
     (apiPhotos: { id: string; url: string }[], coverPhotoUrl?: string) => {
@@ -92,11 +91,11 @@ export const useProductForm = () => {
   useEffect(() => {
     const uploadPhotos = async () => {
       const filesToUpload = photos.filter(
-        (photo) =>
-          photo instanceof File && !uploadedFilesRef.current.has(photo),
+        (photo) => photo instanceof File,
       ) as File[];
 
       if (filesToUpload.length === 0) {
+        setPhotoIds([]);
         return;
       }
 
@@ -107,12 +106,9 @@ export const useProductForm = () => {
         for (const file of filesToUpload) {
           const result = await uploadImage(file);
           uploadedPhotoIds.push(result.attachmentId);
-          uploadedFilesRef.current.add(file);
         }
-
-        setPhotoIds((prev) => [...prev, ...uploadedPhotoIds]);
-        setNewPhotos((prev) => [...prev, ...uploadedPhotoIds]);
-
+        setPhotoIds(uploadedPhotoIds);
+        setNewPhotos(uploadedPhotoIds);
         if (!coverPhotoId && uploadedPhotoIds.length > 0) {
           setCoverPhotoId(uploadedPhotoIds[0]);
         }

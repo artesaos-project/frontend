@@ -27,13 +27,11 @@ function Header() {
   const router = useRouter();
 
   const handleLogoutConfirm = () => {
-    // Clear artisan register data if exists
     localStorage.removeItem('artisan-register');
-    // Reset Zustand store - this will handle its own localStorage cleanup
+    localStorage.removeItem('loginStore');
     resetStoreUser();
     setIsLogoutModalOpen(false);
-    // Use router.push instead of window.location.reload for smoother navigation
-    window.location.href = '/auth/login';
+    window.location.reload();
   };
 
   const handleSearch = () => {
