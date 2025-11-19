@@ -23,26 +23,13 @@ const REASON_TRANSLATIONS: Record<string, string> = {
 };
 
 function getReportedName(report: Report): string {
-  // Para denúncias de usuário
-  if (report.ReportUser && report.ReportUser.length > 0) {
-    const reportedUser = report.ReportUser[0];
-    return reportedUser?.ReportedUserEntity?.name || 'Usuário Desconhecido';
-  }
-
-  // Para denúncias de produto
   if (report.product) {
     const productName = report.product.ProductEntity?.name;
     const artisanName = report.product.ProductEntity?.artisan?.user?.name;
     return productName || artisanName || 'Produto Desconhecido';
   }
 
-  // Para denúncias de avaliação
-  if (report.productRating) {
-    const userName = report.productRating.ProductRatingEntity?.user?.name;
-    return userName || 'Usuário Desconhecido';
-  }
-
-  return 'Desconhecido';
+  return 'Produto Desconhecido';
 }
 
 function StatusLabel({ isSolved }: { isSolved: boolean }) {

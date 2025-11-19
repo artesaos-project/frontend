@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
-import { FaCheck, FaUser } from 'react-icons/fa6';
+import { FaCheck } from 'react-icons/fa6';
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import { GoClockFill } from 'react-icons/go';
 import { IoFilter } from 'react-icons/io5';
-import { MdHourglassEmpty, MdRateReview, MdShoppingBag } from 'react-icons/md';
+import { MdHourglassEmpty, MdShoppingBag } from 'react-icons/md';
 
 interface FilterButtonsProps {
   activeFilter?: string;
@@ -52,19 +52,9 @@ const reportFilterButtons = [
     icon: <FiChevronDown />,
   },
   {
-    key: 'user',
-    label: 'Usuários',
-    icon: <FaUser className="text-blue-500" />,
-  },
-  {
     key: 'product',
     label: 'Produtos',
     icon: <MdShoppingBag className="text-purple-600" />,
-  },
-  {
-    key: 'review',
-    label: 'Avaliações',
-    icon: <MdRateReview className="text-orange-500" />,
   },
   {
     key: 'resolved',
@@ -115,25 +105,11 @@ function ModerationFilterButtons({
           {variant === 'reports' ? (
             <>
               <DropdownMenuItem
-                onClick={() => onFilterChange?.('user')}
-                className="hover:bg-gray-200 transition cursor-pointer flex justify-between items-center focus:outline-none focus-visible:outline-none px-2 py-1 rounded-md"
-              >
-                Usuários
-                <FaUser className="text-blue-500" />
-              </DropdownMenuItem>
-              <DropdownMenuItem
                 onClick={() => onFilterChange?.('product')}
                 className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
               >
                 Produtos
                 <MdShoppingBag className="text-purple-600" />
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onFilterChange?.('review')}
-                className="hover:bg-gray-200 transition cursor-pointer focus:outline-none flex justify-between items-center focus-visible:outline-none px-2 py-1 rounded-md"
-              >
-                Avaliações
-                <MdRateReview className="text-orange-500" />
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onFilterChange?.('resolved')}

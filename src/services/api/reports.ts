@@ -3,11 +3,7 @@ import { apiRequest } from '../api-service';
 
 export interface ListReportsParams {
   isSolved?: boolean | string;
-  isDeleted?: boolean | string;
   reporterId?: string;
-  targetType?: 'product' | 'productRating' | 'user';
-  take?: number;
-  skip?: number;
   page?: number;
   limit?: number;
 }
@@ -45,26 +41,14 @@ export const reportApi = {
     });
   },
 
-  deleteReport: (reportId: string) => {
-    return apiRequest<{ message: string }>(`/reports/${reportId}`, {
-      method: 'DELETE',
-    });
-  },
-
   listReports: (params?: ListReportsParams) => {
     const queryParams = new URLSearchParams();
 
     if (params?.isSolved !== undefined) {
       queryParams.append('isSolved', String(params.isSolved));
     }
-    if (params?.isDeleted !== undefined) {
-      queryParams.append('isDeleted', String(params.isDeleted));
-    }
     if (params?.reporterId) {
       queryParams.append('reporterId', params.reporterId);
-    }
-    if (params?.targetType) {
-      queryParams.append('targetType', params.targetType);
     }
     if (params?.page !== undefined && !isNaN(params.page)) {
       queryParams.append('page', params.page.toString());
