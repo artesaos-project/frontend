@@ -5,6 +5,7 @@ import ModerateReportButton from '@/components/features/moderator/reports/modera
 import ModerateReportInstructions from '@/components/features/moderator/reports/moderate-report-instructions';
 import { productApi, reportApi } from '@/services/api';
 import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -41,7 +42,10 @@ interface BackendReport {
   isSolved: boolean;
   createdAt: string;
   updatedAt: string;
-  product: ProductData | null;
+  product: {
+    id: string;
+    image: string | null;
+  };
   reporter?: {
     id: string;
     name: string;
@@ -121,11 +125,9 @@ function Page() {
     try {
       setIsProcessing(true);
 
-      // Ao excluir o produto, as denúncias relacionadas são removidas automaticamente (cascade delete)
       await productApi.delete(productId);
-      toast.success('Produto e denúncias relacionadas excluídos com sucesso!');
+      toast.success('Produto denunciado excluido com sucesso!');
 
-      // Retorna para a página anterior após exclusão
       setTimeout(() => {
         router.back();
       }, 1000);
@@ -195,7 +197,11 @@ function Page() {
               )}
             </div>
             <div className="pl-5 pr-7.5 pb-5">
-              <ModerateReportInstructions />
+              <ModerateReportInstructions
+                onArchiveClick={handleSolveReport}
+                onExcludeClick={handleExcludeProduct}
+                disabled={report?.isSolved || isProcessing}
+              />
             </div>
           </div>
           <div className="w-full p-5 border border-neutral-300 mt-7.5 rounded-xl">
@@ -205,7 +211,17 @@ function Page() {
             <div className="flex flex-col sm:flex-row gap-10 sm:gap-0">
               <div className="flex flex-col gap-2">
                 <div className="w-[215px] h-[175px] border border-sakura rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
-                  <p className="text-gray-400 text-sm">Sem imagem</p>
+                  {report.product?.image ? (
+                    <Image
+                      width={200}
+                      height={200}
+                      src={report.product.image}
+                      alt="Imagem do produto denunciado"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <p className="text-gray-400 text-sm">Sem imagem</p>
+                  )}
                 </div>
                 <Link
                   href={
