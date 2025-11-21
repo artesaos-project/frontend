@@ -29,11 +29,6 @@ const REASON_TRANSLATIONS: Record<string, string> = {
   OFFENSIVE_CONTENT: 'Conteúdo Ofensivo',
 };
 
-interface ProductData {
-  id: string;
-  name?: string;
-}
-
 interface BackendReport {
   id: string;
   reporterId: string;
@@ -200,7 +195,6 @@ function Page() {
               <ModerateReportInstructions
                 onArchiveClick={handleSolveReport}
                 onExcludeClick={handleExcludeProduct}
-                disabled={report?.isSolved || isProcessing}
               />
             </div>
           </div>

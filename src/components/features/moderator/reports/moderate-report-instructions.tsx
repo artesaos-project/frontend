@@ -3,13 +3,11 @@ import ModerateArtisanButton from './moderate-report-button';
 interface ModerateReportInstructionsProps {
   onArchiveClick?: () => void;
   onExcludeClick?: () => void;
-  disabled?: boolean;
 }
 
 function ModerateReportInstructions({
   onArchiveClick,
   onExcludeClick,
-  disabled = false,
 }: ModerateReportInstructionsProps) {
   return (
     <div className="flex flex-col">
@@ -32,11 +30,7 @@ function ModerateReportInstructions({
         </div> */}
 
         <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
-          <ModerateArtisanButton
-            variant={'exclude'}
-            onClick={onExcludeClick}
-            disabled={disabled}
-          />
+          <ModerateArtisanButton variant={'exclude'} onClick={onExcludeClick} />
           <span>
             Exclui a publicação denunciada da plataforma e marca como resolvida.
           </span>
@@ -55,11 +49,7 @@ function ModerateReportInstructions({
           </span>
         </div> */}
         <div className="flex gap-4 ml-7 mr-8.5 pt-2 items-center">
-          <ModerateArtisanButton
-            variant={'archive'}
-            onClick={onArchiveClick}
-            disabled={disabled}
-          />
+          <ModerateArtisanButton variant={'archive'} onClick={onArchiveClick} />
           <span>
             Marca a denúncia como resolvida sem excluir, mantendo apenas o
             histórico para consulta.
