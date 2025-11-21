@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
 
-function page() {
+function Page() {
   const router = useRouter();
   const { user } = useStoreUser();
 
@@ -60,4 +60,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

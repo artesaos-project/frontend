@@ -1,21 +1,19 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { productApi, reviewsApi, uploadApi } from '@/services/api';
 import { ApiProduct } from '@/types/product';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { MessageSquare, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
-import { LuVideo } from 'react-icons/lu';
 import { TbTrash } from 'react-icons/tb';
 import { toast } from 'sonner';
-import { AxiosError } from 'axios';
 
 const StarRating = ({
   rating,
@@ -52,7 +50,6 @@ export default function ProductEvaluationPage() {
   const [product, setProduct] = useState<ApiProduct | null>(null);
   const [media, setMedia] = useState<File[]>([]);
   const [reviewText, setReviewText] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -119,7 +116,6 @@ export default function ProductEvaluationPage() {
       setRating(0);
       setReviewText('');
       setMedia([]);
-      setIsAnonymous(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
 
       setTimeout(() => {
@@ -213,12 +209,12 @@ export default function ProductEvaluationPage() {
 
         <div className="mt-8">
           <h3 className="mb-4 text-lg font-semibold text-center">
-            Adicione foto(s) e/ou vídeo(s)
+            Adicione foto(s)
           </h3>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*,video/*"
+            accept="image/*"
             multiple
             className="hidden"
             onChange={handleFilesChange}
@@ -233,35 +229,24 @@ export default function ProductEvaluationPage() {
               <FaRegImage size={32} />
               <span>Foto</span>
             </div>
-            <div className="flex flex-row items-center text-sakura gap-2">
-              <LuVideo size={32} />
-              <span>Vídeo</span>
-            </div>
           </button>
 
           <div className="flex flex-wrap gap-4 mb-4">
-            {media.map((file, idx) => {
-              const url = URL.createObjectURL(file);
-              return file.type.startsWith('image/') ? (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={file.name}
-                  className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
-                  onClick={() => handleRemoveOne(idx)}
-                  onLoad={() => URL.revokeObjectURL(url)}
-                />
-              ) : (
-                <video
-                  key={idx}
-                  src={url}
-                  controls
-                  className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
-                  onClick={() => handleRemoveOne(idx)}
-                  onLoadedData={() => URL.revokeObjectURL(url)}
-                />
-              );
-            })}
+            {media
+              .filter((file) => file.type.startsWith('image/'))
+              .map((file, idx) => {
+                const url = URL.createObjectURL(file);
+                return (
+                  <img
+                    key={idx}
+                    src={url}
+                    alt={file.name}
+                    className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
+                    onClick={() => handleRemoveOne(idx)}
+                    onLoad={() => URL.revokeObjectURL(url)}
+                  />
+                );
+              })}
           </div>
 
           <div className="w-full flex flex-col gap-5">
@@ -281,17 +266,6 @@ export default function ProductEvaluationPage() {
               Remover todas as mídias
             </Button>
           </div>
-        </div>
-
-        <div className="mt-8 flex items-center">
-          <Checkbox
-            id="anonymous"
-            checked={isAnonymous}
-            onCheckedChange={(checked) => setIsAnonymous(!!checked)}
-          />
-          <Label htmlFor="anonymous" className="ml-2">
-            Avaliar anonimamente
-          </Label>
         </div>
 
         <Button
