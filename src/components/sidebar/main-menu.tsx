@@ -1,4 +1,5 @@
 import useStoreUser from '@/hooks/use-store-user';
+import { useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaRegHeart } from 'react-icons/fa';
@@ -6,6 +7,7 @@ import { IoMdHelpCircleOutline } from 'react-icons/io';
 import { IoChevronForward } from 'react-icons/io5';
 import { RxPlusCircled } from 'react-icons/rx';
 import { TbLogout2 } from 'react-icons/tb';
+import { HelpDialog } from '../common/help-dialog';
 import { DropdownCategories } from './dropdown-categories';
 import { MenuItem, MenuItemNoLink } from './menu-item';
 
@@ -15,6 +17,7 @@ interface MainMenuProps {
 
 export function MainMenu({ onLogoutClick }: MainMenuProps) {
   const user = useStoreUser((state) => state.user);
+  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
 
   return (
     <>
@@ -54,6 +57,12 @@ export function MainMenu({ onLogoutClick }: MainMenuProps) {
       <MenuItemNoLink
         icon={<IoMdHelpCircleOutline color="#ff8c94" size={30} />}
         label="Suporte e Ajuda"
+        onClick={() => setIsHelpDialogOpen(true)}
+      />
+
+      <HelpDialog
+        isOpen={isHelpDialogOpen}
+        onClose={() => setIsHelpDialogOpen(false)}
       />
 
       {user.isAuthenticated && (

@@ -41,7 +41,7 @@ function Page() {
   const handleApprove = () => {
     try {
       artisanApi.approve(artisanId);
-      toast.success('Usuário aprovado com successo!');
+      toast.success('Usuário aprovado com sucesso!');
       router.push('/moderator/artisans');
     } catch (error) {
       toast.error('Erro ao aprovar artesão!');
@@ -111,7 +111,11 @@ function Page() {
             </label>
             <input
               type="text"
-              value={artisan?.zipCode || ''}
+              value={
+                artisan?.zipCode.slice(0, 5) +
+                  '-' +
+                  artisan?.zipCode.slice(5) || ''
+              }
               readOnly
               className="w-full border border-sakura rounded-lg p-1 hidden md:block"
             />
@@ -149,13 +153,13 @@ function Page() {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  value={artisan?.artisanPhone?.slice(0, 2) || ''}
+                  value={'(' + artisan?.artisanPhone?.slice(3, 5) + ')' || ''}
                   readOnly
-                  className="max-w-11 border text-sm border-sakura rounded-lg p-1.5 "
+                  className="max-w-11 border text-sm text-center border-sakura rounded-lg p-1.5 "
                 />
                 <input
                   type="text"
-                  value={artisan?.artisanPhone?.slice(2, 11) || ''}
+                  value={artisan?.artisanPhone?.slice(5, 14) || ''}
                   readOnly
                   className="max-w-52 border text-sm border-sakura rounded-lg p-1.5 "
                 />
@@ -250,7 +254,7 @@ function Page() {
               <label className="font-semibold">Data de Criação</label>
               <input
                 type="text"
-                value={artisan?.sicabRegistrationDate || ''}
+                value={artisan?.sicabRegistrationDate?.slice(0, 10) || ''}
                 readOnly
                 className="w-full border border-sakura p-1.5 rounded-lg"
               />
@@ -259,7 +263,7 @@ function Page() {
               <label className="font-semibold">Data de Validade</label>
               <input
                 type="text"
-                value={artisan?.sicabValidUntil || ''}
+                value={artisan?.sicabValidUntil?.slice(0, 10) || ''}
                 readOnly
                 className="w-full border border-sakura p-1.5 rounded-lg"
               />
@@ -308,7 +312,6 @@ function Page() {
         />
         <div className="flex flex-col mt-2 gap-2">
           <p className="font-semibold">Mídias</p>
-          <p className="text-sm">clique para ampliar</p>
           <div className="flex gap-2 flex-col md:flex-row flex-wrap">
             {artisan?.photos && artisan.photos.length > 0 ? (
               artisan.photos.map((photo, index) => (

@@ -29,7 +29,10 @@ interface StatusLabelProps {
 }
 
 function StatusLabel({ artisan, isPostponed }: StatusLabelProps) {
-  if (isPostponed || artisan.formStatus === 'POSTPONED') {
+  // Cadastro incompleto: qualquer coisa que NÃO seja 'SUBMITTED'
+  const isIncomplete = isPostponed || artisan.formStatus !== 'SUBMITTED';
+
+  if (isIncomplete) {
     return (
       <div className="flex items-center gap-2.5">
         <MdHourglassEmpty className="text-midnight" size={16} />
