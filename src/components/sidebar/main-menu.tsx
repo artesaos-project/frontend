@@ -21,6 +21,15 @@ export function MainMenu({ onLogoutClick }: MainMenuProps) {
 
   return (
     <>
+      {(user.applicationStatus === 'NOT_ARTISAN' ||
+        user.applicationStatus === 'NOT_FINISHED') &&
+        !user.isModerator && (
+          <MenuItem
+            href="auth/register"
+            label="Tornar-se Artesão"
+            icon={<RxPlusCircled color="#ff8c94" size={30} />}
+          />
+        )}
       {user.isModerator && (
         <MenuItem
           href="/moderator"
