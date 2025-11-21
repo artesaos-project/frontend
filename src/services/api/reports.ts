@@ -22,7 +22,7 @@ export const reportApi = {
   reportProduct: (data: {
     productId: string;
     reason: string;
-    details: string;
+    description: string;
   }) =>
     apiRequest<{ message: string }>('/reports/products', {
       method: 'POST',
