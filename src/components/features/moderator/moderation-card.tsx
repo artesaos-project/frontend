@@ -6,6 +6,7 @@ interface ModerationCardProps {
   description: string;
   pending: number;
   finished: number;
+  href: string;
 }
 
 function ModerationCard({
@@ -13,6 +14,7 @@ function ModerationCard({
   description,
   pending,
   finished,
+  href,
 }: ModerationCardProps) {
   return (
     <div className="w-52 flex flex-col text-midnight justify-center text-sm items-center text-center px-4 py-7 ring-2 ring-black/10 shadow-md shadow-black/10 rounded-xl hover:transform hover:scale-105 duration-300">
@@ -27,10 +29,7 @@ function ModerationCard({
         <p className="text-sm">{finished}</p>
       </div>
       <Button asChild className="w-36 h-7 mt-4 rounded-2xl text-sm bg-midnight">
-        <Link
-          href={`/moderator/artisans`}
-          className=" flex flex-col items-center text-xs"
-        >
+        <Link href={href} className=" flex flex-col items-center text-xs">
           Ver Todos
         </Link>
       </Button>
