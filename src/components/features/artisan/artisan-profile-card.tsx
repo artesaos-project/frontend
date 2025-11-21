@@ -5,8 +5,9 @@ import { useFollowContext } from '@/context/follow-context';
 import useStoreUser from '@/hooks/use-store-user';
 import handleContact from '@/lib/utils/contact-utils';
 import { handleShare } from '@/lib/utils/share-utils';
-import { artisanApi } from '@/services/api';
+import { artisanApi, artisanReviewsApi } from '@/services/api';
 import { ArtisanProfile } from '@/types/artisan';
+import { Review } from '@/types/review';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { FaPlus, FaWhatsapp } from 'react-icons/fa';
@@ -15,7 +16,6 @@ import { LuPencil } from 'react-icons/lu';
 import { PiPlusCircleLight } from 'react-icons/pi';
 import ProductReviews from '../product/product-reviews';
 import SearchBar from '../register/search-bar';
-import artisanProductMock from './artisan-product-mock.json';
 import ProductArtisan from './product-artisan';
 import ProfileDescription from './product-description';
 import ProfileInfo from './profile-info';
@@ -26,7 +26,7 @@ const ArtisanProfileCard = () => {
     'produtos',
   );
   const params = useParams();
-  const userName = params.id as string;
+  const routeUserName = params.id as string;
   const [isArtisan, setIsArtisan] = useState(false);
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,6 +37,9 @@ const ArtisanProfileCard = () => {
   const { user } = useStoreUser();
   const route = useRouter();
   const { isFollowing, toggleFollow } = useFollowContext();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
 
   const getLoggedUserId = useCallback(() => user.userId, [user.userId]);
 
@@ -52,7 +55,7 @@ const ArtisanProfileCard = () => {
     const fetchArtisanProfile = async () => {
       try {
         setLoading(true);
-        const data = await artisanApi.getProfile(userName);
+        const data = await artisanApi.getProfile(routeUserName);
         setArtisan(data);
 
         const loggedUserId = getLoggedUserId();
@@ -72,8 +75,28 @@ const ArtisanProfileCard = () => {
       }
     };
 
-    if (userName) fetchArtisanProfile();
-  }, [userName, getLoggedUserId]);
+    if (routeUserName) fetchArtisanProfile();
+  }, [routeUserName, getLoggedUserId]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!artisan?.userId || activeTab !== 'avaliacoes') return;
+      try {
+        setReviewsLoading(true);
+        setReviewsError(null);
+        const res = await artisanReviewsApi.getByArtisan(artisan.userId, {
+          page: 1,
+          limit: 10,
+        });
+        setReviews(res.data);
+      } catch {
+        setReviewsError('Falha ao carregar avaliações');
+      } finally {
+        setReviewsLoading(false);
+      }
+    };
+    fetchReviews();
+  }, [artisan?.userId, activeTab]);
 
   if (loading) {
     return (
@@ -92,17 +115,14 @@ const ArtisanProfileCard = () => {
     );
   }
 
-  const filteredReviews = artisan.userId
-    ? artisanProductMock.productReviews.filter(
-        (review) => review.authorId === artisan.userId,
-      )
-    : artisanProductMock.productReviews;
-
   const bgcolor = 'bg-[#A6E3E9]';
   const textColor = 'text-[#1F3A4D]';
 
+  const artisanInternalId = artisan.userId;
+  const artisanDisplayName = artisan.artisanName;
+
   const handleFollow = () => {
-    toggleFollow(artisan.userId);
+    toggleFollow(artisanInternalId);
   };
 
   const handleAddProduct = () => {
@@ -132,15 +152,15 @@ const ArtisanProfileCard = () => {
           {!isArtisan && (
             <Button
               variant={
-                isFollowing(artisan.userId)
+                isFollowing(artisanInternalId)
                   ? 'outlineSakura'
                   : 'outlineMidnight'
               }
               onClick={handleFollow}
               className="flex gap-2 items-center px-4 py-1 w-full"
             >
-              {isFollowing(artisan.userId) ? 'Seguindo' : 'Seguir'}
-              {isFollowing(artisan.userId) ? (
+              {isFollowing(artisanInternalId) ? 'Seguindo' : 'Seguir'}
+              {isFollowing(artisanInternalId) ? (
                 <IoIosArrowDown size={16} />
               ) : (
                 <FaPlus size={16} />
@@ -183,8 +203,8 @@ const ArtisanProfileCard = () => {
               className="min-w-[300px] border-none font-bold"
               onClick={() =>
                 handleShare(
-                  `${artisan.artisanName}`,
-                  `Confira os produtos do ${artisan.artisanName}`,
+                  `${artisanDisplayName}`,
+                  `Confira os produtos do ${artisanDisplayName}`,
                   window.location.href,
                 )
               }
@@ -234,7 +254,7 @@ const ArtisanProfileCard = () => {
 
         <div className="flex w-full bg-white items-center justify-center p-4">
           <ProductArtisan
-            artistId={artisan.userId}
+            artistId={artisanInternalId}
             visibleCount={visibleProducts}
             onTotalChange={setTotalProducts}
             isEdit={isArtisan}
@@ -258,12 +278,21 @@ const ArtisanProfileCard = () => {
         className={`justify-center bg-white ${activeTab === 'avaliacoes' ? 'block' : 'hidden'}`}
       >
         <div className="justify-center items-center mx-auto lg:w-7/12">
-          {filteredReviews.length > 0 ? (
-            <ProductReviews />
-          ) : (
+          {reviewsLoading && (
+            <div className="py-8 text-center text-gray-500">
+              Carregando avaliações...
+            </div>
+          )}
+          {reviewsError && (
+            <div className="py-8 text-center text-red-500">{reviewsError}</div>
+          )}
+          {!reviewsLoading && !reviewsError && reviews.length === 0 && (
             <div className="text-center py-8 text-gray-500">
               <p>Este artesão ainda não possui avaliações.</p>
             </div>
+          )}
+          {!reviewsLoading && !reviewsError && reviews.length > 0 && (
+            <ProductReviews reviews={reviews} hideEvaluateButton />
           )}
         </div>
       </div>
