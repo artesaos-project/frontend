@@ -9,7 +9,6 @@ import { artisanApi } from '@/services/api';
 import { ArtisanProfile } from '@/types/artisan';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { CiCircleMore } from 'react-icons/ci';
 import { FaPlus, FaWhatsapp } from 'react-icons/fa';
 import { IoIosArrowDown, IoMdShareAlt } from 'react-icons/io';
 import { LuPencil } from 'react-icons/lu';
@@ -120,7 +119,7 @@ const ArtisanProfileCard = () => {
 
   return (
     <div className={`${bgcolor} pt-6 mx-auto shadow-md `}>
-      <div className="flex flex-row justify-center gap-6">
+      <div className="flex flex-row justify-center gap-6 px-4">
         <div className="flex flex-col justify-center items-center gap-2">
           <ProfilePicture
             artisan={artisan}
@@ -151,8 +150,10 @@ const ArtisanProfileCard = () => {
         </div>
       </div>
 
-      <div className={`${textColor}`}>
-        <ProfileDescription description={artisan.bio} />
+      <div className="flex justify-center">
+        <div className={`${textColor} lg:w-2/3 flex justify-center mt-4 px-4`}>
+          <ProfileDescription description={artisan.bio} />
+        </div>
       </div>
 
       <div className="flex flex-col gap-y-4 md:flex-row justify-center items-center mt-6 md:space-x-4 font-bold text-midnight">
@@ -174,13 +175,6 @@ const ArtisanProfileCard = () => {
               <PiPlusCircleLight size={20} color="salmon" />
               Adicionar Produtos
             </Button>
-            <Button
-              variant="outlineMidnight"
-              className="min-w-[300px] border-none font-bold"
-            >
-              <CiCircleMore size={20} color="salmon" />
-              Saber mais
-            </Button>
           </>
         ) : (
           <>
@@ -197,13 +191,6 @@ const ArtisanProfileCard = () => {
             >
               Compartilhar perfil
               <IoMdShareAlt size={20} color="#E0001E" />
-            </Button>
-            <Button
-              variant="outlineMidnight"
-              className="min-w-[300px] border-none font-bold"
-            >
-              <CiCircleMore size={20} color="#E0001E" />
-              Saber mais sobre o artista
             </Button>
             <Button
               variant="olivineOutline"
