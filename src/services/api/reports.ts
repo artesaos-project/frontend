@@ -1,12 +1,21 @@
+import { Report } from '@/types/moderator-report';
 import { apiRequest } from '../api-service';
 
 export interface ListReportsParams {
   isSolved?: boolean | string;
-  isDeleted?: boolean | string;
   reporterId?: string;
-  targetType?: 'product' | 'productRating' | 'user';
-  take?: number;
-  skip?: number;
+  page?: number;
+  limit?: number;
+}
+
+export interface ListReportsResponse {
+  data: Report[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export const reportApi = {
@@ -38,26 +47,20 @@ export const reportApi = {
     if (params?.isSolved !== undefined) {
       queryParams.append('isSolved', String(params.isSolved));
     }
-    if (params?.isDeleted !== undefined) {
-      queryParams.append('isDeleted', String(params.isDeleted));
-    }
     if (params?.reporterId) {
       queryParams.append('reporterId', params.reporterId);
     }
-    if (params?.targetType) {
-      queryParams.append('targetType', params.targetType);
+    if (params?.page !== undefined && !isNaN(params.page)) {
+      queryParams.append('page', params.page.toString());
     }
-    if (params?.take !== undefined && !isNaN(params.take)) {
-      queryParams.append('take', params.take.toString());
-    }
-    if (params?.skip !== undefined && !isNaN(params.skip)) {
-      queryParams.append('skip', params.skip.toString());
+    if (params?.limit !== undefined && !isNaN(params.limit)) {
+      queryParams.append('limit', params.limit.toString());
     }
 
     const queryString = queryParams.toString();
     const url = queryString ? `/reports?${queryString}` : '/reports';
 
-    return apiRequest<unknown>(url, {
+    return apiRequest<ListReportsResponse>(url, {
       method: 'GET',
     });
   },

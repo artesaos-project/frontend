@@ -7,18 +7,6 @@ export type ReportReason =
   | 'PROHIBITED_ITEM_SALE_OR_DISCLOSURE'
   | 'INAPPROPRIATE_CONTENT';
 
-export interface ProductRating {
-  reportId: string;
-  productRatingId: string;
-  reporterId: string;
-  ProductRatingEntity?: {
-    user?: {
-      name?: string;
-      id?: string;
-    };
-  };
-}
-
 export interface ReportedProduct {
   productId: string;
   reportId: string;
@@ -33,33 +21,14 @@ export interface ReportedProduct {
   };
 }
 
-export interface ReportedUser {
-  reportId: string;
-  reportedUserId: string;
-  reporterId: string;
-  ReportedUserEntity?: {
-    name?: string;
-    id?: string;
-  };
-}
-
 export interface Report {
   id: string;
   reporterId: string;
   reason: ReportReason;
   description: string;
   createdAt: Date | { _seconds: number; _nanoseconds: number };
-  isDeleted: boolean;
   isSolved: boolean;
   product: ReportedProduct | null;
-  productRating: ProductRating | null;
-  ReportUser: ReportedUser[];
 }
 
-export type ReportFilterType =
-  | 'all'
-  | 'user'
-  | 'product'
-  | 'review'
-  | 'resolved'
-  | 'deleted';
+export type ReportFilterType = 'all' | 'product' | 'resolved';

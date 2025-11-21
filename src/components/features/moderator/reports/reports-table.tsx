@@ -13,6 +13,7 @@ interface ReportsTableProps {
 
 const REASON_TRANSLATIONS: Record<string, string> = {
   COPYRIGHT_VIOLATION: 'Violação de Direitos Autorais',
+  OFFENSIVE_CONTENT: 'Conteúdo Ofensivo',
   INAPPROPRIATE_LANGUAGE: 'Linguagem Inapropriada',
   OTHER: 'Outro',
   FALSE_OR_MISLEADING_INFORMATION: 'Informação Falsa ou Enganosa',
@@ -22,26 +23,13 @@ const REASON_TRANSLATIONS: Record<string, string> = {
 };
 
 function getReportedName(report: Report): string {
-  // Para denúncias de usuário
-  if (report.ReportUser && report.ReportUser.length > 0) {
-    const reportedUser = report.ReportUser[0];
-    return reportedUser?.ReportedUserEntity?.name || 'Usuário Desconhecido';
-  }
-
-  // Para denúncias de produto
   if (report.product) {
     const productName = report.product.ProductEntity?.name;
     const artisanName = report.product.ProductEntity?.artisan?.user?.name;
     return productName || artisanName || 'Produto Desconhecido';
   }
 
-  // Para denúncias de avaliação
-  if (report.productRating) {
-    const userName = report.productRating.ProductRatingEntity?.user?.name;
-    return userName || 'Usuário Desconhecido';
-  }
-
-  return 'Desconhecido';
+  return 'Produto Desconhecido';
 }
 
 function StatusLabel({ isSolved }: { isSolved: boolean }) {
@@ -73,13 +61,19 @@ function ReportsTable({ reports, isLoading }: ReportsTableProps) {
 
   return (
     <div className="w-72 sm:w-2/3 mx-auto my-20 h-fit rounded-md border border-neutral-300 text-midnight">
-      <div className="bg-midnight w-full rounded-t-sm py-2 px-4 text-sm flex items-center text-white font-semibold">
-        <label>Lista de Denúncias</label>
+      <div className="bg-midnight w-full rounded-t-sm py-2 px-3 flex gap-4 text-sm text-white font-semibold">
+        <p>Nº</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 items-center px-3 w-full">
+          <p>Denunciado</p>
+          <p className="hidden md:inline text-center">Motivo</p>
+          <p className="text-end md:mr-15">Status</p>
+        </div>
       </div>
+
       <div className="flex flex-col">
         {reports.length === 0 ? (
           <p className="text-center py-4 text-sm text-neutral-400">
-            Nenhum relatório encontrado.
+            Nenhuma denúncia encontrada.
           </p>
         ) : (
           reports.map((report, index) => (
@@ -94,11 +88,11 @@ function ReportsTable({ reports, isLoading }: ReportsTableProps) {
                     {index}
                   </div>
                 </div>
-                <div className="grid grid-cols-3 items-center px-3 w-full">
+                <div className="grid grid-cols-2 md:grid-cols-3 items-center px-3 w-full">
                   <p className="truncate text-left">
                     {getReportedName(report)}
                   </p>
-                  <p className="hidden md:inline text-center whitespace-nowrap">
+                  <p className="hidden md:inline text-center whitespace-nowrap truncate">
                     {REASON_TRANSLATIONS[report.reason] || report.reason}
                   </p>
                   <div className="flex gap-2 md:gap-7 items-center justify-end">

@@ -3,10 +3,10 @@
 import ModerationTitle from '@/components/features/moderator/moderation-title';
 import ModerateReportButton from '@/components/features/moderator/reports/moderate-report-button';
 import ModerateReportInstructions from '@/components/features/moderator/reports/moderate-report-instructions';
-import { reportApi } from '@/services/api';
+import { productApi, reportApi } from '@/services/api';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { toast } from 'sonner';
@@ -25,7 +25,13 @@ const REASON_TRANSLATIONS: Record<string, string> = {
   OFF_TOPIC_OR_IRRELEVANT: 'Fora do Tópico ou Irrelevante',
   PROHIBITED_ITEM_SALE_OR_DISCLOSURE: 'Venda ou Divulgação de Item Proibido',
   INAPPROPRIATE_CONTENT: 'Conteúdo Inapropriado',
+  OFFENSIVE_CONTENT: 'Conteúdo Ofensivo',
 };
+
+interface ProductData {
+  id: string;
+  name?: string;
+}
 
 interface BackendReport {
   id: string;
@@ -33,12 +39,9 @@ interface BackendReport {
   reason: string;
   description: string;
   isSolved: boolean;
-  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
-  product: unknown | null;
-  productRating: unknown | null;
-  ReportUser: unknown[];
+  product: ProductData | null;
   reporter?: {
     id: string;
     name: string;
@@ -55,6 +58,7 @@ function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchReportDetails = async () => {
@@ -62,6 +66,7 @@ function Page() {
         setIsLoading(true);
         setError(null);
         const result = await reportApi.getReportById(reportId);
+        console.log('Detalhes da denúncia:', result);
 
         if (!result || typeof result !== 'object') {
           throw new Error('Dados inválidos retornados pela API');
@@ -90,9 +95,43 @@ function Page() {
       await reportApi.solveReport(reportId);
       toast.success('Denúncia marcada como resolvida!');
       setReport({ ...report, isSolved: true });
+      setTimeout(() => {
+        router.back();
+      }, 1000);
     } catch {
       toast.error('Erro ao resolver denúncia');
-    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleExcludeProduct = async () => {
+    if (!report || isProcessing) return;
+
+    if (!report.product) {
+      toast.error('Produto não encontrado nesta denúncia');
+      return;
+    }
+
+    const productId = report.product.id;
+    if (!productId) {
+      toast.error('ID do produto não encontrado');
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+
+      // Ao excluir o produto, as denúncias relacionadas são removidas automaticamente (cascade delete)
+      await productApi.delete(productId);
+      toast.success('Produto e denúncias relacionadas excluídos com sucesso!');
+
+      // Retorna para a página anterior após exclusão
+      setTimeout(() => {
+        router.back();
+      }, 1000);
+    } catch (deleteError) {
+      console.error('Erro ao excluir produto:', deleteError);
+      toast.error('Erro ao excluir produto');
       setIsProcessing(false);
     }
   };
@@ -148,6 +187,10 @@ function Page() {
                     variant="archive"
                     onClick={handleSolveReport}
                   />
+                  <ModerateReportButton
+                    variant="exclude"
+                    onClick={handleExcludeProduct}
+                  />
                 </div>
               )}
             </div>
@@ -164,19 +207,25 @@ function Page() {
                 <div className="w-[215px] h-[175px] border border-sakura rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
                   <p className="text-gray-400 text-sm">Sem imagem</p>
                 </div>
-                <button className="bg-midnight flex gap-2 justify-center items-center rounded-full w-full text-white text-xs font-semibold py-1.5 cursor-pointer hover:text-midnight hover:bg-white border border-midnight transition">
-                  ACESSAR
-                  <FiExternalLink size="14" />
-                </button>
+                <Link
+                  href={
+                    report.product?.id ? `/product/${report.product.id}` : '#'
+                  }
+                >
+                  <button className="bg-midnight flex gap-2 justify-center items-center rounded-full w-full text-white text-xs font-semibold py-1.5 cursor-pointer hover:text-midnight hover:bg-white border border-midnight transition">
+                    ACESSAR
+                    <FiExternalLink size="14" />
+                  </button>
+                </Link>
               </div>
               <div className="flex flex-col text-xs text-midnight font-semibold">
-                <div className="flex flex-col lg:flex-row gap-4 pl-5">
+                <div className="flex flex-col gap-4 pl-5">
                   <div className="flex flex-col gap-2">
                     <label>Id</label>
                     <input
                       readOnly
-                      value={report?.id?.substring(0, 8) || ''}
-                      className="border border-sakura rounded-md h-8.5 max-w-28 px-2"
+                      value={report?.id || ''}
+                      className="border border-sakura rounded-md truncate h-8.5 max-w-72 px-2"
                       title={report?.id || ''}
                     />
                   </div>
@@ -184,37 +233,9 @@ function Page() {
                     <label>Tipo de Denúncia</label>
                     <input
                       readOnly
-                      value={
-                        report?.product
-                          ? 'Produto'
-                          : report?.productRating
-                            ? 'Avaliação'
-                            : report?.ReportUser?.length
-                              ? 'Usuário'
-                              : 'Desconhecido'
-                      }
+                      value="Produto"
                       className="border border-sakura rounded-md h-8.5 max-w-72 px-2"
                     />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label>Alvo</label>
-                    <input
-                      readOnly
-                      value="N/A"
-                      className="border border-sakura w-full rounded-md h-8.5 max-w-63 px-2"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2 pl-5">
-                  <div className="flex flex-col gap-2 mt-4">
-                    <label>Telefone/Whatsapp</label>
-                    <div className="flex gap-1">
-                      <input
-                        readOnly
-                        value={report?.reporter?.phone || ''}
-                        className="border border-sakura rounded-md h-8.5 w-full px-2"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
