@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Criarte',
-  description: 'Crirarte -  Uma plataforma de arte para artesãos',
+  title: 'Arteiros Caraguá',
+  description: 'Arteiros Caraguá - Uma plataforma de arte para artesãos',
 };
 
 export default function RootLayout({

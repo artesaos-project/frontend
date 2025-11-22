@@ -59,6 +59,8 @@ function StepRegister({
         userPhoto: login.user.avatar,
         userEmail: login.user.email,
         artisanUserName: login.user.artisanUsername,
+        applicationId: login.user.applicationId,
+        applicationStatus: login.user.applicationStatus,
         isAuthenticated: true,
         postnedApplication: undefined,
         expiresAt: new Date(login.session.expiresAt).getTime(),

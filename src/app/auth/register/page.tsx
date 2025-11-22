@@ -54,12 +54,16 @@ function SignUp() {
 
   useEffect(() => {
     if (step === null) setStep(1);
-    else if (user.postnedApplication === false && step < 11) {
+    else if (
+      (user.applicationStatus === 'APPROVED' ||
+        user.applicationStatus === 'PENDING') &&
+      step < 11
+    ) {
       setStep(11);
     } else if (
-      (artisanApplicationId ||
+      (user.applicationStatus === 'NOT_FINISHED' ||
         user.applicationId ||
-        user.postnedApplication === true) &&
+        artisanApplicationId) &&
       step < 4
     ) {
       setStep(4);
@@ -72,6 +76,7 @@ function SignUp() {
     step,
     user.applicationId,
     user.postnedApplication,
+    user.applicationStatus,
   ]);
 
   const handleError = (msg?: string) => {
@@ -107,6 +112,10 @@ function SignUp() {
         state: useArtisanRegister.getState().estado,
       });
 
+      useStoreUser.getState().setUser({
+        ...user,
+        applicationStatus: 'PENDING',
+      });
       setStep(11);
       resetArtisan();
     } catch (error: unknown) {

@@ -76,6 +76,16 @@ function Header() {
         )}
         {user.isAuthenticated && (
           <Dialog>
+            {(user.applicationStatus === 'NOT_ARTISAN' ||
+              user.applicationStatus === 'NOT_FINISHED') && (
+              <Button
+                variant={'outlineSakura'}
+                onClick={() => router.push('auth/register')}
+                className="hidden md:flex mr-2 text-xs mt-2"
+              >
+                TORNAR-SE ARTESÃO
+              </Button>
+            )}
             <DialogTrigger asChild>
               <DialogHeader>
                 <DialogTitle>
@@ -109,6 +119,17 @@ function Header() {
                       </Link>
                       <Separator className="my-2" />
                     </div>
+                  )}
+                  {user.isArtisan && (
+                    <Button
+                      variant={'outlineSakura'}
+                      onClick={() =>
+                        router.push(`/artisan/${user.artisanUserName}`)
+                      }
+                      className="text-xl mt-2"
+                    >
+                      Meu Perfil
+                    </Button>
                   )}
                   <Button
                     variant={'ghost'}

@@ -18,8 +18,11 @@ export const authApi = {
     ),
 
   complete: (profileData: CreateArtisanPayload) =>
-    apiRequest(`/artisan-applications/${profileData.applicationId}/complete`, {
-      method: 'POST',
-      body: profileData,
-    }),
+    apiRequest<{ message: string }>(
+      `/artisan-applications/${profileData.applicationId}/complete`,
+      {
+        method: 'POST',
+        body: profileData,
+      },
+    ),
 };

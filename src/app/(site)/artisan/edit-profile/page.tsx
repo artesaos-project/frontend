@@ -94,7 +94,7 @@ function EditProfilePage() {
       const updatedData: Partial<updateMyProfilePayload> = {
         name: data.name,
         email: data.email,
-        phone: data.ddd && data.phone ? `(${data.ddd}) ${data.phone}` : '',
+        phone: data.ddd && data.phone ? `${data.ddd}${data.phone}` : '',
         avatarId: photoIds[0] || null,
       };
 

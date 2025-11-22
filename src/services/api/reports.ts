@@ -22,12 +22,28 @@ export const reportApi = {
   reportProduct: (data: {
     productId: string;
     reason: string;
-    details: string;
-  }) =>
-    apiRequest<{ message: string }>('/reports/products', {
+    details?: string;
+  }) => {
+    // Mapeia 'details' para 'description' que o backend espera
+    const body: {
+      productId: string;
+      reason: string;
+      description?: string;
+    } = {
+      productId: data.productId,
+      reason: data.reason,
+    };
+
+    // Só adiciona description se details tiver conteúdo
+    if (data.details && data.details.trim() !== '') {
+      body.description = data.details;
+    }
+
+    return apiRequest<{ message: string }>('/reports/products', {
       method: 'POST',
-      body: data,
-    }),
+      body,
+    });
+  },
 
   getReportById: (id: string) => {
     return apiRequest<unknown>(`/reports/${id}`, {

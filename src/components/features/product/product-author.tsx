@@ -55,9 +55,14 @@ const AuthorProfile = ({
             <div className="flex flex-col gap-1">
               <button
                 onClick={onViewProfile}
-                className="text-left transition-colors"
+                className="text-left transition-colors cursor-pointer"
               >
-                <h1 className="font-semibold text-midnight text-lg">{name}</h1>
+                <h1
+                  className="font-semibold text-midnight truncate w-48 lg:w-60 text-lg"
+                  title={name}
+                >
+                  {name}
+                </h1>
                 <p className="text-midnight text-md">@{authorUserName}</p>
               </button>
 
