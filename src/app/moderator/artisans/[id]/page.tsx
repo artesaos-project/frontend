@@ -99,7 +99,7 @@ function Page() {
             <label className=" font-semibold text-sm">Foto de perfil</label>
             <div className="w-56 h-44 border border-sakura rounded-lg">
               <Image
-                src={artisan?.artisanAvatarUrl || '/default-avatar.webp'}
+                src={artisan?.artisanAvatarUrl || '/placeholder-avatar.svg'}
                 width={172}
                 height={172}
                 alt="artisan-avatar"

@@ -93,7 +93,7 @@ function CategoriesSlider() {
             </SwiperSlide>
           ))}
           {loading &&
-            Array.from({ length: 8 }).map((_, index) => (
+            Array.from({ length: 16 }).map((_, index) => (
               <SwiperSlide key={index}>
                 <div className="flex flex-col mt-4 mb-10 items-center justify-center gap-2 cursor-pointer">
                   <div className="animate-pulse flex flex-col gap-4">

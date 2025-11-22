@@ -23,7 +23,7 @@ function NewsSection({
   }
   return (
     <SectionStructure title="Novidades">
-      <BaseSwiper cards={products} loading={loading}>
+      <BaseSwiper key="news" navElId="news" cards={products} loading={loading}>
         {(product) => {
           return (
             <BaseCard>

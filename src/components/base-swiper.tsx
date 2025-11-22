@@ -11,14 +11,24 @@ type CardsSwiperProps<T> = {
   cards: T[];
   loading: boolean;
   children: (card: T) => React.ReactNode;
+  navElId: string;
 };
 
-function BaseSwiper<T>({ cards, loading, children }: CardsSwiperProps<T>) {
+function BaseSwiper<T>({
+  cards,
+  loading,
+  navElId,
+  children,
+}: CardsSwiperProps<T>) {
   return (
     <div className="w-[100vw] sm:w-[95vw] pb-4 sm:px-6 md:w-full relative mt-4">
       {/* Custom navigation buttons */}
-      <div className="swiper-button-prev absolute -ml-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
-      <div className="swiper-button-next absolute -mr-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
+      <div
+        className={`swiper-button-prev-${navElId} absolute -ml-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
+      />
+      <div
+        className={`swiper-button-next-${navElId} absolute -mr-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
+      />
       <div>
         <Swiper
           style={{ paddingBottom: 10 }}
@@ -55,8 +65,8 @@ function BaseSwiper<T>({ cards, loading, children }: CardsSwiperProps<T>) {
           }}
           onSwiper={() => {}}
           navigation={{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: `.swiper-button-next-${navElId}`,
+            prevEl: `.swiper-button-prev-${navElId}`,
           }}
           onPaginationShow={() => {}}
           pagination={{
@@ -82,7 +92,7 @@ function BaseSwiper<T>({ cards, loading, children }: CardsSwiperProps<T>) {
             <SwiperSlide key={index}>{children(card)}</SwiperSlide>
           ))}
           {loading &&
-            Array.from({ length: 4 }).map((_, index) => (
+            Array.from({ length: 10 }).map((_, index) => (
               <SwiperSlide key={`skeleton-${index}`}>
                 <CardSkeleton />
               </SwiperSlide>
