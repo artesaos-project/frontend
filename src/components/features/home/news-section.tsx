@@ -12,18 +12,18 @@ function NewsSection({
   products: ApiProduct[];
   loading: boolean;
 }) {
-  if (!products || products.length === 0) {
-    return (
-      <SectionStructure title="Novidades">
-        <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
-          Nenhum produto disponível no momento.
-        </p>
-      </SectionStructure>
-    );
-  }
+  // if (!products || products.length === 0) {
+  //   return (
+  //     <SectionStructure title="Novidades">
+  //       <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+  //         Nenhum produto disponível no momento.
+  //       </p>
+  //     </SectionStructure>
+  //   );
+  // }
   return (
     <SectionStructure title="Novidades">
-      <BaseSwiper cards={products} loading={loading}>
+      <BaseSwiper key="news" navElId="news" cards={products} loading={loading}>
         {(product) => {
           return (
             <BaseCard>

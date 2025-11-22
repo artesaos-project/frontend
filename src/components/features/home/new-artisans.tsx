@@ -9,21 +9,26 @@ function NewArtisans({
   artisans,
   loading,
 }: {
-  artisans?: NewArtisanCardProps[];
+  artisans: NewArtisanCardProps[];
   loading: boolean;
 }) {
-  if (!artisans || artisans.length === 0) {
-    return (
-      <SectionStructure title="Novos Artistas">
-        <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
-          Nenhum artista novo no momento.
-        </p>
-      </SectionStructure>
-    );
-  }
+  // if (!artisans || artisans.length === 0) {
+  //   return (
+  //     <SectionStructure title="Novos Artistas">
+  //       <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+  //         Nenhum artista novo no momento.
+  //       </p>
+  //     </SectionStructure>
+  //   );
+  // }
   return (
     <SectionStructure title="Novos Artistas">
-      <BaseSwiper cards={artisans} loading={loading}>
+      <BaseSwiper
+        key={'aa'}
+        navElId="new-artisans"
+        cards={artisans}
+        loading={loading}
+      >
         {(artisan) => {
           if (artisan)
             return (
@@ -32,7 +37,7 @@ function NewArtisans({
                   <Image
                     width={200}
                     height={100}
-                    src={artisan.avatar || '/placeholder-artisan-avatar.svg'}
+                    src={artisan.avatar || '/placeholder-avatar.svg'}
                     alt="Imagem do Produto"
                     className="rounded-lg object-cover h-34 md:h-40 w-full"
                     quality={75}

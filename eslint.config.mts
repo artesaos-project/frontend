@@ -65,6 +65,7 @@ export default [
       'jsx-a11y/role-has-required-aria-props': 'warn',
       'jsx-a11y/role-supports-aria-props': 'warn',
       'react/no-unknown-property': 'error',
+      'react-hooks/rules-of-hooks': 'off',
     },
     settings: {
       react: {

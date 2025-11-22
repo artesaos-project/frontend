@@ -82,7 +82,7 @@ function CardReview({
         <div className="flex flex-row items-start">
           <Image
             className="rounded-full h-15 w-15 object-cover mx-2"
-            src={avatar || '/default-avatar.webp'}
+            src={avatar || '/placeholder-avatar.svg'}
             alt={`Imagem do usuario ${name}`}
             width={58}
             height={58}

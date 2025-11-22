@@ -10,7 +10,7 @@ export function UserProfile() {
   return (
     <div className="w-full mb-5 bg-white shadow-md shadow-black/40 rounded-lg p-4 flex gap-2">
       <Image
-        src={user.userPhoto ?? '/default-avatar.webp'}
+        src={user.userPhoto ?? '/placeholder-avatar.svg'}
         alt="User Avatar"
         width={110}
         height={110}
