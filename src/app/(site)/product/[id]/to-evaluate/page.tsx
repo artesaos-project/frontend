@@ -1,21 +1,19 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { productApi, reviewsApi, uploadApi } from '@/services/api';
 import { ApiProduct } from '@/types/product';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { MessageSquare, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
-import { LuVideo } from 'react-icons/lu';
 import { TbTrash } from 'react-icons/tb';
 import { toast } from 'sonner';
-import { AxiosError } from 'axios';
 
 const StarRating = ({
   rating,
@@ -52,8 +50,8 @@ export default function ProductEvaluationPage() {
   const [product, setProduct] = useState<ApiProduct | null>(null);
   const [media, setMedia] = useState<File[]>([]);
   const [reviewText, setReviewText] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const [rating, setRating] = useState<number>(0);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const id = params?.id as string;
@@ -64,17 +62,37 @@ export default function ProductEvaluationPage() {
 
   const apiProduto = async (id: string) => {
     try {
+      setIsLoadingProduct(true);
       const response = await productApi.getById(id);
       setProduct(response);
     } catch (error) {
       console.error('Erro ao buscar produto', error);
-      toast.error('Erro ao carregar produto. Tente novamente.');
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Produto não encontrado.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao carregar produto. Tente novamente.');
+      }
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
-    setMedia((prev) => [...prev, ...files]);
+
+    // Validar tamanho dos arquivos (máximo 10MB por arquivo)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = files.filter((file) => {
+      if (file.size > maxSize) {
+        toast.error(`O arquivo ${file.name} é muito grande. Máximo 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    setMedia((prev) => [...prev, ...validFiles]);
   };
 
   const handleRemoveAll = () => {
@@ -92,16 +110,26 @@ export default function ProductEvaluationPage() {
       }
 
       const attachmentIds: string[] = [];
-      try {
-        for (const file of media) {
-          const uploadResponse = await uploadApi.uploadFile(file);
-          if (uploadResponse?.attachmentId) {
-            attachmentIds.push(uploadResponse.attachmentId);
-          }
+
+      // Upload de arquivos em paralelo para melhor performance
+      if (media.length > 0) {
+        try {
+          const uploadPromises = media.map((file) =>
+            uploadApi.uploadFile(file),
+          );
+          const uploadResponses = await Promise.all(uploadPromises);
+
+          uploadResponses.forEach((response) => {
+            if (response?.attachmentId) {
+              attachmentIds.push(response.attachmentId);
+            }
+          });
+        } catch (error) {
+          console.error('Erro ao fazer upload dos arquivos', error);
+          throw new Error(
+            'Erro ao fazer upload dos arquivos. Tente novamente.',
+          );
         }
-      } catch (error) {
-        console.error('Erro ao fazer upload do arquivo', error);
-        toast.error('Erro ao fazer upload do arquivo. Tente novamente.');
       }
 
       const payload = {
@@ -119,7 +147,6 @@ export default function ProductEvaluationPage() {
       setRating(0);
       setReviewText('');
       setMedia([]);
-      setIsAnonymous(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
 
       setTimeout(() => {
@@ -138,7 +165,21 @@ export default function ProductEvaluationPage() {
     },
   });
 
-  if (!product) return <div>Produto não encontrado</div>;
+  if (isLoadingProduct) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Carregando produto...</div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Produto não encontrado</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -213,12 +254,12 @@ export default function ProductEvaluationPage() {
 
         <div className="mt-8">
           <h3 className="mb-4 text-lg font-semibold text-center">
-            Adicione foto(s) e/ou vídeo(s)
+            Adicione foto(s)
           </h3>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*,video/*"
+            accept="image/*"
             multiple
             className="hidden"
             onChange={handleFilesChange}
@@ -233,35 +274,24 @@ export default function ProductEvaluationPage() {
               <FaRegImage size={32} />
               <span>Foto</span>
             </div>
-            <div className="flex flex-row items-center text-sakura gap-2">
-              <LuVideo size={32} />
-              <span>Vídeo</span>
-            </div>
           </button>
 
           <div className="flex flex-wrap gap-4 mb-4">
-            {media.map((file, idx) => {
-              const url = URL.createObjectURL(file);
-              return file.type.startsWith('image/') ? (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={file.name}
-                  className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
-                  onClick={() => handleRemoveOne(idx)}
-                  onLoad={() => URL.revokeObjectURL(url)}
-                />
-              ) : (
-                <video
-                  key={idx}
-                  src={url}
-                  controls
-                  className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
-                  onClick={() => handleRemoveOne(idx)}
-                  onLoadedData={() => URL.revokeObjectURL(url)}
-                />
-              );
-            })}
+            {media
+              .filter((file) => file.type.startsWith('image/'))
+              .map((file, idx) => {
+                const url = URL.createObjectURL(file);
+                return (
+                  <img
+                    key={idx}
+                    src={url}
+                    alt={file.name}
+                    className="w-36 h-32 object-cover rounded-lg border cursor-pointer"
+                    onClick={() => handleRemoveOne(idx)}
+                    onLoad={() => URL.revokeObjectURL(url)}
+                  />
+                );
+              })}
           </div>
 
           <div className="w-full flex flex-col gap-5">
@@ -281,17 +311,6 @@ export default function ProductEvaluationPage() {
               Remover todas as mídias
             </Button>
           </div>
-        </div>
-
-        <div className="mt-8 flex items-center">
-          <Checkbox
-            id="anonymous"
-            checked={isAnonymous}
-            onCheckedChange={(checked) => setIsAnonymous(!!checked)}
-          />
-          <Label htmlFor="anonymous" className="ml-2">
-            Avaliar anonimamente
-          </Label>
         </div>
 
         <Button

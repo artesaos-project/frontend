@@ -9,6 +9,7 @@ export const uploadApi = {
       method: 'POST',
       body: formData,
       isFormData: true,
+      withCredentials: true,
     });
   },
 };

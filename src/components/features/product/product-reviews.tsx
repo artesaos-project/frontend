@@ -154,11 +154,22 @@ function CardReview({
   );
 }
 
-function ProductReviews() {
+interface ProductReviewsProps {
+  reviews?: Review[];
+  hideEvaluateButton?: boolean;
+  onEvaluate?: () => void;
+}
+
+function ProductReviews({
+  reviews: injectedReviews,
+  hideEvaluateButton = false,
+  onEvaluate,
+}: ProductReviewsProps) {
   const router = useRouter();
   const params = useParams();
   const Id = params?.id as string;
-  const { reviews } = useProductReviews(Id);
+  const shouldFetch = !injectedReviews;
+  const { reviews: fetchedReviews } = useProductReviews(shouldFetch ? Id : '');
 
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [activeFilter, setActiveFilter] = useState<number>(0);
@@ -170,7 +181,7 @@ function ProductReviews() {
     setReviewsToShow(3);
   };
 
-  const reviewsData = reviews || [];
+  const reviewsData = (injectedReviews ?? fetchedReviews) || [];
 
   const isEmpty = reviewsData.length === 0;
 
@@ -193,6 +204,7 @@ function ProductReviews() {
   };
 
   const handleEvaluateClick = () => {
+    if (onEvaluate) return onEvaluate();
     router.push(`/product/${Id}/to-evaluate`);
   };
 
@@ -226,16 +238,18 @@ function ProductReviews() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full mt-6">
-        <Button
-          className="w-8/12"
-          variant="olivineOutline"
-          onClick={handleEvaluateClick}
-        >
-          <MdOutlineRateReview size={20} />
-          Avaliar Produto
-        </Button>
-      </div>
+      {!hideEvaluateButton && (
+        <div className="flex justify-center items-center w-full mt-6">
+          <Button
+            className="w-8/12"
+            variant="olivineOutline"
+            onClick={handleEvaluateClick}
+          >
+            <MdOutlineRateReview size={20} />
+            Avaliar Produto
+          </Button>
+        </div>
+      )}
 
       <div className="flex flex-col space-y-4 items-center justify-center">
         {filteredReviews.slice(0, reviewsToShow).map((review, index) => (
