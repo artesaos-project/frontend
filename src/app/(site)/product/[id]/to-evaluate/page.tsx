@@ -81,7 +81,7 @@ export default function ProductEvaluationPage() {
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
-    
+
     // Validar tamanho dos arquivos (máximo 10MB por arquivo)
     const maxSize = 10 * 1024 * 1024; // 10MB
     const validFiles = files.filter((file) => {
@@ -91,7 +91,7 @@ export default function ProductEvaluationPage() {
       }
       return true;
     });
-    
+
     setMedia((prev) => [...prev, ...validFiles]);
   };
 
@@ -110,7 +110,7 @@ export default function ProductEvaluationPage() {
       }
 
       const attachmentIds: string[] = [];
-      
+
       // Upload de arquivos em paralelo para melhor performance
       if (media.length > 0) {
         try {
@@ -118,7 +118,7 @@ export default function ProductEvaluationPage() {
             uploadApi.uploadFile(file),
           );
           const uploadResponses = await Promise.all(uploadPromises);
-          
+
           uploadResponses.forEach((response) => {
             if (response?.attachmentId) {
               attachmentIds.push(response.attachmentId);
@@ -137,7 +137,6 @@ export default function ProductEvaluationPage() {
         rating,
         comment: reviewText || null,
         imageIds: attachmentIds.length ? attachmentIds : null,
-        isAnonymous,
       };
 
       return reviewsApi.createReview(id, payload);

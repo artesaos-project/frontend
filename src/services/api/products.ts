@@ -8,9 +8,10 @@ export const productApi = {
       withCredentials: true,
     }),
 
-  getById: (id: string) => apiRequest<ApiProduct>(`/products/${id}`, {
-    withCredentials: true,
-  }),
+  getById: (id: string) =>
+    apiRequest<ApiProduct>(`/products/${id}`, {
+      withCredentials: true,
+    }),
 
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
