@@ -4,9 +4,13 @@ import { apiRequest } from '../api-service';
 
 export const productApi = {
   getByArtisan: (artisanId: string) =>
-    apiRequest<ApiProduct[]>(`/products/?artisanId=${artisanId}`),
+    apiRequest<ApiProduct[]>(`/products/?artisanId=${artisanId}`, {
+      withCredentials: true,
+    }),
 
-  getById: (id: string) => apiRequest<ApiProduct>(`/products/${id}`),
+  getById: (id: string) => apiRequest<ApiProduct>(`/products/${id}`, {
+    withCredentials: true,
+  }),
 
   getAll: () => apiRequest<ApiProduct[]>(`/products`),
 
