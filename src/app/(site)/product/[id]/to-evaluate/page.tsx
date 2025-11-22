@@ -51,6 +51,7 @@ export default function ProductEvaluationPage() {
   const [media, setMedia] = useState<File[]>([]);
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState<number>(0);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const id = params?.id as string;
@@ -61,17 +62,37 @@ export default function ProductEvaluationPage() {
 
   const apiProduto = async (id: string) => {
     try {
+      setIsLoadingProduct(true);
       const response = await productApi.getById(id);
       setProduct(response);
     } catch (error) {
       console.error('Erro ao buscar produto', error);
-      toast.error('Erro ao carregar produto. Tente novamente.');
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Produto não encontrado.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao carregar produto. Tente novamente.');
+      }
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
-    setMedia((prev) => [...prev, ...files]);
+
+    // Validar tamanho dos arquivos (máximo 10MB por arquivo)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = files.filter((file) => {
+      if (file.size > maxSize) {
+        toast.error(`O arquivo ${file.name} é muito grande. Máximo 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    setMedia((prev) => [...prev, ...validFiles]);
   };
 
   const handleRemoveAll = () => {
@@ -89,16 +110,26 @@ export default function ProductEvaluationPage() {
       }
 
       const attachmentIds: string[] = [];
-      try {
-        for (const file of media) {
-          const uploadResponse = await uploadApi.uploadFile(file);
-          if (uploadResponse?.attachmentId) {
-            attachmentIds.push(uploadResponse.attachmentId);
-          }
+
+      // Upload de arquivos em paralelo para melhor performance
+      if (media.length > 0) {
+        try {
+          const uploadPromises = media.map((file) =>
+            uploadApi.uploadFile(file),
+          );
+          const uploadResponses = await Promise.all(uploadPromises);
+
+          uploadResponses.forEach((response) => {
+            if (response?.attachmentId) {
+              attachmentIds.push(response.attachmentId);
+            }
+          });
+        } catch (error) {
+          console.error('Erro ao fazer upload dos arquivos', error);
+          throw new Error(
+            'Erro ao fazer upload dos arquivos. Tente novamente.',
+          );
         }
-      } catch (error) {
-        console.error('Erro ao fazer upload do arquivo', error);
-        toast.error('Erro ao fazer upload do arquivo. Tente novamente.');
       }
 
       const payload = {
@@ -134,7 +165,21 @@ export default function ProductEvaluationPage() {
     },
   });
 
-  if (!product) return <div>Produto não encontrado</div>;
+  if (isLoadingProduct) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Carregando produto...</div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Produto não encontrado</div>
+      </div>
+    );
+  }
 
   return (
     <div>
