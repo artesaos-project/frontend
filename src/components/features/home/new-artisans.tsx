@@ -12,15 +12,15 @@ function NewArtisans({
   artisans: NewArtisanCardProps[];
   loading: boolean;
 }) {
-  // if (!artisans || artisans.length === 0) {
-  //   return (
-  //     <SectionStructure title="Novos Artistas">
-  //       <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
-  //         Nenhum artista novo no momento.
-  //       </p>
-  //     </SectionStructure>
-  //   );
-  // }
+  if (!artisans || artisans.length === 0) {
+    return (
+      <SectionStructure title="Novos Artistas">
+        <p className="py-14 text-center bg-gray-50 border border-black/2 m-2 rounded-lg text-gray-500">
+          Nenhum artista novo no momento.
+        </p>
+      </SectionStructure>
+    );
+  }
   return (
     <SectionStructure title="Novos Artistas">
       <BaseSwiper
