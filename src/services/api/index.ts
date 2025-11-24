@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export { adminUsersApi } from './admin-users';
 export { artisanReviewsApi } from './artisan-reviews';
 export { artisanApi } from './artisans';

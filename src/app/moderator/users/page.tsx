@@ -9,9 +9,9 @@ import { useModeratorGuard } from '@/hooks/use-moderator-guard';
 import { adminUsersApi } from '@/services/api';
 import { AdminListedUser } from '@/types/admin-user';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
-function Page() {
+function UsersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { hasHydrated } = useModeratorGuard();
@@ -86,6 +86,14 @@ function Page() {
         </div>
       )}
     </div>
+  );
+}
+
+function Page() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <UsersContent />
+    </Suspense>
   );
 }
 

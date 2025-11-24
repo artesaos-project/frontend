@@ -1,6 +1,7 @@
 import {
-    ChangeUserPasswordInput,
-    ListAdminUsersInput
+  AdminListedUser,
+  ChangeUserPasswordInput,
+  ListAdminUsersInput,
 } from '@/types/admin-user';
 import { apiRequest } from '../api-service';
 
@@ -11,7 +12,15 @@ export const adminUsersApi = {
     queryParams.append('limit', params.limit.toString());
 
     const url = `/admin/users?${queryParams.toString()}`;
-    const response = await apiRequest<{ data: any[]; pagination: any }>(url);
+    const response = await apiRequest<{
+      data: AdminListedUser[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+      };
+    }>(url);
 
     return {
       users: response.data,
@@ -20,9 +29,12 @@ export const adminUsersApi = {
   },
 
   changeUserPassword: (data: ChangeUserPasswordInput) => {
-    return apiRequest<{ message: string }>(`/admin/users/${data.userId}/reset-password`, {
-      method: 'PUT',
-      body: { password: data.newPassword },
-    });
+    return apiRequest<{ message: string }>(
+      `/admin/users/${data.userId}/reset-password`,
+      {
+        method: 'PUT',
+        body: { password: data.newPassword },
+      },
+    );
   },
 };

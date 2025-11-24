@@ -8,7 +8,9 @@ export const userApi = {
   }): Promise<void> =>
     apiRequest<void>('/users/me/password', { method: 'PATCH', body: data }),
 
-  updateProvisionalPassword: (data: { newPassword: string }): Promise<{ success: boolean }> =>
+  updateProvisionalPassword: (data: {
+    newPassword: string;
+  }): Promise<{ success: boolean }> =>
     apiRequest<{ success: boolean }>('/users/me/provisional-password', {
       method: 'PUT',
       body: data,
