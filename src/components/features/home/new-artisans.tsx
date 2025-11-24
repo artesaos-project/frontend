@@ -9,7 +9,7 @@ function NewArtisans({
   artisans,
   loading,
 }: {
-  artisans?: NewArtisanCardProps[];
+  artisans: NewArtisanCardProps[];
   loading: boolean;
 }) {
   if (!artisans || artisans.length === 0) {
@@ -23,7 +23,12 @@ function NewArtisans({
   }
   return (
     <SectionStructure title="Novos Artistas">
-      <BaseSwiper cards={artisans} loading={loading}>
+      <BaseSwiper
+        key={'aa'}
+        navElId="new-artisans"
+        cards={artisans}
+        loading={loading}
+      >
         {(artisan) => {
           if (artisan)
             return (
@@ -32,7 +37,7 @@ function NewArtisans({
                   <Image
                     width={200}
                     height={100}
-                    src={artisan.avatar || '/placeholder-artisan-avatar.svg'}
+                    src={artisan.avatar || '/placeholder-avatar.svg'}
                     alt="Imagem do Produto"
                     className="rounded-lg object-cover h-34 md:h-40 w-full"
                     quality={75}

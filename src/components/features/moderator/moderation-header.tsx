@@ -102,7 +102,7 @@ function ModerationHeader() {
                     <DialogHeader>
                       <DialogTitle>
                         <Image
-                          src={user.userPhoto ?? '/default-avatar.webp'}
+                          src={user.userPhoto ?? '/placeholder-avatar.svg'}
                           alt="User Avatar"
                           width={60}
                           height={60}
@@ -115,7 +115,7 @@ function ModerationHeader() {
                     <DialogContent className="sm:max-w-[350px] py-10 rounded-3xl">
                       <div className="flex flex-col items-center justify-center text-midnight">
                         <Image
-                          src={user.userPhoto ?? '/default-avatar.webp'}
+                          src={user.userPhoto ?? '/placeholder-avatar.svg'}
                           alt="User Avatar"
                           width={120}
                           height={120}
