@@ -31,10 +31,7 @@ function UsersTable({ users, isLoading }: UsersTableProps) {
           </p>
         ) : (
           users.map((user, index) => (
-            <div
-              key={user.id}
-              className="hover:bg-gray-200 transition"
-            >
+            <div key={user.id} className="hover:bg-gray-200 transition">
               <div className="flex text-sm items-center">
                 <div className="flex items-center">
                   <div className="border-r py-2.5 text-center w-9">
