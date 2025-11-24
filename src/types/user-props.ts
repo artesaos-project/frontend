@@ -11,6 +11,7 @@ export type UserProps = {
   applicationId?: string | null;
   postnedApplication: boolean | undefined;
   expiresAt?: number | null;
+  mustChangePassword?: boolean;
 };
 
 export type UserStore = {

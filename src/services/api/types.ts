@@ -37,6 +37,7 @@ export interface UserResponse {
     applicationStatus: string;
     applicationId?: string | null;
     postnedApplication: boolean | undefined;
+    mustChangePassword?: boolean;
   };
   session: { id: string; expiresAt: string };
   error?: boolean;

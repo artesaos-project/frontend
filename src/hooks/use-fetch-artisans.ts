@@ -42,6 +42,7 @@ export function useFetchArtisans(): UseFetchArtisansReturn {
         setError(null);
 
         const response = await artisanApi.getApplications(params);
+        console.log('Fetched artisans:', response);
 
         setArtisans(response.artisanApplications);
         if (response.pagination) {
@@ -85,8 +86,8 @@ export function buildArtisanParams(
   }
 
   if (filter === 'POSTPONED') {
-    // Filtro "Incompletos" - apenas POSTPONED
-    params.formStatus = 'POSTPONED';
+    // Filtro "Incompletos" - apenas NOT_FINISHED
+    params.formStatus = 'NOT_FINISHED';
   } else if (filter !== 'all') {
     // Filtros específicos (PENDING, APPROVED, REJECTED) - apenas SUBMITTED
     params.status = filter as 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -94,7 +95,7 @@ export function buildArtisanParams(
   } else {
     // Filtro "all"
     if (searchQuery.trim()) {
-      // Com busca: NÃO especifica formStatus para buscar em ambos (SUBMITTED e POSTPONED)
+      // Com busca: NÃO especifica formStatus para buscar em ambos (SUBMITTED e NOT_FINISHED)
       // params.formStatus não é definido
     } else {
       // Sem busca: mostra todos (comportamento padrão)

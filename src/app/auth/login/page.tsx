@@ -4,12 +4,12 @@ import AuthInput from '@/components/common/auth-input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
 import useStoreUser from '@/hooks/use-store-user';
 import { LoginFormData, loginSchema } from '@/lib/schemas/login-schema';
@@ -61,9 +61,17 @@ function Page() {
         applicationId: response.user.applicationId,
         postnedApplication: response.user.postnedApplication,
         expiresAt: new Date(response.session.expiresAt).getTime(),
+        mustChangePassword: response.user.mustChangePassword,
       };
 
       setUser(user);
+      
+      // Se o usuário precisa trocar a senha, redireciona para a página de senha provisória
+      if (response.user.mustChangePassword) {
+        router.push('/provisional-password');
+        return;
+      }
+      
       router.back();
     } catch (error) {
       console.log(error);
