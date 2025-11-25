@@ -61,9 +61,17 @@ function Page() {
         applicationId: response.user.applicationId,
         postnedApplication: response.user.postnedApplication,
         expiresAt: new Date(response.session.expiresAt).getTime(),
+        mustChangePassword: response.user.mustChangePassword,
       };
 
       setUser(user);
+
+      // Se o usuário precisa trocar a senha, redireciona para a página de senha provisória
+      if (response.user.mustChangePassword) {
+        router.push('/provisional-password');
+        return;
+      }
+
       router.back();
     } catch (error) {
       console.log(error);

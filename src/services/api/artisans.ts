@@ -10,7 +10,7 @@ export const artisanApi = {
   getApplications: (params?: {
     type?: 'BE_ARTISAN';
     status?: 'PENDING' | 'APPROVED' | 'REJECTED';
-    formStatus?: 'SUBMITTED' | 'POSTPONED';
+    formStatus?: 'SUBMITTED' | 'NOT_FINISHED';
     page?: number;
     limit?: number;
     search?: string;
@@ -33,7 +33,7 @@ export const artisanApi = {
         artisanName: string;
         email: string;
         status: 'PENDING' | 'APPROVED' | 'REJECTED';
-        formStatus?: 'SUBMITTED' | 'POSTPONED';
+        formStatus?: 'SUBMITTED' | 'NOT_FINISHED';
       }>;
       pagination?: {
         page: number;

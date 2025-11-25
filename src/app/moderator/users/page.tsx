@@ -1,43 +1,73 @@
 'use client';
 
 import LoadingScreen from '@/components/common/loading-screen';
+import Pagination from '@/components/common/pagination';
 import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import UsersTable from '@/components/features/moderator/users/users-table';
+import { useModeratorGuard } from '@/hooks/use-moderator-guard';
+import { adminUsersApi } from '@/services/api';
+import { AdminListedUser } from '@/types/admin-user';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
-function Page() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+function UsersContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { hasHydrated } = useModeratorGuard();
 
-  const fetchReports = useCallback(async () => {
+  const [users, setUsers] = useState<AdminListedUser[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    limit: 15,
+    total: 0,
+  });
+
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
+  const fetchUsers = useCallback(async (page: number) => {
     try {
       setIsLoading(true);
-      setIsLoading(false);
+      const response = await adminUsersApi.getUsers({
+        page,
+        limit: 15,
+      });
+
+      setUsers(response.users);
+      setPagination(response.pagination);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error('Error fetching reports:', error.message);
+        console.error('Error fetching users:', error.message);
       }
-      router.replace('/');
+    } finally {
+      setIsLoading(false);
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
-    fetchReports();
-  }, [fetchReports]);
+    if (hasHydrated) {
+      fetchUsers(currentPage);
+    }
+  }, [currentPage, hasHydrated, fetchUsers]);
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
   };
 
-  if (isLoading) {
+  const handlePageChange = (page: number) => {
+    router.push(`/moderator/users?page=${page}`);
+  };
+
+  if (!hasHydrated) {
     return <LoadingScreen />;
   }
 
   return (
     <div className="w-full h-full overflow-x-hidden">
-      <ModerationTitle title={'Denúncias'} />
+      <ModerationTitle title={'Usuários'} />
       <div className="w-2/3 mx-auto">
         <ModerationSearchBar
           searchTerm={searchTerm}
@@ -45,7 +75,25 @@ function Page() {
           variant="users"
         />
       </div>
+      <UsersTable users={users} isLoading={isLoading} />
+      {!isLoading && pagination.totalPages > 1 && (
+        <div className="flex justify-center mb-8">
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
+  );
+}
+
+function Page() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <UsersContent />
+    </Suspense>
   );
 }
 

@@ -21,6 +21,7 @@ const STATUS_TRANSLATIONS: Record<string, string> = {
   APPROVED: 'Aprovado',
   REJECTED: 'Recusado',
   POSTPONED: 'Incompleto',
+  NOT_FINISHED: 'Incompleto',
 };
 
 interface StatusLabelProps {
@@ -29,8 +30,11 @@ interface StatusLabelProps {
 }
 
 function StatusLabel({ artisan, isPostponed }: StatusLabelProps) {
-  // Cadastro incompleto: qualquer coisa que NÃO seja 'SUBMITTED'
-  const isIncomplete = isPostponed || artisan.formStatus !== 'SUBMITTED';
+  // Cadastro incompleto: formStatus seja NOT_FINISHED ou não seja SUBMITTED
+  const isIncomplete =
+    isPostponed ||
+    artisan.formStatus === 'NOT_FINISHED' ||
+    artisan.formStatus !== 'SUBMITTED';
 
   if (isIncomplete) {
     return (

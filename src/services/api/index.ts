@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+export { adminUsersApi } from './admin-users';
 export { artisanReviewsApi } from './artisan-reviews';
 export { artisanApi } from './artisans';
 export { authApi } from './auth';
@@ -12,3 +14,4 @@ export { reviewsApi } from './reviews';
 export * from './types';
 export { uploadApi } from './uploads';
 export { userApi } from './users';
+

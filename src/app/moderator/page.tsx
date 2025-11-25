@@ -73,7 +73,7 @@ function Page() {
   return (
     <div className="overflow-x-hidden">
       <ModerationTitle title={'Moderação'} />
-      <div className="w-2/3 mx-auto grid grid-cols-1 justify-items-center md:grid-cols-2 xl:grid-cols-4 gap-10 mb-20 mt-16">
+      <div className="w-2/3 mx-auto grid grid-cols-1 justify-items-center md:grid-cols-2 xl:grid-cols-3 gap-10 mb-20 mt-16">
         <ModerationCard
           href="/moderator/artisans"
           title={'Artesãos'}
@@ -83,9 +83,14 @@ function Page() {
         />
 
         <ModerationCard
+          href="/moderator/users"
+          title={'Usuários'}
+          description={'Gerenciar usuários da plataforma'}
+        />
+        <ModerationCard
           href="/moderator/reports"
           title={'Denúncias'}
-          description={'Gerenciar denúncias'}
+          description={'Analisar denúncias feitas por usuários'}
           pending={isLoading ? 0 : reportsStats.pending}
           finished={isLoading ? 0 : reportsStats.finished}
         />

@@ -1,6 +1,6 @@
 export type ArtisanApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
-export type ArtisanFormStatus = 'SUBMITTED' | 'POSTPONED';
+export type ArtisanFormStatus = 'SUBMITTED' | 'NOT_FINISHED';
 
 export type ArtisanApplicationType = 'BE_ARTISAN';
 

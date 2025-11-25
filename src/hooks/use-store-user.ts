@@ -18,6 +18,7 @@ const useStoreUser = create<UserStore>()(
         applicationId: undefined,
         postnedApplication: undefined,
         expiresAt: undefined,
+        mustChangePassword: undefined,
       },
       _hasHydrated: false,
       setHasHydrated: (state) => {
@@ -40,6 +41,7 @@ const useStoreUser = create<UserStore>()(
             applicationId: user.applicationId,
             postnedApplication: user.postnedApplication,
             expiresAt: user.expiresAt,
+            mustChangePassword: user.mustChangePassword,
           },
         })),
       resetStore: () =>
@@ -57,6 +59,7 @@ const useStoreUser = create<UserStore>()(
             applicationId: undefined,
             postnedApplication: undefined,
             expiresAt: undefined,
+            mustChangePassword: undefined,
           },
         })),
       updateUser: (data: Partial<UserProps>) =>
