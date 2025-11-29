@@ -4,11 +4,11 @@ import AlertDialog from '@/components/common/alert-dialog';
 import SideBarMenu from '@/components/sidebar-menu';
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import useStoreUser from '@/hooks/use-store-user';

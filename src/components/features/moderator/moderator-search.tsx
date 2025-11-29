@@ -1,7 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { IoIosSearch } from 'react-icons/io';
-import ModerateArtisanInstructions from './moderate-artisan/moderate-artisan-instructions';
-import ModeratorFilterButtons from './moderator-filter-buttons';
+import ModerationFilterButtons from './moderation-filter-buttons';
 
 interface ModeratorSearchProps {
   searchTerm: string;
@@ -20,7 +19,6 @@ function ModeratorSearch({
 }: ModeratorSearchProps) {
   return (
     <div className="w-2/3 mx-auto flex flex-col mt-4 md:mt-16">
-      <ModerateArtisanInstructions />
       <div className="flex w-full justify-center items-center gap-5 mt-10">
         <div className="relative w-full md:max-w-3/5 border-midnight border-[1px] rounded-md">
           <IoIosSearch
@@ -38,7 +36,8 @@ function ModeratorSearch({
             disabled={isSearching}
           />
         </div>
-        <ModeratorFilterButtons
+        <ModerationFilterButtons
+          variant="artisans"
           activeFilter={activeFilter}
           onFilterChange={onFilterChange}
         />
