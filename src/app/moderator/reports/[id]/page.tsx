@@ -65,7 +65,6 @@ function Page() {
         setIsLoading(true);
         setError(null);
         const result = await reportApi.getReportById(reportId);
-        console.log('Detalhes da denúncia:', result);
 
         if (!result || typeof result !== 'object') {
           throw new Error('Dados inválidos retornados pela API');

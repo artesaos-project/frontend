@@ -61,8 +61,7 @@ function SignUp() {
     ) {
       setStep(11);
     } else if (
-      (user.applicationStatus === 'NOT_FINISHED' ||
-        user.applicationId ||
+      ((user.applicationStatus === 'NOT_FINISHED' && user.applicationId) ||
         artisanApplicationId) &&
       step < 4
     ) {

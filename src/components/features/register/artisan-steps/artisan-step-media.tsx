@@ -3,8 +3,8 @@ import { useArtisanRegister } from '@/hooks/use-artisan-register';
 import { uploadApi } from '@/services/api';
 import { useRef, useState } from 'react';
 import { FaRegImage } from 'react-icons/fa6';
-import { LuVideo } from 'react-icons/lu';
 import { TbTrash } from 'react-icons/tb';
+import { toast } from 'sonner';
 
 function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +31,18 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+    if (media.length + files.length > 5) {
+      toast.error('Você pode enviar no máximo 5 arquivos.');
+      fileInputRef.current!.value = '';
+      return;
+    }
+
+    if (Array.from(files).some((file) => file.size > 5 * 1024 * 1024)) {
+      toast.error('Cada arquivo deve ter no máximo 5MB.');
+      fileInputRef.current!.value = '';
+      return;
+    }
+
     setMedia((prev) => [...prev, ...Array.from(files as FileList)]);
   };
 
@@ -48,15 +60,13 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
   return (
     <div className="text-midnight">
       <h1 className="text-2xl font-bold mb-2">Mostre suas criações</h1>
-      <h2 className="text-md italic mb-1">
-        Adicione fotos e/ou vídeos de seus trabalhos.
-      </h2>
+      <h2 className="text-md italic mb-1">Adicione fotos de seus trabalhos.</h2>
       <p className="text-md mt-4 italic font-bold">Mídias</p>
 
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*,video/*"
+        accept="image/*"
         multiple
         className="hidden"
         onChange={handleFilesChange}
@@ -69,10 +79,6 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
         <div className="flex flex-row items-center text-sakura">
           <FaRegImage size={40} />
           <span>Foto</span>
-        </div>
-        <div className="flex flex-row items-center text-sakura">
-          <LuVideo size={40} />
-          <span>Vídeo</span>
         </div>
       </button>
 
@@ -87,18 +93,6 @@ function ArtisanStepMedia({ onNext }: { onNext: () => void }) {
                 alt={file.name}
                 className="w-36 h-32 object-cover rounded-lg border"
                 onLoad={() => URL.revokeObjectURL(url)}
-                onClick={handleRemoveOne.bind(null, idx)}
-              />
-            );
-          }
-          if (file.type.startsWith('video/')) {
-            return (
-              <video
-                key={idx}
-                src={url}
-                controls
-                className="w-36 h-32 object-cover rounded-lg border"
-                onLoadedData={() => URL.revokeObjectURL(url)}
                 onClick={handleRemoveOne.bind(null, idx)}
               />
             );

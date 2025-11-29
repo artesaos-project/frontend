@@ -80,13 +80,14 @@ export default function ProductEvaluationPage() {
   };
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
     const files = e.target.files ? Array.from(e.target.files) : [];
 
-    // Validar tamanho dos arquivos (máximo 10MB por arquivo)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 5 * 1024 * 1024;
     const validFiles = files.filter((file) => {
       if (file.size > maxSize) {
-        toast.error(`O arquivo ${file.name} é muito grande. Máximo 10MB.`);
+        toast.error(`O arquivo ${file.name} é muito grande. Máximo 5MB.`);
+        input.value = '';
         return false;
       }
       return true;
@@ -111,7 +112,6 @@ export default function ProductEvaluationPage() {
 
       const attachmentIds: string[] = [];
 
-      // Upload de arquivos em paralelo para melhor performance
       if (media.length > 0) {
         try {
           const uploadPromises = media.map((file) =>

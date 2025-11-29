@@ -33,11 +33,13 @@ export default function ProductGallery({
   return (
     <div className="w-full">
       <div className="relative" {...touchHandlers}>
-        <ProductImage src={images[currentIndex]} alt={title} />
+        <div className="flex justify-center items-center">
+          <ProductImage src={images[currentIndex]} alt={title} />
 
-        <span className="absolute bottom-2 right-2 bg-white text-black font-bold text-xs px-2 py-2 rounded-lg">
-          {currentIndex + 1} / {images.length}
-        </span>
+          <span className="absolute bottom-2 right-2 bg-white text-black font-bold text-xs px-2 py-2 rounded-lg">
+            {currentIndex + 1} / {images.length}
+          </span>
+        </div>
 
         {hasMultipleImages && (
           <>

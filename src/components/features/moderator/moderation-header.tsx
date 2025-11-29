@@ -61,6 +61,13 @@ function ModerationHeader() {
           <Button
             asChild
             variant={'ghost'}
+            className={`${pathName.endsWith('/users') ? 'bg-baby-blue text-midnight drop-shadow-sm shadow-black/15' : 'bg-midnight text-white'} text-sm py-7 md:w-30 xl:w-40 hover:bg-baby-blue/80 rounded-xl cursor-pointer`}
+          >
+            <Link href="/moderator/users">USUÁRIOS</Link>
+          </Button>
+          <Button
+            asChild
+            variant={'ghost'}
             className={`${pathName.endsWith('/reports') ? 'bg-baby-blue text-midnight drop-shadow-sm shadow-black/15' : 'bg-midnight text-white'} text-sm py-7 md:w-30 xl:w-40  hover:bg-baby-blue/80 rounded-xl cursor-pointer`}
           >
             <Link href="/moderator/reports">DENUNCIAS</Link>

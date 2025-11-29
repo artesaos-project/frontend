@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BsGear } from 'react-icons/bs';
 import { CgDanger } from 'react-icons/cg';
 import { FaHome } from 'react-icons/fa';
-import { IoMdHelpCircleOutline } from 'react-icons/io';
+import { IoIosBrush, IoMdHelpCircleOutline } from 'react-icons/io';
 import { IoPerson } from 'react-icons/io5';
 import { TbLogout2 } from 'react-icons/tb';
 import { HelpDialog } from '../common/help-dialog';
@@ -24,8 +24,13 @@ export function ModerationMenu({ onLogoutClick }: ModerationMenuProps) {
       />
       <MenuItem
         href="/moderator/artisans"
-        icon={<IoPerson color="#ff8c94" size={30} />}
+        icon={<IoIosBrush color="#ff8c94" size={30} />}
         label="Artesãos"
+      />
+      <MenuItem
+        href="/moderator/users"
+        icon={<IoPerson color="#ff8c94" size={30} />}
+        label="Usuários"
       />
       <MenuItem
         href="/moderator/reports"

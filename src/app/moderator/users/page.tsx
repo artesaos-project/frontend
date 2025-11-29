@@ -2,7 +2,6 @@
 
 import LoadingScreen from '@/components/common/loading-screen';
 import Pagination from '@/components/common/pagination';
-import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
 import UsersTable from '@/components/features/moderator/users/users-table';
 import { useModeratorGuard } from '@/hooks/use-moderator-guard';
@@ -17,7 +16,6 @@ function UsersContent() {
   const { hasHydrated } = useModeratorGuard();
 
   const [users, setUsers] = useState<AdminListedUser[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -53,10 +51,6 @@ function UsersContent() {
     }
   }, [currentPage, hasHydrated, fetchUsers]);
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-  };
-
   const handlePageChange = (page: number) => {
     router.push(`/moderator/users?page=${page}`);
   };
@@ -68,13 +62,6 @@ function UsersContent() {
   return (
     <div className="w-full h-full overflow-x-hidden">
       <ModerationTitle title={'Usuários'} />
-      <div className="w-2/3 mx-auto">
-        <ModerationSearchBar
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          variant="users"
-        />
-      </div>
       <UsersTable users={users} isLoading={isLoading} />
       {!isLoading && pagination.totalPages > 1 && (
         <div className="flex justify-center mb-8">

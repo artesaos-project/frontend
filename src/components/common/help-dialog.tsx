@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { HiLocationMarker, HiMail, HiPhone } from 'react-icons/hi';
+import { HiMail } from 'react-icons/hi';
 
 interface HelpDialogProps {
   isOpen: boolean;
@@ -32,28 +32,7 @@ export function HelpDialog({ isOpen, onClose }: HelpDialogProps) {
               <a
                 href="mailto:contato@artesaos.com"
                 className="text-sm text-midnight hover:text-sakura"
-              >
-                contato@artesaos.com
-              </a>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-            <HiPhone className="text-olivine-600" size={24} />
-            <div>
-              <p className="text-xs text-gray-500 font-medium">Telefone</p>
-              <a
-                href="tel:+5511999999999"
-                className="text-sm text-midnight hover:text-olivine-600"
-              >
-                (11) 99999-9999
-              </a>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-            <HiLocationMarker className="text-amber-500" size={24} />
-            <div>
-              <p className="text-xs text-gray-500 font-medium">Endereço</p>
-              <p className="text-sm text-midnight">Rua dos Artesãos, 123</p>
+              />
             </div>
           </div>
         </div>
