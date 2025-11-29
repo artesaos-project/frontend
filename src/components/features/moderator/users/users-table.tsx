@@ -38,8 +38,8 @@ function UsersTable({ users, isLoading }: UsersTableProps) {
                     {index + 1}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 items-center px-3 w-full gap-2 py-2">
-                  <p className="truncate text-left font-medium">
+                <div className="grid grid-cols-2 md:grid-cols-3 items-center px-3 w-full gap-2 py-2">
+                  <p className="truncate text-left font-medium hidden md:inline">
                     {user.name || user.socialName || 'Sem nome'}
                   </p>
                   <p className="truncate text-left md:text-center text-gray-600">
