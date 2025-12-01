@@ -65,7 +65,7 @@ export default function SettingsPage() {
             label="Meu perfil"
             onClick={() => {
               // Navegar para página de perfil
-              router.push(`/artisan/edit-profile`);
+              router.push(`/settings/edit-profile`);
             }}
           />
           <SettingItem

@@ -5,9 +5,10 @@ import { PhotoGallery } from '@/components/features/artisan/add-product/photo-ga
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
 import { Button } from '@/components/ui/button';
-import { useProductForm } from '@/hooks/use-product-form';
+import { usePhoto } from '@/hooks/use-photo';
 import { productApi } from '@/services/api';
 import { ProductForm } from '@/types/product-form';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -19,6 +20,7 @@ import { toast } from 'sonner';
 
 const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { id } = use(params);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
@@ -35,7 +37,7 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
     handlePhotoSelect,
     removeSelectedPhotos,
     selectAllPhotos,
-  } = useProductForm();
+  } = usePhoto();
 
   const {
     register,
@@ -55,35 +57,91 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
       necessaryDays: '',
     },
   });
+
   const triggerFileUpload = () => {
     document.getElementById('photo-upload')?.click();
   };
 
+  const { data: product, isLoading } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => productApi.getById(id),
+    enabled: !!id,
+  });
+
   useEffect(() => {
-    const fetchProduct = async () => {
-      const fetchedProduct = await productApi.getById(id);
+    if (product) {
       const formValues: ProductForm = {
-        name: fetchedProduct.title,
-        description: fetchedProduct.description,
-        category: [fetchedProduct.categoryId].toLocaleString().split(','),
+        name: product.title,
+        description: product.description,
+        category: [product.categoryId].toLocaleString().split(','),
         technical: [1, 2, 3].toLocaleString().split(','),
-        unitPrice: (fetchedProduct.priceInCents / 100).toFixed(2),
-        stock: fetchedProduct.stock.toString(),
+        unitPrice: (product.priceInCents / 100).toFixed(2),
+        stock: product.stock.toString(),
         isCustomOrder: false,
         necessaryDays: '',
       };
       reset(formValues);
-      const apiPhotos = (fetchedProduct.photos || []).map((url, index) => ({
-        id: String((fetchedProduct.photosIds || [])[index] || ''),
+      const apiPhotos = (product.photos || []).map((url, index) => ({
+        id: String((product.photosIds || [])[index] || ''),
         url,
       }));
-      addApiPhotos(apiPhotos, fetchedProduct.coverPhoto);
-    };
+      addApiPhotos(apiPhotos, product.coverPhoto);
+    }
+  }, [product, reset, addApiPhotos]);
 
-    fetchProduct();
-  }, [reset, addApiPhotos, id]);
+  const updateProductMutation = useMutation({
+    mutationFn: (productData: {
+      title: string;
+      description: string;
+      priceInCents: number;
+      photosIds: string[];
+      newPhotos: string[];
+      deletedPhotos: string[];
+      coverPhotoId: string;
+      rawMaterialIds: number[];
+      techniqueIds: number[];
+      stock: number;
+      isCustomOrder: boolean;
+      necessaryDays: number;
+    }) => productApi.update(id, productData),
+    onSuccess: () => {
+      toast.success('Produto atualizado com sucesso!');
+      queryClient.invalidateQueries({ queryKey: ['product', id] });
+      router.back();
+    },
+    onError: (error: unknown) => {
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Erro ao atualizar o produto.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao atualizar o produto.');
+      }
+    },
+  });
 
-  const onSubmit: SubmitHandler<ProductForm> = async (data) => {
+  const deleteProductMutation = useMutation({
+    mutationFn: () => productApi.delete(id),
+    onSuccess: () => {
+      toast.success('Produto excluído com sucesso!');
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      router.back();
+    },
+    onError: (error: unknown) => {
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Erro ao excluir o produto.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao excluir o produto.');
+      }
+    },
+    onSettled: () => {
+      setIsAlertOpen(false);
+    },
+  });
+
+  const onSubmit: SubmitHandler<ProductForm> = (data) => {
     if (isUploading) {
       toast.warning('Por favor, aguarde o término do upload das fotos.');
       return;
@@ -92,6 +150,7 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
       toast.error('Selecione uma foto de capa antes de salvar o produto.');
       return;
     }
+
     const productData = {
       title: data.name.trim(),
       description: data.description.trim(),
@@ -107,37 +166,35 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
       necessaryDays: data.isCustomOrder ? parseInt(data.necessaryDays) || 0 : 0,
     };
 
-    try {
-      await productApi.update(id, productData);
-      toast.success('Produto atualizado com sucesso!');
-      router.back();
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        const message = error.response?.data?.message;
-        toast.error(message);
-      }
-    }
+    updateProductMutation.mutate(productData);
   };
 
   const handleDelete = () => {
     setIsAlertOpen(true);
   };
 
-  const confirmDelete = async () => {
-    try {
-      await productApi.delete(id);
-      toast.success('Produto excluído com sucesso!');
-      router.back();
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message);
-      } else {
-        toast.error('Erro ao excluir o produto.');
-      }
-    } finally {
-      setIsAlertOpen(false);
-    }
+  const confirmDelete = () => {
+    deleteProductMutation.mutate();
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#A6E3E9] text-midnight">
+        <div className="w-10/12 mx-auto pt-10">
+          <div className="flex items-center mb-6">
+            <ArrowLeft
+              className="w-6 h-6 text-gray-700 mr-3 cursor-pointer hover:text-gray-900"
+              onClick={() => router.back()}
+            />
+            <h1 className="text-xl font-bold text-gray-800">Editar produto</h1>
+          </div>
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex items-center justify-center">
+            <p className="text-gray-600">Carregando produto...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#A6E3E9] text-midnight">
@@ -235,20 +292,31 @@ const EditProductPage = ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="grid grid-cols-1 w-full text-sm mt-4 gap-2">
               <Button
                 type="submit"
-                disabled={isUploading}
+                disabled={isUploading || updateProductMutation.isPending}
                 variant="primary"
                 className={`w-full ${
-                  isUploading
+                  isUploading || updateProductMutation.isPending
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-olivine-600 hover:bg-white hover:text-olivine-600'
                 } text-white`}
               >
                 <FaCheck />
-                {isUploading ? 'Enviando fotos...' : 'Atualizar Produto'}
+                {isUploading
+                  ? 'Enviando fotos...'
+                  : updateProductMutation.isPending
+                    ? 'Atualizando...'
+                    : 'Atualizar Produto'}
               </Button>
-              <Button variant="secondary" type="button" onClick={handleDelete}>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={handleDelete}
+                disabled={deleteProductMutation.isPending}
+              >
                 <FaRegTrashAlt />
-                Excluir Produto
+                {deleteProductMutation.isPending
+                  ? 'Excluindo...'
+                  : 'Excluir Produto'}
               </Button>
             </div>
           </div>

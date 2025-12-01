@@ -1,60 +1,74 @@
 import { productApi } from '@/services/api';
-import { ApiProduct } from '@/types/product';
-import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const MAX_RELATED_PRODUCTS = 12;
 
 export function useProductData(productId: string) {
-  const [product, setProduct] = useState<ApiProduct | null>(null);
-  const [artistProducts, setArtistProducts] = useState<ApiProduct[]>([]);
-  const [relatedProducts, setRelatedProducts] = useState<ApiProduct[]>([]);
+  const productQuery = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => productApi.getById(productId),
+    enabled: !!productId,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchData = useCallback(async () => {
-    if (!productId) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const productData = await productApi.getById(productId);
-      setProduct(productData);
-
-      await Promise.all([
-        (async () => {
-          if (productData.authorId) {
-            const products = await productApi.getByArtisan(
-              productData.authorId,
-            );
-            setArtistProducts(products.filter((p) => p.id !== productId));
-          }
-        })(),
-        (async () => {
-          const allProducts = await productApi.getAll();
-          setRelatedProducts(
-            allProducts
-              .filter((p) => p.id !== productId)
-              .slice(0, MAX_RELATED_PRODUCTS),
-          );
-        })(),
-      ]);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Ocorreu um erro ao carregar os dados.',
+  const artistProductsQuery = useQuery({
+    queryKey: ['artist-products', productQuery.data?.authorId, productId],
+    queryFn: async () => {
+      if (!productQuery.data?.authorId) return [];
+      const products = await productApi.getByArtisan(
+        productQuery.data.authorId,
       );
-      console.error('Data fetching error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [productId]);
+      return products.filter((p) => p.id !== productId);
+    },
+    enabled: !!productQuery.data?.authorId,
+    staleTime: 1000 * 60 * 5,
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const relatedProductsQuery = useQuery({
+    queryKey: ['related-products', productQuery.data?.categoryIds, productId],
+    queryFn: async () => {
+      const categoryIds =
+        productQuery.data?.categoryIds ||
+        (productQuery.data?.categoryId ? [productQuery.data.categoryId] : []);
 
-  return { product, artistProducts, relatedProducts, isLoading, error };
+      if (categoryIds.length === 0) return [];
+
+      const randomIndex = Math.floor(Math.random() * categoryIds.length);
+      const selectedCategoryId = categoryIds[randomIndex];
+
+      const query = `categoryId=${selectedCategoryId}`;
+      const products = await productApi.search(query);
+
+      return products
+        .filter((p) => p.id !== productId)
+        .slice(0, MAX_RELATED_PRODUCTS);
+    },
+    enabled:
+      !!productQuery.data?.categoryIds?.length ||
+      !!productQuery.data?.categoryId,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const isLoading =
+    productQuery.isLoading ||
+    (productQuery.isSuccess &&
+      (artistProductsQuery.isLoading || relatedProductsQuery.isLoading));
+
+  const error =
+    productQuery.error ||
+    artistProductsQuery.error ||
+    relatedProductsQuery.error;
+
+  return {
+    product: productQuery.data ?? null,
+    artistProducts: artistProductsQuery.data ?? [],
+    relatedProducts: relatedProductsQuery.data ?? [],
+    isLoading,
+    error: error
+      ? error instanceof Error
+        ? error.message
+        : 'Ocorreu um erro ao carregar os dados.'
+      : null,
+  };
 }
