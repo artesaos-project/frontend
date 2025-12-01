@@ -163,13 +163,13 @@ function ProductPage() {
                 title="Produtos do Artista"
                 onViewMore={handleViewMoreArtistProducts}
               >
-                {artistProducts.slice(0, 12).map((artistProduct) => (
+                {artistProducts.map((artistProduct) => (
                   <BaseCard key={artistProduct.id}>
                     <div className="relative w-full h-34 md:h-44">
                       <Image
                         src={artistProduct.coverPhoto}
                         alt={artistProduct.title}
-                        className="object-fill rounded-lg w-full h-34 md:h-44"
+                        className="object-cover rounded-lg w-full h-34 md:h-44"
                         width={800}
                         height={400}
                       />
@@ -197,7 +197,11 @@ function ProductPage() {
             {relatedProducts.length > 0 ? (
               <ProductSlide
                 title="Produtos Relacionados"
-                onViewMore={() => router.push('/')}
+                onViewMore={() =>
+                  router.push(
+                    `/category/${relatedProducts[0].categoryIds ? relatedProducts[0].categoryIds[0] : relatedProducts[0].categoryId}`,
+                  )
+                }
               >
                 {relatedProducts.map((relatedProduct) => (
                   <BaseCard key={relatedProduct.id}>
@@ -205,7 +209,7 @@ function ProductPage() {
                       <Image
                         src={relatedProduct.coverPhoto}
                         alt={relatedProduct.title}
-                        className="object-fill rounded-lg w-full h-34 md:h-44"
+                        className="object-cover rounded-lg w-full h-34 md:h-44"
                         width={800}
                         height={400}
                       />

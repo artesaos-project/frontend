@@ -26,14 +26,27 @@ export function useProductData(productId: string) {
   });
 
   const relatedProductsQuery = useQuery({
-    queryKey: ['related-products', productId],
+    queryKey: ['related-products', productQuery.data?.categoryIds, productId],
     queryFn: async () => {
-      const allProducts = await productApi.getAll();
-      return allProducts
+      const categoryIds =
+        productQuery.data?.categoryIds ||
+        (productQuery.data?.categoryId ? [productQuery.data.categoryId] : []);
+
+      if (categoryIds.length === 0) return [];
+
+      const randomIndex = Math.floor(Math.random() * categoryIds.length);
+      const selectedCategoryId = categoryIds[randomIndex];
+
+      const query = `categoryId=${selectedCategoryId}`;
+      const products = await productApi.search(query);
+
+      return products
         .filter((p) => p.id !== productId)
         .slice(0, MAX_RELATED_PRODUCTS);
     },
-    enabled: !!productId,
+    enabled:
+      !!productQuery.data?.categoryIds?.length ||
+      !!productQuery.data?.categoryId,
     staleTime: 1000 * 60 * 5,
   });
 

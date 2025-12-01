@@ -34,6 +34,7 @@ export interface ApiProduct {
   description: string;
   priceInCents: number;
   categoryId: number;
+  categoryIds?: number[];
   stock: number;
   likesCount: number;
   averageRating: number;
