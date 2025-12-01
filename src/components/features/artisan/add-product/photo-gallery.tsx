@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { PhotoType } from '@/hooks/use-product-form';
+import { PhotoType } from '@/hooks/use-photo';
 import { Trash2 } from 'lucide-react';
 import React from 'react';
 import { TbSelect, TbTrash } from 'react-icons/tb';
