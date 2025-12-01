@@ -1,8 +1,8 @@
-import { PhotoType } from '@/hooks/use-product-form';
+import { PhotoType } from '@/hooks/use-photo';
 import { Upload } from 'lucide-react';
+import Image from 'next/image';
 import React from 'react';
 import { FaRegImage } from 'react-icons/fa6';
-import Image from 'next/image';
 
 interface PhotoSlotProps {
   index: number;

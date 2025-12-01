@@ -4,7 +4,7 @@ import { PhotoGallery } from '@/components/features/artisan/add-product/photo-ga
 import { PriceStockForm } from '@/components/features/artisan/add-product/price-stock-form';
 import { ProductInfoForm } from '@/components/features/artisan/add-product/product-info-form';
 import { Button } from '@/components/ui/button';
-import { useProductForm } from '@/hooks/use-product-form';
+import { usePhoto } from '@/hooks/use-photo';
 import { catalogApi, productApi } from '@/services/api';
 import { ProductForm } from '@/types/product-form';
 import { useQuery } from '@tanstack/react-query';
@@ -37,7 +37,7 @@ const AddProductPage = () => {
     handlePhotoSelect,
     removeSelectedPhotos,
     selectAllPhotos,
-  } = useProductForm();
+  } = usePhoto();
 
   const {
     register,

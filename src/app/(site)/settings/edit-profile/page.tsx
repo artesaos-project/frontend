@@ -2,7 +2,7 @@
 import { PhotoSlot } from '@/components/features/artisan/add-product/photo-slot';
 import InputField from '@/components/features/artisan/input-field';
 import { Button } from '@/components/ui/button';
-import { useProductForm } from '@/hooks/use-product-form';
+import { usePhoto } from '@/hooks/use-photo';
 import useStoreUser from '@/hooks/use-store-user';
 import { userApi } from '@/services/api';
 import { GetMyProfile, updateMyProfilePayload } from '@/types/artisan';
@@ -31,7 +31,7 @@ function EditProfilePage() {
     handlePhotoUpload,
     photoIds,
     setPhotos,
-  } = useProductForm();
+  } = usePhoto();
   const router = useRouter();
 
   const handleSlotClick = (index: number) => {
