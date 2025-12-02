@@ -24,10 +24,10 @@ function BaseSwiper<T>({
     <div className="w-[100vw] sm:w-[95vw] pb-4 sm:px-6 md:w-full relative mt-4">
       {/* Custom navigation buttons */}
       <div
-        className={`swiper-button-prev-${navElId} absolute -ml-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
+        className={`swiper-button-prev absolute -ml-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
       />
       <div
-        className={`swiper-button-next-${navElId} absolute -mr-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
+        className={`swiper-button-next absolute -mr-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
       />
       <div>
         <Swiper
