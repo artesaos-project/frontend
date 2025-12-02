@@ -6,6 +6,7 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { CardSkeleton } from './loading-state';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 type CardsSwiperProps<T> = {
   cards: T[];
@@ -24,11 +25,19 @@ function BaseSwiper<T>({
     <div className="w-[100vw] sm:w-[95vw] pb-4 sm:px-6 md:w-full relative mt-4">
       {/* Custom navigation buttons */}
       <div
-        className={`swiper-button-prev absolute -ml-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
-      />
+        className={`swiper-button-prev-${navElId} absolute left-2 top-1/2 hidden md:block -ml-4 -translate-y-1/2 z-20 text-gray-400 hover:text-gray-600`}
+        role="button"
+        aria-label="previous"
+      >
+        <FaChevronLeft size={40} />
+      </div>
       <div
-        className={`swiper-button-next absolute -mr-4 translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400`}
-      />
+        className={`swiper-button-next-${navElId} absolute right-2 top-1/2 -translate-y-1/2 z-20 -mr-4 text-gray-400 hover:text-gray-600`}
+        role="button"
+        aria-label="next"
+      >
+        <FaChevronRight size={40} />
+      </div>
       <div>
         <Swiper
           style={{ paddingBottom: 10 }}
