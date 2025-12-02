@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import CategoryCard from './category-card';
 import { productApi } from '@/services/api';
 import { CategoryProps } from '@/types/category';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 function CategoriesSlider() {
   const [loading, setLoading] = useState(true);
@@ -28,8 +29,20 @@ function CategoriesSlider() {
   return (
     <div className="w-[100vw] ml-12 sm:w-[95vw] sm:px-6 md:w-full sm:mx-20 mx-10 relative">
       {/* Custom navigation buttons */}
-      <div className="swiper-button-prev absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
-      <div className="swiper-button-next absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400" />
+      <div
+        className={`swiper-button-prev-categories absolute left-2 top-1/2 hidden md:block -ml-2 -translate-y-1/2 z-20 text-gray-400 hover:text-gray-600`}
+        role="button"
+        aria-label="previous"
+      >
+        <FaChevronLeft size={30} />
+      </div>
+      <div
+        className={`swiper-button-next-categories absolute right-2 top-1/2 -translate-y-1/2 z-20 -mr-2 text-gray-400 hover:text-gray-600`}
+        role="button"
+        aria-label="next"
+      >
+        <FaChevronRight size={30} />
+      </div>
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
@@ -60,8 +73,8 @@ function CategoriesSlider() {
           }}
           onSwiper={() => {}}
           navigation={{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: '.swiper-button-next-categories',
+            prevEl: '.swiper-button-prev-categories',
           }}
           onPaginationShow={() => {}}
           pagination={{
