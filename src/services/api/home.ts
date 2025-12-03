@@ -10,5 +10,5 @@ export interface HomeApiResponse {
 }
 
 export const homeApi = {
-  getHome: () => apiRequest<{ data: HomeApiResponse }>('/home'),
+  getHome: () => apiRequest<{ data: HomeApiResponse }>('/home?limit=20'),
 };
