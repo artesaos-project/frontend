@@ -10,7 +10,7 @@ function PopularProducts({
   loading: boolean;
 }) {
   return (
-    <SectionStructure title="Produtos Populares">
+    <SectionStructure title="Produtos Populares" showMoreLink="/products">
       <ProductsList products={products} loading={loading} />
     </SectionStructure>
   );

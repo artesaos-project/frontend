@@ -3,6 +3,7 @@ import { Pagination } from '@/components/pagination';
 import ProductsList from '@/components/products-list';
 // import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import chunkArray from '@/lib/utils/chunkArray';
 // import { Label } from '@/components/ui/label';
 import { productApi } from '@/services/api';
 import { CategoryProps } from '@/types/category';
@@ -13,15 +14,19 @@ import { IoIosSearch } from 'react-icons/io';
 // import { IoClose, IoSwapVerticalOutline } from 'react-icons/io5';
 // import { LuListFilter } from 'react-icons/lu';
 
+// Os botões de filtro e ordenação estão implementados visualmente mas não existe rotas no backend, por isso estão comentados
 function Page() {
   const [category, setCategory] = useState<CategoryProps>({} as CategoryProps);
   const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [slicedProducts, setSlicedProducts] = useState<ApiProduct[][]>([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages] = useState(5); // Mock: será substituído por dados reais do backend
+  const [totalPages, setTotalPages] = useState(5); // Mock: será substituído por dados reais do backend
   const [searchQuery, setSearchQuery] = useState('');
   const params = useParams();
   const categoryId = params.id as string;
+  //TODO: implementar paginação real com backend
+  const limit = 20;
 
   useEffect(() => {
     async function fetchCategories() {
@@ -47,6 +52,8 @@ function Page() {
         }
         const response = await productApi.search(query);
         setProducts(response);
+        setSlicedProducts(chunkArray(response, limit));
+        setTotalPages(Math.ceil(response.length / limit));
       } catch (err: unknown) {
         if (err instanceof Error)
           console.error('Erro ao buscar produtos', err.message);
@@ -102,7 +109,7 @@ function Page() {
         />
       )} */}
       <ProductsList
-        products={products}
+        products={slicedProducts[currentPage - 1]}
         loading={loading}
         emptyStateMessage={'Nenhum produto encontrado'}
         showAll={true}
