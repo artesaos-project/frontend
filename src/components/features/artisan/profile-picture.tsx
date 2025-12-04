@@ -12,7 +12,7 @@ function ProfilePicture({
     return (
       <div className="h-30 w-30">
         <Image
-          src="placeholder-avatar.svg"
+          src="/placeholder-avatar.svg"
           className={className}
           alt="Profile"
           width={100}

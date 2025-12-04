@@ -9,11 +9,15 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import useStoreUser from '@/hooks/use-store-user';
+import { authApi } from '@/services/api';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { LuDoorOpen } from 'react-icons/lu';
+import { toast } from 'sonner';
 import { MainMenu } from './sidebar/main-menu';
 import { ModerationMenu } from './sidebar/moderation-menu';
 import { UserProfile } from './sidebar/user-profile';
@@ -25,12 +29,44 @@ function SideBarMenu() {
 
   const isModerationRoute = pathname.startsWith('/moderator');
 
+  const logoutMutation = useMutation({
+    mutationFn: () => authApi.logout(),
+    onSuccess: () => {
+      localStorage.removeItem('artisan-register');
+      localStorage.removeItem('loginStore');
+      resetStoreUser();
+      setIsLogoutModalOpen(false);
+
+      toast.success('Logout realizado com sucesso!');
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    },
+    onError: (error) => {
+      console.error('Erro ao fazer logout:', error);
+
+      localStorage.removeItem('artisan-register');
+      localStorage.removeItem('loginStore');
+      resetStoreUser();
+      setIsLogoutModalOpen(false);
+
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Erro ao fazer logout.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao fazer logout. Sua sessão foi limpa localmente.');
+      }
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
+    },
+  });
+
   function handleLogout() {
-    localStorage.removeItem('artisan-register');
-    localStorage.removeItem('loginStore');
-    resetStoreUser();
-    setIsLogoutModalOpen(false);
-    window.location.reload();
+    logoutMutation.mutate();
   }
 
   const handleOpenLogoutModal = () => {
@@ -78,6 +114,7 @@ function SideBarMenu() {
           dialogTitle="Tem certeza que deseja sair?"
           textButton1="Sair"
           textButton2="Voltar"
+          isLoading={logoutMutation.isPending}
         />
       </SheetContent>
     </Sheet>
