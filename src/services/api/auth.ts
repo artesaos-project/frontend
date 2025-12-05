@@ -25,4 +25,8 @@ export const authApi = {
         body: profileData,
       },
     ),
+  logout: () =>
+    apiRequest<{ message: string }>('/auth/logout', {
+      method: 'POST',
+    }),
 };

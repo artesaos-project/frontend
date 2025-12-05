@@ -12,6 +12,7 @@ type Props = {
   };
   textButton1?: string;
   textButton2?: string;
+  isLoading?: boolean;
 };
 
 function AlertDialog({
@@ -23,6 +24,7 @@ function AlertDialog({
   dialogMessage = { text: '', color: '' },
   textButton1 = 'Sair',
   textButton2 = 'Voltar',
+  isLoading = false,
 }: Props) {
   if (!isOpen) {
     return null;
@@ -43,18 +45,29 @@ function AlertDialog({
           <button
             type="button"
             onClick={onConfirm}
+            disabled={isLoading}
             className="flex h-10 flex-1 border border-salmon items-center 
             justify-center rounded-lg bg-salmon p-4 cursor-pointer hover:bg-white
-            hover:text-salmon transition duration-200"
+            hover:text-salmon transition duration-200 disabled:opacity-50 
+            disabled:cursor-not-allowed"
           >
-            {textButton1}
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                Saindo...
+              </span>
+            ) : (
+              textButton1
+            )}
           </button>
           <button
             type="button"
             onClick={onClose}
+            disabled={isLoading}
             className="flex h-10 border border-olivine-600 flex-1 items-center
              justify-center rounded-lg bg-olivine-600 p-4 cursor-pointer
-              hover:bg-white hover:text-olivine-600 transition duration-200"
+              hover:bg-white hover:text-olivine-600 transition duration-200
+              disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {textButton2}
           </button>
