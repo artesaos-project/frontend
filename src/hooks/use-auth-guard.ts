@@ -16,8 +16,7 @@ export function useAuthGuard() {
     if (hasHydrated && !user.isAuthenticated) {
       router.replace('/auth/login');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hasHydrated, user.isAuthenticated, router]);
 
   return {
     hasHydrated,

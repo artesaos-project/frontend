@@ -143,7 +143,7 @@ function ProductPage() {
               <ProductAuthor
                 name={product.authorName}
                 authorUserName={product.authorUserName}
-                avatar={product.authorAvatarUrl || 'https://placehold.co/48x48'}
+                avatar={product.authorAvatarUrl || '/placeholder-avatar.svg'}
                 followers={product.authorFollowersCount || 0}
                 totalProducts={product.authorProductsCount || 0}
                 authorId={product.authorId}

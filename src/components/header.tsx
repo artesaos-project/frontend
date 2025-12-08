@@ -9,12 +9,16 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import useStoreUser from '@/hooks/use-store-user';
+import { authApi } from '@/services/api';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { LuDoorOpen } from 'react-icons/lu';
+import { toast } from 'sonner';
 import SideBarMenu from './sidebar-menu';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -26,12 +30,44 @@ function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
+  const logoutMutation = useMutation({
+    mutationFn: () => authApi.logout(),
+    onSuccess: () => {
+      localStorage.removeItem('artisan-register');
+      localStorage.removeItem('loginStore');
+      resetStoreUser();
+      setIsLogoutModalOpen(false);
+
+      toast.success('Logout realizado com sucesso!');
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    },
+    onError: (error) => {
+      console.error('Erro ao fazer logout:', error);
+
+      localStorage.removeItem('artisan-register');
+      localStorage.removeItem('loginStore');
+      resetStoreUser();
+      setIsLogoutModalOpen(false);
+
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || 'Erro ao fazer logout.';
+        toast.error(message);
+      } else {
+        toast.error('Erro ao fazer logout. Sua sessão foi limpa localmente.');
+      }
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
+    },
+  });
+
   const handleLogoutConfirm = () => {
-    localStorage.removeItem('artisan-register');
-    localStorage.removeItem('loginStore');
-    resetStoreUser();
-    setIsLogoutModalOpen(false);
-    window.location.reload();
+    logoutMutation.mutate();
   };
 
   const handleSearch = () => {
@@ -151,6 +187,7 @@ function Header() {
                 text: 'Tem certeza de que deseja sair da sua conta?',
                 color: 'text-midnight',
               }}
+              isLoading={logoutMutation.isPending}
             />
           </Dialog>
         )}

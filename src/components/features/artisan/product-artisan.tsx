@@ -45,7 +45,9 @@ function ProductArtisan({
     };
 
     fetchProducts();
-  }, [artistId, onTotalChange]);
+    // onTotalChange removido das dependências - deve ser memoizado pelo componente pai se necessário
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artistId]);
 
   if (loading) {
     return (
