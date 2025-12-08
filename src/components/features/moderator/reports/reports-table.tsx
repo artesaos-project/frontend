@@ -22,16 +22,6 @@ const REASON_TRANSLATIONS: Record<string, string> = {
   INAPPROPRIATE_CONTENT: 'Conteúdo Inapropriado',
 };
 
-function getReportedName(report: Report): string {
-  if (report.product) {
-    const productName = report.product.ProductEntity?.name;
-    const artisanName = report.product.ProductEntity?.artisan?.user?.name;
-    return productName || artisanName || 'Produto Desconhecido';
-  }
-
-  return 'Produto Desconhecido';
-}
-
 function StatusLabel({ isSolved }: { isSolved: boolean }) {
   if (isSolved) {
     return (
@@ -89,9 +79,7 @@ function ReportsTable({ reports, isLoading }: ReportsTableProps) {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 items-center px-3 w-full">
-                  <p className="truncate text-left">
-                    {getReportedName(report)}
-                  </p>
+                  <p className="truncate text-left">{report.product.title}</p>
                   <p className="hidden md:inline text-center whitespace-nowrap truncate">
                     {REASON_TRANSLATIONS[report.reason] || report.reason}
                   </p>

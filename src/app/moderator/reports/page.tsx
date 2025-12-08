@@ -27,7 +27,6 @@ function ReportsPage() {
         page: currentPage,
         limit: 15,
       });
-
       if (result && result.data && Array.isArray(result.data)) {
         setReports(result.data);
         setPagination(result.pagination);
