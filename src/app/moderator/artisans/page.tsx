@@ -34,7 +34,9 @@ function ArtisansPage() {
       15,
     );
     fetchArtisans(params);
-  }, [activeFilter, debouncedSearchQuery, currentPage, fetchArtisans]);
+    // fetchArtisans é estável (useCallback com deps vazias), não precisa estar nas dependências
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFilter, debouncedSearchQuery, currentPage]);
 
   useEffect(() => {
     if (searchQuery !== debouncedSearchQuery) {

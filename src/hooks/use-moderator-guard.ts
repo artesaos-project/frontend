@@ -20,8 +20,7 @@ export function useModeratorGuard() {
         router.replace('/');
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasHydrated]);
+  }, [hasHydrated, user.isAuthenticated, user.isModerator, router]);
 
   return {
     hasHydrated,

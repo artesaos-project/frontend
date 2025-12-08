@@ -49,7 +49,9 @@ function UsersContent() {
     if (hasHydrated) {
       fetchUsers(currentPage);
     }
-  }, [currentPage, hasHydrated, fetchUsers]);
+    // fetchUsers é estável (useCallback com deps vazias), não precisa estar nas dependências
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, hasHydrated]);
 
   const handlePageChange = (page: number) => {
     router.push(`/moderator/users?page=${page}`);
