@@ -25,6 +25,7 @@
     "dotenv": "^17.2.1",
     "lucide-react": "^0.486.0",
     "next": "15.2.3",
+    "next-devtools-mcp": "^0.3.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.55.0",

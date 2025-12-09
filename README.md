@@ -34,33 +34,39 @@ O **Artesãos Project** é uma plataforma completa para artesãos brasileiros di
 ## 🚀 Tecnologias
 
 ### Core
+
 - **[Next.js 15.2.3](https://nextjs.org/)** - Framework React com App Router
 - **[React 19](https://react.dev/)** - Biblioteca JavaScript para interfaces
 - **[TypeScript](https://www.typescriptlang.org/)** - Superset tipado do JavaScript
 - **[Tailwind CSS 4](https://tailwindcss.com/)** - Framework CSS utility-first
 
 ### UI Components
+
 - **[Radix UI](https://www.radix-ui.com/)** - Componentes acessíveis e sem estilo
 - **[shadcn/ui](https://ui.shadcn.com/)** - Componentes reutilizáveis baseados em Radix
 - **[Lucide React](https://lucide.dev/)** - Ícones SVG
 - **[React Icons](https://react-icons.github.io/react-icons/)** - Biblioteca de ícones
 
 ### Formulários & Validação
+
 - **[React Hook Form](https://react-hook-form.com/)** - Gerenciamento de formulários
 - **[Zod](https://zod.dev/)** - Validação de schemas TypeScript-first
 - **[@hookform/resolvers](https://github.com/react-hook-form/resolvers)** - Integração Zod + React Hook Form
 
 ### Estado & Dados
+
 - **[Zustand](https://zustand-demo.pmnd.rs/)** - Gerenciamento de estado global
 - **[Axios](https://axios-http.com/)** - Cliente HTTP para requisições API
 - **[React Select](https://react-select.com/)** - Select customizável
 
 ### Animações & UI/UX
+
 - **[Swiper](https://swiperjs.com/)** - Carrosséis e sliders touch
 - **[Sonner](https://sonner.emilkowal.ski/)** - Notificações toast elegantes
 - **[tw-animate-css](https://www.npmjs.com/package/tw-animate-css)** - Animações CSS com Tailwind
 
 ### Qualidade de Código
+
 - **[ESLint](https://eslint.org/)** - Linter JavaScript/TypeScript
 - **[Prettier](https://prettier.io/)** - Formatador de código
 - **[TypeScript ESLint](https://typescript-eslint.io/)** - Regras ESLint para TypeScript
@@ -121,6 +127,7 @@ NEXT_PUBLIC_API_BASE_URL="http://localhost:3333"
 ### 2. Configuração de Imagens Externas
 
 O projeto está configurado para aceitar imagens de:
+
 - GitHub (`github.com`, `avatars.githubusercontent.com`)
 - Placeholders (`placehold.co`)
 - Servidor interno (`72.60.155.229:9000`)
@@ -248,6 +255,7 @@ artesaos-project-web/
 ## 🎨 Funcionalidades
 
 ### 🏠 Portal Público
+
 - ✅ Página inicial com banner de novidades
 - ✅ Listagem de produtos artesanais
 - ✅ Slider de categorias
@@ -256,12 +264,14 @@ artesaos-project-web/
 - ✅ Detalhes de produtos com galeria
 
 ### 🔐 Autenticação
+
 - ✅ Login de usuários
 - ✅ Registro de novos usuários
 - ✅ Validação de formulários com Zod
 - ✅ Gerenciamento de sessão
 
 ### 👤 Painel do Artesão
+
 - ✅ Editar perfil do artesão
 - ✅ Upload de fotos
 - ✅ Adicionar novos produtos
@@ -269,6 +279,7 @@ artesaos-project-web/
 - ✅ Gerenciar informações (técnicas, materiais, finalidades)
 
 ### 🛡️ Painel do Moderador
+
 - ✅ Listagem de artesãos pendentes
 - ✅ Aprovar/rejeitar cadastros
 - ✅ Gerenciar denúncias
@@ -277,6 +288,7 @@ artesaos-project-web/
 - ✅ Sistema de status (Pendente/Moderado/Arquivado)
 
 ### 🎨 Design System
+
 - ✅ Paleta de cores customizada (Dust, Midnight, Sakura, Solar, Mint, etc.)
 - ✅ Componentes acessíveis (Radix UI)
 - ✅ Totalmente responsivo (mobile-first)
@@ -287,12 +299,12 @@ artesaos-project-web/
 
 ## 📜 Scripts Disponíveis
 
-| Script | Descrição |
-|--------|-----------|
-| `npm run dev` | Inicia o servidor de desenvolvimento com Turbopack |
-| `npm run build` | Cria build de produção otimizado |
-| `npm run start` | Inicia servidor de produção |
-| `npm run lint` | Executa ESLint para verificar código |
+| Script          | Descrição                                          |
+| --------------- | -------------------------------------------------- |
+| `npm run dev`   | Inicia o servidor de desenvolvimento com Turbopack |
+| `npm run build` | Cria build de produção otimizado                   |
+| `npm run start` | Inicia servidor de produção                        |
+| `npm run lint`  | Executa ESLint para verificar código               |
 
 ---
 
@@ -305,6 +317,7 @@ npx shadcn@latest add [component-name]
 ```
 
 Exemplo:
+
 ```bash
 npx shadcn@latest add button
 npx shadcn@latest add dialog
@@ -323,8 +336,8 @@ O projeto usa **App Router** do Next.js 15:
 Durante o desenvolvimento, utilize os arquivos em `src/db-mock/`:
 
 ```typescript
-import reportsMock from '@/db-mock/reports.json';
-import productsMock from '@/db-mock/products.json';
+import reportsMock from "@/db-mock/reports.json";
+import productsMock from "@/db-mock/products.json";
 ```
 
 ### Gerenciamento de Estado
@@ -333,7 +346,7 @@ O projeto usa **Zustand** para estado global:
 
 ```typescript
 // hooks/use-store-user.ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
   user: null,
@@ -344,7 +357,7 @@ export const useUserStore = create((set) => ({
 ### Chamadas de API
 
 ```typescript
-import { userApi } from '@/services/api';
+import { userApi } from "@/services/api";
 
 // Login
 const response = await userApi.login({ email, password });
@@ -379,6 +392,7 @@ docker run -p 3000:3000 artesaos-frontend
 ### Outras Plataformas
 
 O projeto Next.js pode ser deployado em:
+
 - **Netlify**
 - **AWS Amplify**
 - **Railway**
@@ -422,6 +436,7 @@ Desenvolvido por [Marcus Santos](https://github.com/marcus-santos)
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
+
 - 📧 Email: sac@criarte.com.br
 - 🐛 Issues: [GitHub Issues](https://github.com/marcus-santos/artesaos-project-web/issues)
 
@@ -444,4 +459,3 @@ Para dúvidas ou problemas:
 Feito com ❤️ para artesãos brasileiros
 
 </div>
-
