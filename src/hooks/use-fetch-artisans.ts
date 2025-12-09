@@ -42,7 +42,6 @@ export function useFetchArtisans(): UseFetchArtisansReturn {
         setError(null);
 
         const response = await artisanApi.getApplications(params);
-        console.log('Fetched artisans:', response);
 
         setArtisans(response.artisanApplications);
         if (response.pagination) {
@@ -52,11 +51,11 @@ export function useFetchArtisans(): UseFetchArtisansReturn {
         const errorMessage =
           err instanceof Error ? err.message : 'Erro ao buscar artesãos';
         setError(errorMessage);
-        console.error('Error fetching artisans:', err);
       } finally {
         setIsLoading(false);
       }
     },
+    // Não incluímos setArtisans/setError/setPagination pois são funções setState do React (sempre estáveis)
     [],
   );
 

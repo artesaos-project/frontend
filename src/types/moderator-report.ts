@@ -28,7 +28,9 @@ export interface Report {
   description: string;
   createdAt: Date | { _seconds: number; _nanoseconds: number };
   isSolved: boolean;
-  product: ReportedProduct | null;
+  product: {
+    title: string;
+  };
 }
 
 export type ReportFilterType = 'all' | 'product' | 'resolved';

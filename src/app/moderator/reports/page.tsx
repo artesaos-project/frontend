@@ -27,7 +27,6 @@ function ReportsPage() {
         page: currentPage,
         limit: 15,
       });
-
       if (result && result.data && Array.isArray(result.data)) {
         setReports(result.data);
         setPagination(result.pagination);
@@ -40,11 +39,14 @@ function ReportsPage() {
       setReports([]);
       setIsLoading(false);
     }
+    // Incluímos currentPage nas dependências pois é usado dentro da função
   }, [currentPage]);
 
   useEffect(() => {
     fetchReports();
-  }, [fetchReports]);
+    // fetchReports muda quando currentPage muda (por design), então é seguro
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]); // Removemos fetchReports, dependemos apenas de currentPage
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
