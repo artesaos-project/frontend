@@ -29,7 +29,7 @@ function Page() {
 
   const slicedProducts = useMemo(
     () => chunkArray(products, limit),
-    [products, limit]
+    [products, limit],
   );
 
   useEffect(() => {
