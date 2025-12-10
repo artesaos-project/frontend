@@ -6,12 +6,11 @@ import chunkArray from '@/lib/utils/chunkArray';
 import { productApi } from '@/services/api';
 import { ApiProduct } from '@/types/product';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 
 function page() {
   const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [slicedProducts, setSlicedProducts] = useState<ApiProduct[][]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5); // Mock: será substituído por dados reais do backend
@@ -20,6 +19,11 @@ function page() {
   const categoryId = params.id as string;
   //TODO: implementar paginação real com backend
   const limit = 20;
+
+  const slicedProducts = useMemo(
+    () => chunkArray(products, limit),
+    [products, limit]
+  );
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       try {
@@ -30,7 +34,6 @@ function page() {
         }
         const response = await productApi.search(query);
         setProducts(response);
-        setSlicedProducts(chunkArray(response, limit));
         setTotalPages(Math.ceil(response.length / limit));
       } catch (err: unknown) {
         if (err instanceof Error)
