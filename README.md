@@ -382,25 +382,6 @@ docker build -t artesaos-frontend -f Dockerfile.frontend .
 docker run -p 3000:3000 artesaos-frontend
 ```
 
-### Vercel (Recomendado)
-
-1. Faça push do código para GitHub
-2. Importe o projeto no [Vercel](https://vercel.com)
-3. Configure as variáveis de ambiente
-4. Deploy automático a cada push
-
-### Outras Plataformas
-
-O projeto Next.js pode ser deployado em:
-
-- **Netlify**
-- **AWS Amplify**
-- **Railway**
-- **Render**
-- **DigitalOcean App Platform**
-
----
-
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
@@ -421,15 +402,16 @@ Contribuições são bem-vindas! Para contribuir:
 
 ---
 
-## 📝 Licença
-
-Este projeto é privado e de propriedade de **Arteiros Caraguá**.
-
----
-
 ## 👥 Equipe
 
-Desenvolvido por [Marcus Santos](https://github.com/marcus-santos)
+Desenvolvido por:
+
+- [Marcus Santos](https://github.com/marcus-santos)
+- [Murilo Matos](https://github.com/murilofmatos)
+- [Samuel Rodrigues](https://github.com/SamuelRSADS)
+- [Daniel Moraes](https://github.com/DanielPMorais)
+- [Emilly Vieira](https://github.com/emillyvieira)
+- [Henrique Szabo](https://github.com/Szaboltz)
 
 ---
 
