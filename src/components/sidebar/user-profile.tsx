@@ -3,6 +3,7 @@ import useStoreUser from '@/hooks/use-store-user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoChevronForward } from 'react-icons/io5';
+import { SheetClose } from '../ui/sheet';
 
 export function UserProfile() {
   const user = useStoreUser((state) => state.user);
@@ -28,15 +29,17 @@ export function UserProfile() {
             {user.userName}
           </h2>
           {user.isArtisan && (
-            <Button asChild variant={'outline'} className="rounded-full">
-              <Link
-                href={`/artisan/${user.artisanUserName}`}
-                className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
-              >
-                Ver meu perfil
-                <IoChevronForward />
-              </Link>
-            </Button>
+            <SheetClose asChild>
+              <Button asChild variant={'outline'} className="rounded-full">
+                <Link
+                  href={`/artisan/${user.artisanUserName}`}
+                  className="bg-[#FAFAFA] text-sakura border-sakura border-2 border-b-4 shadow-sakura hover:bg-sakura hover:text-white sm:w-42 mt-2 text-sm"
+                >
+                  Ver meu perfil
+                  <IoChevronForward />
+                </Link>
+              </Button>
+            </SheetClose>
           )}
         </div>
       )}
