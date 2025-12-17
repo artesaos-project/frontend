@@ -19,6 +19,7 @@ import ProfileInfo from '../../../../components/features/artisan/profile-info';
 import ProfilePicture from '../../../../components/features/artisan/profile-picture';
 import ProductReviews from '../../../../components/features/product/product-reviews';
 import SearchBar from '../../../../components/features/register/search-bar';
+import { GoArrowLeft } from 'react-icons/go';
 
 type TabType = 'produtos' | 'avaliacoes';
 
@@ -135,6 +136,20 @@ const ArtisanPage = () => {
 
   return (
     <div className={`${bgColor} pt-6 mx-auto shadow-md`}>
+      <div className="md:w-7/12 mx-auto">
+        <button
+          onClick={() => {
+            if (window.history.length > 1) {
+              router.back();
+            } else {
+              router.push('/');
+            }
+          }}
+          className="p-2 hover:bg-gray-300 rounded-full ml-4 mt-6 transition-colors"
+        >
+          <GoArrowLeft size={30} />
+        </button>
+      </div>
       <div className="flex flex-row justify-center gap-6 px-4">
         <div className="flex flex-col justify-center items-center gap-2">
           <ProfilePicture
