@@ -98,7 +98,13 @@ function ProductPage() {
       <main className="bg-white">
         <div className="max-w-6xl mx-auto">
           <button
-            onClick={() => router.back()}
+            onClick={() => {
+              if (window.history.length > 1) {
+                router.back();
+              } else {
+                router.push('/');
+              }
+            }}
             className="p-2 hover:bg-gray-300 rounded-full ml-4 mt-6 transition-colors"
           >
             <GoArrowLeft size={30} />
