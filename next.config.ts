@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const nextConfig: NextConfig = {
   images: {
+    unoptimized: isDev,
     remotePatterns: [
       {
         protocol: 'http',
@@ -22,6 +25,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000',
+        pathname: '/**',
       },
       {
         protocol: 'http',
