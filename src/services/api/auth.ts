@@ -9,6 +9,7 @@ export const authApi = {
     apiRequest<UserResponse>('/auth/login', {
       method: 'POST',
       body: credentials,
+      withCredentials: true
     }),
 
   initiate: (wantsToCompleteNow: boolean) =>
@@ -28,5 +29,6 @@ export const authApi = {
   logout: () =>
     apiRequest<{ message: string }>('/auth/logout', {
       method: 'POST',
+      withCredentials: true
     }),
 };

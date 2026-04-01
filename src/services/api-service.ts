@@ -50,8 +50,6 @@ export const apiRequest = async <T>(
     isFormData = false,
   }: FetchOptions = {},
 ): Promise<T> => {
-  const devMode = process.env.NEXT_PUBLIC_DEVELOPMENT === 'true';
-
   try {
     const response = await apiClient<T>({
       url: endpoint,
@@ -61,7 +59,7 @@ export const apiRequest = async <T>(
         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         ...headers,
       },
-      withCredentials: devMode ? false : (withCredentials ?? true),
+      withCredentials: withCredentials ?? true,
     });
 
     return response.data;
