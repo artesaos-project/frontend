@@ -22,7 +22,7 @@ function StepChoice({
       <div className="mt-6 text-midnight text-center px-4">
         <span className="font-bold text-2xl">Voce é Artesão?</span>
         <p className="text-md mt-2">
-          Ao ativar essa opção, você poderá divulgar suas criações, exibir
+          Ao preencher o formulário, você poderá divulgar suas criações, exibir
           preços e alcançar mais pessoas interessadas no seu trabalho.
         </p>
         <div className="flex flex-col gap-4 justify-center mt-6">

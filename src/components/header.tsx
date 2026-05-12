@@ -2,6 +2,7 @@
 import AlertDialog from '@/components/common/alert-dialog';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -157,15 +158,17 @@ function Header() {
                     </div>
                   )}
                   {user.isArtisan && (
-                    <Button
-                      variant={'outlineSakura'}
-                      onClick={() =>
-                        router.push(`/artisan/${user.artisanUserName}`)
-                      }
-                      className="text-xl mt-2"
-                    >
-                      Meu Perfil
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        variant={'outlineSakura'}
+                        onClick={() =>
+                          router.push(`/artisan/${user.artisanUserName}`)
+                        }
+                        className="text-xl mt-2"
+                      >
+                        Meu Perfil
+                      </Button>
+                    </DialogClose>
                   )}
                   <Button
                     variant={'ghost'}
