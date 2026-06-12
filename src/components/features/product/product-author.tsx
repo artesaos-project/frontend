@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useFollowContext } from '@/context/follow-context';
 import { FiPlus, FiUser, FiUserCheck } from 'react-icons/fi';
 
@@ -41,10 +42,13 @@ const AuthorProfile = ({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             {avatar ? (
-              <img
+              <Image
                 src={avatar}
                 alt={name}
                 className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                width={96}
+                height={96}
+                loading="lazy"
               />
             ) : (
               <div className="w-24 h-24 rounded-full bg-[#1B7132] flex items-center justify-center">
